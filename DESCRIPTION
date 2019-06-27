@@ -1,13 +1,13 @@
 Package: artemis
-Title: What the Package Does (One Line, Title Case)
+Title: Analysis and simulation of eDNA experiments
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Matt",
+           family = "Espe",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           email = "mespe@gmail.com")
+Description: artemis allows for the design and analysis of experiments
+			 collecting eDNA.
 License: GPL (>=3)
 Depends: 
     methods,
