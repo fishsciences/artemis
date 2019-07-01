@@ -16,6 +16,7 @@
  */
 
 functions{
+  // Calculate standard curve conversion
   vector ln_std_curve(vector conc, real std_curve_alpha, real std_curve_beta){
 	return std_curve_beta * log(conc) + std_curve_alpha;
   }
@@ -30,14 +31,14 @@ data{
   matrix[N, n_vars] X;
   int rand_id[N, n_rand_var];
   vector[N] Cq;
+  real upper_Cq; // upper value that Cq can take
+  // alpha and beta of the ln_conc -> Cq conversion according to
+  // beta * log(conc) + alpha
+  real std_curve_alpha;
+  real std_curve_beta;
 }
 
 transformed data{
-  // hard code these for now
-  real upper_Cq = 40.0;
-  real std_curve_alpha = 21.167769;
-  real std_curve_beta = -1.52868305;
-
   // QR Decomp - from Stan User Guide
   matrix[n_vars, n_vars] R = qr_thin_R(X);
   real s = sqrt(N - 1.0);
@@ -55,6 +56,7 @@ parameters{
 transformed parameters{
   
 }
+
 model{
   vector[N] ln_conc_hat = Q_ast * thetas;
   vector[N] Cq_hat;
@@ -73,7 +75,7 @@ model{
   Cq_hat = ln_std_curve(exp(ln_conc_hat), std_curve_alpha, std_curve_beta);
   
   for(n in 1:N){
-	if(Cq[n] < 40) {
+	if(Cq[n] < upper_Cq) {
 	  Cq[n] ~ normal(Cq_hat[n], sigma_Cq);  
 	} else {
 	  target += normal_lccdf(upper_Cq | Cq_hat[n], sigma_Cq);
@@ -83,4 +85,5 @@ model{
 
 generated quantities{
   vector[n_vars] betas = R_ast_inverse * thetas;
+  /* vector */
 }
