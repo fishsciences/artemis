@@ -2,3 +2,5 @@
 .Rproj.*
 *.hpp
 *.o
+*.so
+*.hpp
