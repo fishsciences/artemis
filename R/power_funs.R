@@ -9,7 +9,10 @@ sim_experiment = function(vars_list, betas, sigma_rand,
 prep_model_data = function(vars_list, betas, sigma_rand,
                            sigma_Cq,
                            X = expand.grid(vars_list),
-                           rand_var_names = c("tech_rep", "rep"))
+                           rand_var_names = c("tech_rep", "rep"),
+                           std_curve_beta = -1.5,
+                           std_curve_alpha = 21,
+                           upper_Cq = 40)
 {
     tmp = sim_data(, betas, sigma_rand, sigma_Cq, X, rand_var_names)
     rand_idx = relevel_rands(tmp$X[, rand_var_names])
@@ -20,7 +23,10 @@ prep_model_data = function(vars_list, betas, sigma_rand,
                       rand_var_shared = get_shared_rand(tmp$X[,rand_var_names]),
                       X = tmp$X[, !names(tmp$X) %in% rand_var_names],
                       rand_id = rand_idx,
-                      Cq = tmp$Cq)
+                      Cq = tmp$Cq,
+                      std_curve_beta = std_curve_beta,
+                      std_curve_alpha = std_curve_alpha,
+                      upper_Cq = upper_Cq)
     return(model_data)
 }
 
