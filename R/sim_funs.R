@@ -3,7 +3,7 @@
 # M. Espe
 # March 2019
 
-sim_data = function(vars_list, betas,
+sim_data = function(formula, vars_list, betas,
                     sigma_rand, sigma_Cq,
                     X = expand.grid(vars_list),
                     rand_var_names = c("tech_rep", "rep"))
