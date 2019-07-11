@@ -6,8 +6,8 @@ test_that("Choosing correct parser", {
 
 })
 
-test_that("lm model.matrix", {
-    d = gen_model_matrix_lm(mpg ~ cyl + wt, mtcars)
+test_that("lm model.list", {
+    d = gen_model_list_lm(mpg ~ cyl + wt, mtcars)
 
     expect_is(d, "list")
     expect_true(length(d) == 2)
@@ -16,7 +16,7 @@ test_that("lm model.matrix", {
     expect_true(ncol(d$x) == 3)
 
     # Test changes in formulas
-    d = gen_model_matrix_lm(mpg ~ as.factor(cyl) + I(sqrt(wt)), mtcars)
+    d = gen_model_list_lm(mpg ~ as.factor(cyl) + I(sqrt(wt)), mtcars)
 
     expect_is(d, "list")
     expect_true(length(d) == 2)
@@ -26,8 +26,8 @@ test_that("lm model.matrix", {
 
 })
 
-test_that("lmer model.matrix", {
-    d = gen_model_matrix_lmer(mpg ~ cyl + (1|cyl), mtcars)
+test_that("lmer model.list", {
+    d = gen_model_list_lmer(mpg ~ cyl + (1|cyl), mtcars)
 
     expect_is(d, "list")
     expect_true(length(d) == 5)
@@ -35,7 +35,7 @@ test_that("lmer model.matrix", {
     expect_true(ncol(d$groups) == 1)
     expect_true(ncol(d$x) == 2)
 
-    d = gen_model_matrix_lmer(mpg ~ cyl + am + (1|cyl/am), mtcars)
+    d = gen_model_list_lmer(mpg ~ cyl + am + (1|cyl/am), mtcars)
 
     expect_is(d, "list")
     expect_true(length(d) == 5)
@@ -43,7 +43,7 @@ test_that("lmer model.matrix", {
     expect_true(ncol(d$groups) == 2)
     expect_true(ncol(d$x) == 3)
 
-    d = gen_model_matrix_lmer(mpg ~ factor(cyl) + factor(am) + (1|cyl/am), mtcars)
+    d = gen_model_list_lmer(mpg ~ factor(cyl) + factor(am) + (1|cyl/am), mtcars)
 
     expect_is(d, "list")
     expect_true(length(d) == 5)

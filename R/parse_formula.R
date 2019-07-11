@@ -8,7 +8,7 @@ is_lme4 = function(formula)
     any(grepl("\\(.*\\|.*\\)", as.character(formula)))
 }
 
-gen_model_matrix_lm = function(formula, data)
+gen_model_list_lm = function(formula, data)
 {
     mf = stats::model.frame(formula, data)
     y = model.response(mf)
@@ -17,7 +17,7 @@ gen_model_matrix_lm = function(formula, data)
     return(list(x = x, y = y))    
 }
 
-gen_model_matrix_lmer = function(formula, data)
+gen_model_list_lmer = function(formula, data)
 {
     mf = lme4::lFormula(formula, data)
     x = mf$X
