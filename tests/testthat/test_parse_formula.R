@@ -13,6 +13,7 @@ test_that("lm model.matrix", {
     expect_true(length(d) == 2)
 
     expect_true(all(names(d) %in% c("x", "y")))
+    expect_true(ncol(d$x) == 3)
 })
 
 test_that("lmer model.matrix", {
@@ -21,6 +22,15 @@ test_that("lmer model.matrix", {
     expect_is(d, "list")
     expect_true(length(d) == 5)
     expect_true(all(names(d) %in% c("x","y","groups", "n_grp", "n_levels")))
-    
+    expect_true(ncol(d$groups) == 1)
+    expect_true(ncol(d$x) == 2)
+
+    d = gen_model_matrix_lmer(mpg ~ cyl + am + (1|cyl/am), mtcars)
+
+    expect_is(d, "list")
+    expect_true(length(d) == 5)
+    expect_true(all(names(d) %in% c("x","y","groups", "n_grp", "n_levels")))
+    expect_true(ncol(d$groups) == 2)
+    expect_true(ncol(d$x) == 3)
 
 })
