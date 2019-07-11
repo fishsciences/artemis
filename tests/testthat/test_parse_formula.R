@@ -1,0 +1,26 @@
+context("Formula parsing")
+
+test_that("Choosing correct parser", {
+    expect_true(is_lme4(mpg ~ cyl + (1|cyl)))
+    expect_true(!is_lme4(mpg~cyl))
+
+})
+
+test_that("lm model.matrix", {
+    d = gen_model_matrix_lm(mpg ~ cyl + wt, mtcars)
+
+    expect_is(d, "list")
+    expect_true(length(d) == 2)
+
+    expect_true(all(names(d) %in% c("x", "y")))
+})
+
+test_that("lmer model.matrix", {
+    d = gen_model_matrix_lmer(mpg ~ cyl + (1|cyl), mtcars)
+
+    expect_is(d, "list")
+    expect_true(length(d) == 5)
+    expect_true(all(names(d) %in% c("x","y","groups", "n_grp", "n_levels")))
+    
+
+})
