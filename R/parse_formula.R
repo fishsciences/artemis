@@ -20,6 +20,8 @@ gen_model_list_lm = function(formula, data)
 gen_model_list_lmer = function(formula, data)
 {
     mf = lme4::lFormula(formula, data)
+    check_formula(mf)
+
     x = mf$X
     
     y = mf$fr[, as.character(mf$formula[2L])]
@@ -33,4 +35,11 @@ gen_model_list_lmer = function(formula, data)
 
     return(list(y = y, x = x, groups = groups,
                 n_grp = n_grp, n_levels = n_levels))
+}
+
+check_formula = function(formula)
+{
+    if(!all(unlist(formula$reTrms$cnms) == "(Intercept)"))
+        stop("Sorry, only random intercepts are supported at this time.")
+    return(NULL)
 }
