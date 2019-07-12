@@ -15,11 +15,13 @@ Description: artemis allows for the design and analysis of experiments
 License: GPL (>=3)
 Depends: 
     methods,
+	stats,
     R (>= 3.4.0),
     Rcpp (>= 1.0.1)
 Imports: 
     rstan (>= 2.18.2),
-    rstantools (>= 1.5.1)
+    rstantools (>= 1.5.1),
+	lme4
 LinkingTo: 
     BH (>= 1.69.0-1),
     Rcpp (>= 1.0.1),

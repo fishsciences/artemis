@@ -10,7 +10,7 @@ is_lme4 = function(formula)
 
 gen_model_list_lm = function(formula, data)
 {
-    mf = stats::model.frame(formula, data)
+    mf = model.frame(formula, data)
     y = model.response(mf)
     x = model.matrix(attr(mf, "terms"), data)
 
@@ -19,7 +19,7 @@ gen_model_list_lm = function(formula, data)
 
 gen_model_list_lmer = function(formula, data)
 {
-    mf = lme4::lFormula(formula, data)
+    mf = lFormula(formula, data)
     check_formula(mf)
 
     x = mf$X
