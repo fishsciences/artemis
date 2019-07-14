@@ -3,12 +3,15 @@ context("Formula parsing")
 test_that("Choosing correct parser", {
     expect_true(is_lme4(mpg ~ cyl + (1|cyl)))
     expect_true(!is_lme4(mpg~cyl))
+    expect_true(!is_lme4(mpg~factor(cyl)))
 
+    expect_true(is_lme4(mpg ~ factor(cyl) + (1|cyl)))
 })
 
 test_that("lm model.list", {
     d = gen_model_list_lm(mpg ~ cyl + wt, mtcars)
 
+    
     expect_is(d, "list")
     expect_true(length(d) == 2)
 
@@ -24,6 +27,8 @@ test_that("lm model.list", {
     expect_true(all(names(d) %in% c("x", "y")))
     expect_true(ncol(d$x) == 4)
 
+    d = gen_model_list_lm( ~ cyl + wt, mtcars)
+    
 })
 
 test_that("lmer model.list", {
