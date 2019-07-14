@@ -3,19 +3,34 @@
 # M. Espe
 # March 2019
 
-sim_data = function(formula, vars_list, betas,
-                    sigma_rand, sigma_Cq,
-                    X = expand.grid(vars_list),
-                    rand_var_names = c("tech_rep", "rep"))
+sim_eDNA_lm = function(formula, vars_list,
+                       betas, sigma_Cq,
+                       std_curve_alpha, std_curve_beta,
+                       upper_Cq = 40,
+                       X = expand.grid(vars_list))
 {
-    if(ncol(X[,!names(X) %in% rand_var_names]) != length(betas))
-        stop("'betas' must the same length as number of fixed effects")
+    ml = gen_model_list_lm(formula, X)
+
+    if(ncol(ml$x) != length(betas))
+        stop("Please provide one beta per model term")
     
-    rand = gen_rand_eff(X[,rand_var_names], sigma_rand)
-    ln_conc = gen_eDNA_conc(X[, !names(X) %in% rand_var_names],
-                            betas, rand)
-    Cq = gen_Cq(ln_conc, sigma_Cq)
-    return(list(X = X, ln_conc = ln_conc, Cq = Cq))
+    ln_conc_hat = ml$x %*% betas
+
+    cq_star = gen_Cq(ln_conc_hat, sigma_Cq, 
+                     std_curve_alpha, std_curve_beta,
+                     thresh = upper_Cq)
+    
+    return(list(x = X, Cq_star = cq_star, ln_conc = ln_conc_hat))
+
+}
+
+sim_eDNA_lmer = function(formula, vars_list,
+                       X = expand.grid(vars_list),
+                       betas, sigma_Cq,
+                       sigma_rand = numeric())
+{
+    if(is_lme4(formula) && length(sigma_rand) == 0)
+        stop("You must provide the sd of the random effects")
 }
 
 gen_rand_eff = function(X, sigma_rand_eff)
@@ -36,11 +51,11 @@ gen_eDNA_conc = function(X, betas, rands)
 }
 
 gen_Cq = function(ln_conc, sigma,
-                  std_curve_fun = ln_std_curve,
-                  thresh = 40)
+                  std_alpha, std_beta,
+                  thresh)
     # Generate Cq from a conc, and then truncate to thresh
 {
-    Cq_hat = std_curve_fun(exp(ln_conc))
+    Cq_hat = ln_std_curve(exp(ln_conc), std_alpha, std_beta)
     Cq_star = rnorm(length(ln_conc), Cq_hat, sigma)
     Cq_star[Cq_star > thresh] = thresh
     return(Cq_star)
@@ -51,3 +66,4 @@ ln_std_curve = function(x, alpha = 21.167769, beta = -1.52868305)
 {
     beta * log(x) + alpha
 }
+    

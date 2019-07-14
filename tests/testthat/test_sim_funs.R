@@ -19,11 +19,23 @@ test_that("Simulate data", {
 
     betas = c(distance = .002, volume = -0.57, biomass = 1, alive = 1)
 
+    #rand effects not provided
+    expect_error(sim_eDNA_lmer(Cq ~ distance + volume + (1|rep),
+                               vars))
+
+    expect_error(sim_eDNA_lm(Cq ~ distance + volume, vars,
+                             betas = c(intercept = 1, distance = 0.5)))
+
+    ans = sim_eDNA_lm( ~ distance + volume, vars,
+                      betas = c(intercept = 1, distance = 0.5, volume = 0),
+                      sigma_Cq = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
+    expect_is(ans, "list")
+    
     rand = gen_rand_eff(X[,c("tech_rep", "rep")], c(.1, .1))
     expect_equal(nrow(rand), nrow(X))
 
-    sim_data(vars, betas, c(0.1,0.1), .1)
+    # sim_data(vars, betas, c(0.1,0.1), .1)
 
 
-    sim_data(X=X, betas = betas, sigma_rand =  c(0.1,0.1), sigma_Cq = .1)
+    # sim_data(X=X, betas = betas, sigma_rand =  c(0.1,0.1), sigma_Cq = .1)
 })
