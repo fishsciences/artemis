@@ -29,7 +29,7 @@ gen_model_list_lmer = function(formula, data)
         y = as.vector(y)
     
     groups = as.data.frame(mf$reTrms$flist)
-    groups = sapply(groups, as.integer)
+    groups = as.data.frame(lapply(groups, as.integer))
     n_grp = ncol(groups)
     n_levels = sapply(groups, max)
 
