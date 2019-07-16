@@ -1,7 +1,7 @@
-# These functions are for generating simulated data to be used
-# to calculate power for the eDNA experiments
-# M. Espe
-# March 2019
+                                        # These functions are for generating simulated data to be used
+                                        # to calculate power for the eDNA experiments
+                                        # M. Espe
+                                        # March 2019
 
 sim_eDNA_lm = function(formula, vars_list,
                        betas, sigma_Cq,
@@ -17,14 +17,12 @@ sim_eDNA_lm = function(formula, vars_list,
         stop("Please provide one beta per model term \n",
              "Provided: ", length(betas), "\n",
              "Required: ", ncol(ml$x), "\n")
-    
-    ln_conc_hat = ml$x %*% betas
 
-    cq_star = gen_Cq(ln_conc_hat, sigma_Cq, 
-                     std_curve_alpha, std_curve_beta,
-                     thresh = upper_Cq)
+    md = prep_sim(ml, std_curve_alpha, std_curve_beta, sigma_Cq, betas)
+    sims = sampling(stanmodels$eDNA_sim, data = md, algorithm = "Fixed_param", iter = 1)
     
-    return(list(x = X, Cq_star = cq_star, ln_conc = ln_conc_hat))
+    
+    return(sims)
 
 }
 
@@ -57,7 +55,7 @@ sim_eDNA_lmer = function(formula, vars_list,
     ln_conc_fixed = ml$x %*% betas
 
     rand_eff = gen_rand_eff(ml$groups, sigma_rand)
-    # browser()
+                                        # browser()
     
     cq_star = gen_Cq(ln_conc_fixed + rowSums(rand_eff),
                      sigma_Cq, 
@@ -79,8 +77,8 @@ gen_rand_eff = function(X, sigma_rand_eff)
 
 
 gen_eDNA_conc = function(X, betas, rands)
-    # Generate the concentration from a
-    # model matrix X and a vector betas
+                                        # Generate the concentration from a
+                                        # model matrix X and a vector betas
 {
     y_hat = as.matrix(X) %*% betas + rowSums(rands)
     return(y_hat)
@@ -89,7 +87,7 @@ gen_eDNA_conc = function(X, betas, rands)
 gen_Cq = function(ln_conc, sigma,
                   std_alpha, std_beta,
                   thresh)
-    # Generate Cq from a conc, and then truncate to thresh
+                                        # Generate Cq from a conc, and then truncate to thresh
 {
     Cq_hat = ln_std_curve(exp(ln_conc), std_alpha, std_beta)
     Cq_star = rnorm(length(ln_conc), Cq_hat, sigma)
@@ -98,13 +96,46 @@ gen_Cq = function(ln_conc, sigma,
 }
 
 ln_std_curve = function(x, alpha = 21.167769, beta = -1.52868305)
-    # equation, alpha, and beta from 20180927_VS_standard_curve.xlsx
+    ## equation, alpha, and beta from 20180927_VS_standard_curve.xlsx
 {
     beta * log(x) + alpha
 }
-    
+
 has_response = function(formula)
 {
-     attr(terms(formula), "response") > 0
+    attr(terms(formula), "response") > 0
 }
 
+prep_sim = function(mod_list, alpha, beta, Cq_sd, betas, rand_sd = double(0))
+{
+    model_data = list(N = length(mod_list$y),
+                      n_vars = ncol(mod_list$x),
+                      X = mod_list$x,
+                      std_curve_alpha = alpha,
+                      std_curve_beta = beta,
+                      sigma_Cq = Cq_sd,
+                      betas = betas,
+                      rand_sigma = rand_sd)
+
+    if(is.null(mod_list$groups)){
+        model_data = c(model_data, 
+                       has_rand = 0L,
+                       n_rand_var = 0L,
+                       n_rand_total = 0L,
+                       rand_var_shared = double(0),
+                       groups = double(0))
+    } else { 
+        rand_idx = relevel_rands(mod_list$groups)
+        rand_var_shared = get_shared_rand(mod_list$groups)
+        
+        model_data = c(model_data, 
+                       has_rand = 1L,
+                       n_rand_var = ncol(mod_list$groups),
+                       n_rand_total = max(rand_idx),
+                       rand_var_shared = rand_var_shared,
+                       groups = rand_idx,
+                       rand_sigma = rand_sd)
+    }
+
+    return(model_data)
+}

@@ -25,10 +25,9 @@ data{
   int n_rand_var; // number of columns of rand effects
   int n_rand_total; // total number of random effects
   int<upper = n_rand_var> rand_var_shared[n_rand_total]; // idx to map which are shared
-  int rand_id[N, n_rand_var];
 
   matrix[N, n_vars] X;
-  int groups[ has_rand ? N : 0, n_rand_var];
+  int groups[ has_rand ? N * n_rand_var : 0];
   real upper_Cq; // upper value that Cq can take
 
   // alpha and beta of the ln_conc -> Cq conversion according to
@@ -62,7 +61,7 @@ generated quantities{
 
 	for(i in 1:n_rand_var)
 	  for(n in 1:N)
-		ln_conc_fixed[n] += rand_beta_raw[rand_id[n,i]] * rand_sigma[i];
+		ln_conc_fixed[n] += rand_beta_raw[groups[n + (i - 1)]] * rand_sigma[i];
   }
   
   for(n in 1:N){
