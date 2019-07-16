@@ -15,29 +15,28 @@
  */
 
 functions{
-  // Calculate standard curve conversion
-  vector ln_std_curve(vector conc, real std_curve_alpha, real std_curve_beta){
-	return std_curve_beta * log(conc) + std_curve_alpha;
-  }
+
 }
 
 data{
   int N;
   int n_vars;
+  int<lower=0, upper=1> has_rand;
   int n_rand_var; // number of columns of rand effects
   int n_rand_total; // total number of random effects
   int<upper = n_rand_var> rand_var_shared[n_rand_total]; // idx to map which are shared
-  matrix[N, n_vars] X;
   int rand_id[N, n_rand_var];
-  vector[N] Cq;
+
+  matrix[N, n_vars] X;
+  int groups[ has_rand ? N : 0, n_rand_var];
   real upper_Cq; // upper value that Cq can take
+
   // alpha and beta of the ln_conc -> Cq conversion according to
   // beta * log(conc) + alpha
   real std_curve_alpha;
   real std_curve_beta;
-  real<lower = 0> sigma_Cq;
+  real<lower = 0> sigma_Cq; // sd on Cq - assumed to be only on measurement
   vector[n_vars] betas;
-  vector[n_rand_total] rand_betas;
   vector<lower = 0>[n_rand_var] rand_sigma;
 }
 
@@ -46,25 +45,28 @@ transformed data{
 
 parameters{
 }
-transformed parameters{
-  
+
+transformed parameters{ 
 }
 
 model{
 }
 
 generated quantities{
-  vector[n_vars] betas = R_ast_inverse * thetas;
   /* vector */
-  vector[N] ln_conc_hat = Q_ast * thetas;
+  vector[N] ln_conc_fixed = X * betas;
   vector[N] Cq_star;
-  
-  for(i in 1:n_rand_var)
-	for(n in 1:N)
-	  ln_conc_hat[n] += rand_betas_raw[rand_id[n,i]] * rand_sigma[i];
 
+  if(has_rand) {
+	real rand_beta_raw[n_rand_total] = normal_rng(rep_vector(0, n_rand_total), 1);
+
+	for(i in 1:n_rand_var)
+	  for(n in 1:N)
+		ln_conc_fixed[n] += rand_beta_raw[rand_id[n,i]] * rand_sigma[i];
+  }
+  
   for(n in 1:N){
-	real Cq_hat = ln_std_curve(exp(ln_conc_hat[n]), std_curve_alpha, std_curve_beta);
+	real Cq_hat = ln_conc_fixed[n] * std_curve_beta + std_curve_alpha;
 
 	Cq_star[n] = normal_rng(Cq_hat, sigma_Cq);
 	if(Cq_star[n] > upper_Cq)
