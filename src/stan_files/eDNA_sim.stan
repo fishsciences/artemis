@@ -53,7 +53,7 @@ model{
 
 generated quantities{
   /* vector */
-  vector[N] ln_conc_fixed = X * betas;
+  vector[N] ln_conc = X * betas;
   vector[N] Cq_star;
 
   if(has_rand) {
@@ -61,11 +61,11 @@ generated quantities{
 
 	for(i in 1:n_rand_var)
 	  for(n in 1:N)
-		ln_conc_fixed[n] += rand_beta_raw[groups[n + (i - 1)]] * rand_sigma[i];
+		ln_conc[n] += rand_beta_raw[groups[n + (n * (i - 1))]] * rand_sigma[i];
   }
   
   for(n in 1:N){
-	real Cq_hat = ln_conc_fixed[n] * std_curve_beta + std_curve_alpha;
+	real Cq_hat = ln_conc[n] * std_curve_beta + std_curve_alpha;
 
 	Cq_star[n] = normal_rng(Cq_hat, sigma_Cq);
 	if(Cq_star[n] > upper_Cq)
