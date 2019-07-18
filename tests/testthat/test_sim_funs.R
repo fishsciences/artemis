@@ -4,16 +4,18 @@
                                         # March 2019
 
 context("Simulating data")
+
+vars = list(distance = c(0, 15, 50),
+            volume = c(25, 50),
+            biomass = 100,
+            alive = 1,
+            tech_rep = 1:10,
+            rep = 1:3, Cq = 1)
+
+X = expand.grid(vars)
+betas = c(distance = .002, volume = -0.57, biomass = 1, alive = 1)
+
 test_that("Simulate data: lm", {
-
-    vars = list(distance = c(0, 15, 50),
-                volume = c(25, 50),
-                biomass = 100,
-                alive = 1,
-                tech_rep = 1:10,
-                rep = 1:3, Cq = 1)
-
-    X = expand.grid(vars)
 
     expect_equal(nrow(X), Reduce(`*`, sapply(vars, length)))
 
@@ -36,15 +38,6 @@ test_that("Simulate data: lm", {
 
 test_that("Simulate data: lmer", {
 
-    vars = list(distance = c(0, 15, 50),
-                volume = c(25, 50),
-                biomass = 100,
-                alive = 1,
-                tech_rep = 1:10,
-                rep = 1:3, Cq = 1)
-
-    X = expand.grid(vars)
-
     #rand effects not provided
     expect_error(sim_eDNA_lmer(Cq ~ distance + volume + (1|rep),
                                vars))
@@ -58,4 +51,37 @@ test_that("Simulate data: lmer", {
                         std_curve_beta = -1.5)
     expect_is(ans, "list")
     ## expect_true(all(names(ans) %in% c("x", "Cq_star", "ln_conc")))
+})
+
+test_that("Prep data", {
+    ## lm
+    ml = gen_model_list_lm(Cq ~ distance, X)
+    ans = prep_sim(ml, 21, -1.5, 1, betas)
+
+    expect_is(ans, "list")
+
+    expect_true(all(sapply(ans[c("groups", "rand_var_shared", "rand_sigma")], length) == 0))
+    expect_true(all(sapply(ans[c("has_rand", "n_rand_var", "n_rand_total")], `==`, 0)))
+
+    ## lmer
+    ml = gen_model_list_lmer(Cq ~ distance + (1|volume), X)
+    ans = prep_sim(ml, 21, -1.5, 1, betas, 0.1)
+
+    expect_is(ans, "list")
+
+    expect_true(all(sapply(ans[c("groups", "rand_var_shared", "rand_sigma")], length) != 0))
+    expect_true(all(sapply(ans[c("has_rand", "n_rand_var", "n_rand_total")], `!=`, 0)))
+})
+
+test_that("Gen model list", {
+    ml = gen_model_list_lm(Cq ~ distance, X)
+    
+    expect_is(ml, "list")
+    expect_true(all(names(ml) %in% c("x","y")))
+
+    mler = gen_model_list_lmer(Cq ~ distance + (1|volume), X)
+    expect_is(mler, "list")
+    expect_true(all(names(ml) %in% c("x","y", "groups", "n_grp", "n_levels")))
+
+   
 })

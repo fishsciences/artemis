@@ -26,7 +26,6 @@ sim_eDNA_lm = function(formula, vars_list,
     sims = extract(sims)
     
     return(sims)
-
 }
 
 sim_eDNA_lmer = function(formula, vars_list,
@@ -59,6 +58,7 @@ sim_eDNA_lmer = function(formula, vars_list,
     
     md = prep_sim(ml, std_curve_alpha, std_curve_beta, sigma_Cq,
                   betas = betas, rand_sd = sigma_rand)
+
     sims = sampling(stanmodels$eDNA_sim, data = md, chains = 1L,
                     algorithm = "Fixed_param", iter = n_sim, warmup = 0L)
 
