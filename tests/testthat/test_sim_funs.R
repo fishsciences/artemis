@@ -64,8 +64,8 @@ test_that("Prep data", {
     expect_true(all(sapply(ans[c("has_rand", "n_rand_var", "n_rand_total")], `==`, 0)))
 
     ## lmer
-    ml = gen_model_list_lmer(Cq ~ distance + (1|volume), X)
-    ans = prep_sim(ml, 21, -1.5, 1, betas, 0.1)
+    mler = gen_model_list_lmer(Cq ~ distance + (1|volume), X)
+    ans = prep_sim(mler, 21, -1.5, 1, betas, 0.1)
 
     expect_is(ans, "list")
 
@@ -82,6 +82,8 @@ test_that("Gen model list", {
     mler = gen_model_list_lmer(Cq ~ distance + (1|volume), X)
     expect_is(mler, "list")
     expect_true(all(names(ml) %in% c("x","y", "groups", "n_grp", "n_levels")))
-
+    expect_true(ncol(mler$groups) == mler$n_grp)
+    expect_true(length(mler$n_levels) == ncol(mler$groups))
+    expect_true(all(sapply(mler$groups, max) == mler$n_levels))
    
 })
