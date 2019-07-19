@@ -8,7 +8,8 @@ sim_eDNA_lm = function(formula, vars_list,
                        std_curve_alpha, std_curve_beta,
                        n_sim = 1L,
                        upper_Cq = 40,
-                       X = expand.grid(vars_list))
+                       X = expand.grid(vars_list),
+                       verbose = FALSE)
 {
     if(!has_response(formula))
         stop("Please provide a dummy response variable for simulations")
@@ -20,9 +21,15 @@ sim_eDNA_lm = function(formula, vars_list,
              "Required: ", ncol(ml$x), "\n")
 
     md = prep_sim(ml, std_curve_alpha, std_curve_beta, sigma_Cq, betas)
-    sims = sampling(stanmodels$eDNA_sim, data = md, chains = 1L,
-                    algorithm = "Fixed_param", iter = n_sim)
 
+    if(!verbose) sink(tempfile())
+
+    sims = sampling(stanmodels$eDNA_sim, data = md, chains = 1L,
+                    algorithm = "Fixed_param", iter = n_sim,
+                    refresh = ifelse(verbose, 100, -1), show_messages = verbose)
+
+    if(!verbose) sink()
+    
     sims = extract(sims)
     
     return(sims)
@@ -34,7 +41,8 @@ sim_eDNA_lmer = function(formula, vars_list,
                          std_curve_alpha, std_curve_beta,
                          n_sim = 1L,
                          upper_Cq = 40,
-                         X = expand.grid(vars_list))
+                         X = expand.grid(vars_list),
+                         verbose = FALSE)
 {
     if(!has_response(formula))
         stop("Please provide a dummy response variable for simulations")
@@ -59,9 +67,14 @@ sim_eDNA_lmer = function(formula, vars_list,
     md = prep_sim(ml, std_curve_alpha, std_curve_beta, sigma_Cq,
                   betas = betas, rand_sd = sigma_rand)
 
+    if(!verbose) sink(tempfile())
+    
     sims = sampling(stanmodels$eDNA_sim, data = md, chains = 1L,
-                    algorithm = "Fixed_param", iter = n_sim, warmup = 0L)
-
+                    algorithm = "Fixed_param", iter = n_sim, warmup = 0L,
+                    refresh = ifelse(verbose, 100, -1), show_messages = verbose)
+    
+    if(!verbose) sink()
+    
     sims = extract(sims)
     
     return(sims)
@@ -142,3 +155,4 @@ prep_sim = function(mod_list, alpha, beta, Cq_sd, betas, rand_sd = double(0))
 
     return(model_data)
 }
+

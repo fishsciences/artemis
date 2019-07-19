@@ -87,3 +87,23 @@ test_that("Gen model list", {
     expect_true(all(sapply(mler$groups, max) == mler$n_levels))
    
 })
+
+test_that("Multiple groups", {
+    expect_error(sim_eDNA_lmer(Cq ~ distance + volume + (1|rep) + (1|tech_rep),
+                        vars,
+                        betas = c(intercept = 1, distance = 0.5, volume = 0),
+                        sigma_Cq = 1,
+                        sigma_rand = c(0.1),
+                        std_curve_alpha = 21.2,
+                        std_curve_beta = -1.5))
+
+    ans = sim_eDNA_lmer(Cq ~ distance + volume + (1|rep) + (1|tech_rep),
+                        vars,
+                        betas = c(intercept = 1, distance = 0.5, volume = 0),
+                        sigma_Cq = 1,
+                        sigma_rand = c(0.1, 0.1),
+                        std_curve_alpha = 21.2,
+                        std_curve_beta = -1.5)
+
+
+})
