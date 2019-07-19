@@ -1,0 +1,40 @@
+setClass("eDNA_simulation",
+         slots = c(ln_conc = "matrix", Cq_star = "matrix",
+                   formula = "formula", variable_levels = "list",
+                   betas = "numeric", x = "data.frame"))
+
+setAs("stanfit", "eDNA_simulation",
+      function(from){
+          tmp = extract(from)
+          new("eDNA_simulation", 
+              ln_conc = tmp$ln_conc,
+              Cq_star = tmp$Cq_star)
+       
+      })
+
+setMethod("print", "eDNA_simulation",
+          function(x, FUN = summary, digits = 3) {
+              cat("\nformula: "); print(x@formula)
+              cat("\nvariable levels:\n")
+              
+              vars = sapply(seq_along(x@variable_levels), function(i)
+                  paste0(names(x@variable_levels)[i],  " :",
+                         paste(x@variable_levels[[i]], collapse = " ")))
+              cat(vars, sep = "\n")
+              cat("\n ln concentration: \n")
+              print(get_marginals(x@ln_conc, x@x, FUN, digits))
+
+              cat("\n simulated Cq: \n")
+              print(get_marginals(x@Cq_star, x@x, FUN, digits))
+              
+              return(invisible(NULL))
+          })
+
+get_marginals = function(y, X, fun, n_digits)
+{
+    ans = lapply(X, function(x) tapply(y, x, function(dd) round(fun(dd), n_digits)))
+    if(all(sapply(ans, is.list)))
+        ans = lapply(ans, function(x) do.call(rbind, x))
+
+    ans       
+}
