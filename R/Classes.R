@@ -1,7 +1,9 @@
 setClass("eDNA_simulation",
          slots = c(ln_conc = "matrix", Cq_star = "matrix",
                    formula = "formula", variable_levels = "list",
-                   betas = "numeric", x = "data.frame"))
+                   betas = "numeric", x = "data.frame",
+                   std_curve_alpha = "numeric", std_curve_beta = "numeric",
+                   upper_Cq = "numeric"))
 
 setClass("eDNA_simulation_lmer", contains = "eDNA_simulation",
          slots = c(groups = "data.frame", random_sd = "numeric"))
