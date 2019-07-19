@@ -107,3 +107,13 @@ test_that("Multiple groups", {
 
 
 })
+
+# might want to move these eventually to a methods test file
+test_that("Methods", {
+  ans = sim_eDNA_lm(Cq ~ distance + volume, vars,
+                      betas = c(intercept = 1, distance = 0.5, volume = 0),
+                      sigma_Cq = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
+
+  print(ans)
+  expect_null(print(ans))
+})

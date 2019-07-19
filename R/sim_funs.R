@@ -34,6 +34,8 @@ sim_eDNA_lm = function(formula, vars_list,
     sims = as(sims, "eDNA_simulation")
     sims@formula = formula
     sims@betas = betas
+    sims@variable_levels = vars_list
+    sims@x = as.data.frame(md$X)
     
     return(sims)
 }
@@ -82,6 +84,8 @@ sim_eDNA_lmer = function(formula, vars_list,
     sims = as(sims, "eDNA_simulation")
     sims@formula = formula
     sims@betas = betas
+    sims@variable_levels = vars_list
+    sims@x = as.data.frame(md$X)
     
     return(sims)
 }
