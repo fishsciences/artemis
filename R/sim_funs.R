@@ -78,7 +78,7 @@ sim_eDNA_lmer = function(formula, vars_list,
 
     # hacky
     sims = as(sims, "eDNA_simulation_lmer")
-    sims = load_slots(simso)
+    sims = load_slots(sims)
     
     return(sims)
 }
@@ -161,11 +161,18 @@ prep_sim = function(mod_list, alpha, beta, Cq_sd, betas, rand_sd = double(0))
 
 load_slots = function(obj)
     ## Potentially really dangerous - think about this
+
+    ## Want to avoid copying this code 2x for each sim, but
+    ## grabbing from the parent frame might bite us
 {
     obj@formula = get("formula", parent.frame())
     obj@betas = get("betas", parent.frame())
     obj@variable_levels = get("vars_list", parent.frame())
     obj@x = as.data.frame(get("md", parent.frame())$X)
+    obj@std_curve_alpha = get("std_curve_alpha", parent.frame())
+    obj@std_curve_beta = get("std_curve_beta", parent.frame())
+    obj@upper_Cq = get("upper_Cq", parent.frame())
     
     obj
 }
+
