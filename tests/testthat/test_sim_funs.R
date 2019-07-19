@@ -31,7 +31,7 @@ test_that("Simulate data: lm", {
                       betas = c(intercept = 1, distance = 0.5, volume = 0),
                       sigma_Cq = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
-    expect_is(ans, "list")
+    expect_is(ans, "eDNA_simulation")
     ## expect_true(all(names(ans) %in% c("x", "Cq_star", "ln_conc")))
     
 })
@@ -49,7 +49,7 @@ test_that("Simulate data: lmer", {
                         sigma_rand = 0.1,
                         std_curve_alpha = 21.2,
                         std_curve_beta = -1.5)
-    expect_is(ans, "list")
+    expect_is(ans, "eDNA_simulation")
     ## expect_true(all(names(ans) %in% c("x", "Cq_star", "ln_conc")))
 })
 

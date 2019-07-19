@@ -30,7 +30,10 @@ sim_eDNA_lm = function(formula, vars_list,
 
     if(!verbose) sink()
     
-    sims = extract(sims)
+    # hacky
+    sims = as(sims, "eDNA_simulation")
+    sims@formula = formula
+    sims@betas = betas
     
     return(sims)
 }
@@ -74,8 +77,11 @@ sim_eDNA_lmer = function(formula, vars_list,
                     refresh = ifelse(verbose, 100, -1), show_messages = verbose)
     
     if(!verbose) sink()
-    
-    sims = extract(sims)
+
+    # hacky
+    sims = as(sims, "eDNA_simulation")
+    sims@formula = formula
+    sims@betas = betas
     
     return(sims)
 }

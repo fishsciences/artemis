@@ -6,3 +6,5 @@ import(methods)
 import(rstantools)
 importFrom(rstan, sampling, extract)
 useDynLib(artemis, .registration = TRUE)
+
+exportClass(eDNA_simulation)
