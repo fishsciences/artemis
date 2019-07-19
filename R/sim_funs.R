@@ -81,7 +81,7 @@ sim_eDNA_lmer = function(formula, vars_list,
     if(!verbose) sink()
 
     # hacky
-    sims = as(sims, "eDNA_simulation")
+    sims = as(sims, "eDNA_simulation_lmer")
     sims@formula = formula
     sims@betas = betas
     sims@variable_levels = vars_list

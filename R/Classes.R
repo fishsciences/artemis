@@ -3,6 +3,14 @@ setClass("eDNA_simulation",
                    formula = "formula", variable_levels = "list",
                    betas = "numeric", x = "data.frame"))
 
+setClass("eDNA_simulation_lmer", contains = "eDNA_simulation",
+         slots = c(groups = "data.frame", random_sd = "numeric"))
+
+setClass("eDNA_simulation_lm", contains = "eDNA_simulation")
+
+setAs("stanfit", "eDNA_simulation_lmer", function(from) callNextMethod())
+setAs("stanfit", "eDNA_simulation_lm", function(from) callNextMethod())
+
 setAs("stanfit", "eDNA_simulation",
       function(from){
           tmp = extract(from)
@@ -12,6 +20,7 @@ setAs("stanfit", "eDNA_simulation",
        
       })
 
+
 setMethod("print", "eDNA_simulation",
           function(x, FUN = summary, digits = 3) {
               cat("\nformula: "); print(x@formula)
@@ -20,6 +29,7 @@ setMethod("print", "eDNA_simulation",
               vars = sapply(seq_along(x@variable_levels), function(i)
                   paste0(names(x@variable_levels)[i],  " :",
                          paste(x@variable_levels[[i]], collapse = " ")))
+
               cat(vars, sep = "\n")
               cat("\n ln concentration: \n")
               print(get_marginals(x@ln_conc, x@x, FUN, digits))
