@@ -32,11 +32,7 @@ sim_eDNA_lm = function(formula, vars_list,
     
     # hacky
     sims = as(sims, "eDNA_simulation")
-    sims@formula = formula
-    sims@betas = betas
-    sims@variable_levels = vars_list
-    sims@x = as.data.frame(md$X)
-    
+    sims = load_slots(sims)
     return(sims)
 }
 
@@ -82,10 +78,7 @@ sim_eDNA_lmer = function(formula, vars_list,
 
     # hacky
     sims = as(sims, "eDNA_simulation_lmer")
-    sims@formula = formula
-    sims@betas = betas
-    sims@variable_levels = vars_list
-    sims@x = as.data.frame(md$X)
+    sims = load_slots(simso)
     
     return(sims)
 }
@@ -166,3 +159,13 @@ prep_sim = function(mod_list, alpha, beta, Cq_sd, betas, rand_sd = double(0))
     return(model_data)
 }
 
+load_slots = function(obj)
+    ## Potentially really dangerous - think about this
+{
+    obj@formula = get("formula", parent.frame())
+    obj@betas = get("betas", parent.frame())
+    obj@variable_levels = get("vars_list", parent.frame())
+    obj@x = as.data.frame(get("md", parent.frame())$X)
+    
+    obj
+}
