@@ -117,3 +117,30 @@ test_that("Methods", {
   print(ans)
   expect_null(print(ans))
 })
+
+test_that("Simulation accuracy", {
+    ans = sim_eDNA_lm(Cq ~ 1, vars,
+                      betas = c(intercept = -15),
+                      sigma_Cq = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
+
+    
+    expect_is(ans, "eDNA_simulation")
+    expect_true(all(ans@ln_conc == -15))
+    expect_true(all(ans@Cq_star == 40))
+
+    ans = sim_eDNA_lm(Cq ~ 1, vars,
+                      betas = c(intercept = -10),
+                      sigma_Cq = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
+
+    expect_true(abs(sd(ans@Cq_star) - 1) < 0.1)
+    
+    ans = sim_eDNA_lm(Cq ~ 1 + distance, vars,
+                      betas = c(intercept = -1, distance = -11),
+                      sigma_Cq = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
+
+    tt = tapply(ans@Cq_star, ans@x$distance, unique)
+    expect_true(all(tt[c("15", "50") == 40]))
+    
+    tt = tapply(ans@Cq_star, ans@x$distance, sd)
+    expect_true(all(abs(tt[1] - 1) < 0.1)) # the sd of Cq should be close to 1
+})
