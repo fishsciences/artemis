@@ -131,7 +131,7 @@ prep_sim = function(mod_list, alpha, beta, Cq_sd, betas, rand_sd = double(0))
                       std_curve_alpha = alpha,
                       std_curve_beta = beta,
                       sigma_Cq = Cq_sd,
-                      betas = betas)
+                      betas = as.array(betas))
 
     if(is.null(mod_list$groups)){
         b = list(model_data, 
