@@ -54,7 +54,8 @@ get_marginals = function(y, X, fun, n_digits = getOption("digits"), ...)
 setMethod("summary", "eDNA_simulation",
           function(object, ...) {
               qtl = get_marginals(object@Cq_star, object@x, quantile)
-              dt = get_marginals(object@Cq_star, object@x, p_detect, thresh = object@upper_Cq)
+              dt = get_marginals(object@Cq_star, object@x, p_detect,
+                                 thresh = object@upper_Cq)
               mapply(function(a, b) cbind(a,p_detect = b), qtl, dt)
           })
 
@@ -63,4 +64,16 @@ p_detect = function(y, thresh)
 {
     sum(y <= thresh) / length(y)
 }
+
+setAs("eDNA_simulation", "data.frame",
+      function(from){
+          if(dim(from@ln_conc)[1] != 1)
+              stop("Only single simulations can be converted at this time")
+          
+          to = cbind(data.frame(ln_conc = as.vector(from@ln_conc),
+                                Cq_star = as.vector(from@Cq_star)),
+                     from@x)
+          to
+      })
+
 
