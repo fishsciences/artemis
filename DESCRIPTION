@@ -16,6 +16,7 @@ License: GPL (>=3)
 Depends: 
     methods,
 	stats,
+	ggplot2,
     R (>= 3.4.0),
     Rcpp (>= 1.0.1)
 Imports: 
