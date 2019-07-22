@@ -72,7 +72,7 @@ model{
   sigma_Cq ~ normal(0, 1);
   rand_sigma ~ normal(0, .1);
   
-  Cq_hat = ln_std_curve(exp(ln_conc_hat), std_curve_alpha, std_curve_beta);
+  Cq_hat = ln_conc_hat * std_curve_beta + std_curve_alpha;
   
   for(n in 1:N){
 	if(Cq[n] < upper_Cq) {
