@@ -124,14 +124,16 @@ test_that("Methods", {
   ans2 = as(ans, "data.frame")
 
   expect_is(ans2, "data.frame")
+  ans3 = as.data.frame(ans)
 
+  expect_is(ans3, "data.frame")
+  expect_equal(ans2, ans3)
 })
 
 test_that("Simulation accuracy", {
     ans = sim_eDNA_lm(Cq ~ 1, vars,
                       betas = c(intercept = -15),
                       sigma_Cq = 1e-5, std_curve_alpha = 21.2, std_curve_beta = -1.5)
-
     
     expect_is(ans, "eDNA_simulation")
     expect_true(all(ans@ln_conc == -15))

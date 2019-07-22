@@ -76,4 +76,7 @@ setAs("eDNA_simulation", "data.frame",
           to
       })
 
+as.data.frame.eDNA_simulation = function(x) {
+    as(x, "data.frame")
+}
 
