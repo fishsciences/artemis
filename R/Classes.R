@@ -42,11 +42,25 @@ setMethod("print", "eDNA_simulation",
               return(invisible(NULL))
           })
 
-get_marginals = function(y, X, fun, n_digits)
+get_marginals = function(y, X, fun, n_digits = getOption("digits"), ...)
 {
-    ans = lapply(X, function(x) tapply(y, x, function(dd) round(fun(dd), n_digits)))
+    ans = lapply(X, function(x) tapply(y, x, function(dd) round(fun(dd, ...), n_digits)))
     if(all(sapply(ans, is.list)))
         ans = lapply(ans, function(x) do.call(rbind, x))
 
     ans       
 }
+
+setMethod("summary", "eDNA_simulation",
+          function(object, ...) {
+              qtl = get_marginals(object@Cq_star, object@x, quantile)
+              dt = get_marginals(object@Cq_star, object@x, p_detect, thresh = object@upper_Cq)
+              mapply(function(a, b) cbind(a,p_detect = b), qtl, dt)
+          })
+
+
+p_detect = function(y, thresh)
+{
+    sum(y <= thresh) / length(y)
+}
+

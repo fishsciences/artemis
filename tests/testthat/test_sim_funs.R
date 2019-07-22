@@ -116,6 +116,8 @@ test_that("Methods", {
 
   print(ans)
   expect_null(print(ans))
+
+  summary(ans)
 })
 
 test_that("Simulation accuracy", {
