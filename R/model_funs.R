@@ -1,25 +1,66 @@
 eDNA_lm = function(formula, data, fit_fun = rstan::sampling,
+                   std_curve_alpha, std_curve_beta,
+                   upper_Cq = 40,
                    n_chain = 1L, iters = 500L, verbose = FALSE, ...)
 {
     
-    ml = if(is_lme4(formula)) {
-             gen_model_list_lm(formula, X)
+    ml = if(!is_lme4(formula)) {
+             gen_model_list_lm(formula, data)
          } else {
-             gen_model_list_lmer(formula, X)
+             gen_model_list_lmer(formula, data)
          }
-    
-    md = prep_sim(ml, std_curve_alpha, std_curve_beta, sigma_Cq, betas)
 
+    # This works because Stan ignores extra input data
+    md = prep_model(ml, std_curve_alpha, std_curve_beta,
+                    Cq_upper = upper_Cq)
+
+    md$y = ml$y
     if(!verbose) sink(tempfile())
     
-    fit = fit_fun(stanmodels$eDNA_sim, data = md, chains = n_chain,
+    fit = fit_fun(stanmodels$eDNA_lm, data = md, chains = n_chain,
                   algorithm = "Fixed_param", iter = iters,
                   refresh = ifelse(verbose, 100, -1), show_messages = verbose)
 
     if(!verbose) sink()
-    cl = if(is_lme4) "eDNA_model_lm" else "eDNA_model_lmer"
+    
+    cl = if(is_lme4(formula)) "eDNA_model_lm" else "eDNA_model_lmer"
     
     fit = as(fit, cl)
     return(fit)
 }
 
+
+prep_model = function(mod_list, alpha, beta, Cq_upper = 40)
+{
+    model_data = list(N = length(mod_list$y),
+                      n_vars = ncol(mod_list$x),
+                      X = mod_list$x,
+                      std_curve_alpha = alpha,
+                      std_curve_beta = beta,
+                      upper_Cq = Cq_upper)
+
+    if(is.null(mod_list$groups)){
+        b = list(model_data, 
+                 has_rand = 0L,
+                 n_rand_var = 0L,
+                 n_rand_total = 0L, 
+                 rand_var_shared = double(0),
+                 groups = double(0))
+
+    } else { 
+        rand_idx = unlist(relevel_rands(mod_list$groups))
+        rand_var_shared = get_shared_rand(mod_list$groups)
+        
+        b = list(has_rand = 1L,
+                 n_rand_var = ncol(mod_list$groups),
+                 n_rand_total = max(rand_idx),
+                 rand_var_shared = rand_var_shared,
+                 groups = rand_idx,
+                 rand_sigma = as.array(rand_sd))
+        
+    }
+    
+    model_data = c(model_data, b)
+
+    return(model_data)
+}

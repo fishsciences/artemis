@@ -123,7 +123,7 @@ has_response = function(formula)
     attr(terms(formula), "response") > 0
 }
 
-prep_sim = function(mod_list, alpha, beta, Cq_sd, betas, rand_sd = double(0))
+prep_sim = function(mod_list, alpha, beta, Cq_sd, betas, Cq_upper = 40, rand_sd = double(0))
 {
     model_data = list(N = length(mod_list$y),
                       n_vars = ncol(mod_list$x),
@@ -131,7 +131,8 @@ prep_sim = function(mod_list, alpha, beta, Cq_sd, betas, rand_sd = double(0))
                       std_curve_alpha = alpha,
                       std_curve_beta = beta,
                       sigma_Cq = Cq_sd,
-                      betas = as.array(betas))
+                      betas = as.array(betas),
+                      upper_Cq = Cq_upper)
 
     if(is.null(mod_list$groups)){
         b = list(model_data, 

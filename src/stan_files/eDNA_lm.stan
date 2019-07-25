@@ -79,8 +79,8 @@ model{
   Cq_hat = ln_conc_hat * std_curve_beta + std_curve_alpha;
   
   for(n in 1:N){
-	if(Cq[n] < upper_Cq) {
-	  Cq[n] ~ normal(Cq_hat[n], sigma_Cq);  
+	if(y[n] < upper_Cq) {
+	  y[n] ~ normal(Cq_hat[n], sigma_Cq);  
 	} else {
 	  target += normal_lccdf(upper_Cq | Cq_hat[n], sigma_Cq);
 	}
