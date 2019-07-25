@@ -31,7 +31,7 @@ sim_eDNA_lm = function(formula, vars_list,
     if(!verbose) sink()
     
     # hacky
-    sims = as(sims, "eDNA_simulation")
+    sims = as(sims, "eDNA_simulation_lm")
     sims = load_slots(sims)
     return(sims)
 }

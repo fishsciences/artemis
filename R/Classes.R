@@ -80,3 +80,28 @@ as.data.frame.eDNA_simulation = function(x) {
     as(x, "data.frame")
 }
 
+################################################################################
+## Model results
+
+setClass("eDNA_model",
+         slots = c(ln_conc = "matrix", Cq_star = "matrix",
+                   formula = "formula", x = "data.frame",
+                   std_curve_alpha = "numeric", std_curve_beta = "numeric",
+                   upper_Cq = "numeric"))
+
+setClass("eDNA_model_lmer", contains = "eDNA_model",
+         slots = c(groups = "data.frame", random_sd = "numeric"))
+
+setClass("eDNA_model_lm", contains = "eDNA_model")
+
+setAs("stanfit", "eDNA_model_lmer", function(from) callNextMethod())
+setAs("stanfit", "eDNA_model_lm", function(from) callNextMethod())
+
+setAs("stanfit", "eDNA_model",
+      function(from){
+          tmp = extract(from)
+          new("eDNA_model", 
+              ln_conc = tmp$ln_conc,
+              Cq_star = tmp$Cq_star)
+       
+      })
