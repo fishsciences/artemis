@@ -65,7 +65,7 @@ test_that("Prep data", {
 
     ## lmer
     mler = gen_model_list_lmer(Cq ~ distance + (1|volume), X)
-    ans = prep_sim(mler, 21, -1.5, 1, betas, 0.1)
+    ans = prep_sim(mler, 21, -1.5, 1, betas, rand_sd = 0.1)
 
     expect_is(ans, "list")
 
