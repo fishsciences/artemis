@@ -23,7 +23,7 @@ eDNA_lm = function(formula, data, fit_fun = rstan::sampling,
 
     if(!verbose) sink()
     
-    cl = if(is_lme4(formula)) "eDNA_model_lm" else "eDNA_model_lmer"
+    cl = if(is_lme4(formula)) "eDNA_model_lmer" else "eDNA_model_lm"
     
     fit = as(fit, cl)
     return(fit)
