@@ -20,7 +20,7 @@ sim_eDNA_lm = function(formula, vars_list,
              "Provided: ", length(betas), "\n",
              "Required: ", ncol(ml$x), "\n")
 
-    md = prep_sim(ml, std_curve_alpha, std_curve_beta, sigma_Cq, betas)
+    md = prep_data(ml, std_curve_alpha, std_curve_beta, sigma_Cq, betas, type = "sim")
 
     if(!verbose) sink(tempfile())
 
@@ -65,8 +65,9 @@ sim_eDNA_lmer = function(formula, vars_list,
              "Random effects: ", colnames(ml$groups))
 
     
-    md = prep_sim(ml, std_curve_alpha, std_curve_beta, sigma_Cq,
-                  betas = betas, rand_sd = sigma_rand)
+    md = prep_data(ml, std_curve_alpha, std_curve_beta, sigma_Cq,
+                  betas = betas, rand_sd = sigma_rand,
+                  type = "sim")
 
     if(!verbose) sink(tempfile())
     
@@ -121,43 +122,6 @@ ln_std_curve = function(x, alpha = 21.167769, beta = -1.52868305)
 has_response = function(formula)
 {
     attr(terms(formula), "response") > 0
-}
-
-prep_sim = function(mod_list, alpha, beta, Cq_sd, betas, Cq_upper = 40, rand_sd = double(0))
-{
-    model_data = list(N = length(mod_list$y),
-                      n_vars = ncol(mod_list$x),
-                      X = mod_list$x,
-                      std_curve_alpha = alpha,
-                      std_curve_beta = beta,
-                      sigma_Cq = Cq_sd,
-                      betas = as.array(betas),
-                      upper_Cq = Cq_upper)
-
-    if(is.null(mod_list$groups)){
-        b = list(model_data, 
-                 has_rand = 0L,
-                 n_rand_var = 0L,
-                 n_rand_total = 0L, 
-                 rand_var_shared = double(0),
-                 groups = double(0),
-                 rand_sigma = rand_sd)
-        model_data = c(model_data, b)
-    } else { 
-        rand_idx = unlist(relevel_rands(mod_list$groups))
-        rand_var_shared = get_shared_rand(mod_list$groups)
-        
-        b = list(has_rand = 1L,
-                 n_rand_var = ncol(mod_list$groups),
-                 n_rand_total = max(rand_idx),
-                 rand_var_shared = rand_var_shared,
-                 groups = rand_idx,
-                 rand_sigma = as.array(rand_sd))
-        
-        model_data = c(model_data, b)
-    }
-
-    return(model_data)
 }
 
 load_slots = function(obj)

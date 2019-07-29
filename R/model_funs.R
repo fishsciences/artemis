@@ -49,38 +49,3 @@ run_model = function(model = stanmodels$eDNA_lm, data, n_chain,
     class(fit) = cl
     return(fit)
 }
-
-prep_model = function(mod_list, alpha, beta, Cq_upper = 40)
-{
-    model_data = list(N = length(mod_list$y),
-                      n_vars = ncol(mod_list$x),
-                      X = mod_list$x,
-                      std_curve_alpha = alpha,
-                      std_curve_beta = beta,
-                      upper_Cq = Cq_upper)
-
-    if(is.null(mod_list$groups)){
-        b = list(model_data, 
-                 has_rand = 0L,
-                 n_rand_var = 0L,
-                 n_rand_total = 0L, 
-                 rand_var_shared = double(0),
-                 groups = double(0))
-
-    } else { 
-        rand_idx = unlist(relevel_rands(mod_list$groups))
-        rand_var_shared = get_shared_rand(mod_list$groups)
-        
-        b = list(has_rand = 1L,
-                 n_rand_var = ncol(mod_list$groups),
-                 n_rand_total = max(rand_idx),
-                 rand_var_shared = rand_var_shared,
-                 groups = rand_idx,
-                 rand_sigma = as.array(rand_sd))
-        
-    }
-    
-    model_data = c(model_data, b)
-
-    return(model_data)
-}
