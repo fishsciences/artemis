@@ -8,5 +8,6 @@ importFrom(rstan, sampling, extract)
 useDynLib(artemis, .registration = TRUE)
 
 exportClass(eDNA_simulation)
+exportClass(eDNA_model)
 
 export(sim_eDNA_lm, sim_eDNA_lmer)

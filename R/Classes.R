@@ -92,7 +92,6 @@ setClass("eDNA_model",
 
 setClass("eDNA_model_lmer", contains = "eDNA_model",
          slots = c(groups = "data.frame", random_sd = "numeric"))
-
 setClass("eDNA_model_lm", contains = "eDNA_model")
 
 setAs("stanfit", "eDNA_model_lmer", function(from) callNextMethod())
