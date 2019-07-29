@@ -47,8 +47,7 @@ run_model = function(model = stanmodels$eDNA_lm, data, n_chain,
     
     fit = as(fit, "eDNA_model")
     class(fit) = cl
-
-
+    return(fit)
 }
 
 prep_model = function(mod_list, alpha, beta, Cq_upper = 40)
