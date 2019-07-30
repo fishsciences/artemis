@@ -9,9 +9,9 @@ eDNA_lm = function(formula, data, fit_fun = rstan::sampling,
     # This works because Stan ignores extra input data
     md = prep_model(ml, std_curve_alpha, std_curve_beta,
                     Cq_upper = upper_Cq)
-
     md$y = ml$y
     fit = run_model(data = md, n_chain = n_chain, iters = iters, verbose = verbose, ...)
+    class(fit) = "eDNA_model_lm"
     return(fit)
 }
 
@@ -25,9 +25,10 @@ eDNA_lmer = function(formula, data,
     
     md = prep_model(ml, std_curve_alpha, std_curve_beta,
                     Cq_upper = upper_Cq)
-
     md$y = ml$y
+
     fit = run_model(data = md, n_chain = n_chain, iters = iters, verbose = verbose, ...)
+    class(fit) = "eDNA_model_lmer"
     return(fit)
 }
 
@@ -43,9 +44,6 @@ run_model = function(model = stanmodels$eDNA_lm, data, n_chain,
 
     if(!verbose) sink()
     
-    cl = if(is_lme4(formula)) "eDNA_model_lmer" else "eDNA_model_lm"
-    
     fit = as(fit, "eDNA_model")
-    class(fit) = cl
     return(fit)
 }
