@@ -5,7 +5,8 @@
 
 context("Simulating data")
 
-vars = list(distance = c(0, 15, 50),
+vars = list(Intercept = -10.6,
+            distance = c(0, 15, 50),
             volume = c(25, 50),
             biomass = 100,
             alive = 1,
@@ -13,22 +14,20 @@ vars = list(distance = c(0, 15, 50),
             rep = 1:3, Cq = 1)
 
 X = expand.grid(vars)
-betas = c(distance = .002, volume = -0.57, biomass = 1, alive = 1)
+betas = c(distance = -0.002, volume = 0.01, biomass = 1, alive = 1)
 
 test_that("Simulate data: lm", {
 
     expect_equal(nrow(X), Reduce(`*`, sapply(vars, length)))
 
-    betas = c(distance = .002, volume = -0.57, biomass = 1, alive = 1)
-
     expect_error(sim_eDNA_lm(Cq ~ distance + volume, vars,
-                             betas = c(intercept = 1, distance = 0.5)))
-
+                             betas = c(intercept = -10.6, distance = -0.05)))
+    
     expect_error(sim_eDNA_lm(Cq ~ distance + volume, vars,
-                             betas = c(intercept = 1, distance = 0.5)))
+                             betas = c(intercept = -10.6, distance = -0.05)))
 
     ans = sim_eDNA_lm(Cq ~ distance + volume, vars,
-                      betas = c(intercept = 1, distance = 0.5, volume = 0),
+                      betas = c(intercept = -10.6, distance = -0.05, volume = 0.1),
                       sigma_Cq = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
     expect_is(ans, "eDNA_simulation")
@@ -44,7 +43,7 @@ test_that("Simulate data: lmer", {
 
     ans = sim_eDNA_lmer(Cq ~ distance + volume + (1|rep),
                         vars,
-                        betas = c(intercept = 1, distance = 0.5, volume = 0),
+                        betas = c(intercept = -10.6, distance = -0.05, volume = 0.01),
                         sigma_Cq = 1,
                         sigma_rand = 0.1,
                         std_curve_alpha = 21.2,
@@ -72,7 +71,7 @@ test_that("Gen model list", {
 test_that("Multiple groups", {
     expect_error(sim_eDNA_lmer(Cq ~ distance + volume + (1|rep) + (1|tech_rep),
                         vars,
-                        betas = c(intercept = 1, distance = 0.5, volume = 0),
+                        betas = c(intercept = -10.6, distance = -0.05, volume = 0.01),
                         sigma_Cq = 1,
                         sigma_rand = c(0.1),
                         std_curve_alpha = 21.2,
@@ -80,7 +79,7 @@ test_that("Multiple groups", {
 
     ans = sim_eDNA_lmer(Cq ~ distance + volume + (1|rep) + (1|tech_rep),
                         vars,
-                        betas = c(intercept = 1, distance = 0.5, volume = 0),
+                        betas = c(intercept = -10.6, distance = -0.05, volume = 0.01),
                         sigma_Cq = 1,
                         sigma_rand = c(0.1, 0.1),
                         std_curve_alpha = 21.2,
@@ -92,8 +91,8 @@ test_that("Multiple groups", {
 # might want to move these eventually to a methods test file
 test_that("Methods", {
   ans = sim_eDNA_lm(Cq ~ distance + volume, vars,
-                      betas = c(intercept = 1, distance = 0.5, volume = 0),
-                      sigma_Cq = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
+                    betas = c(intercept = -10.6, distance = -0.05, volume = 0.01),,
+                    sigma_Cq = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
   print(ans)
   expect_null(print(ans))
@@ -128,7 +127,7 @@ test_that("Simulation accuracy", {
     expect_true(abs(sd(ans@Cq_star) - 1) < 0.2)
     
     ans = sim_eDNA_lm(Cq ~ 1 + distance, vars,
-                      betas = c(intercept = -1, distance = -11),
+                      betas = c(intercept = -10.6, distance = -11),
                       sigma_Cq = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
     tt = tapply(ans@Cq_star, ans@x$distance, unique)
