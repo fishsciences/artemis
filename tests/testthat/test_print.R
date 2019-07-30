@@ -1,4 +1,7 @@
-context("Simulating data")
+context("Print methods")
+
+## Figure out how to test this
+
 
 vars = list(distance = c(0, 15, 50),
             volume = c(25, 50),
@@ -10,22 +13,10 @@ vars = list(distance = c(0, 15, 50),
 X = expand.grid(vars)
 betas = c(distance = .002, volume = -0.57, biomass = 1, alive = 1)
 
-test_that("Summary methods: simulations", {
+test_that("Print methods: simulations", {
     ans = sim_eDNA_lm(Cq ~ distance + volume, vars,
                       betas = c(intercept = 1, distance = 0.5, volume = 0),
                       sigma_Cq = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
-
-    res = summary(ans)
-
-    expect_is(res, "eDNA_simulation.summary")
-    expect_is(res, "data.frame")
-
-    expect_true(nrow(res) == sum(sapply(ans@x, function(x) length(unique(x)))))
-    expect_true(ncol(res) == 7)
-    
-    res2 = summary(ans, prob = 0.5)
-
-    expect_true(ncol(res2) == 5)
-
-    print(res)
+    ## should not throw an error
+    expect_null(print(ans))
 })
