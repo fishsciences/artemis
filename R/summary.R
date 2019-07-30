@@ -29,8 +29,15 @@ summary.eDNA_simulation = function(object, var = "Cq_star",
 
 summary.eDNA_model = function(object, probs = c(0.025, 0.5, 0.975), ...)
 {
-    res = t(apply(object@betas, 2, quantile, prob = probs))
-    res = as.data.frame(res)
+    res = apply(object@betas, 2, quantile, prob = probs, simplify = FALSE)
+
+    if(!is.null(ncol(res))) 
+        res = t(res)
+
+    res = data.frame(res)
+
+    colnames(res) = paste0(probs * 100, "%")
+    
     rownames(res) = colnames(object@x)
     res$mean = colMeans(object@betas)
     

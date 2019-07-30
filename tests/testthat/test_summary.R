@@ -29,3 +29,22 @@ test_that("Summary methods: simulations", {
 
     print(res)
 })
+
+test_that("Summary methods: model", {
+    ans = eDNA_lm(Cq ~ Distance, eDNA_samples,
+                  std_curve_alpha = 21.2, std_curve_beta = -1.5)
+    
+    res = summary(ans)
+
+    expect_is(res, "eDNA_model.summary")
+    expect_is(res, "data.frame")
+
+    expect_true(nrow(res) == ncol(ans@betas))
+    expect_true(ncol(res) == 4)
+    
+    res2 = summary(ans, prob = 0.5)
+
+    expect_true(ncol(res2) == 2)
+
+    print(res)
+})
