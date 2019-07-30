@@ -100,8 +100,9 @@ test_that("Methods", {
 
   a = summary(ans)
 
-  expect_is(a, "list")
-
+  expect_is(a, "eDNA_simulation.summary")
+  expect_is(a, "data.frame")
+  
   ans2 = as(ans, "data.frame")
 
   expect_is(ans2, "data.frame")
