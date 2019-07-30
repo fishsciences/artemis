@@ -53,25 +53,6 @@ test_that("Simulate data: lmer", {
     ## expect_true(all(names(ans) %in% c("x", "Cq_star", "ln_conc")))
 })
 
-test_that("Prep data", {
-    ## lm
-    ml = gen_model_list_lm(Cq ~ distance, X)
-    ans = prep_data(ml, 21, -1.5, 1, betas, type = "sim")
-
-    expect_is(ans, "list")
-
-    expect_true(all(sapply(ans[c("groups", "rand_var_shared", "rand_sigma")], length) == 0))
-    expect_true(all(sapply(ans[c("has_rand", "n_rand_var", "n_rand_total")], `==`, 0)))
-
-    ## lmer
-    mler = gen_model_list_lmer(Cq ~ distance + (1|volume), X)
-    ans = prep_data(mler, 21, -1.5, 1, betas, rand_sd = 0.1, type = "sim")
-
-    expect_is(ans, "list")
-
-    expect_true(all(sapply(ans[c("groups", "rand_var_shared", "rand_sigma")], length) != 0))
-    expect_true(all(sapply(ans[c("has_rand", "n_rand_var", "n_rand_total")], `!=`, 0)))
-})
 
 test_that("Gen model list", {
     ml = gen_model_list_lm(Cq ~ distance, X)
