@@ -42,9 +42,9 @@ as.data.frame.eDNA_simulation = function(x) {
     as(x, "data.frame")
 }
 
-get_marginals = function(y, X, fun, n_digits = getOption("digits"), ...)
+get_marginals = function(y, X, fun, ...)
 {
-    ans = lapply(X, function(x) tapply(y, x, function(dd) round(fun(dd, ...), n_digits)))
+    ans = lapply(X, function(x) tapply(y, x, fun, ...))
     if(all(sapply(ans, is.list)))
         ans = lapply(ans, function(x) do.call(rbind, x))
 
@@ -64,7 +64,8 @@ setClass("eDNA_model",
                    betas = "array", sigma_Cq = "array",
                    formula = "formula", x = "data.frame",
                    std_curve_alpha = "numeric", std_curve_beta = "numeric",
-                   upper_Cq = "numeric"))
+                   upper_Cq = "numeric",
+                   stanfit = "stanfit"))
 
 setClass("eDNA_model_lmer", contains = "eDNA_model",
          slots = c(groups = "data.frame", random_sd = "numeric"))
@@ -78,6 +79,7 @@ setAs("stanfit", "eDNA_model",
           tmp = extract(from)
           new("eDNA_model", 
               betas = tmp$betas,
-              sigma_Cq = tmp$sigma_Cq)
+              sigma_Cq = tmp$sigma_Cq,
+              stanfit = from)
        
       })
