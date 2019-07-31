@@ -22,6 +22,7 @@ summary.eDNA_simulation = function(object, var = "Cq_star",
          } else NA
     
     ans = cbind(qtl, mean = unlist(m), p_detect = unlist(dt))
+    rownames(ans) = NULL
     structure(ans,
               class = c("eDNA_simulation.summary", "data.frame"))
     
@@ -44,7 +45,7 @@ summary.eDNA_model = function(object, probs = c(0.025, 0.5, 0.975), ...)
     
     rownames(res) = c(colnames(object@x), "CQ sd")
     res$mean = colMeans(cbind(object@betas, object@sigma_Cq))
-
+    
     structure(res,
               iter = object@stanfit@stan_args$iter,
               class = c("eDNA_model.summary", "data.frame"))
