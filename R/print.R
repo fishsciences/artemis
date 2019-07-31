@@ -1,5 +1,8 @@
-print.eDNA_simulation = function(x, FUN = summary, digits = getOption("digits")) {
+print.eDNA_simulation = function(x, FUN = summary, digits = getOption("digits"),
+                                 show_variables = FALSE) {
     cat("\nformula: "); print(x@formula)
+
+    if(show_variables){
     cat("\nvariable levels:\n")
     
     vars = sapply(seq_along(x@variable_levels), function(i)
@@ -7,6 +10,10 @@ print.eDNA_simulation = function(x, FUN = summary, digits = getOption("digits"))
                paste(x@variable_levels[[i]], collapse = " ")))
     
     cat(vars, sep = "\n")
+    }
+    cat("\nStandard curve parameters: Cq = alpha + beta * log(concentration)\n")
+    cat("\tStandard curve alpha = ", x@std_curve_alpha, "\n")
+    cat("\tStandard curve beta = ", x@std_curve_beta, "\n")
     cat("\n ln concentration: \n")
     print(summary(x, var = "ln_conc", digits = digits))
 
@@ -23,4 +30,21 @@ print.eDNA_simulation.summary = function(x, digits = getOption("digits"), ...)
                            , digs = digits),
                       stringsAsFactors = FALSE)
     NextMethod()
+}
+
+print.eDNA_model = function(x, digits = getOptions("digits"), ...)
+{
+    cat("\nformula: "); print(x@formula)
+    cat("\nStandard curve parameters: Cq = alpha + beta * log(concentration)\n")
+    cat("\tStandard curve alpha = ", x@std_curve_alpha, "\n")
+    cat("\tStandard curve beta = ", x@std_curve_beta, "\n")
+    invisible(x)
+}
+
+
+
+print.eDNA_model.summary = function(x, digits = getOptions("digits"), ...)
+{
+    NextMethod()
+    invisible(x)
 }

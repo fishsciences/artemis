@@ -27,6 +27,7 @@ summary.eDNA_simulation = function(object, var = "Cq_star",
     
 }
 
+
 summary.eDNA_model = function(object, probs = c(0.025, 0.5, 0.975), ...)
 {
     res = apply(object@betas, 2, quantile, prob = probs, simplify = FALSE)
@@ -46,6 +47,5 @@ summary.eDNA_model = function(object, probs = c(0.025, 0.5, 0.975), ...)
 
     structure(res,
               iter = object@stanfit@stan_args$iter,
-              
               class = c("eDNA_model.summary", "data.frame"))
 }

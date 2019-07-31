@@ -47,4 +47,6 @@ test_that("Summary methods: model", {
     expect_true(ncol(res2) == 2)
     
     print(res)
+    print(res2)
+    
 })
