@@ -6,8 +6,7 @@ est_p_detect = function(var_levels,
                         n_rep = 1:12,
                         model_fit = NULL,
                         target_detection = 0.8,
-                        upper_Cq = 40,
-                        n_sim = 500L)
+                        upper_Cq = 40)
 
 {
     ln_conc_hat = if(is.null(model_fit)) {
@@ -18,6 +17,9 @@ est_p_detect = function(var_levels,
 
     ln_thresh = (upper_Cq - std_curve_alpha) / std_curve_beta
 
+    ans = sapply(n_rep, function(i) 1 - (pnorm(ln_thresh, ln_conc_hat, Cq_sd) ^ i))
 
-    sapply(n_rep, function(i) 1 - (pnorm(ln_thresh, ln_conc_hat, Cq_sd) ^ i))
+    structure(ans,
+              reps = n_rep,
+              class = c("eDNA_p_detect", class(ans)))
 }

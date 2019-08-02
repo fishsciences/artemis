@@ -9,7 +9,7 @@ test_that("P-detect", {
                  betas = c(intercept = -10.6, Distance = -0.005, Volume = 0.01),
                  Cq_sd = 1, n_rep = 6, std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
-    est_p_detect(var_levels = c(intecept = 1, Distance = 300, Volume = 0),
+    res = est_p_detect(var_levels = c(intecept = 1, Distance = 300, Volume = 0),
                  betas = c(intercept = -10.6, Distance = -0.5, Volume = -0.1),
                  Cq_sd = 1, n_rep = 3, std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
@@ -26,7 +26,6 @@ test_that("P-detect", {
     res = est_p_detect(var_levels = c(intecept = 1, Distance = 50),
                  betas = NULL, model_fit = ans, 
                  Cq_sd = 1, n_rep = 2:6, std_curve_alpha = 21.2, std_curve_beta = -1.5)
-
     expect_true(nrow(res) == nrow(ans@betas))
     expect_true(ncol(res) == length(2:6))
 
