@@ -19,7 +19,7 @@ print.eDNA_simulation = function(x, FUN = summary, digits = getOption("digits"),
 
     cat("\n simulated Cq: \n")
     print(summary(x), digits = digits, row.names = FALSE, ...) 
-    return(invisible(NULL))
+    invisible(x)
 }
 
 print.eDNA_model = function(x, digits = getOption("digits"), ...)
@@ -29,6 +29,7 @@ print.eDNA_model = function(x, digits = getOption("digits"), ...)
     cat("\tStandard curve alpha = ", x@std_curve_alpha, "\n")
     cat("\tStandard curve beta = ", x@std_curve_beta, "\n\n")
 
-    print(summary(x, ...), digits = digits, row.names = FALSE, ...)
+    cat("\nParameter estimates:\n")
+    print(summary(x, ...), digits = digits, ...)
     invisible(x)
 }
