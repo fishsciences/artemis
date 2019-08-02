@@ -1,13 +1,13 @@
 context("Power functions")
 
 test_that("P-detect", {
-    est_p_detect(var_levels = c(intecept = 1, Distance = 500, Volume = 20),
-                 betas = c(intercept = -10.6, Distance = -0.005, Volume = 0.01),
-                 Cq_sd = 1, n_rep = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
-
-    est_p_detect(var_levels = c(intecept = 1, Distance = 500, Volume = 50),
-                 betas = c(intercept = -10.6, Distance = -0.005, Volume = 0.01),
-                 Cq_sd = 1, n_rep = 6, std_curve_alpha = 21.2, std_curve_beta = -1.5)
+    expect_error(est_p_detect(var_levels = c(intecept = 1, Distance = 500),
+                              betas = c(intercept = -10.6, Distance = -0.005, Volume = 0.01),
+                              Cq_sd = 1, n_rep = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5))
+    
+    expect_error(est_p_detect(var_levels = c(intecept = 1, Distance = 500, Volume = 50),
+                 betas = c(intercept = -10.6, Distance = -0.005),
+                 Cq_sd = 1, n_rep = 6, std_curve_alpha = 21.2, std_curve_beta = -1.5))
 
     res = est_p_detect(var_levels = c(intecept = 1, Distance = 300, Volume = 0),
                  betas = c(intercept = -10.6, Distance = -0.5, Volume = -0.1),
@@ -29,4 +29,11 @@ test_that("P-detect", {
     expect_true(nrow(res) == nrow(ans@betas))
     expect_true(ncol(res) == length(2:6))
 
+
+    expect_error(est_p_detect(var_levels = c(intecept = 1, Distance = 300,
+                                             Volume = c(0, 20)),
+                              betas = c(intercept = -10.6, Distance = -0.5, Volume = -0.1),
+                              Cq_sd = 1, n_rep = 3, std_curve_alpha = 21.2, std_curve_beta = -1.5))
+   
+    
 })
