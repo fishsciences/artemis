@@ -9,6 +9,11 @@ est_p_detect = function(var_levels,
                         upper_Cq = 40)
 
 {
+    if(!is.null(dim(var_levels)))
+        stop("Sorry, only one set of variable levels at a time currently supported")
+    if(is.null(model_fit) && length(var_levels) != length(betas))
+        stop("Variable levels and betas cannot be of different lengths")
+
     ln_conc_hat = if(is.null(model_fit)) {
                       var_levels %*% betas
                   } else {
@@ -20,6 +25,7 @@ est_p_detect = function(var_levels,
     ans = sapply(n_rep, function(i) 1 - (pnorm(ln_thresh, ln_conc_hat, Cq_sd) ^ i))
 
     structure(ans,
+              variable_levels = var_levels,
               reps = n_rep,
               class = c("eDNA_p_detect", class(ans)))
 }
