@@ -24,11 +24,12 @@ plot.eDNA_p_detect = function(x, y, probs = c(0.025, 0.975),
     
         ci = apply(x, 2, quantile, probs)
         plot(reps, mn, ylab = "p(detect)", type = "b",
-             ylim = ylim, xlim = range(reps), ...)
+             ylim = ylim, xlim = range(reps),
+             lty = 2, ...)
 
         segments(reps, y0 = ci[1,], y1 = ci[2,])
-        lines(reps, ci[1,], lty = 2)
-        lines(reps, ci[2,], lty = 2)
+        lines(reps, ci[1,], lty = 3)
+        lines(reps, ci[2,], lty = 3)
     } else {
         plot(reps, x, ylab = "p(detect)", ylim = ylim, ...)
     }
