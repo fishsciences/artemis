@@ -50,3 +50,10 @@ summary.eDNA_model = function(object, probs = c(0.025, 0.5, 0.975), ...)
               iter = object@stanfit@stan_args$iter,
               class = c("eDNA_model.summary", "data.frame"))
 }
+
+summary.eDNA_predict_lm = function(object, probs = c(0.025, 0.5, 0.975), ...)
+{
+    # Placeholder
+    object
+
+}
