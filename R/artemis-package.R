@@ -9,6 +9,9 @@
 #' @import methods
 #' @import Rcpp
 #' @import rstantools
+#' @importFrom rstan sampling extract
+#' @importFrom lme4 lFormula
+#' @importFrom stats model.frame
 #' @importFrom rstan sampling
 #' 
 #' @references 
