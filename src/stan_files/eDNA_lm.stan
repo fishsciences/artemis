@@ -74,7 +74,7 @@ model{
   thetas ~ normal(0 , 1);
   rand_betas_raw ~ normal(0, 1);
   sigma_Cq ~ normal(0, 1);
-  rand_sigma ~ normal(0, .1);
+  rand_sigma ~ normal(0, 1);
   
   Cq_hat = ln_conc_hat * std_curve_beta + std_curve_alpha;
   
