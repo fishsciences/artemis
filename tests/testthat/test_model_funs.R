@@ -25,5 +25,18 @@ test_that("Fit the model with simple data",{
 
     aa = summary(ans)
 
+
     
+})
+
+test_that("Lmer", {
+    ans2 = eDNA_lmer(Cq ~ Distance + Volume + (1|TechnicalRep), eDNA_samples,
+                   std_curve_alpha = 21.2, std_curve_beta = -1.5)
+
+    summary(ans2)
+
+    ans2 = eDNA_lmer(Cq ~ Distance + Volume + (1|TechnicalRep) + (1|SampleID),
+                     eDNA_samples,
+                     std_curve_alpha = 21.2, std_curve_beta = -1.5)
+
 })

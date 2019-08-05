@@ -37,3 +37,13 @@ test_that("P-detect", {
    
     
 })
+
+test_that("Power function", {
+    
+    ans = est_power(Cq ~ 1 + distance + (1|rep), vars,
+                    betas = c(intercept = -10.6, distance = -0.05),
+                    sigma_Cq = 1, sigma_rep = 0.5, std_curve_alpha = 21.2, std_curve_beta = -1.5)
+
+
+})
+
