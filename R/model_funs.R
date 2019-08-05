@@ -1,7 +1,7 @@
 eDNA_lm = function(formula, data, fit_fun = rstan::sampling,
                    std_curve_alpha, std_curve_beta,
                    upper_Cq = 40,
-                   n_chain = 1L, iters = 1000L, verbose = FALSE, ...)
+                   n_chain = 4L, iters = 1000L, verbose = FALSE, ...)
 {
     
     ml = gen_model_list_lm(formula, data)
@@ -18,9 +18,9 @@ eDNA_lm = function(formula, data, fit_fun = rstan::sampling,
 }
 
 eDNA_lmer = function(formula, data, 
-                   std_curve_alpha, std_curve_beta,
-                   upper_Cq = 40,
-                   n_chain = 1L, iters = 1000L, verbose = FALSE, ...)
+                     std_curve_alpha, std_curve_beta,
+                     upper_Cq = 40,
+                     n_chain = 4L, iters = 1000L, verbose = FALSE, ...)
 {
     
     ml = gen_model_list_lmer(formula, data)
