@@ -1,3 +1,15 @@
+##' Print eDNA simulation
+##'
+##' .. content for \details{} ..
+##' @title Print eDNA simulation
+##' @param x object of class eDNA_simulation
+##' @param FUN a function to use to summarize the results, default is \code{summary}
+##' @param digits number of digits to show 
+##' @param show_variables logical, should the variable levels used in the simulation
+##'     be included
+##' @param ... additional arguments passed to \code{print}
+##' @return NULL
+##' @author Matt Espe
 print.eDNA_simulation = function(x, FUN = summary, digits = getOption("digits"),
                                  show_variables = FALSE, ...) {
     cat("\nformula: "); print(x@formula)
@@ -22,6 +34,15 @@ print.eDNA_simulation = function(x, FUN = summary, digits = getOption("digits"),
     invisible(x)
 }
 
+##' Print eDNA model results
+##'
+##' .. content for \details{} ..
+##' @title Print eDNA model results
+##' @param x object of class "eDNA_model_*"
+##' @param digits number of digits to show 
+##' @param ... additional arguments passed to \code{print}
+##' @return NULL
+##' @author Matt Espe
 print.eDNA_model = function(x, digits = getOption("digits"), ...)
 {
     cat("\nformula: "); print(x@formula)
