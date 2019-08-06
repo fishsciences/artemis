@@ -11,6 +11,20 @@ setMethod("plot", "eDNA_simulation_lmer",
 setMethod("plot", "eDNA_model_lmer",
           function(x, y, ...) {})
 
+##' Plot the p(detect)
+##'
+##' Plot the p(detect)
+##' @title Plot p(detect)
+##' @param x an object of class "eDNA_p_detect", produced by \code{est_p_detect}
+##' @param y ignored
+##' @param probs numeric vector of length 2, the lower and upper probabilities for
+##'     quantiles displayed
+##' @param ylim the y limits on the plot
+##' @param ... additional args passed to \code{plot}
+##' @return NULL
+##' 
+##' @author Matt Espe
+##' @export
 plot.eDNA_p_detect = function(x, y, probs = c(0.025, 0.975),
                               ylim = c(0,1), ...)
 {
@@ -34,6 +48,5 @@ plot.eDNA_p_detect = function(x, y, probs = c(0.025, 0.975),
         plot(reps, x, ylab = "p(detect)", ylim = ylim, ...)
     }
     
-
     invisible(x)
 }

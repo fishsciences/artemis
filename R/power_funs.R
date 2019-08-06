@@ -1,6 +1,7 @@
 ##' Estimate the probability of detection
 ##'
 ##' Estimate the probability of detection
+##' 
 ##' @title Estimate the probability of detection
 ##' @param variable_levels numeric vector, with each element corresponding
 ##'     to the condition to estimate the probability of detection.
