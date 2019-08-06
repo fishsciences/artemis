@@ -1,11 +1,39 @@
-
+##' Estimate the probability of detection
+##'
+##' Estimate the probability of detection
+##' @title Estimate the probability of detection
+##' @param variable_levels numeric vector, with each element corresponding
+##'     to the condition to estimate the probability of detection.
+##' @param betas numeric vector, the effect sizes for each of the variable
+##'     level
+##' @param Cq_sd numeric, the measurement error on CQ
+##' @param std_curve_alpha the alpha for the std. curve formula for conversion
+##'     between log(concentration) and CQ
+##' @param std_curve_beta the alpha for the std. curve formula for conversion
+##'     between log(concentration) and CQ
+##' @param n_rep the number of replicate measurements at the levels specified
+##' @param model_fit optional, a model fit from \code{eDNA_lm} or \code{eDNA_lmer}.
+##'     If this is provided, an estimate derived from the posterior estimates of beta
+##'     is calculated.
+##' @param upper_Cq the upper limit on detection
+##' @return object of class "eDNA_p_detect" with the estimates of the
+##'     probability of detection for the variable levels provided.
+##' @author Matt Espe
+##'
+##' @examples
+##'
+##' est_p_detect(variable_levels = c(Intercept = 1, Distance = 100, Volume = 20),
+##'              betas = c(Intercept = -10.5, Distance = -0.05, Volume = 0.001),
+##'              Cq_sd = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5,
+##'              n_rep = 1:12)
+##'
+##' @export
 est_p_detect = function(variable_levels,
                         betas, 
                         Cq_sd,
                         std_curve_alpha, std_curve_beta,
                         n_rep = 1:12,
                         model_fit = NULL,
-                        target_detection = 0.8,
                         upper_Cq = 40)
 
 {
