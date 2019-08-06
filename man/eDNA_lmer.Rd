@@ -5,9 +5,8 @@
 \alias{eDNA_lmer}
 \title{Fit eDNA Model}
 \usage{
-eDNA_lm(formula, data, fit_fun = rstan::sampling, std_curve_alpha,
-  std_curve_beta, upper_Cq = 40, n_chain = 4L, iters = 1000L,
-  verbose = FALSE, ...)
+eDNA_lm(formula, data, std_curve_alpha, std_curve_beta, upper_Cq = 40,
+  n_chain = 4L, iters = 1000L, verbose = FALSE, ...)
 
 eDNA_lmer(formula, data, std_curve_alpha, std_curve_beta, upper_Cq = 40,
   n_chain = 4L, iters = 1000L, verbose = FALSE, ...)
@@ -36,7 +35,7 @@ two is not recommended.}
 \item{verbose}{logical, when TRUE output from \code{rstan::sampling} is written
 to the console.}
 
-\item{...}{additional arguments passed to \code{\link{rstan::sampling}}}
+\item{...}{additional arguments passed to \code{\link[rstan]{sampling}}}
 }
 \value{
 S4 object, with the following slots:

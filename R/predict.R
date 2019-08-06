@@ -5,7 +5,7 @@ predict.eDNA_model = function(object, newdata = NULL, include_sigma = FALSE,
 
     
     if(!is.null(newdata)){
-        if(ncol(x) != ncol(object@betas))
+        if(ncol(object@x) != ncol(object@betas))
             stop("Please provide the same number of predictors as the original data, including the intercept")
         X = newdata
     } else {

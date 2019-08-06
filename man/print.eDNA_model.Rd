@@ -4,7 +4,7 @@
 \alias{print.eDNA_model}
 \title{Print eDNA model results}
 \usage{
-\method{eDNA_model}{print}(x, digits = getOption("digits"), ...)
+\method{print}{eDNA_model}(x, digits = getOption("digits"), ...)
 }
 \arguments{
 \item{x}{object of class "eDNA_model_*"}

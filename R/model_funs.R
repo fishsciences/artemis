@@ -1,7 +1,7 @@
 
 ##' @rdname eDNA_lmer
 ##' @export
-eDNA_lm = function(formula, data, fit_fun = rstan::sampling,
+eDNA_lm = function(formula, data, 
                    std_curve_alpha, std_curve_beta,
                    upper_Cq = 40,
                    n_chain = 4L, iters = 1000L, verbose = FALSE, ...)
@@ -42,7 +42,7 @@ eDNA_lm = function(formula, data, fit_fun = rstan::sampling,
 ##' @param iters integer, the number of iterations per chain
 ##' @param verbose logical, when TRUE output from \code{rstan::sampling} is written
 ##'     to the console. 
-##' @param ... additional arguments passed to \code{\link{rstan::sampling}}
+##' @param ... additional arguments passed to \code{\link[rstan]{sampling}}
 ##' @return S4 object, with the following slots:
 ##' \describe{
 ##'   \item{ln_conc}{matrix, the posterior samples for the latent variable,

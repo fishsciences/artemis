@@ -4,7 +4,7 @@
 \alias{print.eDNA_simulation}
 \title{Print eDNA simulation}
 \usage{
-\method{eDNA_simulation}{print}(x, FUN = summary,
+\method{print}{eDNA_simulation}(x, FUN = summary,
   digits = getOption("digits"), show_variables = FALSE, ...)
 }
 \arguments{

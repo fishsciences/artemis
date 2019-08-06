@@ -1,5 +1,10 @@
 ################################################################################
 ## simulations
+
+##' eDNA simulation results
+##'
+##' Placeholder
+##' 
 ##' @slot ln_conc matrix, simulated log(eDNA concentration)
 ##' @slot Cq_star matrx, simulated CQ star
 ##' @slot formula the formula used
@@ -18,13 +23,23 @@ setClass("eDNA_simulation",
                    std_curve_alpha = "numeric", std_curve_beta = "numeric",
                    upper_Cq = "numeric"))
 
+##' eDNA simulation results
+##'
+##' Placeholder
+##' 
 ##' @slot groups the grouping variables used
 ##' @slot random_sd the stdev of the random effects
 ##' 
+##' @rdname eDNA_simulation
 ##' @export
 setClass("eDNA_simulation_lmer", contains = "eDNA_simulation",
          slots = c(groups = "data.frame", random_sd = "numeric"))
 
+##' eDNA simulation results
+##'
+##' Placeholder
+##' 
+##' @rdname eDNA_simulation
 ##' @export
 setClass("eDNA_simulation_lm", contains = "eDNA_simulation")
 
@@ -74,6 +89,10 @@ p_detect = function(y, thresh)
 ################################################################################
 ## Model results
 
+##' eDNA model fit results
+##'
+##' Placeholder.
+##' 
 ##' @slot ln_conc matrix, the estimated latent variable, log(eDNA concentration)
 ##' @slot Cq_star matrix, the predicted CQ value for each obs
 ##' @slot betas matrix, the posterior estimate for each beta in the model
@@ -84,7 +103,7 @@ p_detect = function(y, thresh)
 ##' @slot std_curve_beta the beta for the std. curve conversion formula used
 ##' @slot upper_Cq the upper limit for CQ
 ##' @slot stanfit the result from rstan::sampling
-##' 
+##'
 ##' @export
 setClass("eDNA_model",
          slots = c(ln_conc = "matrix", Cq_star = "matrix",
@@ -94,12 +113,22 @@ setClass("eDNA_model",
                    upper_Cq = "numeric",
                    stanfit = "stanfit"))
 
+##' eDNA simulation results
+##'
+##' Placeholder
+##' 
 ##' @slot groups data.frame of the grouping variables used
 ##' @slot random_sd the estimated stdev. of each of the random effects
+##' @rdname eDNA_model
 ##' @export
 setClass("eDNA_model_lmer", contains = "eDNA_model",
          slots = c(groups = "data.frame", random_sd = "numeric"))
 
+##' eDNA simulation results
+##'
+##' Placeholder
+##' 
+##' @rdname eDNA_model
 ##' @export
 setClass("eDNA_model_lm", contains = "eDNA_model")
 

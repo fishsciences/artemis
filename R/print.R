@@ -11,7 +11,7 @@
 ##' @param ... additional arguments passed to \code{print}
 ##' @return NULL
 ##' @author Matt Espe
-##' @method eDNA_simulation print
+##' @method print eDNA_simulation
 ##' @export
 print.eDNA_simulation = function(x, FUN = summary, digits = getOption("digits"),
                                  show_variables = FALSE, ...) {
@@ -48,7 +48,7 @@ print.eDNA_simulation = function(x, FUN = summary, digits = getOption("digits"),
 ##' @return NULL
 ##'
 ##' @author Matt Espe
-##' @method eDNA_model print
+##' @method print eDNA_model 
 ##' @export
 print.eDNA_model = function(x, digits = getOption("digits"), ...)
 {
