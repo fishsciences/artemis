@@ -1,6 +1,30 @@
-
+##' Predict values for eDNA model
+##'
+##' Predict methods.
+##' 
+##' @title Predict eDNA model
+##' 
+##' @param object an object of class eDNA_lm{er}
+##' @param newdata optional, data.frame of new observations to predict
+##'     values for
+##' @param include_sigma logical, should the predictions include
+##'     measurement error?
+##' @param interval logical, should the raw predictions be returned
+##'     (\code{interval = FALSE}) or should an interval be computed
+##'     (\code{interval = TRUE})
+##' @param interval_fun a function which computes an interval given a
+##'     vector of posterior samples
+##' @param ... additional arguments passed to the interval function
+##' @return either a vector of predictions, or a matrix with the
+##'     prediction plus interval, depending on the value of
+##'     \code{interval}
+##' @author Matt Espe
+##' @method predict eDNA_model
+##' @export
 predict.eDNA_model = function(object, newdata = NULL, include_sigma = FALSE,
-                              interval = FALSE, ...)
+                              interval = FALSE,
+                              interval_fun = posterior_interval,
+                              ...)
 {
 
     
@@ -26,12 +50,15 @@ predict.eDNA_model = function(object, newdata = NULL, include_sigma = FALSE,
 
     if(interval){
         isNull = sapply(ans, is.null)
-        ans[!isNull] = lapply(ans[!isNull], posterior_interval, ...)
+        ans[!isNull] = lapply(ans[!isNull], interval_fun, ...)
     }
     structure(ans,
               class = "eDNA_predict_lm")
 }
 
+##' @param type the type of the prediction, MORE HERE
+##' @rdname predict.eDNA_model
+##' @export
 predict.eDNA_model_lmer = function(object, newdata = NULL, 
                                    type = c(), ...)
 {
