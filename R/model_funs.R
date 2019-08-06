@@ -45,17 +45,17 @@ eDNA_lm = function(formula, data, fit_fun = rstan::sampling,
 ##' @param ... additional arguments passed to \code{\link{rstan::sampling}}
 ##' @return S4 object, with the following slots:
 ##' \describe{
-##'   \item {ln_conc}{matrix, the posterior samples for the latent variable,
+##'   \item{ln_conc}{matrix, the posterior samples for the latent variable,
 ##'       eDNA concentration}
-##'   \item {Cq_star} {matrix, the posterior prediction for the observed response}
-##'   \item {betas} {array, the posterior estimates for the betas for the linear model}
-##'   \item {sigma_Cq}{array, the posterior estimates for the measurement error of CQ}
-##'   \item {formula}{formula, the original formula used in the model}
-##'   \item {x}{data.frame, the model matrix used in the model}
-##'   \item {std_curve_alpha} {numeric, the std. curve value used}
-##'   \item {std_curve_beta}{numeric, the std. curve value used}
-##'   \item {upper_Cq}{numeric, the upper limit for observed CQ used}
-##'   \item {stanfit}{stanfit, the original results from \code{rstan::sampling}}
+##'   \item{Cq_star}{matrix, the posterior prediction for the observed response}
+##'   \item{betas}{array, the posterior estimates for the betas for the linear model}
+##'   \item{sigma_Cq}{array, the posterior estimates for the measurement error of CQ}
+##'   \item{formula}{formula, the original formula used in the model}
+##'   \item{x}{data.frame, the model matrix used in the model}
+##'   \item{std_curve_alpha}{numeric, the std. curve value used}
+##'   \item{std_curve_beta}{numeric, the std. curve value used}
+##'   \item{upper_Cq}{numeric, the upper limit for observed CQ used}
+##'   \item{stanfit}{stanfit, the original results from \code{rstan::sampling}}
 ##' }
 ##' @author Matt Espe
 ##'

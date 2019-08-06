@@ -53,15 +53,15 @@ one sigma per random effect specified}
 \value{
 S4 object of class "eDNA_simulation_{lm/lmer}" with the following slots:
 \describe{
-  \item {ln_conc matrix} { the simulated log(concentration)}
-  \item {Cq_star matrix} {the simulated CQ values, including the measurement error}
-  \item {formula} { the formula for the simulation}
-  \item {variable_levels} { named list, the variable levels used for the simulation}
-  \item {betas}{ numeric vector, the betas for the simulation}
-  \item {x}{ data.frame, the design matrix}
-  \item {std_curve_alpha numeric}{ the alpha for the std curve conversion}
-  \item {std_curve_beta numeric}{ the alpha for the std curve conversion}
-  \item {upper_Cq}{ the upper limit for CQ}
+  \item{ln_conc matrix}{the simulated log(concentration)}
+  \item{Cq_star matrix}{the simulated CQ values, including the measurement error}
+  \item{formula}{the formula for the simulation}
+  \item{variable_levels}{named list, the variable levels used for the simulation}
+  \item{betas}{numeric vector, the betas for the simulation}
+  \item{x}{data.frame, the design matrix}
+  \item{std_curve_alpha numeric}{the alpha for the std curve conversion}
+  \item{std_curve_beta numeric}{the alpha for the std curve conversion}
+  \item{upper_Cq}{the upper limit for CQ}
 }
 }
 \description{

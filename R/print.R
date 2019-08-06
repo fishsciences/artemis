@@ -1,6 +1,7 @@
 ##' Print eDNA simulation
 ##'
-##' .. content for \details{} ..
+##' Print method.
+##' 
 ##' @title Print eDNA simulation
 ##' @param x object of class eDNA_simulation
 ##' @param FUN a function to use to summarize the results, default is \code{summary}
@@ -10,7 +11,7 @@
 ##' @param ... additional arguments passed to \code{print}
 ##' @return NULL
 ##' @author Matt Espe
-##' @method print eDNA_simulation
+##' @method eDNA_simulation print
 ##' @export
 print.eDNA_simulation = function(x, FUN = summary, digits = getOption("digits"),
                                  show_variables = FALSE, ...) {
@@ -38,7 +39,8 @@ print.eDNA_simulation = function(x, FUN = summary, digits = getOption("digits"),
 
 ##' Print eDNA model results
 ##'
-##' .. content for \details{} ..
+##' Print method.
+##'
 ##' @title Print eDNA model results
 ##' @param x object of class "eDNA_model_*"
 ##' @param digits number of digits to show 

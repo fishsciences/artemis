@@ -17,7 +17,7 @@
 Print eDNA model results
 }
 \details{
-.. content for \details{} ..
+Print method.
 }
 \author{
 Matt Espe

@@ -4,7 +4,7 @@
 \alias{print.eDNA_simulation}
 \title{Print eDNA simulation}
 \usage{
-\method{print}{eDNA_simulation}(x, FUN = summary,
+\method{eDNA_simulation}{print}(x, FUN = summary,
   digits = getOption("digits"), show_variables = FALSE, ...)
 }
 \arguments{
@@ -23,7 +23,7 @@ be included}
 Print eDNA simulation
 }
 \details{
-.. content for \details{} ..
+Print method.
 }
 \author{
 Matt Espe
