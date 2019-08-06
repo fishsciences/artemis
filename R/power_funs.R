@@ -38,9 +38,9 @@ est_p_detect = function(variable_levels,
                         upper_Cq = 40)
 
 {
-    if(!is.null(dim(variablelevels)))
+    if(!is.null(dim(variable_levels)))
         stop("Sorry, only one set of variable levels at a time currently supported")
-    if(is.null(model_fit) && length(variablelevels) != length(betas))
+    if(is.null(model_fit) && length(variable_levels) != length(betas))
         stop("Variable levels and betas cannot be of different lengths")
 
     ln_conc_hat = if(is.null(model_fit)) {

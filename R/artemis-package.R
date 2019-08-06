@@ -9,9 +9,10 @@
 #' @import methods
 #' @import Rcpp
 #' @import rstantools
+#' @importFrom stats model.matrix model.response pnorm quantile rnorm terms
+#' @importFrom graphics lines segments
 #' @importFrom rstan sampling extract
 #' @importFrom lme4 lFormula
-#' @importFrom stats model.frame
 #' @importFrom rstan sampling
 #' 
 #' @references 

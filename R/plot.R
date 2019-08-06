@@ -24,6 +24,7 @@ setMethod("plot", "eDNA_model_lmer",
 ##' @return NULL
 ##' 
 ##' @author Matt Espe
+##' @method plot eDNA_p_detect
 ##' @export
 plot.eDNA_p_detect = function(x, y, probs = c(0.025, 0.975),
                               ylim = c(0,1), ...)

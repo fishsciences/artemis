@@ -4,7 +4,8 @@
 \alias{plot.eDNA_p_detect}
 \title{Plot p(detect)}
 \usage{
-plot.eDNA_p_detect(x, y, probs = c(0.025, 0.975), ylim = c(0, 1), ...)
+\method{plot}{eDNA_p_detect}(x, y, probs = c(0.025, 0.975), ylim = c(0,
+  1), ...)
 }
 \arguments{
 \item{x}{an object of class "eDNA_p_detect", produced by \code{est_p_detect}}

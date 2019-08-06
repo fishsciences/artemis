@@ -10,6 +10,8 @@
 ##' @param ... additional arguments passed to \code{print}
 ##' @return NULL
 ##' @author Matt Espe
+##' @method print eDNA_simulation
+##' @export
 print.eDNA_simulation = function(x, FUN = summary, digits = getOption("digits"),
                                  show_variables = FALSE, ...) {
     cat("\nformula: "); print(x@formula)
@@ -42,7 +44,10 @@ print.eDNA_simulation = function(x, FUN = summary, digits = getOption("digits"),
 ##' @param digits number of digits to show 
 ##' @param ... additional arguments passed to \code{print}
 ##' @return NULL
+##'
 ##' @author Matt Espe
+##' @method eDNA_model print
+##' @export
 print.eDNA_model = function(x, digits = getOption("digits"), ...)
 {
     cat("\nformula: "); print(x@formula)
