@@ -27,14 +27,18 @@ gen_model_list_lmer = function(formula, data)
     y = mf$fr[, as.character(mf$formula[2L])]
     if (is.matrix(y) && ncol(y) == 1L) 
         y = as.vector(y)
-    
-    groups = as.data.frame(mf$reTrms$flist)
-    groups = as.data.frame(lapply(groups, as.integer))
-    n_grp = ncol(groups)
-    n_levels = sapply(groups, max)
 
-    return(list(y = y, x = x, groups = groups,
-                n_grp = n_grp, n_levels = n_levels))
+    rand_x = t(as.matrix(mf$reTrms$Zt))
+    groups = mf$reTrms$Lind
+    
+    n_rand = ncol(rand_x)
+    n_grp = length(unique(groups))
+
+    return(list(y = y, x = x,
+                rand_x = rand_x,
+                groups = groups,
+                n_rand = n_rand,
+                n_grp = n_grp))
 }
 
 check_formula = function(formula)

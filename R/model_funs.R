@@ -81,7 +81,8 @@ eDNA_lmer = function(formula, data,
                    Cq_upper = upper_Cq, type = "model")
     md$y = ml$y
 
-    fit = run_model(data = md, n_chain = n_chain, iters = iters, verbose = verbose, ...)
+    fit = run_model(model = stanmodels$eDNA_lmer,
+                    data = md, n_chain = n_chain, iters = iters, verbose = verbose, ...)
     fit = load_slots_model(fit)
     class(fit) = "eDNA_model_lmer"
     return(fit)
