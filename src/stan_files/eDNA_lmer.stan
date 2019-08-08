@@ -61,6 +61,7 @@ parameters{
   vector<lower = 0>[n_grp] rand_sigma;
 }
 transformed parameters{
+  
   vector[n_vars] betas = R_ast_inverse * thetas;
   vector[n_rand] rand_betas;
 
