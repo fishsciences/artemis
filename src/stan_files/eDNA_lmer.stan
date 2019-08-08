@@ -20,6 +20,17 @@ functions{
   vector ln_std_curve(vector conc, real std_curve_alpha, real std_curve_beta){
 	return std_curve_beta * log(conc) + std_curve_alpha;
   }
+
+  int[] get_group_lengths(int[] groups){
+	int n_grp = max(groups);
+	int n = dims(groups)[1];
+	int ans[n_grp] = rep_array(0, n_grp);
+	for(i in 1:n){
+	  ans[groups[i]] += 1;
+	}
+	return ans;
+  }
+
 }
 
 data{
@@ -52,6 +63,8 @@ transformed data{
   matrix[n_rand, n_rand] rand_R_ast = rand_R / s;
   matrix[N, n_rand] rand_Q_ast = qr_thin_Q(rand_x) * s;
   matrix[n_rand, n_rand] rand_R_ast_inverse = inverse(rand_R_ast);
+
+  int group_lengths[n_grp] = get_group_lengths(groups);
 }
 
 parameters{
@@ -65,15 +78,26 @@ transformed parameters{
   vector[n_vars] betas = R_ast_inverse * thetas;
   vector[n_rand] rand_betas;
 
-  for(i in 1:n_rand)
-	rand_betas[i] = rand_betas_raw[i] * rand_sigma[groups[i]];
+  {
+	int grp = 1;
+	int st = 1;
+	for(i in 1:n_rand){
+	  if(i == group_lengths[grp]) {
+		rand_betas[i] = -sum(rand_betas_raw[st:(i-1)]) * rand_sigma[groups[i]];
+		grp += 1;
+		st = i + 1;
+	  } else {
+		rand_betas[i] = rand_betas_raw[i] * rand_sigma[groups[i]];
+	  }
+	}
+  }
 }
 
 model{
   
   vector[N] ln_conc_hat = Q_ast * thetas + rand_x * rand_betas;
   vector[N] Cq_hat;
-  
+
   // Priors
   thetas ~ normal(0 , 1);
   sigma_Cq ~ normal(0, 1);
