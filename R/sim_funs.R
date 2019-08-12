@@ -130,7 +130,7 @@ sim_eDNA_lmer = function(formula, variable_list,
              "Provided: ", length(betas), "\n",
              "Required: ", ncol(ml$x), "\n")
 
-    if(length(sigma_rand) != ncol(ml$groups))
+    if(length(sigma_rand) != ml$n_grp)
         stop("You must provide one sd for each random effect\n",
              "Provided: ", length(sigma_rand), "\n",
              "Required: ", ncol(ml$groups), "\n",
@@ -143,7 +143,7 @@ sim_eDNA_lmer = function(formula, variable_list,
 
     if(!verbose) sink(tempfile())
     
-    sims = sampling(stanmodels$eDNA_sim, data = md, chains = 1L,
+    sims = sampling(stanmodels$eDNA_sim_lmer, data = md, chains = 1L,
                     algorithm = "Fixed_param", iter = n_sim, warmup = 0L,
                     refresh = ifelse(verbose, 100, -1), show_messages = verbose)
     
