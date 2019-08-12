@@ -9,7 +9,7 @@ eDNA_lm(formula, data, std_curve_alpha, std_curve_beta, upper_Cq = 40,
   n_chain = 4L, iters = 1000L, verbose = FALSE, ...)
 
 eDNA_lmer(formula, data, std_curve_alpha, std_curve_beta, upper_Cq = 40,
-  n_chain = 4L, iters = 1000L, verbose = FALSE, ...)
+  n_chain = 4L, iters = 500L, verbose = FALSE, ...)
 }
 \arguments{
 \item{formula}{a formula, specifying the relationship between the
