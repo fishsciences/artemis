@@ -1,0 +1,96 @@
+---
+title: "Getting_started with the artemis package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting_started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, echo = FALSE}
+library(artemis)
+```
+
+The artemis package is designed to aid in the design and data analysis
+of eDNA survey studies. These studies are marked by attempting to
+detect a species by collecting eDNA shed by that species. The analysis
+of these data are confounded by traditional linear regression for the
+following reasons:
+
+  1. The eDNA concentration is not directly measured. Instead, the
+     eDNA is estimate by the number of quantification cycles of qPCR
+     (here after referred to as "Cq" values).
+	 
+  2. eDNA concentration is related to the Cq values via a calibration
+     step, which results in a standard curve for the detections. 
+	 
+  3. Lower Cq values represent a higher concentration of eDNA in the
+     sample. Above a certain threshold, additional cycles are not
+     attempted. Therefore, "non-detection" is taken to be any sample
+     which requires more than the threshold cycles to detect. 
+	 
+  4. This data trucation in the observed response increases
+     uncertainty in our estimate of the underlying response variable,
+     eDNA concentration.
+	 
+The artemis package resolves these issues by implementing a latent
+variable model, which directly models the latent (unobserved) eDNA
+concentration, and links this latent variable to the observed response
+via the standard curve. Specifically, the artemis package says that
+log(eDNA concentration) is a direct response of predictors variables,
+
+$$log(eDNA concentration) = X * \beta$$
+
+where $\beta$ is a vector of effects on the log(eDNA concentration).
+
+The eDNA concentration is converted to Cq values via the standard
+curve,
+
+$$ \hat{Cq} = log(eDNA concentration) * \beta_{std_curve} +
+ \alpha_{std_curve}$$
+ 
+ Any values of $\hat{Cq}$ which are greater than the upper limit on Cq
+detections are recorded as the threshold, e.g. a $\hat{Cq}$ value of
+42 is recorded as 40 when the upper limit is 40 cycles. 
+
+ Finally, our observed Cq values the $\hat{Cq}$, measured with error,
+ 
+ $$ Cq ~ normal(\hat{Cq}, \sigma_{Cq}) $$
+ 
+ It is important to note that this model formulation makes some
+ assumptions which should be kept in mind:
+ 
+  - log(eDNA concentration) is assumed to be uniform within a sample
+  
+  - log(eDNA concentration) is sampled without error.
+  
+  - measurement error is introduced in the qPCR stage. Previous steps
+    are assumed to be sampled without error.
+	
+  - there are no false detections, i.e. the measurement error cannot
+    result in a positive detection when eDNA is not present in the
+    sample. 
+  
+*Note: Future versions of the artemis package might allow for measurement
+error in both the collection and qPCR stages*
+
+# Simulations
+
+
+
+## Study design
+
+
+# Modeling
+
+
+## Post-hoc p(detect)
+
+
