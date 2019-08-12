@@ -1,4 +1,21 @@
 # S3 methods
+##' Summary of eDNA simulations
+##'
+##' Summary of eDNA simulations
+##' 
+##' @title Summary of eDNA simulations
+##'
+##' @param object an object of class eDNA_simulation_*
+##' @param var the simulated variable to summarize, either "Cq_star"
+##'     or "ln_conc"
+##' @param probs probabilities for the summary of the posterior
+##'     samples
+##' @param ... currently ignored
+##' @return data.frame
+##' @author Matt Espe
+##'
+##' @method summary eDNA_simulation
+##' @export
 summary.eDNA_simulation = function(object, var = "Cq_star",
                                    probs = c(0.025, 0.5, 0.975), ...)
 {
@@ -28,7 +45,21 @@ summary.eDNA_simulation = function(object, var = "Cq_star",
     
 }
 
-
+##' Summary of eDNA model
+##'
+##' Summary of eDNA model
+##' 
+##' @title Summary of an eDNA model
+##' @param object an object of class eDNA_model_*
+##' @param probs probabilities for the quantiles of the posterior
+##'     samples
+##' @param ... currently ignored
+##' @return data.frame, with summary of the fixed effects from the
+##'     model
+##'
+##' @author Matt Espe
+##' @method summary eDNA_model
+##' @export
 summary.eDNA_model = function(object, probs = c(0.025, 0.5, 0.975), ...)
 {
     res = apply(object@betas, 2, quantile, prob = probs, simplify = FALSE)

@@ -20,12 +20,7 @@ prep_data = function(mod_list,
         model_data$rand_var_shared = double(0)
         model_data$groups = double(0)
     } else { 
-        rand_idx = unlist(relevel_rands(mod_list$groups))
-        rand_var_shared = get_shared_rand(mod_list$groups)
-        
         model_data$n_rand = mod_list$n_rand
-        model_data$n_rand_total = max(rand_idx)
-        model_data$rand_var_shared = rand_var_shared
         model_data$groups = mod_list$groups
         model_data$rand_x = mod_list$rand_x
         model_data$n_grp = mod_list$n_grp
