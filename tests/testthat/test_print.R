@@ -18,5 +18,5 @@ test_that("Print methods: simulations", {
                       betas = c(intercept = 1, distance = 0.5, volume = 0),
                       sigma_Cq = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
     ## should not throw an error
-    expect_null(print(ans))
+    expect_is(print(ans), "eDNA_simulation")
 })

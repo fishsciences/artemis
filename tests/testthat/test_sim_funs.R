@@ -62,8 +62,7 @@ test_that("Gen model list", {
     mler = gen_model_list_lmer(Cq ~ distance + (1|volume), X)
     expect_is(mler, "list")
     expect_true(all(names(ml) %in% c("x","y", "groups", "n_grp", "n_levels")))
-    expect_true(ncol(mler$groups) == mler$n_grp)
-    expect_true(length(mler$n_levels) == ncol(mler$groups))
+    expect_true(ncol(mler$rand_x) == mler$n_rand)
     expect_true(all(sapply(mler$groups, max) == mler$n_levels))
    
 })
@@ -94,8 +93,9 @@ test_that("Methods", {
                     betas = c(intercept = -10.6, distance = -0.05, volume = 0.01),,
                     sigma_Cq = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
+
   print(ans)
-  expect_null(print(ans))
+  expect_is(print(ans), "eDNA_simulation")
 
   a = summary(ans)
 

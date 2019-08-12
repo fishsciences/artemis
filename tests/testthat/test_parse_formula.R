@@ -35,25 +35,25 @@ test_that("lmer model.list", {
     d = gen_model_list_lmer(mpg ~ cyl + (1|cyl), mtcars)
 
     expect_is(d, "list")
-    expect_true(length(d) == 5)
-    expect_true(all(names(d) %in% c("x","y","groups", "n_grp", "n_levels")))
-    expect_true(ncol(d$groups) == 1)
+    expect_true(length(d) == 6)
+    expect_true(all(names(d) %in% c("y", "x", "rand_x", "groups", "n_rand", "n_grp")))
+    expect_true(length(d$groups) == ncol(d$rand_x))
     expect_true(ncol(d$x) == 2)
 
     d = gen_model_list_lmer(mpg ~ cyl + am + (1|cyl/am), mtcars)
 
     expect_is(d, "list")
-    expect_true(length(d) == 5)
-    expect_true(all(names(d) %in% c("x","y","groups", "n_grp", "n_levels")))
-    expect_true(ncol(d$groups) == 2)
+    expect_true(length(d) == 6)
+    expect_true(all(names(d) %in% c("y", "x", "rand_x", "groups", "n_rand", "n_grp")))
+    expect_true(length(d$groups) == ncol(d$rand_x))
     expect_true(ncol(d$x) == 3)
 
     d = gen_model_list_lmer(mpg ~ factor(cyl) + factor(am) + (1|cyl/am), mtcars)
 
     expect_is(d, "list")
-    expect_true(length(d) == 5)
-    expect_true(all(names(d) %in% c("x","y","groups", "n_grp", "n_levels")))
-    expect_true(ncol(d$groups) == 2)
+    expect_true(length(d) == 6)
+    expect_true(all(names(d) %in% c("y", "x", "rand_x", "groups", "n_rand", "n_grp")))
+    expect_true(length(d$groups) == ncol(d$rand_x))
     expect_true(ncol(d$x) == 4)
 
 })
