@@ -21,13 +21,8 @@ functions{
 data{
   int N;
   int n_vars;
-  int<lower=0, upper=1> has_rand;
-  int n_rand_var; // number of columns of rand effects
-  int n_rand_total; // total number of random effects
-  int<upper = n_rand_var> rand_var_shared[n_rand_total]; // idx to map which are shared
 
   matrix[N, n_vars] X;
-  int groups[ has_rand ? N * n_rand_var : 0];
   real upper_Cq; // upper value that Cq can take
 
   // alpha and beta of the ln_conc -> Cq conversion according to
@@ -36,7 +31,6 @@ data{
   real std_curve_beta;
   real<lower = 0> sigma_Cq; // sd on Cq - assumed to be only on measurement
   vector[n_vars] betas;
-  vector<lower = 0>[n_rand_var] rand_sigma;
 }
 
 transformed data{
@@ -56,17 +50,9 @@ generated quantities{
   vector[N] ln_conc = X * betas;
   vector[N] Cq_star;
 
-  if(has_rand) {
-	real rand_beta_raw[n_rand_total] = normal_rng(rep_vector(0, n_rand_total), 1);
-
-	for(i in 1:n_rand_var)
-	  for(n in 1:N)
-		ln_conc[n] += rand_beta_raw[groups[n + (n * (i - 1))]] * rand_sigma[i];
-  }
-  
   for(n in 1:N){
 	real Cq_hat = ln_conc[n] * std_curve_beta + std_curve_alpha;
-
+	
 	Cq_star[n] = normal_rng(Cq_hat, sigma_Cq);
 	if(Cq_star[n] > upper_Cq)
 	  Cq_star[n] = upper_Cq;
