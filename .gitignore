@@ -5,3 +5,5 @@
 *.so
 *.hpp
 inst/doc
+doc
+Meta

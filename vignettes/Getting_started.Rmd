@@ -1,5 +1,5 @@
 ---
-title: "Getting_started with the artemis package"
+title: "Getting started with the artemis package"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Getting_started}
@@ -46,15 +46,15 @@ concentration, and links this latent variable to the observed response
 via the standard curve. Specifically, the artemis package says that
 log(eDNA concentration) is a direct response of predictors variables,
 
-$$log(eDNA concentration) = X * \beta$$
+$$log(eDNA\ concentration) = X * \beta$$
 
 where $\beta$ is a vector of effects on the log(eDNA concentration).
 
 The eDNA concentration is converted to Cq values via the standard
 curve,
 
-$$ \hat{Cq} = log(eDNA concentration) * \beta_{std_curve} +
- \alpha_{std_curve}$$
+$$ \hat{Cq_i} = log(eDNA\ concentration) * \beta_{std\_curve} +
+ \alpha_{std\_curve}$$
  
  Any values of $\hat{Cq}$ which are greater than the upper limit on Cq
 detections are recorded as the threshold, e.g. a $\hat{Cq}$ value of
@@ -62,7 +62,7 @@ detections are recorded as the threshold, e.g. a $\hat{Cq}$ value of
 
  Finally, our observed Cq values the $\hat{Cq}$, measured with error,
  
- $$ Cq ~ normal(\hat{Cq}, \sigma_{Cq}) $$
+ $$ Cq_i \~ normal(\hat{Cq_i}, \sigma_{Cq}) $$
  
  It is important to note that this model formulation makes some
  assumptions which should be kept in mind:
@@ -79,17 +79,187 @@ detections are recorded as the threshold, e.g. a $\hat{Cq}$ value of
     sample. 
   
 *Note: Future versions of the artemis package might allow for measurement
-error in both the collection and qPCR stages*
+error in both the collection and qPCR stages.*
+
+In artemis, the model is specified using a model formula, similar to
+the `lm()` or `lmer()` functions. This model formula is used to
+construct the model on log(eDNA concentration).
 
 # Simulations
 
+One of the most basic tasks for the artemis package is simulating
+data. Simulated data is useful for testing assumptions, designing a
+study, or doing a post-hoc analysis. 
 
+To simulate data, you first must provide a set of levels for each
+variable, 
+
+```{r}
+vars = list(Intercept = 1,
+            distance = c(0, 15, 50),
+            volume = c(25, 50),
+            tech_rep = 1:10,
+            rep = 1:3, Cq = 1)
+```
+
+by design, the simulation functions construct a model matrix assuming
+a complete block design (i.e. every level is represented). The
+variable list provided is expanded using `expand.grid()`. Notice that
+we also provided a dummy variable for the response - this is not used
+except internally to create the model matrix.
+
+Second, you must provide a set of effect sizes for the variables you
+provide. For example, if we were only simulating data using distance,
+we might specify the effect sizes as,
+
+```{r}
+betas = c(intercept = -10.6, distance = -0.05, volume = 0.1)
+```
+
+Please note, these are the effect sizes on the log(eDNA
+concentration), not the Cq values. Hence, we specified the intercept
+to be -10, or exp(-10) concentration of eDNA. 
+
+To simulate data from a fixed-effects model, we use the
+`sim_eDNA_lm()` function,
+
+```{r}
+ans = sim_eDNA_lm(Cq ~ distance + volume, vars,
+                  betas = c(intercept = -10.6, distance = -0.05, volume = 0.1),
+                  sigma_Cq = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
+```
+
+Notice that we must provide the parameters for the conversion formula
+between log(eDNA concentration) and Cq values to the simulation
+function, as well as the measurement error on Cq (`sigma_Cq`).
+
+By default, only one instance of simulated data is created, but we can
+easily simulate many data sets by adjusting the `n_sim` parameter,
+e.g.
+
+```{r eval = FALSE}
+ans = sim_eDNA_lm(Cq ~ distance + volume, vars,
+                  betas = c(intercept = -10.6, distance = -0.05, volume = 0.1),
+                  sigma_Cq = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5,
+                  n_sim = 500)
+
+```
+
+If we desire to simulate data where the design is not a complete
+block, we can specify our own variable data.frame, `X`, in which case the
+variable levels are ignored and the provided data.frame is used to
+create a model.matrix.
+
+To simulate for a mixed-effects model, we use the function
+`sim_eDNA_lmer()`. Random effects are specified using the syntax of
+the lme4 package, e.g. `(1|random effect)`:
+
+```{r}
+ans2 = sim_eDNA_lmer(Cq ~ distance + volume + (1|rep) + (1|tech_rep),
+                     vars,
+                     betas = c(intercept = -10.6, distance = -0.05, volume = 0.01),
+                     sigma_Cq = 1,
+                     sigma_rand = c(0.1, 0.1),
+                     std_curve_alpha = 21.2,
+                     std_curve_beta = -1.5)
+
+```
+
+When we are simulating data with random effects, we must provide the
+stdev. of the random effects as well as the information for a fixed
+effects model. Random effects are generated for these simulations with
+the stdev. given. When in cases when mutliple simulations are
+performed, different random effects are used for each simulation.
+
+The results of a simulation can be inspected via `summary` and `plot`
+methods. This can be helpful in assessing how accurate the simulated
+data are, and to test the assumptions behind the model and the betas
+used. For example, the results above can be summarized,
+
+```{r}
+summary(ans)
+```
+
+The default behavior of `summary()` is to give the marginal effects,
+i.e. the effects summarized by each level of the variables used to
+simulate the data. *WARNING: these marginal effects can be misleading
+in cases where interactions are used in the formula.* The summary also
+includes a empirical summary of the percent of each level which was
+detected, i.e. had a Cq value below the threshold.
+
+**TODO** Plot methods
 
 ## Study design
 
+Simulations are helpful for designing new studies. Given a set of
+assumptions about the effect sizes, we can simulate how well we are
+able to either detect eDNA or how accurately we can estimate those
+effects given a number of replications and variable levels in the design.
 
 # Modeling
 
+The second purpose of the artemis package is to fit a model to
+collected data. Similar to the simulation functions, the artemis
+package has two functions which fit a Bayesian latent variable model
+to eDNA data; `eDNA_lm()` for fixed effects models and `eDNA_lmer()`
+for mixed effects models.
+
+The syntax of these functions is similar to the simulation
+functions. We provide a model formula, a data.frame with the observed
+data, and then the parameters for standard curve formula to convert
+between log(eDNA concentration) and Cq values. For example, to fit a
+model to the sample data included in artemis, `eDNA_samples`:
+
+```{r}
+model_fit = eDNA_lm(Cq ~ Distance, eDNA_samples,
+                    std_curve_alpha = 21.2, std_curve_beta = -1.5)
+
+```
+
+The modeling functions use [Stan](mc-stan.org) to fit the Bayesian
+model. Full control of the MCMC algorithm can be accomplished by
+passing arguments to `rstan::stan()` in the modeling functions. For
+example, 
+
+
+```{r}
+model_fit = eDNA_lm(Cq ~ Distance, eDNA_samples,
+                    std_curve_alpha = 21.2, std_curve_beta = -1.5,
+                    iter = 1000)
+
+```
+
+By default, artemis suppresses the (often verbose) output from Stan,
+but users can (and should) enable it when the model is slow or the
+output suggests the MCMC algorithm might not have converged, for
+example,
+
+```{r}
+model_fit = eDNA_lm(Cq ~ Distance, eDNA_samples,
+                    std_curve_alpha = 21.2, std_curve_beta = -1.5,
+                    iter = 100,
+                    verbose = TRUE)
+```
+
+To fit a model with a random effect, users merely use the
+`eDNA_lmer()` function and specify the random effects using the syntax
+used by lme4,
+
+```{r}
+model_fit2 = eDNA_lmer(Cq ~ Distance + Volume + (1|TechnicalRep), eDNA_samples,
+                 std_curve_alpha = 21.2, std_curve_beta = -1.5)
+
+```
+
+As with the simulations, the model results can be summarized with
+`summary()` and can be plotted with `plot()`,
+
+```{r}
+summary(model_fit2)
+
+```
+
+**TODO:** PLOT
 
 ## Post-hoc p(detect)
 
