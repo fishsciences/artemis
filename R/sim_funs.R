@@ -27,7 +27,7 @@ sim_eDNA_lm = function(formula, variable_list,
     if(!verbose) sink(tempfile())
 
     sims = sampling(stanmodels$eDNA_sim, data = md, chains = 1L,
-                    algorithm = "Fixed_param", iter = n_sim,
+                    algorithm = "Fixed_param", iter = n_sim, warmup = 0L,
                     refresh = ifelse(verbose, 100, -1), show_messages = verbose)
 
     if(!verbose) sink()
