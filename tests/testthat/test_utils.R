@@ -26,3 +26,8 @@ test_that("Re-level random effects", {
                        c("betas[1]", "betas[2]", "betas[3]"), c("2.5%", "97.5%")))
     expect_true(all(apply(ii, 1, excludes_zero)))
 })
+
+test_that("Conf 2 prob", {
+    expect_true(length(conf_to_probs(0.90)) == 2)
+    expect_equal(conf_to_probs(0.9), c(0.05, 0.95))
+})

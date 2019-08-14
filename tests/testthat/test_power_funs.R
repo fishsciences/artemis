@@ -51,14 +51,14 @@ test_that("P-detect", {
 })
 
 test_that("Power function", {
-    ans = est_power(Cq ~ 1 + distance,
+    ans = est_power_lm(Cq ~ 1 + distance,
                     vars_list = list(Cq = 1, distance = c(0,100,300), rep = 1:3),
                     betas = c(intercept = -10.6, distance = -0.05),
                     sigma_Cq = 1, sigma_rep = 0.5,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5, n_sim = 5,
                     type = "exclude_zero")
 
-    ans = est_power(Cq ~ 1 + distance,
+    ans = est_power_lm(Cq ~ 1 + distance,
                     vars_list = list(Cq = 1, distance = c(0,100,300), rep = 1:20),
                     betas = c(intercept = -10.6, distance = -0.05),
                     sigma_Cq = 1, sigma_rep = 0.5,
@@ -66,7 +66,7 @@ test_that("Power function", {
                     type = "exclude_zero")
 
     lapply(seq(2, 20, 2), function(i){
-    ans = est_power(Cq ~ 1 + distance,
+    ans = est_power_lm(Cq ~ 1 + distance,
                     vars_list = list(Cq = 1, distance = c(0,50,75,100,300), rep = 1:i),
                     betas = c(intercept = -10.6, distance = -0.04),
                     sigma_Cq = 1, sigma_rep = 0.5,
