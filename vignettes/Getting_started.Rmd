@@ -196,6 +196,52 @@ assumptions about the effect sizes, we can simulate how well we are
 able to either detect eDNA or how accurately we can estimate those
 effects given a number of replications and variable levels in the design.
 
+For example, suppose we wanted to design a study exploring the effects
+of different distances on the detection of eDNA. From previous
+studies, we have estimated the effect of distance to be -0.04 decrease
+in log(eDNA concentration) per meter distance. If we want to have a
+sense of how many replicates we need for this study to have at least
+80% power (at least 80% chance to estimate the effect of distance
+without including 0 in the CI), we can get a quick estimate of this
+using the `est_power_lm()` and a given number of reps, say 5 reps. To
+do this, we specify the number of replicates in the variable_list as
+`1:5`, and specify our effect sizes,
+
+```{r}
+dist_power = est_power_lm(Cq ~ 1 + distance,
+                          variable_list = list(Cq = 1, distance = c(0,100,300), rep = 1:5),
+                          betas = c(intercept = -10.6, distance = -0.04),
+                          sigma_Cq = 1, 
+                          std_curve_alpha = 21.2, std_curve_beta = -1.5,
+                          type = "exclude_zero")
+
+dist_power
+
+```
+
+It appears that 5 replicates was not enough in this case. We could
+keep trying different number of replicates until we get the number we
+would like. However, it is easier to use the function
+`est_power_range_lm`, which will automate this process for us. The
+call is similar to the above, but instead of specifying the number of
+replicates in the `variable_list`, we provide a `rep_range`, which is
+`seq(2,20,2)` (every 2 from 2 to 20) by default
+
+```{r}
+dist_power_range = est_power_range_lm(Cq ~ 1 + distance,
+                                variable_list = list(Cq = 1, distance = c(0,100,300)),
+                                betas = c(intercept = -10.6, distance = -0.04),
+                                sigma_Cq = 1, 
+                                std_curve_alpha = 21.2, std_curve_beta = -1.5,
+                                type = "exclude_zero")
+
+dist_power_range
+
+
+```
+
+For this study, it looks like we will need greater then 8 replicates
+to have our desired 80% power. 
 
 # Modeling
 
@@ -263,5 +309,47 @@ summary(model_fit2)
 **TODO:** PLOT
 
 ## Post-hoc p(detect)
+
+It is common that the purpose of a eDNA sampling study is to inform
+the deployment of an automated sampler in the field. For these cases,
+we often want to know how likely we are to detect eDNA given the
+estimated parameters of the model and a set of conditions. For these
+circumstances, we can use the `est_p_detect()` function to see how
+well we can detect given effect sizes and conditions,
+
+```{r}
+p_detect = est_p_detect(variable_levels = c(Intercept = 1, Distance = 100),
+                        betas = c(Intercept = -10.5, Distance = -0.04),
+                        Cq_sd = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5,
+                        n_rep = 1:12)
+```
+and we can plot this,
+
+```{r fig = TRUE}
+plot(p_detect)
+
+```
+
+Alternatively, we can also use a fit model to estimate the p(detect)
+for a set of circumstances. Unlike the above, using a fit model allows
+us to estimate the probability of detection with the uncertainty in
+our effect size estimates taken into account.
+
+```{r}
+p_detect2 = est_p_detect(variable_levels = c(Intercept = 1, Distance = 100),
+                        model_fit = model_fit, 
+                        Cq_sd = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5,
+                        n_rep = 1:12)
+
+
+```
+
+and we can plot the results,
+
+```{r fig = TRUE}
+plot(p_detect2)
+```
+
+Notice how we get uncertainty intervals when we use a fit model. 
 
 
