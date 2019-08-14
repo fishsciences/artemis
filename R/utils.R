@@ -22,6 +22,12 @@ excludes_zero = function(ci)
     ci[2] < 0 | ci[1] > 0
 }
 
+within_accuracy = function(ci, true_betas, acc = 0.20)
+{
+    ci[1] > true_betas * (1 - acc) &
+        ci[2] < true_betas * (1 + acc)
+}
+
 in_interval = function(ci, beta)
 {
     beta > ci[1] & beta < ci[2]

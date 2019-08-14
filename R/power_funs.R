@@ -63,26 +63,41 @@ est_power = function(formula, vars_list,
                      betas, sigma_Cq,
                      sigma_rep,
                      std_curve_alpha, std_curve_beta,
+                     type = c("exclude_zero", "accuracy"),
+                     accuracy_level = 0.2, 
                      conf_level = 0.95,
                      n_sim = 200L,
+                     probs = c(0.025, 0.975),
                      upper_Cq = 40,
                      X = expand.grid(vars_list),
                      verbose = FALSE)
 {
+    if(!type %in% c("exclude_zero", "accuracy"))
+        stop("Invalid type: ", type)
     
-    sims = sim_eDNA_lmer(formula, vars_list,
-                         betas, sigma_Cq,
-                         sigma_rep,
-                         std_curve_alpha, std_curve_beta,
-                         n_sim, upper_Cq,
-                         X, verbose)
+    sims = sim_eDNA_lm(formula, vars_list,
+                       betas, sigma_Cq,
+                       std_curve_alpha, std_curve_beta,
+                       n_sim, upper_Cq,
+                       X, verbose)
 
-    fit = eDNA_lmer(formula,
-                    cbind(expand.grid(vars_list), Cq = sims@Cq_star[1,]),
-                    std_curve_alpha = std_curve_alpha,
-                    std_curve_beta = std_curve_beta,
-                    upper_Cq = upper_Cq, n_chain = 4, iters = 500, verbose = TRUE)
+    ans = lapply(seq(n_sim), function(i) {
+        fit = eDNA_lm(formula,
+                      cbind(sims@x, Cq = sims@Cq_star[i,]),
+                      std_curve_alpha = std_curve_alpha,
+                      std_curve_beta = std_curve_beta,
+                      upper_Cq = upper_Cq, n_chain = 4, iters = 500)
+        as.data.frame(t(apply(fit@betas, 2, quantile, probs)),
+                      row.names = colnames(fit@x))
+    })
 
-
-
+    res = if(type == "exclude_zero"){
+              lapply(ans, excludes_zero)
+          } else { 
+              lapply(ans, function(x) within_accuracy(x, betas, accuracy_level))
+          }
+    
+    res = do.call(cbind, res)
+    
+    return(rowSums(res)/ncol(res))
 }
