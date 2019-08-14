@@ -196,6 +196,7 @@ assumptions about the effect sizes, we can simulate how well we are
 able to either detect eDNA or how accurately we can estimate those
 effects given a number of replications and variable levels in the design.
 
+
 # Modeling
 
 The second purpose of the artemis package is to fit a model to
@@ -246,8 +247,9 @@ To fit a model with a random effect, users merely use the
 used by lme4,
 
 ```{r}
-model_fit2 = eDNA_lmer(Cq ~ Distance + Volume + (1|TechnicalRep), eDNA_samples,
-                 std_curve_alpha = 21.2, std_curve_beta = -1.5)
+model_fit2 = eDNA_lmer(Cq ~ Distance + Volume + (1|TechnicalRep),
+                       eDNA_samples,
+                       std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
 ```
 
@@ -256,7 +258,6 @@ As with the simulations, the model results can be summarized with
 
 ```{r}
 summary(model_fit2)
-
 ```
 
 **TODO:** PLOT
