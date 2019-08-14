@@ -5,11 +5,11 @@
 \alias{est_power_lmer}
 \title{Estimate power}
 \usage{
-est_power_lm(formula, vars_list, betas, sigma_Cq, std_curve_alpha,
+est_power_lm(formula, variable_list, betas, sigma_Cq, std_curve_alpha,
   std_curve_beta, type = c("exclude_zero", "accuracy"),
   accuracy_level = 0.2, conf_level = 0.95, n_sim = 200L,
-  probs = c(0.025, 0.975), upper_Cq = 40, X = expand.grid(vars_list),
-  verbose = FALSE)
+  probs = c(0.025, 0.975), upper_Cq = 40,
+  X = expand.grid(variable_list), verbose = FALSE)
 
 est_power_lmer(formula, variable_list, betas, sigma_Cq, sigma_rand,
   std_curve_alpha, std_curve_beta, type = c("exclude_zero", "accuracy"),
@@ -21,6 +21,13 @@ est_power_lmer(formula, variable_list, betas, sigma_Cq, sigma_rand,
 \item{formula}{a model formula, e.g. \code{y ~ x1 + x2}. For
 \code{sim_eDNA_lmer}, random intercepts can also be provided,
 e.g. \code{ ( 1 | rep ) }.}
+
+\item{variable_list}{a named list, with the levels that each
+variable can take.  Please note that the variables listed in
+the formula, including the response variable, must be present
+in the variable_list or in the X design matrix.  Extra
+variables, i.e. variables which do not occur in the formula,
+are ignored.}
 
 \item{betas}{numeric vector, the beta for each variable in the
 design matrix}
@@ -61,13 +68,6 @@ unbalanced design matrix.}
 
 \item{verbose}{logical, when TRUE output from
 \code{rstan::sampling} is written to the console.}
-
-\item{variable_list}{a named list, with the levels that each
-variable can take.  Please note that the variables listed in
-the formula, including the response variable, must be present
-in the variable_list or in the X design matrix.  Extra
-variables, i.e. variables which do not occur in the formula,
-are ignored.}
 
 \item{sigma_rand}{numeric vector, the stdev for the random
 effects. There must be one sigma per random effect specified}

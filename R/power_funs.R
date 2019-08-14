@@ -61,7 +61,7 @@ est_p_detect = function(variable_levels,
 
 ##' @rdname est_power_lmer
 ##' @export
-est_power_lm = function(formula, vars_list,
+est_power_lm = function(formula, variable_list,
                      betas, sigma_Cq,
                      std_curve_alpha, std_curve_beta,
                      type = c("exclude_zero", "accuracy"),
@@ -70,13 +70,13 @@ est_power_lm = function(formula, vars_list,
                      n_sim = 200L,
                      probs = c(0.025, 0.975),
                      upper_Cq = 40,
-                     X = expand.grid(vars_list),
+                     X = expand.grid(variable_list),
                      verbose = FALSE)
 {
     if(!type %in% c("exclude_zero", "accuracy"))
         stop("Invalid type: ", type)
     
-    sims = sim_eDNA_lm(formula, vars_list,
+    sims = sim_eDNA_lm(formula, variable_list,
                        betas, sigma_Cq,
                        std_curve_alpha, std_curve_beta,
                        n_sim, upper_Cq,

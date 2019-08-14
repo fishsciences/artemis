@@ -1,6 +1,6 @@
 ##' @rdname est_power_range_lmer
 ##' @export
-est_power_range_lm = function(formula, vars_list,
+est_power_range_lm = function(formula, variable_list,
                      betas, sigma_Cq,
                      std_curve_alpha, std_curve_beta,
                      type = c("exclude_zero", "accuracy"),
@@ -13,14 +13,14 @@ est_power_range_lm = function(formula, vars_list,
                      verbose = FALSE)
 {
     ans = lapply(rep_range, function(i){
-        vars_list$rep = seq(i)
+        variable_list$rep = seq(i)
         
         est_power_lm(formula, 
-                     vars_list, 
-                     betas, sigma_Cq, sigma_rep,
+                     variable_list, 
+                     betas, sigma_Cq, 
                      std_curve_alpha, std_curve_beta, type,
                      accuracy_level, conf_level, n_sim,
-                     probs, upper_Cq, verbose)
+                     probs, upper_Cq, expand.grid(variable_list), verbose)
     })
     names(ans) = paste("n_rep:", rep_range)
     ans
@@ -90,7 +90,7 @@ est_power_range_lmer = function(formula, variable_list,
         
         est_power_lm(formula, 
                      variable_list, 
-                     betas, sigma_Cq, sigma_rand,
+                     betas, sigma_Cq, 
                      std_curve_alpha, std_curve_beta, type,
                      accuracy_level, conf_level, n_sim,
                      probs, upper_Cq, verbose)
