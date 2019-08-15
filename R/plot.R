@@ -1,5 +1,40 @@
-setMethod("plot", "eDNA_simulation",
-          function(x, y, ...) {})
+##' Plot method for eDNA simulations
+##'
+##' Plot method for eDNA simulations
+##' @title Plot method for eDNA simulations
+##' @param x object of class eDNA_simulation
+##' @param y ignored
+##' @param response the response variable to plot
+##' @param probs the probability for plotting CIs
+##' @param ... ignored
+##' @return a gtable object from marrangeGrob
+##' @author Matt Espe
+##' @method plot eDNA_simulation
+##' @export
+plot.eDNA_simulation = function(x, y,
+                                response = "Cq_star",
+                                probs = c(0.025, 0.975),
+                                ...)
+{
+    y = slot(x, response)
+    if(dim(y)[1] == 1){
+        ymn = as.vector(y)
+        yci = rep(0, length(ymn))
+    } else {
+        ymn = apply(y, 2, mean)
+        yci = apply(y, 2, quantile, probs)
+    }
+    vars = colnames(x@x)
+    p = lapply(vars, function(v){
+        ggplot(, aes(y = ymn, x = x@x[[v]] )) +
+            geom_point() +
+            geom_smooth() +
+            xlab(v) +
+            ylab(response) +
+            theme_bw()
+    })
+    marrangeGrob(p, ncol = 3, nrow = 1)
+}
 
 setMethod("plot", "eDNA_model",
           function(x, y, ...) {})
@@ -36,7 +71,9 @@ plot.eDNA_p_detect = function(x, y, probs = c(0.025, 0.975),
 
     if(is.matrix(x)) {
         tmp = summary(x, probs)
-        plot(tmp$n_rep, tmp$mean, ylab = "p(detect)", type = "b",
+        plot(tmp$n_rep, tmp$mean,
+             ylab = "p(detect)", xlab = "N replicates",
+             type = "b",
              ylim = ylim, xlim = range(reps),
              lty = 2, ...)
 
