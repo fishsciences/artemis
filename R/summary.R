@@ -88,3 +88,27 @@ summary.eDNA_predict_lm = function(object, probs = c(0.025, 0.5, 0.975), ...)
     object
 
 }
+
+##' Summary method for eDNA p(detect)
+##'
+##' Summary method for eDNA p(detect)
+##' @title Summary method for eDNA p(detect)
+##' @param object an object of class eDNA_p_detect
+##' @param probs probabilities for summary, passed to \code{quantile}
+##' @param ... ignored
+##' @return a data.frame, with summary statistics of the object
+##' @author Matt Espe
+##' @method summary eDNA_p_detect
+##' @export
+summary.eDNA_p_detect = function(object, probs = c(0.025, 0.5, 0.975), ...)
+{
+    if(!is.matrix(object))
+        return(data.frame(n_rep = attr(object, "reps"),
+                          p_detect = as.numeric(object)))
+
+    mn = apply(object, 2, mean)
+    
+    ci = apply(object, 2, quantile, probs)
+
+    as.data.frame(cbind(n_rep = attr(object, "reps"), mean = mn, t(ci)))
+}

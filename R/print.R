@@ -61,3 +61,31 @@ print.eDNA_model = function(x, digits = getOption("digits"), ...)
     print(summary(x, ...), digits = digits, ...)
     invisible(x)
 }
+
+##' Print method for p(detect)
+##'
+##' Print method for p(detect)
+##' @title Print eDNA p(detect)
+##' @param x object of class "eDNA_p_detect"
+##' @param digits number of digits to show 
+##' @param ... additional arguments passed to \code{print}
+##' @return x 
+##' @author Matt Espe
+##' @method print eDNA_p_detect
+##' @export
+print.eDNA_p_detect = function(x, digits = getOption("digits"), ...)
+{
+    cat("Variable levels: \n")
+    print(attr(x, "variable_levels"), digits, ...)
+    cat("\n")
+    tmp = if(is.matrix(x)){
+              summary(x)
+          } else {
+              data.frame(n_reps = attr(x, "reps"),
+                         p_detect = as.numeric(x))
+    }
+    
+    print.default(x, digits, ...)
+
+    invisible(NULL)          
+}
