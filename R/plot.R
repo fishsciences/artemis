@@ -36,13 +36,13 @@ plot.eDNA_p_detect = function(x, y, probs = c(0.025, 0.975),
 
     if(is.matrix(x)) {
         tmp = summary(x, probs)
-        plot(tmp$n_reps, tmp$mean, ylab = "p(detect)", type = "b",
+        plot(tmp$n_rep, tmp$mean, ylab = "p(detect)", type = "b",
              ylim = ylim, xlim = range(reps),
              lty = 2, ...)
 
-        segments(tmp$n_reps, y0 = tmp[, 3], y1 = tmp[, 4])
-        lines(tmp$n_reps, tmp[, 3], lty = 3)
-        lines(tmp$n_reps, tmp[, 4], lty = 3)
+        segments(tmp$n_rep, y0 = tmp[, 3], y1 = tmp[, 4])
+        lines(tmp$n_rep, tmp[, 3], lty = 3)
+        lines(tmp$n_rep, tmp[, 4], lty = 3)
     } else {
         plot(reps, x, ylab = "p(detect)", ylim = ylim, ...)
     }
