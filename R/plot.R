@@ -36,15 +36,26 @@ plot.eDNA_simulation = function(x, y,
     marrangeGrob(p, ncol = 3, nrow = 1)
 }
 
-setMethod("plot", "eDNA_model",
-          function(x, y, ...) {})
 
-## Might do something slightly different/expanded with lmer sims and fits
-setMethod("plot", "eDNA_simulation_lmer",
-          function(x, y, ...) {})
+##' Plot eDNA model results
+##'
+##' Plot eDNA model results
+##' @title Plot eDNA model results
+##' @param x object of class eDNA_model_*
+##' @param y ignored
+##' @param pars parameters to plot
+##' @param ... additional args passed to plot.stanfit
+##' @param response the response variable to plot
+##' @param probs the probability for plotting CIs
+##' @return ggplot of posterior estimates
+##' @author Matt Espe
+##' @method plot eDNA_model
+##' @export
+plot.eDNA_model = function(x, y, pars = "betas",  ...) {
+    plot(x@stanfit, pars = pars, ...)
+}
 
-setMethod("plot", "eDNA_model_lmer",
-          function(x, y, ...) {})
+
 
 ##' Plot the p(detect)
 ##'
