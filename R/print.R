@@ -85,7 +85,7 @@ print.eDNA_p_detect = function(x, digits = getOption("digits"), ...)
                          p_detect = as.numeric(x))
     }
     
-    print.default(x, digits, ...)
+    print.default(tmp, digits, ...)
 
     invisible(x)          
 }
