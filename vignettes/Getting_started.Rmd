@@ -123,7 +123,7 @@ to be -10, or exp(-10) concentration of eDNA.
 To simulate data from a fixed-effects model, we use the
 `sim_eDNA_lm()` function,
 
-```{r warnings = FALSE}
+```{r warning = FALSE}
 ans = sim_eDNA_lm(Cq ~ distance + volume, vars,
                   betas = c(intercept = -10.6, distance = -0.05, volume = 0.1),
                   sigma_Cq = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
@@ -154,7 +154,7 @@ To simulate for a mixed-effects model, we use the function
 `sim_eDNA_lmer()`. Random effects are specified using the syntax of
 the lme4 package, e.g. `(1|random effect)`:
 
-```{r warnings = FALSE}
+```{r warning = FALSE}
 ans2 = sim_eDNA_lmer(Cq ~ distance + volume + (1|rep) + (1|tech_rep),
                      vars,
                      betas = c(intercept = -10.6, distance = -0.05, volume = 0.01),
@@ -207,7 +207,7 @@ using the `est_power_lm()` and a given number of reps, say 5 reps. To
 do this, we specify the number of replicates in the variable_list as
 `1:5`, and specify our effect sizes,
 
-```{r warnings = FALSE}
+```{r warning = FALSE}
 dist_power = est_power_lm(Cq ~ 1 + distance,
                           variable_list = list(Cq = 1, distance = c(0,100,300), rep = 1:5),
                           betas = c(intercept = -10.6, distance = -0.04),
@@ -227,7 +227,7 @@ call is similar to the above, but instead of specifying the number of
 replicates in the `variable_list`, we provide a `rep_range`, which is
 `seq(2,20,2)` (every 2 from 2 to 20) by default
 
-```{r warnings = FALSE}
+```{r warning = FALSE}
 dist_power_range = est_power_range_lm(Cq ~ 1 + distance,
                                 variable_list = list(Cq = 1, distance = c(0,100,300)),
                                 betas = c(intercept = -10.6, distance = -0.04),
@@ -255,7 +255,7 @@ data, and then the parameters for standard curve formula to convert
 between log(eDNA concentration) and Cq values. For example, to fit a
 model to the sample data included in artemis, `eDNA_samples`:
 
-```{r warnings = FALSE}
+```{r warning = FALSE}
 model_fit = eDNA_lm(Cq ~ Distance, eDNA_samples,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
@@ -267,7 +267,7 @@ passing arguments to `rstan::stan()` in the modeling functions. For
 example, 
 
 
-```{r warnings = FALSE}
+```{r warning = FALSE}
 model_fit = eDNA_lm(Cq ~ Distance, eDNA_samples,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5,
                     iter = 1000)
@@ -279,7 +279,7 @@ but users can (and should) enable it when the model is slow or the
 output suggests the MCMC algorithm might not have converged, for
 example,
 
-```{r warnings = FALSE}
+```{r warning = FALSE}
 model_fit = eDNA_lm(Cq ~ Distance, eDNA_samples,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5,
                     iter = 100, n_chain = 1,
@@ -290,7 +290,7 @@ To fit a model with a random effect, users merely use the
 `eDNA_lmer()` function and specify the random effects using the syntax
 used by lme4,
 
-```{r warnings = FALSE}
+```{r warning = FALSE}
 model_fit2 = eDNA_lmer(Cq ~ Distance + Volume + (1|TechnicalRep),
                        eDNA_samples,
                        std_curve_alpha = 21.2, std_curve_beta = -1.5)
@@ -320,7 +320,7 @@ p_detect = est_p_detect(variable_levels = c(Intercept = 1, Distance = 100),
                         betas = c(Intercept = -10.5, Distance = -0.04),
                         Cq_sd = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5,
                         n_rep = 1:12)
-p_detect
+print(p_detect)
 ```
 and we can plot this,
 
@@ -340,7 +340,7 @@ p_detect2 = est_p_detect(variable_levels = c(Intercept = 1, Distance = 100),
                         Cq_sd = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5,
                         n_rep = 1:12)
 
-p_detect2
+print(p_detect2)
 ```
 
 and we can plot the results,

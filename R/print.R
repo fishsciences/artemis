@@ -87,5 +87,5 @@ print.eDNA_p_detect = function(x, digits = getOption("digits"), ...)
     
     print.default(x, digits, ...)
 
-    invisible(NULL)          
+    invisible(x)          
 }
