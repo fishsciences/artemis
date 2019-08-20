@@ -1,21 +1,51 @@
 ##' Estimate the probability of detection
 ##'
-##' Estimate the probability of detection
-##' 
+##' This function estimates the probability of getting a positive
+##' detection for an eDNA survey given a set of predictors. This can
+##' be useful when trying to take the estimates from a preliminary
+##' study and use those estimates to inform the deployment of future
+##' sampling schemes. The function assumes that you have either an
+##' idea of the effects of the various predictors, for example from a
+##' previous study, or a fit model with estimates of the effect sizes.
+##'
+##' This function takes one circumstance at a time, and calculates the
+##' range of outcomes given a number of repeated sampling
+##' attempts. The probability calculated is the probability of getting
+##' at least one positive detection. For details on the underlying
+##' model and assumptions for this calculation, please refer to the
+##' package vignette.
+##'
+##' @section Notes on random effects:
+##'
+##' This function deals with random effects in two different
+##' ways. First, when we desire to see the probability of detection
+##' for a specific instance of a random effect, users can specify the
+##' random effect as just another effect by specifying the random
+##' effect = 1 in the variable list, and then the size of the random
+##' effect. However, when users wish to estimate the probability of
+##' detection in cases where random effects are generated from a
+##' distribution of random effects, this can be accomplished by adding
+##' the standard deviation of the random effect to the
+##' \code{Cq_sd}. This takes advantage of the fact that random effects
+##' are just another source of variation, and that sum of random
+##' normal distributions is itself a random normal distribution.
+##'
 ##' @title Estimate the probability of detection
-##' @param variable_levels numeric vector, with each element corresponding
-##'     to the condition to estimate the probability of detection.
-##' @param betas numeric vector, the effect sizes for each of the variable
-##'     level
+##' @param variable_levels numeric vector, with each element
+##'     corresponding to the condition to estimate the probability of
+##'     detection.
+##' @param betas numeric vector, the effect sizes for each of the
+##'     variable level
 ##' @param Cq_sd numeric, the measurement error on CQ
-##' @param std_curve_alpha the alpha for the std. curve formula for conversion
-##'     between log(concentration) and CQ
-##' @param std_curve_beta the alpha for the std. curve formula for conversion
-##'     between log(concentration) and CQ
-##' @param n_rep the number of replicate measurements at the levels specified
-##' @param model_fit optional, a model fit from \code{eDNA_lm} or \code{eDNA_lmer}.
-##'     If this is provided, an estimate derived from the posterior estimates of beta
-##'     is calculated.
+##' @param std_curve_alpha the alpha for the std. curve formula for
+##'     conversion between log(concentration) and CQ
+##' @param std_curve_beta the alpha for the std. curve formula for
+##'     conversion between log(concentration) and CQ
+##' @param n_rep the number of replicate measurements at the levels
+##'     specified
+##' @param model_fit optional, a model fit from \code{eDNA_lm} or
+##'     \code{eDNA_lmer}.  If this is provided, an estimate derived
+##'     from the posterior estimates of beta is calculated.
 ##' @param upper_Cq the upper limit on detection
 ##' @return object of class "eDNA_p_detect" with the estimates of the
 ##'     probability of detection for the variable levels provided.
@@ -105,7 +135,21 @@ est_power_lm = function(formula, variable_list,
 
 ##' Estimate the power for a given eDNA design
 ##'
-##' Estimate the power for a given eDNA design and effect sizes.
+##' These functions estimate the power for a given eDNA design and
+##' specific effect sizes. The functions allow the user to specify to
+##' either use the classic definition of power (i.e., whether an
+##' estimate includes 0 in the confidence/credible interval), or
+##' accuracy, defined as the estimates being within a certain
+##' percentage of the "true" betas. Both can be useful in different
+##' circumstances, but eDNA survey studies produce data where accuracy
+##' can be a more useful metric. Since the response variable, Cq
+##' values, are truncated at an upper limit, it is often possible to
+##' detect a "significant effect" which results in Cq values above
+##' this upper limit, but the effects are estimated with a high amount
+##' of uncertainty. When are primarily interested in the precision of
+##' the estimate, the classic definition of power is not helpful. For
+##' these reasons, these functions allow the user to specify
+##' "accuracy" as the metric of interest.
 ##' 
 ##' @title Estimate power
 ##' @param formula a model formula, e.g. \code{y ~ x1 + x2}. For
