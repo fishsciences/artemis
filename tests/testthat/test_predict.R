@@ -18,6 +18,12 @@ test_that("Model predictions",{
     x = data.frame(Intercept = 1, Distance = c(0,50))
  
     ans4 = predict(dd, newdata = x)
+
+    
     
     expect_true(nrow(ans4$ln_conc) == 2)
+
+
+    ans5 = predict(dd, include_sigma = TRUE)
+    
 })
