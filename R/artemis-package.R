@@ -8,7 +8,10 @@
 #'     variable, CQ cycles via a standard curve
 #'     calibration. CQ cycles, are often truncated at a certain limit,
 #'     where more than X cycles is considered a
-#'     non-detection. 
+#'     non-detection.
+#'
+#' Additional details on the model implemented by the artemis package
+#' can be found in the "Getting Started" vignette.
 #' 
 #' @docType package
 #' @name artemis-package

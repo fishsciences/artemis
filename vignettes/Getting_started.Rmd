@@ -21,8 +21,11 @@ library(artemis)
 
 The `artemis` package was created to aid in the design and analysis of
 eDNA survey studies by offering a custom suite of models for eDNA
-sampling and qPCR data. There are several reasons we felt that
-modeling of eDNA data could benefit from this treatment:
+sampling and qPCR data. Typically, data collected from these studies
+are modeled using a simple binary response of detection/no
+detection. While this approach has been OK, there are several
+characteristics of eDNA data which made us feel that
+modeling eDNA data could benefit from a different modeling approach:
 
   1. In eDNA samples, the concentration of eDNA is not directly
      measured. Instead, the amount of eDNA present is represented as a
@@ -30,16 +33,22 @@ modeling of eDNA data could benefit from this treatment:
      (hereafter referred to as the "Cq" value) completed before
      amplification takes place. eDNA concentration ($[eDNA]$) is then
      related to Cq via a standard curve generated in the lab for the
-     target species. This standard curve formula typically takes the form: 
-	 $$Cq = log[eDNA] * \beta + \alpha$$
+     target species. This standard curve formula typically takes the
+     form: $$Cq = log[eDNA] * \beta + \alpha$$. The standard curve is
+     specific to the lab reagents and techniques used. **The
+     implication of this is that models using Cq values (or a derived
+     value such as "postitive detection") as the response result in
+     estimates of effect sizes which cannot be directly compared
+     between different studies using different standard curves.**
 	 
-  2. A lower Cq value corresponds to a higher concentration of eDNA in
+  2. A higher Cq value corresponds to a lower concentration of eDNA in
      a sample. Above a pre-determined threshold, additional
      quantification cycles are not attempted. Therefore,
      "non-detection" is taken to be any sample which requires more
-     than the threshold number of cycles to detect.  This data
-     truncation in the observed response increases uncertainty in our
-     estimate of the underlying response variable, eDNA concentration.
+     than the threshold number of cycles to detect. **Not taking this
+     data truncation process into account in the model can result in
+     increased uncertainty and bias in our estimates of the effect
+     sizes.**
   
   3. The potential sources of measurement error in the extraction and
      qPCR processes are difficult to separate and quantify. For
@@ -51,15 +60,16 @@ modeling of eDNA data could benefit from this treatment:
      they have the same effect on Cq (namely, increasing variability).
 	 
 The `artemis` package addresses these issues by directly modeling the
-latent (unobserved) eDNA concentration, linking it to the truncated
-observed response via a standard curve, and estimating the measurement
-error in the process. The general model is as follows:
+effect of the predictors on the latent (unobserved) variable, eDNA
+concentration. It does this by linking eDNA concentration to the 
+observed response via the standard curve parameters. The general model is as follows:
 
 $$ Cq_i \sim Normal(\hat{Cq_i}, \sigma_{Cq}) \\
 \hat{Cq_i} = \alpha_{std\_curve} + \beta_{std\_curve}* log[eDNA]_i  \\
 log[eDNA]_{i} = X_{i} \beta$$
 
-where $\beta$ is a vector of effects on $log[eDNA]$, and
+where $\beta$ is a vector of effects on $log[eDNA]$, X is the model
+matrix of predictors and
 $\alpha_{std\_curve}$ and $\beta_{std\_curve}$ are fixed values
 provided by the standard curve.
 
@@ -82,27 +92,45 @@ This model formulation makes several assumptions:
   - There are no false detections, i.e. the measurement error cannot
     result in a positive detection when eDNA is not present in the
     sample. 
-  
-*`*`Future versions of the artemis package might allow for measurement
+
+
+*`*`Future versions of the `artemis` package might allow for measurement
 error in both the field collection and qPCR stages.*
+
+Importantly, this formulation produces estimates of the effect sizes
+which:
+
+
+  - are modeled directly on $log[eDNA]$ rather than Cq, *therefore are independent
+	of the standard curve and can be compared between studies*.
+  
+  - account for the data truncation at the upper limit of qPCR
+    cycles, *which reduces uncertainty and bias in the estimates.*
+	
+  - directly model the measurement error on qPCR extraction, *allowing
+    quantification of the amount of uncertainty attributable to
+    uncertainty in the effect sizes vs. lab procedure.*
 
 In `artemis`, the model is specified using a model formula, similar to
 the `lm()` or `lmer()` functions. This model formula is used to
 construct the model on $log[eDNA]$.
 
-# A note on survey data
+# A note on included sample data
 
-Because `artemis` was originally written to analyze aquatic eDNA
-samples, the examples and sample data included in the package have
-variables that are specific to aquatic eDNA survey data, and even more
-specifically to "live car" experiments, where eDNA is sampled at known
-distances from a source of eDNA (fish in a net pen in unidirectional
-flow, for example).  These variables include `volume` (the the number
-of mililiters of water that went through the filter in each sample)
-and `distance` (the distance in meters from the source of eDNA).
-However, the functions in `artemis` do generalize to any eDNA survey
-data, so long as that study generates Cq values and is associated with
-a standard curve for the target species.
+`artemis` was originally written to analyze aquatic eDNA samples,
+therefore the examples and sample data included in the package have
+variables that are specific to aquatic eDNA survey data. Specifically,
+many of the variables relate to "live car" experiments, where eDNA is
+sampled at known distances from a source of eDNA (fish in a net pen in
+unidirectional flow, for example). These variables include `volume`
+(the the number of mililiters of water that went through the filter in
+each sample) and `distance` (the distance in meters from the source of
+eDNA).  
+
+The functions in `artemis` generalize to any eDNA survey data with the
+following requirements. First, that study must generates Cq values and
+second, those Cq values are associated with a standard curve for the
+target species.
 
 In the following examples, `tech_rep` refers to technical replicates
 extracted from a single eDNA sample; `rep` refers to a single eDNA
@@ -111,12 +139,15 @@ sample.
 # Simulations
 
 One of the most basic tasks for the `artemis` package is simulating
-data. Simulated data is useful for testing assumptions, designing a
-study, or doing a post-hoc analysis. 
+data. This data is generated using the same data generation process as
+the model outlined above. Simulated data is useful for testing
+assumptions, designing a study, or doing a post-hoc analysis.
 
-To simulate data, you first must provide a set of levels for each
-variable in your survey data.  In the following example, our variables
-are `distance`, `volume`, `tech_rep`, and `rep`.
+To simulate data, we first must provide a set of levels for each
+variable in your survey data.  For example, if the hypothetical
+experiment had varying levels of the variables `distance`, `volume`,
+`tech_rep`, and `rep`, we would create a list with the variable names
+and the associated levels
 
 ```{r}
 vars = list(Intercept = 1,
@@ -127,35 +158,35 @@ vars = list(Intercept = 1,
             Cq = 1)
 ```
 
-Notice that we also provided a level for the intercept, as well as a
-dummy variable for the response. The response "level" is not used
-except internally to create the model matrix.  By default, the
-simulation functions construct a model matrix assuming a complete
-block design (i.e. every level of each variable is represented). The
-simulation function expands the variable list using
-`base::expand.grid()`.
+Notice that we provided a level for the intercept, as well as a dummy
+variable for the response. The response dummy variable (`Cq = 1`
+above) is only used internally to create the model matrix.  By
+default, the simulation functions construct a model matrix assuming a
+complete block design (i.e. every level of each variable is
+represented). 
 
-Second, you must provide a set of effect sizes for the variables you
-provide. For example, if we were only simulating data using distance,
-we might specify the effect sizes as:
+Next, we must provide a set of effect sizes for each of the variables
+we have in the variable levels. For example, if we were only
+simulating data using distance and volume, we might specify the effect sizes as:
 
 ```{r}
-betas = c(intercept = -10.6, distance = -0.05, volume = 0.1)
+betas = c(intercept = -10.6, distance = -0.05, volume = 0.02)
 ```
 
-It is important to note that these are the effect sizes on
+Again, it is important to remember that these are the effect sizes on
 $log[eDNA]$, *not* on the Cq values themselves. All the parameters of
-the model are on the log scale, including the intercept. Hence, we
-specified the intercept to be -10, which corresponds to
-exp(-10)$[eDNA]$. In practice, if the default value for log[eDNA] is
-close to 0, some a negative number less than -10 is a fair assumption
-for the intercept beta.
+the model are on the scale of $log[eDNA]$, including the
+intercept. Hence, we specified the intercept to be -10, which
+corresponds to exp(-10)$[eDNA]$. (In practice, if the default value
+for log[eDNA] is close to 0, some a negative number less than -10 is a
+fair assumption for the intercept beta.)
 
-Finally, to simulate data from a fixed-effects model, we use the `sim_eDNA_lm()` function:
+Finally, to simulate data from a fixed-effects model, we use the
+`sim_eDNA_lm()` function:
 
 ```{r warning = FALSE}
 ans = sim_eDNA_lm(Cq ~ distance + volume, 
-                  vars,
+                  variable_list = vars,
                   betas = c(intercept = -10.6, distance = -0.05, volume = 0.1),
                   sigma_Cq = 1, 
                   std_curve_alpha = 21.2, 
@@ -163,12 +194,20 @@ ans = sim_eDNA_lm(Cq ~ distance + volume,
 ```
 
 Notice that we must provide the parameters for the conversion formula
-between $log[eDNA]$ and Cq values to the simulation
-function, as well as the measurement error on Cq (`sigma_Cq`).
+between $log[eDNA]$ and Cq values to the simulation function, as well
+as the measurement error on Cq (`sigma_Cq`). 
 
-By default, only one instance of simulated data is created, but we can
-easily simulate many data sets by adjusting the `n_sim` parameter,
-e.g.
+You might have noticed that when we specified the `vars` above, we
+included many variables that we did not include in the formula. By
+design, all of the functions ignore extra variables in input
+variable_list or data (in the case of the modeling functions). This
+allows us to create a comprehensive list of variables we might be
+interested in, and then only adjust the model formula to change the
+simulations.
+
+By default, the `sim_eDNA_*` functions will only simulate one instance
+of the hypothetical survey/experiment, but we can easily simulate many
+data sets in one go by adjusting the `n_sim` parameter, e.g.
 
 ```{r eval = FALSE}
 ans2 = sim_eDNA_lm(Cq ~ distance + volume, 
@@ -185,13 +224,20 @@ specify our own variable data.frame, `X`, in which case the variable
 levels are ignored and the provided data.frame is used to create a
 model.matrix.
 
+The returned object from the `sim_eDNA_*` functions is a list
+containing the latent variable `ln_conc`, the equivalent Cq value
+before truncation and measurement error `Cq_hat`, and the Cq value
+following the truncation and measurement error `Cq_star`. When
+multiple simulations are requested, each of these will be stored in a
+matrix, with each column representing a single simulated instance.
+
 To simulate for a mixed-effects model, we use the function
 `sim_eDNA_lmer()`. Random effects are specified using the syntax of
 the `lme4` package, e.g. `(1|random effect)`:
 
 ```{r warning = FALSE}
 ans3 = sim_eDNA_lmer(Cq ~ distance + volume + (1|rep) + (1|tech_rep),
-                     vars,
+                     variable_levels = vars,
                      betas = c(intercept = -10.6, distance = -0.05, volume = 0.01),
                      sigma_Cq = 1,
                      sigma_rand = c(0.1, 0.1), #stdev of the random effects
@@ -298,8 +344,8 @@ to have our desired 80% power.
 
 # Modeling
 
-The second purpose of the artemis package is to fit a model to
-collected data. Similar to the simulation functions, the artemis
+The second purpose of the `artemis` package is to fit a model to
+collected data. Similar to the simulation functions, the `artemis`
 package has two functions which fit a Bayesian latent variable model
 to eDNA data; `eDNA_lm()` for fixed effects models and `eDNA_lmer()`
 for mixed effects models.
@@ -308,7 +354,7 @@ The syntax of these functions is similar to the simulation
 functions. We provide a model formula, a data.frame with the observed
 data, and then the parameters for standard curve formula to convert
 between log(eDNA concentration) and Cq values. For example, to fit a
-model to the sample data included in artemis, `eDNA_samples`:
+model to the sample data included in `artemis`, `eDNA_samples`:
 
 ```{r warning = FALSE}
 model_fit = eDNA_lm(Cq ~ Distance, eDNA_samples,
@@ -409,5 +455,5 @@ Notice how we get uncertainty intervals when we use a fit model.
 ## Predicting outcomes
 
 Once a model is fit, it can be helpful to predict the outcome, either
-for the data used to fit the model or new data. For this, artemis
+for the data used to fit the model or new data. For this, `artemis`
 provides methods for `predict()` for models fit with `eDNA_lm*()`. 

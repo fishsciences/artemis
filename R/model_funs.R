@@ -22,7 +22,37 @@ eDNA_lm = function(formula, data,
 
 ##' Fit eDNA model
 ##'
-##' Fit eDNA model. 
+##' These functions fit a Bayesian latent variable model to data
+##' collected from a eDNA sampling experiment. These data have a few
+##' particular characteristics that justify using a specialized
+##' model. More details on these characteristics and the model
+##' structure, please refer to the "Getting Started" vignette for the
+##' artemis package.
+##'
+##' There are two different modeling functions in the artemis package,
+##' \code{eDNA_lm} and \code{eDNA_lmer}. \code{eDNA_lm} is for fitting
+##' a fixed effects model, while \code{eDNA_lmer} is for fitting a
+##' mixed or random effects model. Both models are fit using the
+##' \code{rstan::sampling} function, which uses a Hamiltonian Monte
+##' Carlo algorithm to estimate parameters for the model. Users are
+##' encouraged to refer to the documentation for Stan and RStan at
+##' \url{https://mc-stan.org/users/documentation/} for details about
+##' how models are fit.
+##'
+##' @section Diagnosing warning and error messages:
+##' 
+##' The models have been written in Stan with key focus on robustness
+##' and speed. However, it is possible that users might encounter
+##' issues. Typically, these issues will be highlighted by warning
+##' messages, which will be displayed regardless of the value of
+##' \code{verbose}. Often times, these warnings can be resolved by
+##' increasing the number of iterations that the HMC algorithm runs by
+##' specifying \code{iters} to be a larger value. This should be the
+##' first action attempted, as increasing the \code{iters} increases
+##' both the warm-up and sampling iterations. If users continue to
+##' have issues, additional control arguments can be passed to
+##' \code{rstan::sampling} via the \code{...} argument.
+##' 
 ##' @title Fit eDNA Model
 ##'
 ##' @aliases eDNA_lm
@@ -61,12 +91,15 @@ eDNA_lm = function(formula, data,
 ##'
 ##' @examples
 ##'
+##' ## Fixed effect model
 ##' ans = eDNA_lm(Cq ~ Distance, eDNA_samples,
 ##'               std_curve_alpha = 21.2, std_curve_beta = -1.5)
 ##'
+##' ## Mixed-effect model
 ##' ans2 = eDNA_lmer(Cq ~ Distance + Volume + (1|TechnicalRep), eDNA_samples,
 ##'                  std_curve_alpha = 21.2, std_curve_beta = -1.5)
 ##'
+##' 
 ##'
 ##' @export
 eDNA_lmer = function(formula, data, 

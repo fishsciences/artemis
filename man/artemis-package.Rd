@@ -15,6 +15,9 @@ The artemis package implements a framework for
     calibration. CQ cycles, are often truncated at a certain limit,
     where more than X cycles is considered a
     non-detection.
+
+Additional details on the model implemented by the artemis package
+can be found in the "Getting Started" vignette.
 }
 \references{
 Stan Development Team (2018). RStan: the R interface to Stan. R package version 2.18.2. http://mc-stan.org

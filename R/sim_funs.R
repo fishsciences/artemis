@@ -40,7 +40,42 @@ sim_eDNA_lm = function(formula, variable_list,
 
 ##' Simulate eDNA data
 ##'
-##' Simulate eDNA data
+##' These functions allow for computationally efficient simulation of
+##' Cq values from a hypothetical eDNA sampling experiment via a
+##' series of effect sizes (\code{betas}) on a number of predictor or
+##' variable levels (\code{variable_levels}). The mechanism for this
+##' model is described in detail in the artemis "Getting Started"
+##' vignette.
+##'
+##' The simulation functions call to specialized functions which are
+##' written in Stan and are compiled to provide speed. This also
+##' allows the simulation functions and the modeling functions to
+##' reflect the same process at the code level.
+##'
+##' @section Diagnosing "unrealistic" simulations:
+##'
+##' Users will find that sometimes the simulationed response (i.e. Cq
+##' values) produced by this function are not similar to expected data
+##' collected from a sampling experiment. This circumstance suggests
+##' that there is a mismatch between the assumptions of the model and
+##' the data generating process in the field. For these circumstances,
+##' we suggest:
+##'
+##' \enumerate{
+##' \item Check that the \code{betas} provided are the
+##' effect sizes on the predictor on the log[eDNA concentration], and
+##' not the Cq values.
+##'
+##' \item Check that the variable levels provided are representative
+##' of real-world circumstances. For example, a sample volume of 0 ml
+##' is not possible.
+##'
+##' \item Verify the values for the standard curve alpha and
+##' beta. These are specific to each calibration for the lab, so it is
+##' important that you use the same conversion between Cq values and
+##' log[eDNA concentration] as the comparison data.
+##'
+##' }
 ##' 
 ##' @title Simulate eDNA data
 ##'

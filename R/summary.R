@@ -112,3 +112,20 @@ summary.eDNA_p_detect = function(object, probs = c(0.025, 0.5, 0.975), ...)
 
     as.data.frame(cbind(n_rep = attr(object, "reps"), mean = mn, t(ci)))
 }
+
+
+summary.eDNA_predict_lm = function(object, probs = c(0.025, 0.5, 0.975),
+                                   FUN = quantile)
+{
+    ll = if(!attr(object, interval)){
+             lapply(object, function(x) {
+                 if(is.null(x)) return(NULL)
+                 t(apply(x, 1, FUN, probs))
+             })
+         } else {
+             object
+         }
+    
+    
+}
+
