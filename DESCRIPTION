@@ -8,8 +8,9 @@ Authors@R:
            email = "mespe@ucdavis.edu"),
 	  person(given = "Myfanwy",
 		   family = "Johnston",
-		   role = "aut",
+		   role = "aut", 
 		   email = "myfanwy.johnston@fishsciences.net"))
+Maintainer: Myfanwy Johnston <myfanwy.johnston@fishsciences.net>
 Description: artemis allows for the design and analysis of experiments
 			 collecting eDNA.
 License: GPL (>=3)
@@ -22,8 +23,8 @@ Depends:
 Imports: 
     rstan (>= 2.18.2),
     rstantools (>= 1.5.1),
-	lme4,
-	gridExtra
+	lme4 (>= 1.1.21),
+	gridExtra (>= 2.3)
 LinkingTo: 
     BH (>= 1.69.0-1),
     Rcpp (>= 1.0.1),

@@ -8,7 +8,7 @@
 est_power_lm(formula, variable_list, betas, sigma_Cq, std_curve_alpha,
   std_curve_beta, type = c("exclude_zero", "accuracy"),
   accuracy_level = 0.2, conf_level = 0.95, n_sim = 200L,
-  probs = c(0.025, 0.975), upper_Cq = 40,
+  probs = conf_to_probs(conf_level), upper_Cq = 40,
   X = expand.grid(variable_list), verbose = FALSE)
 
 est_power_lmer(formula, variable_list, betas, sigma_Cq, sigma_rand,
@@ -49,15 +49,21 @@ percentage of the "true" betas used to simulate the data.}
 \item{accuracy_level}{numeric, between 0 and 1. The percent of the
 true betas for the accuracy estimate.}
 
+\item{conf_level}{numeric, between 0 and 1, representing the
+percent of the confidence interval to calculate. If
+\code{probs} is not provided, then the interval is assumed to
+be symetric.}
+
 \item{n_sim}{integer, the number of simulations to conduct in
 order to estimate the power.}
 
 \item{probs}{probabilities for the calculation of the confidence
-intervals.}
+intervals. By default, a symetric set of lower and upper
+probabilities is constructed by \code{conf_to_probs})}
 
-\item{upper_Cq}{numeric, the upper limit on CQ detection. Any value of
-log(concentration) which would result in a value greater than this limit is
-instead recorded as the limit.}
+\item{upper_Cq}{numeric, the upper limit on CQ detection. Any
+value of log(concentration) which would result in a value
+greater than this limit is instead recorded as the limit.}
 
 \item{X}{optional, a design matrix. By default, this is created
 from the variable_list using \code{expand.grid()}, which
@@ -80,7 +86,21 @@ a named vector, with one estimate of the power for each
 Estimate the power for a given eDNA design
 }
 \details{
-Estimate the power for a given eDNA design and effect sizes.
+These functions estimate the power for a given eDNA design and
+specific effect sizes. The functions allow the user to specify to
+either use the classic definition of power (i.e., whether an
+estimate includes 0 in the confidence/credible interval), or
+accuracy, defined as the estimates being within a certain
+percentage of the "true" betas. Both can be useful in different
+circumstances, but eDNA survey studies produce data where accuracy
+can be a more useful metric. Since the response variable, Cq
+values, are truncated at an upper limit, it is often possible to
+detect a "significant effect" which results in Cq values above
+this upper limit, but the effects are estimated with a high amount
+of uncertainty. When are primarily interested in the precision of
+the estimate, the classic definition of power is not helpful. For
+these reasons, these functions allow the user to specify
+"accuracy" as the metric of interest.
 }
 \author{
 Matt Espe

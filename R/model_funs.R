@@ -96,7 +96,7 @@ eDNA_lm = function(formula, data,
 ##'               std_curve_alpha = 21.2, std_curve_beta = -1.5)
 ##'
 ##' ## Mixed-effect model
-##' ans2 = eDNA_lmer(Cq ~ Distance + Volume + (1|TechnicalRep), eDNA_samples,
+##' ans2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID), eDNA_samples,
 ##'                  std_curve_alpha = 21.2, std_curve_beta = -1.5)
 ##'
 ##' 

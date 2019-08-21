@@ -8,13 +8,13 @@
 est_power_range_lm(formula, variable_list, betas, sigma_Cq,
   std_curve_alpha, std_curve_beta, type = c("exclude_zero", "accuracy"),
   rep_range = seq(2, 20, 2), accuracy_level = 0.2, conf_level = 0.95,
-  n_sim = 200L, probs = c(0.025, 0.975), upper_Cq = 40,
+  n_sim = 200L, probs = conf_to_probs(conf_level), upper_Cq = 40,
   verbose = FALSE)
 
 est_power_range_lmer(formula, variable_list, betas, sigma_Cq, sigma_rand,
   std_curve_alpha, std_curve_beta, type = c("exclude_zero", "accuracy"),
   rep_range = seq(2, 20, 2), accuracy_level = 0.2, conf_level = 0.95,
-  n_sim = 200L, probs = c(0.025, 0.975), upper_Cq = 40,
+  n_sim = 200L, probs = conf_to_probs(conf_level), upper_Cq = 40,
   verbose = FALSE)
 }
 \arguments{
@@ -46,18 +46,23 @@ confidence interval for the estimate ("significant"). Accuracy
 measures whether the estimated betas are within some
 percentage of the "true" betas used to simulate the data.}
 
-\item{rep_range}{}
+\item{rep_range}{vector, a set of the number of iterations to
+calculate the power for}
 
 \item{accuracy_level}{numeric, between 0 and 1. The percent of the
 true betas for the accuracy estimate.}
 
-\item{conf_level}{}
+\item{conf_level}{numeric, between 0 and 1, representing the
+percent of the confidence interval to calculate. If
+\code{probs} is not provided, then the interval is assumed to
+be symetric.}
 
 \item{n_sim}{integer, the number of simulations to conduct in
 order to estimate the power.}
 
 \item{probs}{probabilities for the calculation of the confidence
-intervals.}
+intervals. By default, a symetric set of lower and upper
+probabilities is constructed by \code{conf_to_probs})}
 
 \item{upper_Cq}{numeric, the upper limit on CQ detection. Any
 value of log(concentration) which would result in a value
