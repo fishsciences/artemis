@@ -22,7 +22,8 @@ Depends:
 Imports: 
     rstan (>= 2.18.2),
     rstantools (>= 1.5.1),
-	lme4
+	lme4,
+	gridExtra
 LinkingTo: 
     BH (>= 1.69.0-1),
     Rcpp (>= 1.0.1),

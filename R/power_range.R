@@ -8,7 +8,7 @@ est_power_range_lm = function(formula, variable_list,
                      accuracy_level = 0.2, 
                      conf_level = 0.95,
                      n_sim = 200L,
-                     probs = c(0.025, 0.975),
+                     probs = conf_to_probs(conf_level),
                      upper_Cq = 40,
                      verbose = FALSE)
 {
@@ -55,14 +55,19 @@ est_power_range_lm = function(formula, variable_list,
 ##'     confidence interval for the estimate ("significant"). Accuracy
 ##'     measures whether the estimated betas are within some
 ##'     percentage of the "true" betas used to simulate the data.
-##' @param rep_range 
+##' @param rep_range vector, a set of the number of iterations to
+##'     calculate the power for
 ##' @param accuracy_level numeric, between 0 and 1. The percent of the
 ##'     true betas for the accuracy estimate.
-##' @param conf_level 
+##' @param conf_level numeric, between 0 and 1, representing the
+##'     percent of the confidence interval to calculate. If
+##'     \code{probs} is not provided, then the interval is assumed to
+##'     be symetric.
 ##' @param n_sim integer, the number of simulations to conduct in
 ##'     order to estimate the power.
 ##' @param probs probabilities for the calculation of the confidence
-##'     intervals.
+##'     intervals. By default, a symetric set of lower and upper
+##'     probabilities is constructed by \code{conf_to_probs})
 ##' @param upper_Cq numeric, the upper limit on CQ detection. Any
 ##'     value of log(concentration) which would result in a value
 ##'     greater than this limit is instead recorded as the limit.
@@ -81,7 +86,7 @@ est_power_range_lmer = function(formula, variable_list,
                                 accuracy_level = 0.2, 
                                 conf_level = 0.95,
                                 n_sim = 200L,
-                                probs = c(0.025, 0.975),
+                                probs = conf_to_probs(conf_level),
                                 upper_Cq = 40,
                                 verbose = FALSE)
 {
