@@ -324,7 +324,9 @@ would like. However, it is easier to use the function
 `est_power_range_lm`, which will automate this process for us. The
 call is similar to the above, but instead of specifying the number of
 replicates in the `variable_list`, we provide a `rep_range`, which is
-`seq(2,20,2)` (every 2 from 2 to 20) by default
+`seq(2,20,2)` (every 2 from 2 to 20) by default. Warning, this is
+quite CPU intensive, so for this demonstation, we will be lowering the
+`rep_range` and the number of iterations for each case,
 
 ```{r warning = FALSE}
 dist_power_range = est_power_range_lm(Cq ~ 1 + distance,
@@ -332,7 +334,8 @@ dist_power_range = est_power_range_lm(Cq ~ 1 + distance,
                                 betas = c(intercept = -10.6, distance = -0.04),
                                 sigma_Cq = 1, 
                                 std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                                type = "exclude_zero")
+                                type = "exclude_zero",
+                                rep_range = c(5,10), n_sims = 50)
 
 dist_power_range
 ```
@@ -392,7 +395,7 @@ To fit a model with a random effect, use the
 used by `lme4`:
 
 ```{r warning = FALSE}
-model_fit2 = eDNA_lmer(Cq ~ Distance + Volume + (1|TechnicalRep),
+model_fit2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID),
                        eDNA_samples,
                        std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
