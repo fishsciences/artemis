@@ -24,9 +24,6 @@ test_that("Fit the model with simple data",{
                                           "upper_Cq", "stanfit")))
 
     aa = summary(ans)
-
-
-    
 })
 
 test_that("Lmer", {

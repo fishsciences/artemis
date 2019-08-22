@@ -112,18 +112,6 @@ setClass("eDNA_model",
                    std_curve_alpha = "numeric", std_curve_beta = "numeric",
                    upper_Cq = "numeric",
                    stanfit = "stanfit"))
-
-##' eDNA simulation results
-##'
-##' Placeholder
-##' 
-##' @slot groups data.frame of the grouping variables used
-##' @slot random_sd the estimated stdev. of each of the random effects
-##' @rdname eDNA_model
-##' @export
-setClass("eDNA_model_lmer", contains = "eDNA_model",
-         slots = c(groups = "data.frame", random_sd = "numeric"))
-
 ##' eDNA simulation results
 ##'
 ##' Placeholder
@@ -131,6 +119,18 @@ setClass("eDNA_model_lmer", contains = "eDNA_model",
 ##' @rdname eDNA_model
 ##' @export
 setClass("eDNA_model_lm", contains = "eDNA_model")
+
+##' eDNA simulation results
+##'
+##' Placeholder
+##' 
+##' @slot random_x data.frame of the grouping variables used
+##' @slot random_sd the estimated stdev. of each of the random effects
+##' @rdname eDNA_model
+##' @export
+setClass("eDNA_model_lmer", contains = "eDNA_model_lm",
+         slots = c(random_x = "data.frame", random_sd = "array"))
+
 
 setAs("stanfit", "eDNA_model_lmer", function(from) callNextMethod())
 setAs("stanfit", "eDNA_model_lm", function(from) callNextMethod())
@@ -144,3 +144,4 @@ setAs("stanfit", "eDNA_model",
               stanfit = from)
        
       })
+

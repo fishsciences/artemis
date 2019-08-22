@@ -89,3 +89,7 @@ print.eDNA_p_detect = function(x, digits = getOption("digits"), ...)
 
     invisible(x)          
 }
+
+##' @rdname eDNA_model-methods
+##' @aliases eDNA_model, ANY-method
+setMethod("show", "eDNA_model", function(object) print(object))

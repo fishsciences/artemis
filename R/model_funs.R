@@ -15,7 +15,7 @@ eDNA_lm = function(formula, data,
     md$y = ml$y
     fit = run_model(data = md, n_chain = n_chain, iters = iters, verbose = verbose, ...)
     fit = load_slots_model(fit)
-    class(fit) = "eDNA_model_lm"
+    fit = as(fit, "eDNA_model_lm")
     
     return(fit)
 }
@@ -118,7 +118,11 @@ eDNA_lmer = function(formula, data,
     fit = run_model(model = stanmodels$eDNA_lmer,
                     data = md, n_chain = n_chain, iters = iters, verbose = verbose, ...)
     fit = load_slots_model(fit)
-    class(fit) = "eDNA_model_lmer"
+    
+    fit = as(fit, "eDNA_model_lmer")
+    fit@random_x = as.data.frame(md$rand_x)
+    fit@random_sd = extract(fit@stanfit, "rand_sigma")$rand_sigma
+    
     return(fit)
 }
 
