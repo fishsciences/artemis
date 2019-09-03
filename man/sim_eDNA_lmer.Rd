@@ -7,11 +7,13 @@
 \usage{
 sim_eDNA_lm(formula, variable_list, betas, sigma_Cq, std_curve_alpha,
   std_curve_beta, n_sim = 1L, upper_Cq = 40,
-  X = expand.grid(variable_list), verbose = FALSE)
+  X = expand.grid(variable_list), verbose = FALSE,
+  sink_file = tempfile())
 
 sim_eDNA_lmer(formula, variable_list, betas, sigma_Cq, sigma_rand,
   std_curve_alpha, std_curve_beta, n_sim = 1L, upper_Cq = 40,
-  X = expand.grid(variable_list), verbose = FALSE)
+  X = expand.grid(variable_list), verbose = FALSE,
+  sink_file = tempfile())
 }
 \arguments{
 \item{formula}{a model formula, e.g. \code{y ~ x1 + x2}. For \code{sim_eDNA_lmer},
@@ -46,6 +48,10 @@ provide an unbalanced design matrix.}
 
 \item{verbose}{logical, when TRUE output from \code{rstan::sampling} is written
 to the console.}
+
+\item{sink_file}{character, a file to write the console output to
+if \code{verbose = FALSE}, by default writes to
+\code{tempfile()}}
 
 \item{sigma_rand}{numeric vector, the stdev for the random effects. There must be
 one sigma per random effect specified}

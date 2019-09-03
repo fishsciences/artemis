@@ -11,7 +11,8 @@ sim_eDNA_lm = function(formula, variable_list,
                        n_sim = 1L,
                        upper_Cq = 40,
                        X = expand.grid(variable_list),
-                       verbose = FALSE)
+                       verbose = FALSE,
+                       sink_file = tempfile())
 {
     if(!has_response(formula))
         stop("Please provide a dummy response variable for simulations")
@@ -24,7 +25,7 @@ sim_eDNA_lm = function(formula, variable_list,
 
     md = prep_data(ml, std_curve_alpha, std_curve_beta, sigma_Cq, betas, type = "sim")
 
-    if(!verbose) sink(tempfile())
+    if(!verbose) sink(sink_file)
 
     sims = sampling(stanmodels$eDNA_sim, data = md, chains = 1L,
                     algorithm = "Fixed_param", iter = n_sim, warmup = 0L,
@@ -105,7 +106,10 @@ sim_eDNA_lm = function(formula, variable_list,
 ##'     as well, in which case the variable_list is ignored. This allows users to
 ##'     provide an unbalanced design matrix. 
 ##' @param verbose logical, when TRUE output from \code{rstan::sampling} is written
-##'     to the console. 
+##'     to the console.
+##' @param sink_file character, a file to write the console output to
+##'     if \code{verbose = FALSE}, by default writes to
+##'     \code{tempfile()}
 ##' @return S4 object of class "eDNA_simulation_{lm/lmer}" with the following slots:
 ##' \describe{
 ##'   \item{ln_conc matrix}{the simulated log(concentration)}
@@ -150,7 +154,7 @@ sim_eDNA_lmer = function(formula, variable_list,
                          n_sim = 1L,
                          upper_Cq = 40,
                          X = expand.grid(variable_list),
-                         verbose = FALSE)
+                         verbose = FALSE, sink_file = tempfile())
 {
     if(!has_response(formula))
         stop("Please provide a dummy response variable for simulations")
@@ -176,7 +180,7 @@ sim_eDNA_lmer = function(formula, variable_list,
                   betas = betas, rand_sd = sigma_rand,
                   type = "sim")
 
-    if(!verbose) sink(tempfile())
+    if(!verbose) sink(sink_file)
     
     sims = sampling(stanmodels$eDNA_sim_lmer, data = md, chains = 1L,
                     algorithm = "Fixed_param", iter = n_sim, warmup = 0L,
