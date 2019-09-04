@@ -6,15 +6,14 @@
 \alias{artemis}
 \title{The 'artemis' package.}
 \description{
-The artemis package implements a framework for
-    simulating data and fitting models for eDNA studies. In
-    particular, it implements a Bayesian latent-variable model in
-    which the predictors affect a latent variable, eDNA
-    concentration. This latent variable is related to an observed
-    variable, CQ cycles via a standard curve
-    calibration. CQ cycles, are often truncated at a certain limit,
-    where more than X cycles is considered a
-    non-detection.
+Simulating data and fitting models for eDNA studies
+    can be accomplished using the artemis package. In particular,
+    artemis implements a Bayesian latent-variable model in which the
+    predictors affect a latent variable, eDNA concentration. This
+    latent variable is related to an observed variable, CQ cycles
+    via a standard curve calibration. CQ cycles, are often
+    truncated at a certain limit, where more than X cycles is
+    considered a non-detection.
 
 Additional details on the model implemented by the artemis package
 can be found in the "Getting Started" vignette.

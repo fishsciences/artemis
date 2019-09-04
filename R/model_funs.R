@@ -4,7 +4,8 @@
 eDNA_lm = function(formula, data, 
                    std_curve_alpha, std_curve_beta,
                    upper_Cq = 40,
-                   n_chain = 4L, iters = 1000L, verbose = FALSE, ...)
+                   n_chain = 4L, iters = 1000L, verbose = FALSE,
+                   sink_file = tempfile(), ...)
 {
     
     ml = gen_model_list_lm(formula, data)
@@ -13,7 +14,8 @@ eDNA_lm = function(formula, data,
     md = prep_data(ml, std_curve_alpha, std_curve_beta,
                     Cq_upper = upper_Cq, type = "model")
     md$y = ml$y
-    fit = run_model(data = md, n_chain = n_chain, iters = iters, verbose = verbose, ...)
+    fit = run_model(data = md, n_chain = n_chain, iters = iters,
+                    verbose = verbose, sink_file = sink_file, ...)
     fit = load_slots_model(fit)
     fit = as(fit, "eDNA_model_lm")
     
@@ -100,10 +102,12 @@ eDNA_lm = function(formula, data,
 ##'               std_curve_alpha = 21.2, std_curve_beta = -1.5)
 ##'
 ##' ## Mixed-effect model
-##' ans2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID), eDNA_samples,
+##' ## This takes a while to run
+##' \dontrun{
+##' ans2 = eDNA_lmer(Cq ~ Distance + (1|SampleID), eDNA_samples,
 ##'                  std_curve_alpha = 21.2, std_curve_beta = -1.5)
 ##'
-##' 
+##' }
 ##'
 ##' @export
 eDNA_lmer = function(formula, data, 

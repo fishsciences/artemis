@@ -6,10 +6,12 @@
 \title{Fit eDNA Model}
 \usage{
 eDNA_lm(formula, data, std_curve_alpha, std_curve_beta, upper_Cq = 40,
-  n_chain = 4L, iters = 1000L, verbose = FALSE, ...)
+  n_chain = 4L, iters = 1000L, verbose = FALSE,
+  sink_file = tempfile(), ...)
 
 eDNA_lmer(formula, data, std_curve_alpha, std_curve_beta, upper_Cq = 40,
-  n_chain = 4L, iters = 500L, verbose = FALSE, ...)
+  n_chain = 4L, iters = 500L, verbose = FALSE,
+  sink_file = tempfile(), ...)
 }
 \arguments{
 \item{formula}{a formula, specifying the relationship between the
@@ -17,41 +19,46 @@ predictors and the latent variable eDNA concentration.}
 
 \item{data}{data.frame, with the response and predictors}
 
-\item{std_curve_alpha}{the alpha value for the formula for converting between
-log(eDNA concentration) and CQ value}
+\item{std_curve_alpha}{the alpha value for the formula for
+converting between log(eDNA concentration) and CQ value}
 
-\item{std_curve_beta}{the beta value for the formula for converting between
-log(eDNA concentration) and CQ value}
+\item{std_curve_beta}{the beta value for the formula for
+converting between log(eDNA concentration) and CQ value}
 
-\item{upper_Cq}{numeric, the upper limit on CQ detection. Any value of
-log(concentration) which would result in a value greater than this limit is
-instead recorded as the limit.}
+\item{upper_Cq}{numeric, the upper limit on CQ detection. Any
+value of log(concentration) which would result in a value
+greater than this limit is instead recorded as the limit.}
 
-\item{n_chain}{integer, the number of chains to use. Please note that less than
-two is not recommended.}
+\item{n_chain}{integer, the number of chains to use. Please note
+that less than two is not recommended.}
 
 \item{iters}{integer, the number of iterations per chain}
 
-\item{verbose}{logical, when TRUE output from \code{rstan::sampling} is written
-to the console.}
+\item{verbose}{logical, when TRUE output from
+\code{rstan::sampling} is written to the console.}
 
-\item{...}{additional arguments passed to \code{\link[rstan]{sampling}}}
+\item{sink_file}{character, a file to write the console output to
+if \code{verbose = FALSE}, by default writes to
+\code{tempfile()}}
+
+\item{...}{additional arguments passed to
+\code{\link[rstan]{sampling}}}
 }
 \value{
-S4 object, with the following slots:
-\describe{
-  \item{ln_conc}{matrix, the posterior samples for the latent variable,
-      eDNA concentration}
-  \item{Cq_star}{matrix, the posterior prediction for the observed response}
-  \item{betas}{array, the posterior estimates for the betas for the linear model}
-  \item{sigma_Cq}{array, the posterior estimates for the measurement error of CQ}
-  \item{formula}{formula, the original formula used in the model}
-  \item{x}{data.frame, the model matrix used in the model}
-  \item{std_curve_alpha}{numeric, the std. curve value used}
-  \item{std_curve_beta}{numeric, the std. curve value used}
-  \item{upper_Cq}{numeric, the upper limit for observed CQ used}
-  \item{stanfit}{stanfit, the original results from \code{rstan::sampling}}
-}
+S4 object, with the following slots: \describe{
+    \item{ln_conc}{matrix, the posterior samples for the latent
+    variable, eDNA concentration} \item{Cq_star}{matrix, the
+    posterior prediction for the observed response}
+    \item{betas}{array, the posterior estimates for the betas for
+    the linear model} \item{sigma_Cq}{array, the posterior
+    estimates for the measurement error of CQ}
+    \item{formula}{formula, the original formula used in the
+    model} \item{x}{data.frame, the model matrix used in the
+    model} \item{std_curve_alpha}{numeric, the std. curve value
+    used} \item{std_curve_beta}{numeric, the std. curve value
+    used} \item{upper_Cq}{numeric, the upper limit for observed CQ
+    used} \item{stanfit}{stanfit, the original results from
+    \code{rstan::sampling}} }
 }
 \description{
 Fit eDNA model
@@ -97,10 +104,12 @@ ans = eDNA_lm(Cq ~ Distance, eDNA_samples,
               std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
 ## Mixed-effect model
-ans2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID), eDNA_samples,
+## This takes a while to run
+\dontrun{
+ans2 = eDNA_lmer(Cq ~ Distance + (1|SampleID), eDNA_samples,
                  std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
-
+}
 
 }
 \author{

@@ -1,14 +1,13 @@
 #' The 'artemis' package.
 #' 
-#' @description The artemis package implements a framework for
-#'     simulating data and fitting models for eDNA studies. In
-#'     particular, it implements a Bayesian latent-variable model in
-#'     which the predictors affect a latent variable, eDNA
-#'     concentration. This latent variable is related to an observed
-#'     variable, CQ cycles via a standard curve
-#'     calibration. CQ cycles, are often truncated at a certain limit,
-#'     where more than X cycles is considered a
-#'     non-detection.
+#' @description Simulating data and fitting models for eDNA studies
+#'     can be accomplished using the artemis package. In particular,
+#'     artemis implements a Bayesian latent-variable model in which the
+#'     predictors affect a latent variable, eDNA concentration. This
+#'     latent variable is related to an observed variable, CQ cycles
+#'     via a standard curve calibration. CQ cycles, are often
+#'     truncated at a certain limit, where more than X cycles is
+#'     considered a non-detection.
 #'
 #' Additional details on the model implemented by the artemis package
 #' can be found in the "Getting Started" vignette.
@@ -22,7 +21,7 @@
 #' @import rstantools
 #' @import ggplot2
 #' @importFrom stats model.matrix model.response model.frame pnorm quantile rnorm terms
-#' @importFrom graphics lines segments
+#' @importFrom graphics lines segments plot
 #' @importFrom rstan sampling extract
 #' @importFrom lme4 lFormula
 #' @importFrom rstan sampling

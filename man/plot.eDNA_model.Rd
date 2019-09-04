@@ -14,10 +14,6 @@
 \item{pars}{parameters to plot}
 
 \item{...}{additional args passed to plot.stanfit}
-
-\item{response}{the response variable to plot}
-
-\item{probs}{the probability for plotting CIs}
 }
 \value{
 ggplot of posterior estimates

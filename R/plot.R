@@ -45,8 +45,6 @@ plot.eDNA_simulation = function(x, y,
 ##' @param y ignored
 ##' @param pars parameters to plot
 ##' @param ... additional args passed to plot.stanfit
-##' @param response the response variable to plot
-##' @param probs the probability for plotting CIs
 ##' @return ggplot of posterior estimates
 ##' @author Matt Espe
 ##' @method plot eDNA_model

@@ -1,21 +1,20 @@
 Package: artemis
-Title: Analysis and simulation of eDNA experiments
-Version: 0.0.0.9000
+Title: Analysis and Simulation of eDNA Experiments
+Version: 0.0.9
 Authors@R: 
-    c(person(given = "Matt",
-           family = "Espe",
-           role = c("aut", "cre"),
-           email = "mespe@ucdavis.edu"),
-	  person(given = "Myfanwy",
+    c(person(given = "Myfanwy",
 		   family = "Johnston",
-		   role = "aut", 
-		   email = "myfanwy.johnston@fishsciences.net"))
+		   role = c("aut", "cre"), 
+		   email = "myfanwy.johnston@fishsciences.net"), person(given = "Matt",
+           family = "Espe",
+           role = c("aut", "ctr"),
+           email = "mespe@ucdavis.edu"))
 Maintainer: Myfanwy Johnston <myfanwy.johnston@fishsciences.net>
-Description: artemis allows for the design and analysis of experiments
-			 collecting eDNA.
+Description: The design and analysis of experiments collecting eDNA.
 License: GPL (>=3)
 Depends: 
     methods,
+	graphics,
 	stats,
 	ggplot2,
     R (>= 3.4.0),
