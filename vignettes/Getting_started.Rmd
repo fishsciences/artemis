@@ -3,8 +3,10 @@ title: "Getting started with the artemis package"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Getting_started}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE, echo = FALSE}
@@ -19,13 +21,15 @@ knitr::opts_chunk$set(
 library(artemis)
 ```
 
+## Introduction
+
 The `artemis` package was created to aid in the design and analysis of
 eDNA survey studies by offering a custom suite of models for eDNA
 sampling and qPCR data. Typically, data collected from these studies
 are modeled using a simple binary response of detection/no
 detection. While this approach has been OK, there are several
 characteristics of eDNA data which made us feel that
-modeling eDNA data could benefit from a different modeling approach:
+it would benefit from a different modeling approach:
 
   1. In eDNA samples, the concentration of eDNA is not directly
      measured. Instead, the amount of eDNA present is represented as a
@@ -34,7 +38,7 @@ modeling eDNA data could benefit from a different modeling approach:
      amplification takes place. eDNA concentration ($[eDNA]$) is then
      related to Cq via a standard curve generated in the lab for the
      target species. This standard curve formula typically takes the
-     form: $$Cq = log[eDNA] * \beta + \alpha$$. The standard curve is
+     form: $$Cq = log[eDNA] * \beta + \alpha$$ The standard curve is
      specific to the lab reagents and techniques used. **The
      implication of this is that models using Cq values (or a derived
      value such as "postitive detection") as the response result in
@@ -68,7 +72,7 @@ $$ Cq_i \sim Normal(\hat{Cq_i}, \sigma_{Cq}) \\
 \hat{Cq_i} = \alpha_{std\_curve} + \beta_{std\_curve}* log[eDNA]_i  \\
 log[eDNA]_{i} = X_{i} \beta$$
 
-where $\beta$ is a vector of effects on $log[eDNA]$, X is the model
+where $\beta$ is a vector of effects on $log[eDNA]$, $X$ is the model
 matrix of predictors and
 $\alpha_{std\_curve}$ and $\beta_{std\_curve}$ are fixed values
 provided by the standard curve.
@@ -82,7 +86,7 @@ the upper limit is 40 cycles.
    
 This model formulation makes several assumptions:
  
-  - $log[eDNA]$ is assumed to be uniform within a sample
+  - $log[eDNA]$ is assumed to be uniform within a sample.
   
   - $log[eDNA]$ is sampled without error.
   
@@ -115,28 +119,21 @@ In `artemis`, the model is specified using a model formula, similar to
 the `lm()` or `lmer()` functions. This model formula is used to
 construct the model on $log[eDNA]$.
 
-# A note on included sample data
+The functions in `artemis` generalize to any eDNA survey data containing Cq values associated with a standard curve for the target species.
 
-`artemis` was originally written to analyze aquatic eDNA samples,
-therefore the examples and sample data included in the package have
-variables that are specific to aquatic eDNA survey data. Specifically,
-many of the variables relate to "live car" experiments, where eDNA is
-sampled at known distances from a source of eDNA (fish in a net pen in
-unidirectional flow, for example). These variables include `volume`
+## A note on included sample data
+
+Since `artemis` was originally written to analyze aquatic eDNA samples, the examples and sample data included in the package (see `?eDNA_samples`) reference
+variables that are specific to aquatic eDNA survey data. These variables include `volume`
 (the the number of mililiters of water that went through the filter in
 each sample) and `distance` (the distance in meters from the source of
-eDNA).  
-
-The functions in `artemis` generalize to any eDNA survey data with the
-following requirements. First, that study must generates Cq values and
-second, those Cq values are associated with a standard curve for the
-target species.
+eDNA).  For example, `eDNA_samples` is from a "live car" experiment, where eDNA was sampled at known distances from a source of eDNA (fish in a net pen in unidirectional flow). 
 
 In the following examples, `tech_rep` refers to technical replicates
 extracted from a single eDNA sample; `rep` refers to a single eDNA
 sample.
 
-# Simulations
+## Simulations
 
 One of the most basic tasks for the `artemis` package is simulating
 data. This data is generated using the same data generation process as
@@ -147,7 +144,7 @@ To simulate data, we first must provide a set of levels for each
 variable in your survey data.  For example, if the hypothetical
 experiment had varying levels of the variables `distance`, `volume`,
 `tech_rep`, and `rep`, we would create a list with the variable names
-and the associated levels
+and the associated levels:
 
 ```{r}
 vars = list(Intercept = 1,
@@ -185,6 +182,7 @@ Finally, to simulate data from a fixed-effects model, we use the
 `sim_eDNA_lm()` function:
 
 ```{r warning = FALSE}
+set.seed(1234)
 ans = sim_eDNA_lm(Cq ~ distance + volume, 
                   variable_list = vars,
                   betas = c(intercept = -10.6, distance = -0.05, volume = 0.1),
@@ -221,8 +219,8 @@ ans2 = sim_eDNA_lm(Cq ~ distance + volume,
 
 If we want to simulate data for an incomplete block design, we can
 specify our own variable data.frame, `X`, in which case the variable
-levels are ignored and the provided data.frame is used to create a
-model.matrix.
+levels are ignored and the provided data frame is used to create a
+model matrix.
 
 The returned object from the `sim_eDNA_*` functions is a list
 containing the latent variable `ln_conc`, the equivalent Cq value
@@ -237,7 +235,7 @@ the `lme4` package, e.g. `(1|random effect)`:
 
 ```{r warning = FALSE}
 ans3 = sim_eDNA_lmer(Cq ~ distance + volume + (1|rep) + (1|tech_rep),
-                     variable_levels = vars,
+                     variable_list = vars,
                      betas = c(intercept = -10.6, distance = -0.05, volume = 0.01),
                      sigma_Cq = 1,
                      sigma_rand = c(0.1, 0.1), #stdev of the random effects
@@ -272,8 +270,8 @@ used in the formula.* The summary also includes an empirical summary
 of the percent of each level which was detected, i.e. had a Cq value
 below the threshold.
 
-So in the output above, 95% of the simulated data with distance = 0
-was between 27.8 and 31.6.  The p_detect column is the percentage of
+So in the output above, 95% of the simulated data with `distance` = 0
+was between 28.2 and 34.8.  The `p_detect` column is the percentage of
 each effect that was below the detection threshold.  In this
 simulation, the intercept is pretty low and the effects of distance
 and volume are small.  100% of all levels resulted in samples below
@@ -285,26 +283,26 @@ The results of the simulations can be plotted with `plot()`,
 plot(ans)
 ```
 
-Similar to summary, this plots the response (either Cq or $log[eNDA]$
+Similar to `summary()`, this plots the response (either Cq or $log[eNDA]$)
 by each level of the variables used to simulate the data. 
 
-## Study design
+### Simulating Study Designs
 
 Simulations are helpful for designing new studies. Given a set of
-assumptions about the effect sizes, we can simulate how well we are
-able to either detect eDNA or how accurately we can estimate those
-effects given a number of replications and variable levels in the design.
+assumptions about the effect sizes, we can simulate a full study and evaluate how well we are
+able to detect eDNA, and/or or whether the proposed design allows us to estimate those
+effects.
 
 For example, suppose we wanted to design a study exploring the effects
 of different distances on the detection of eDNA. From previous
-studies, we have estimated the effect of distance to be -0.04 decrease
-in log(eDNA concentration) per meter distance. If we want to have a
+studies, we have estimated the effect of distance to be a -0.04 decrease
+in log[eDNA] per meter distance away from source. If we want to have a
 sense of how many replicates we need for this study to have at least
 80% power (at least 80% chance to estimate the effect of distance
 without including 0 in the CI), we can get a quick estimate of this
 using the `est_power_lm()` and a given number of samples, say 5 reps. To
-do this, we specify the number of replicates in the variable_list as
-`rep = 1:5`, and specify our effect sizes,
+do this, we specify the number of replicates in the `variable_list` as
+`rep = 1:5`, and also specify our effect sizes:
 
 ```{r warning = FALSE}
 dist_power = est_power_lm(Cq ~ 1 + distance,
@@ -318,34 +316,33 @@ dist_power
 
 ```
 
-It appears that 5 samples was not enough in this case. We could
-keep trying different number of replicates until we get the number we
+It appears that 5 samples was not enough to estimate the effect of distance in this case. We could keep trying different number of replicates until we get the number we
 would like. However, it is easier to use the function
-`est_power_range_lm`, which will automate this process for us. The
-call is similar to the above, but instead of specifying the number of
+`est_power_range_lm()`, which will automate this process for us. The
+call is similar to the one above, but instead of specifying the number of
 replicates in the `variable_list`, we provide a `rep_range`, which is
 `seq(2,20,2)` (every 2 from 2 to 20) by default. Warning, this is
 quite CPU intensive, so for this demonstation, we will be lowering the
-`rep_range` and the number of iterations for each case,
+`rep_range` and the number of iterations for each case:
 
 ```{r warning = FALSE}
+set.seed(1234)
 dist_power_range = est_power_range_lm(Cq ~ 1 + distance,
                                 variable_list = list(Cq = 1, distance = c(0,100,300)),
                                 betas = c(intercept = -10.6, distance = -0.04),
                                 sigma_Cq = 1, 
                                 std_curve_alpha = 21.2, std_curve_beta = -1.5,
                                 type = "exclude_zero",
-                                rep_range = c(5,10), n_sims = 50)
+                                rep_range = c(5,10))
 
 dist_power_range
 ```
 
-For this study, it looks like we will need greater then 8 replicates
+For this study, it looks like we will need greater then 5 replicates
 to have our desired 80% power. 
 
-**TODO: Print method: results are ugly to look at?**
 
-# Modeling
+## Modeling
 
 The second purpose of the `artemis` package is to fit a model to
 collected data. Similar to the simulation functions, the `artemis`
@@ -354,12 +351,13 @@ to eDNA data; `eDNA_lm()` for fixed effects models and `eDNA_lmer()`
 for mixed effects models.
 
 The syntax of these functions is similar to the simulation
-functions. We provide a model formula, a data.frame with the observed
+functions. We provide a model formula, a data frame with the observed
 data, and then the parameters for standard curve formula to convert
-between log(eDNA concentration) and Cq values. For example, to fit a
+between log[eDNA] and Cq values. For example, to fit a
 model to the sample data included in `artemis`, `eDNA_samples`:
 
 ```{r warning = FALSE}
+
 model_fit = eDNA_lm(Cq ~ Distance, eDNA_samples,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
@@ -379,7 +377,7 @@ model_fit = eDNA_lm(Cq ~ Distance, eDNA_samples,
 ```
 
 By default, `artemis` suppresses the (often verbose) output from Stan,
-but users can (and should) enable it when the model is slow or the
+but users can (and should) enable it with `verbose = TRUE` when the model is slow or the
 output suggests the MCMC algorithm might not have converged, for
 example,
 
@@ -406,6 +404,7 @@ As with the simulations, the model results can be summarized with
 
 ```{r}
 summary(model_fit2)
+plot(model_fit2)
 ```
 
 **TODO:** PLOT
