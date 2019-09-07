@@ -22,7 +22,8 @@ ggplot of posterior estimates
 Plot eDNA model results
 }
 \details{
-Plot eDNA model results
+Plot eDNA model results. Currently, this is just a wrapper for
+\code{rstan::plot}, which produces a "catapillar" plot.
 }
 \author{
 Matt Espe
