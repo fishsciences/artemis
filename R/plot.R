@@ -27,8 +27,7 @@ plot.eDNA_simulation = function(x, y,
     vars = colnames(x@x)
     p = lapply(vars, function(v){
         ggplot(, aes(y = ymn, x = x@x[[v]] )) +
-            geom_point() +
-            geom_smooth() +
+            geom_jitter() +
             xlab(v) +
             ylab(response) +
             theme_bw()
