@@ -68,6 +68,16 @@ setAs("eDNA_simulation", "data.frame",
           to
       })
 
+##' Methods for eDNA simulations
+##'
+##' Methods for eDNA simulations
+##' 
+##' @title  Methods for eDNA simulations
+##' @param x object of class eDNA_simulation
+##' @return data.frame
+##' @author Matt Espe
+##' @method as.data.frame eDNA_simulation
+##' @export 
 as.data.frame.eDNA_simulation = function(x) {
     as(x, "data.frame")
 }
