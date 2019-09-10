@@ -19,7 +19,7 @@
 \item{...}{ignored}
 }
 \value{
-a gtable object from marrangeGrob
+a list of ggplots
 }
 \description{
 Plot method for eDNA simulations

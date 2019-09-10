@@ -7,7 +7,7 @@
 ##' @param response the response variable to plot
 ##' @param probs the probability for plotting CIs
 ##' @param ... ignored
-##' @return a gtable object from marrangeGrob
+##' @return a list of ggplots
 ##' @author Matt Espe
 ##' @method plot eDNA_simulation
 ##' @export
@@ -27,12 +27,12 @@ plot.eDNA_simulation = function(x, y,
     vars = colnames(x@x)
     p = lapply(vars, function(v){
         ggplot(, aes(y = ymn, x = x@x[[v]] )) +
-            geom_jitter() +
+            geom_jitter(alpha = 1/10, width = 0.35) +
             xlab(v) +
             ylab(response) +
             theme_bw()
     })
-    marrangeGrob(p, ncol = 3, nrow = 1)
+    p
 }
 
 
