@@ -4,10 +4,16 @@
 \alias{as.data.frame.eDNA_simulation}
 \title{Methods for eDNA simulations}
 \usage{
-\method{as.data.frame}{eDNA_simulation}(x)
+\method{as.data.frame}{eDNA_simulation}(x, row.names, optional, ...)
 }
 \arguments{
 \item{x}{object of class eDNA_simulation}
+
+\item{row.names}{ignored}
+
+\item{optional}{ignored}
+
+\item{...}{ignored}
 }
 \value{
 data.frame
