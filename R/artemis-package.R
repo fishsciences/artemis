@@ -22,7 +22,7 @@
 #' @import ggplot2
 #' @importFrom stats model.matrix model.response model.frame pnorm quantile rnorm terms
 #' @importFrom graphics lines segments plot
-#' @importFrom rstan sampling extract
+#' @importFrom rstan sampling extract plot
 #' @importFrom lme4 lFormula
 #' @importFrom rstan sampling
 #' 

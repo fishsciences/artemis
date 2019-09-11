@@ -51,7 +51,7 @@ plot.eDNA_simulation = function(x, y,
 ##' @method plot eDNA_model
 ##' @export
 plot.eDNA_model = function(x, y, pars = "betas",  ...) {
-    rstan::plot(x@stanfit, pars = pars, ...)
+    plot(x@stanfit, pars = pars, ...)
 }
 
 
@@ -81,12 +81,11 @@ plot.eDNA_p_detect = function(x, y, probs = c(0.025, 0.975),
 
     if(is.matrix(x)) {
         tmp = summary(x, probs)
-        p = ggplot(tmp, aes(x = n_rep, y = tmp$mean)) + 
-            ## geom_point() +
+        p = ggplot(, aes(x = tmp$n_rep, y = tmp$mean)) + # avoids note in R CMD check 
             geom_line(lty = 2) + 
             geom_pointrange(aes(ymin = tmp[,3], ymax = tmp[,4])) + 
             theme_bw()
-
+        
 
      } else {
         p = ggplot(, aes(x = reps, y = x)) +
