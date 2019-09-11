@@ -17,7 +17,10 @@ quantiles displayed}
 
 \item{ylim}{the y limits on the plot}
 
-\item{...}{additional args passed to \code{plot}}
+\item{...}{additional args, currently ignored}
+}
+\value{
+a ggplot object
 }
 \description{
 Plot the p(detect)

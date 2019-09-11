@@ -65,8 +65,8 @@ plot.eDNA_model = function(x, y, pars = "betas",  ...) {
 ##' @param probs numeric vector of length 2, the lower and upper probabilities for
 ##'     quantiles displayed
 ##' @param ylim the y limits on the plot
-##' @param ... additional args passed to \code{plot}
-##' @return NULL
+##' @param ... additional args, currently ignored
+##' @return a ggplot object
 ##' 
 ##' @author Matt Espe
 ##' @method plot eDNA_p_detect
