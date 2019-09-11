@@ -96,6 +96,5 @@ plot.eDNA_p_detect = function(x, y, probs = c(0.025, 0.975),
                 pretty(x, n)[round(pretty(x, n),1) %% 1 == 0],
                 expand = expand_scale(mult = 0.015)) +
             scale_y_continuous(limits = ylim, expand = expand_scale(add = 0.01)) +
-            coord_flip()  +
             theme_bw()
 }
