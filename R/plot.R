@@ -81,18 +81,21 @@ plot.eDNA_p_detect = function(x, y, probs = c(0.025, 0.975),
 
     if(is.matrix(x)) {
         tmp = summary(x, probs)
-        p = ggplot(, aes(x = tmp$n_rep, y = tmp$mean)) + # avoids note in R CMD check 
-            geom_line(lty = 2) + 
-            geom_pointrange(aes(ymin = tmp[,3], ymax = tmp[,4])) + 
-            theme_bw()
-        
-
-     } else {
-        p = ggplot(, aes(x = reps, y = x)) +
-                     geom_point()
+        p = ggplot(tmp, aes(x = as.integer(n_rep), y = tmp$mean)) + 
+            geom_point(size = 2.5) +
+            geom_line(lty = 3) + 
+            geom_errorbar(aes(ymin = tmp[,3], # lower
+                              ymax = tmp[,4]), # upper
+                            width = rel(0.15)) 
+    } else {
+        p = ggplot( , aes(x = as.integer(reps), y = x)) +
+            geom_point(size = 2.5) 
     }
         p + ylab("p(detect)") + xlab("N replicates") +
-            ylim(ylim) + xlim(range(reps)) +
+            scale_x_continuous(breaks = function(x, n = 5)  
+                pretty(x, n)[round(pretty(x, n),1) %% 1 == 0],
+                expand = expand_scale(mult = 0.015)) +
+            scale_y_continuous(limits = ylim, expand = expand_scale(add = 0.01)) +
+            coord_flip()  +
             theme_bw()
-        
 }
