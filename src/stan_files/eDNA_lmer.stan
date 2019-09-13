@@ -16,11 +16,6 @@
  */
 
 functions{
-  // Calculate standard curve conversion
-  vector ln_std_curve(vector conc, real std_curve_alpha, real std_curve_beta){
-	return std_curve_beta * log(conc) + std_curve_alpha;
-  }
-
   int[] get_group_lengths(int[] groups){
 	int n_grp = max(groups);
 	int n = dims(groups)[1];
