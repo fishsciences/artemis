@@ -123,11 +123,11 @@ The functions in `artemis` generalize to any eDNA survey data containing Cq valu
 
 ## A note on included sample data
 
-Since `artemis` was originally written to analyze aquatic eDNA samples, the examples and sample data included in the package (see `?eDNA_samples`) reference
+Since `artemis` was originally written to analyze aquatic eDNA samples, the examples and sample data included in the package (see `?eDNA_data`) reference
 variables that are specific to aquatic eDNA survey data. These variables include `volume`
 (the the number of mililiters of water that went through the filter in
 each sample) and `distance` (the distance in meters from the source of
-eDNA).  For example, `eDNA_samples` is from a "live car" experiment, where eDNA was sampled at known distances from a source of eDNA (fish in a net pen in unidirectional flow). 
+eDNA).  For example, `eDNA_data` is from a "live car" experiment, where eDNA was sampled at known distances from a source of eDNA (fish in a net pen in unidirectional flow). 
 
 In the following examples, `tech_rep` refers to technical replicates
 extracted from a single eDNA sample; `rep` refers to a single eDNA
@@ -354,11 +354,11 @@ The syntax of these functions is similar to the simulation
 functions. We provide a model formula, a data frame with the observed
 data, and then the parameters for standard curve formula to convert
 between log[eDNA] and Cq values. For example, to fit a
-model to the sample data included in `artemis`, `eDNA_samples`:
+model to the sample data included in `artemis`, `eDNA_data`:
 
 ```{r warning = FALSE}
 
-model_fit = eDNA_lm(Cq ~ Distance, eDNA_samples,
+model_fit = eDNA_lm(Cq ~ Distance, eDNA_data,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
 ```
@@ -370,7 +370,7 @@ example,
 
 
 ```{r warning = FALSE}
-model_fit = eDNA_lm(Cq ~ Distance, eDNA_samples,
+model_fit = eDNA_lm(Cq ~ Distance, eDNA_data,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5,
                     iter = 1000)
 
@@ -382,7 +382,7 @@ output suggests the MCMC algorithm might not have converged, for
 example,
 
 ```{r warning = FALSE}
-model_fit = eDNA_lm(Cq ~ Distance, eDNA_samples,
+model_fit = eDNA_lm(Cq ~ Distance, eDNA_data,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5,
                     iter = 100, n_chain = 1,
                     verbose = TRUE)
@@ -394,7 +394,7 @@ used by `lme4`:
 
 ```{r warning = FALSE}
 model_fit2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID),
-                       eDNA_samples,
+                       eDNA_data,
                        std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
 ```
