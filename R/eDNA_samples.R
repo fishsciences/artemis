@@ -1,4 +1,4 @@
-#' eDNA_samples
+#' eDNA_data
 #' 
 #' A subset of the data collected in Delta Smelt eDNA live car experiments in the Sacramento River Delta.
 #' 
@@ -14,4 +14,4 @@
 #'    \item{Volume}{Volume (in milliliters) of water pulled through the Sterivex filter in the sample.}
 #'    \item{Cq}{Quantification cycle of qPCR - lower values represent higher concentration of eDNA.  Cq == 40.0 indicates no eDNA present (the cutoff value for amplification cycles during qPCR).}
 #'    }
-"eDNA_samples"
+"eDNA_data"
