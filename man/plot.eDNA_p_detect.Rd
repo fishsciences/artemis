@@ -5,23 +5,27 @@
 \title{Plot p(detect)}
 \usage{
 \method{plot}{eDNA_p_detect}(x, y, probs = c(0.025, 0.975), ylim = c(0,
-  1), point_size = 2.5, n_breaks = 5, ...)
+  1), point_size = 2.5, n_breaks = 5, error_width = rel(1.5), ...)
 }
 \arguments{
-\item{x}{an object of class "eDNA_p_detect", produced by \code{est_p_detect}}
+\item{x}{object of class eDNA_model_*}
 
 \item{y}{ignored}
 
-\item{probs}{numeric vector of length 2, the lower and upper probabilities for
-quantiles displayed}
+\item{probs}{probabilities for error bars when a model fit is
+supplied}
 
-\item{ylim}{the y limits on the plot}
+\item{ylim}{limits on the y axis}
 
-\item{point_size}{point size for the estimate or the mean value}
+\item{point_size}{point size for the estimated p(detect)}
 
-\item{n_breaks}{passed to \code{pretty()}}
+\item{n_breaks}{passed to \code{pretty}}
 
-\item{...}{additional args, currently ignored}
+\item{error_width}{the width of the ends of errorbars}
+
+\item{...}{additional args passed to plot.stanfit}
+
+\item{pars}{parameters to plot}
 }
 \value{
 a ggplot object

@@ -63,14 +63,16 @@ plot.eDNA_model = function(x, y, pars = "betas",  ...) {
 ##'
 ##' Plot the p(detect)
 ##' @title Plot p(detect)
-##' @param x an object of class "eDNA_p_detect", produced by \code{est_p_detect}
+##' @param x object of class eDNA_model_*
 ##' @param y ignored
-##' @param probs numeric vector of length 2, the lower and upper probabilities for
-##'     quantiles displayed
-##' @param ylim the y limits on the plot
-##' @param point_size point size for the estimate or the mean value
-##' @param n_breaks passed to \code{pretty()}
-##' @param ... additional args, currently ignored
+##' @param probs probabilities for error bars when a model fit is
+##'     supplied
+##' @param ylim limits on the y axis
+##' @param point_size point size for the estimated p(detect)
+##' @param n_breaks passed to \code{pretty}
+##' @param error_width the width of the ends of errorbars
+##' @param ... additional args passed to plot.stanfit
+##' @param pars parameters to plot
 ##' @return a ggplot object
 ##' 
 ##' @author Matt Espe
@@ -80,6 +82,7 @@ plot.eDNA_p_detect = function(x, y, probs = c(0.025, 0.975),
                               ylim = c(0,1),
                               point_size = 2.5,
                               n_breaks = 5,
+                              error_width = rel(1.5),
                               ...)
 {
     if(length(probs) != 2)
@@ -90,9 +93,10 @@ plot.eDNA_p_detect = function(x, y, probs = c(0.025, 0.975),
     if(is.matrix(x)) {
         tmp = summary(x, probs)
         p = ggplot(, aes(x = as.integer(tmp$n_rep), y = tmp$mean)) + #avoids R CMD check NOTE
-            geom_pointrange(aes(ymin = tmp[,3], # lower
-                                ymax = tmp[,4]), # upper
-                            size = point_size) +
+            geom_point(size = point_size) +
+            geom_errorbar(aes(ymin = tmp[,3], # lower
+                              ymax = tmp[,4]), # upper
+                          width = error_width) + 
             geom_line(lty = 3) 
     } else {
         p = ggplot( , aes(x = as.integer(reps), y = x)) +
