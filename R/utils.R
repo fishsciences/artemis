@@ -1,21 +1,3 @@
-len = function(x)
-{
-    length(unique(x))
-}
-
-get_shared_rand = function(X)
-{
-    idx = lapply(X, unique)
-    rep(seq(length(idx)), times = sapply(idx, length))
-}
-
-relevel_rands = function(x)
-{
-    m = c(0, cumsum(sapply(x, max)))
-    as.data.frame(sapply(seq(ncol(x)), function(i){
-        x[[i]] + m[i]
-    }))
-}
 
 excludes_zero = function(ci)
 {
