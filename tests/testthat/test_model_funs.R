@@ -1,7 +1,7 @@
 context("Model fitting")
 
 test_that("Fit the model with simple data",{
-    ans = eDNA_lm(Cq ~ Distance, eDNA_samples,
+    ans = eDNA_lm(Cq ~ Distance, eDNA_data,
                   std_curve_alpha = 21.2, std_curve_beta = -1.5)
     expect_is(ans, "eDNA_model_lm")
 
@@ -14,7 +14,7 @@ test_that("Fit the model with simple data",{
 
     expect_is(aa, "data.frame")
 
-    ans2 = eDNA_lm(Cq ~ Distance + Volume, eDNA_samples,
+    ans2 = eDNA_lm(Cq ~ Distance + Volume, eDNA_data,
                   std_curve_alpha = 21.2, std_curve_beta = -1.5)
     expect_is(ans, "eDNA_model_lm")
 
@@ -27,19 +27,19 @@ test_that("Fit the model with simple data",{
 })
 
 test_that("Lmer", {
-    ans2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID), eDNA_samples,
+    ans2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID), eDNA_data,
                    std_curve_alpha = 21.2, std_curve_beta = -1.5, verbose = TRUE)
 
     
     summary(ans2)
 
     ans2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID),
-                     eDNA_samples,
+                     eDNA_data,
                      std_curve_alpha = 21.2, std_curve_beta = -1.5, verbose = TRUE)
 
 
     ans2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID),
-                     eDNA_samples,
+                     eDNA_data,
                      std_curve_alpha = 21.2, std_curve_beta = -1.5, verbose = TRUE,
                      cores = 4L, iter = 2000)
 

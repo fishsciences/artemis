@@ -31,7 +31,7 @@ test_that("Summary methods: simulations", {
 })
 
 test_that("Summary methods: model", {
-    ans = eDNA_lm(Cq ~ Distance, eDNA_samples,
+    ans = eDNA_lm(Cq ~ Distance, eDNA_data,
                   std_curve_alpha = 21.2, std_curve_beta = -1.5)
     
     res = summary(ans)

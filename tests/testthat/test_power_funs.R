@@ -25,7 +25,7 @@ test_that("P-detect", {
                  betas = c(intercept = -10.6, Distance = -0.5, Volume = -0.1),
                  Cq_sd = 1, n_rep = 3, std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
-    ans = eDNA_lm(Cq ~ Distance, eDNA_samples,
+    ans = eDNA_lm(Cq ~ Distance, eDNA_data,
                   std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
 
