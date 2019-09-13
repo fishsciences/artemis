@@ -5,7 +5,7 @@
 \title{Plot method for eDNA simulations}
 \usage{
 \method{plot}{eDNA_simulation}(x, y, response = "Cq_star",
-  probs = c(0.025, 0.975), ...)
+  probs = c(0.025, 0.975), alpha = 0.1, jitter_width = 0.35, ...)
 }
 \arguments{
 \item{x}{object of class eDNA_simulation}
@@ -15,6 +15,10 @@
 \item{response}{the response variable to plot}
 
 \item{probs}{the probability for plotting CIs}
+
+\item{alpha}{the alpha value, i.e. transparancy, of the points}
+
+\item{jitter_width}{the width of the jitter applied to the points}
 
 \item{...}{ignored}
 }

@@ -5,7 +5,7 @@
 \title{Plot p(detect)}
 \usage{
 \method{plot}{eDNA_p_detect}(x, y, probs = c(0.025, 0.975), ylim = c(0,
-  1), ...)
+  1), point_size = 2.5, n_breaks = 5, ...)
 }
 \arguments{
 \item{x}{an object of class "eDNA_p_detect", produced by \code{est_p_detect}}
@@ -16,6 +16,10 @@
 quantiles displayed}
 
 \item{ylim}{the y limits on the plot}
+
+\item{point_size}{point size for the estimate or the mean value}
+
+\item{n_breaks}{passed to \code{pretty()}}
 
 \item{...}{additional args, currently ignored}
 }
