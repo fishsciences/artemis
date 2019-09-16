@@ -18,6 +18,8 @@
 \item{digits}{number of digits to show}
 
 \item{...}{additional arguments passed to \code{print}}
+
+\item{object}{an object of class eDNA_model}
 }
 \value{
 x

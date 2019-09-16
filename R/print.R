@@ -103,6 +103,7 @@ print.eDNA_p_detect = function(x, digits = getOption("digits"), ...)
     invisible(x)          
 }
 
+##' @param object an object of class eDNA_model
 ##' @rdname print.eDNA_model
 ##' @aliases eDNA_model, ANY-method
 ##' @export

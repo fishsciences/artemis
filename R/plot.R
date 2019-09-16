@@ -81,7 +81,6 @@ plot.eDNA_model = function(x, y, pars = "betas",  ...) {
 ##' @param n_breaks passed to \code{pretty}
 ##' @param error_width the width of the ends of errorbars
 ##' @param ... additional args passed to plot.stanfit
-##' @param pars parameters to plot
 ##' @return a ggplot object
 ##' 
 ##' @author Matt Espe

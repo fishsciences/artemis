@@ -24,8 +24,6 @@ supplied}
 \item{error_width}{the width of the ends of errorbars}
 
 \item{...}{additional args passed to plot.stanfit}
-
-\item{pars}{parameters to plot}
 }
 \value{
 a ggplot object
