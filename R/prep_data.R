@@ -1,3 +1,4 @@
+# Helper function to arrange data for Stan
 
 prep_data = function(mod_list,
                      alpha, beta,

@@ -22,7 +22,9 @@ data.frame
 Methods for eDNA simulations
 }
 \details{
-Methods for eDNA simulations
+as.data.frame methods for eDNA simulations. This allows the
+conversion of the simulations to a form suitable for additional
+operations, e.g. plotting.
 }
 \author{
 Matt Espe

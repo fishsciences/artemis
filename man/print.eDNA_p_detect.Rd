@@ -20,7 +20,12 @@ x
 Print method for p(detect)
 }
 \details{
-Print method for p(detect)
+Print method for the results of \code{est_p_detect}. If
+\code{est_p_detect} was provided with a single set of beta values,
+only these point estimates are printed. If a fit model was
+provided, posterior samples of the p(detect) are produced. These
+are summarized and printed together with posterior intervals, as
+estimated by the quantile method.
 }
 \author{
 Matt Espe

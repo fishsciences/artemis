@@ -3,9 +3,11 @@
 \docType{class}
 \name{eDNA_model-class}
 \alias{eDNA_model-class}
+\alias{eDNA_model_lm-class}
+\alias{eDNA_model_lmer-class}
 \title{eDNA model fit results}
 \description{
-Placeholder.
+An S4 object holding the results of a model fit by \code{eDNA_lm*}
 }
 \section{Slots}{
 
@@ -29,5 +31,9 @@ Placeholder.
 \item{\code{upper_Cq}}{the upper limit for CQ}
 
 \item{\code{stanfit}}{the result from rstan::sampling}
+
+\item{\code{random_x}}{data.frame of the grouping variables used}
+
+\item{\code{random_sd}}{the estimated stdev. of each of the random effects}
 }}
 

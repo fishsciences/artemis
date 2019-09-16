@@ -1,6 +1,7 @@
 ##' Predict values for eDNA model
 ##'
-##' Predict methods.
+##' Predict methods for an eDNA model fit. Currently, these functions
+##' are quite limited.
 ##' 
 ##' @title Predict eDNA model
 ##' 

@@ -10,20 +10,28 @@
 \arguments{
 \item{x}{object of class eDNA_simulation}
 
-\item{FUN}{a function to use to summarize the results, default is \code{summary}}
+\item{FUN}{a function to use to summarize the results, default is
+\code{summary}}
 
 \item{digits}{number of digits to show}
 
-\item{show_variables}{logical, should the variable levels used in the simulation
-be included}
+\item{show_variables}{logical, should the variable levels used in
+the simulation be displayed. This is a bit redundent, since
+the variable levels are also displayed in the summary, but
+this can be helpful to check the results.}
 
 \item{...}{additional arguments passed to \code{print}}
+}
+\value{
+x
 }
 \description{
 Print eDNA simulation
 }
 \details{
-Print method.
+Print method for the results of simulations of an eDNA
+experiment. By default, the results are summarized by each
+variable level using \code{summary}.
 }
 \author{
 Matt Espe

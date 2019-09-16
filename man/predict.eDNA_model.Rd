@@ -41,7 +41,8 @@ either a vector of predictions, or a matrix with the
 Predict values for eDNA model
 }
 \details{
-Predict methods.
+Predict methods for an eDNA model fit. Currently, these functions
+are quite limited.
 }
 \author{
 Matt Espe

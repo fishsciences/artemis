@@ -29,7 +29,12 @@ a list of ggplots
 Plot method for eDNA simulations
 }
 \details{
-Plot method for eDNA simulations
+Plot method for eDNA simulations which creates a separate plot of
+the simulated CQ values by each of the variables, i.e. a plot of
+the marginal distributions. Each plot is returned in a list of
+gglot objects, each of which can be further augmented. By default,
+the points are semi-transparant and jittered to reduce
+overplotting.
 }
 \author{
 Matt Espe

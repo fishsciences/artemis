@@ -3,9 +3,11 @@
 \docType{class}
 \name{eDNA_simulation-class}
 \alias{eDNA_simulation-class}
+\alias{eDNA_simulation_lmer-class}
+\alias{eDNA_simulation_lm-class}
 \title{eDNA simulation results}
 \description{
-Placeholder
+An S4 object holding the results of \code{sim_eDNA_lm*}.
 }
 \section{Slots}{
 
@@ -27,5 +29,9 @@ Placeholder
 \item{\code{std_curve_beta}}{the beta for the std. curve conversion formula used}
 
 \item{\code{upper_Cq}}{the upper limit for CQ}
+
+\item{\code{groups}}{the grouping variables used}
+
+\item{\code{random_sd}}{the stdev of the random effects}
 }}
 

@@ -3,7 +3,7 @@
 
 ##' eDNA simulation results
 ##'
-##' Placeholder
+##' An S4 object holding the results of \code{sim_eDNA_lm*}.
 ##' 
 ##' @slot ln_conc matrix, simulated log(eDNA concentration)
 ##' @slot Cq_star matrx, simulated CQ star
@@ -23,23 +23,15 @@ setClass("eDNA_simulation",
                    std_curve_alpha = "numeric", std_curve_beta = "numeric",
                    upper_Cq = "numeric"))
 
-##' eDNA simulation results
-##'
-##' Placeholder
-##' 
 ##' @slot groups the grouping variables used
 ##' @slot random_sd the stdev of the random effects
 ##' 
-##' @rdname eDNA_simulation
+##' @rdname eDNA_simulation-class
 ##' @export
 setClass("eDNA_simulation_lmer", contains = "eDNA_simulation",
          slots = c(groups = "data.frame", random_sd = "numeric"))
 
-##' eDNA simulation results
-##'
-##' Placeholder
-##' 
-##' @rdname eDNA_simulation
+##' @rdname eDNA_simulation-class
 ##' @export
 setClass("eDNA_simulation_lm", contains = "eDNA_simulation")
 
@@ -70,7 +62,9 @@ setAs("eDNA_simulation", "data.frame",
 
 ##' Methods for eDNA simulations
 ##'
-##' Methods for eDNA simulations
+##' as.data.frame methods for eDNA simulations. This allows the
+##' conversion of the simulations to a form suitable for additional
+##' operations, e.g. plotting.
 ##' 
 ##' @title  Methods for eDNA simulations
 ##' @param x object of class eDNA_simulation
@@ -104,7 +98,7 @@ p_detect = function(y, thresh)
 
 ##' eDNA model fit results
 ##'
-##' Placeholder.
+##' An S4 object holding the results of a model fit by \code{eDNA_lm*}
 ##' 
 ##' @slot ln_conc matrix, the estimated latent variable, log(eDNA concentration)
 ##' @slot Cq_star matrix, the predicted CQ value for each obs
@@ -125,21 +119,15 @@ setClass("eDNA_model",
                    std_curve_alpha = "numeric", std_curve_beta = "numeric",
                    upper_Cq = "numeric",
                    stanfit = "stanfit"))
-##' eDNA simulation results
-##'
-##' Placeholder
-##' 
-##' @rdname eDNA_model
+
+##' @rdname eDNA_model-class
 ##' @export
 setClass("eDNA_model_lm", contains = "eDNA_model")
 
-##' eDNA simulation results
-##'
-##' Placeholder
-##' 
 ##' @slot random_x data.frame of the grouping variables used
 ##' @slot random_sd the estimated stdev. of each of the random effects
-##' @rdname eDNA_model
+##'
+##' @rdname eDNA_model-class
 ##' @export
 setClass("eDNA_model_lmer", contains = "eDNA_model_lm",
          slots = c(random_x = "data.frame", random_sd = "array"))

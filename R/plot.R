@@ -1,6 +1,12 @@
 ##' Plot method for eDNA simulations
 ##'
-##' Plot method for eDNA simulations
+##' Plot method for eDNA simulations which creates a separate plot of
+##' the simulated CQ values by each of the variables, i.e. a plot of
+##' the marginal distributions. Each plot is returned in a list of
+##' gglot objects, each of which can be further augmented. By default,
+##' the points are semi-transparant and jittered to reduce
+##' overplotting.
+##' 
 ##' @title Plot method for eDNA simulations
 ##' @param x object of class eDNA_simulation
 ##' @param y ignored
@@ -59,11 +65,14 @@ plot.eDNA_model = function(x, y, pars = "betas",  ...) {
 
 
 
-##' Plot the p(detect)
+##' Plot the p(detect eDNA)
 ##'
-##' Plot the p(detect)
+##' This allows the visualization of the probability of detection
+##' producted by \code{est_p_detect}. If the object includes an
+##' interval estimate, errorbars are produced with those intervals.
+##' 
 ##' @title Plot p(detect)
-##' @param x object of class eDNA_model_*
+##' @param x object of class eDNA_p_detect
 ##' @param y ignored
 ##' @param probs probabilities for error bars when a model fit is
 ##'     supplied

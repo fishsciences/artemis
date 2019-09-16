@@ -8,7 +8,7 @@
   1), point_size = 2.5, n_breaks = 5, error_width = rel(1.5), ...)
 }
 \arguments{
-\item{x}{object of class eDNA_model_*}
+\item{x}{object of class eDNA_p_detect}
 
 \item{y}{ignored}
 
@@ -31,10 +31,12 @@ supplied}
 a ggplot object
 }
 \description{
-Plot the p(detect)
+Plot the p(detect eDNA)
 }
 \details{
-Plot the p(detect)
+This allows the visualization of the probability of detection
+producted by \code{est_p_detect}. If the object includes an
+interval estimate, errorbars are produced with those intervals.
 }
 \author{
 Matt Espe
