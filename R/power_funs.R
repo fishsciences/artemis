@@ -73,15 +73,20 @@ est_p_detect = function(variable_levels,
     if(is.null(model_fit) && length(variable_levels) != length(betas))
         stop("Variable levels and betas cannot be of different lengths")
 
-    ln_conc_hat = if(is.null(model_fit)) {
-                      variable_levels %*% betas
-                  } else {
-                      apply(model_fit@betas, 1, function(y) variable_levels %*% y)
-                  }
+    if(is.null(model_fit)) {
+        ln_conc_hat = variable_levels %*% betas
+        if(!missing(Cq_sd)){
+            warning("Both model_fit and Cq_sd supplied. Using Cq_sd provided.")
+        } else {
+            Cq_sd = model_fit@sigma_Cq
+        }
+    } else {
+        ln_conc_hat = apply(model_fit@betas, 1, function(y) variable_levels %*% y)
+    }
 
     ln_thresh = (upper_Cq - std_curve_alpha) / std_curve_beta
 
-    ans = sapply(n_rep, function(i) 1 - (pnorm(ln_thresh, ln_conc_hat, Cq_sd) ^ i))
+    ans = sapply(n_rep, function(i) 1 - (1 - (pnorm(ln_thresh, ln_conc_hat, Cq_sd) ^ i)))
 
     structure(ans,
               variable_levels = variable_levels,
