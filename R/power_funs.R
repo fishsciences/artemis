@@ -78,12 +78,12 @@ est_p_detect = function(variable_levels,
     } else {
         # model_fit provided
         if(!missing(Cq_sd)){
-            warning("Both model_fit and Cq_sd supplied. Using Cq_sd provided.")
+            dup_arg_warn("Cq_sd")
         } else {
             Cq_sd = model_fit@sigma_Cq
         }
         if(!missing(std_curve_alpha) & !missing(std_curve_beta)) {
-            warning("std_curve parameters provided with model fit. Using std. curve parameters provided.")
+            dup_arg_warn("std_curve parameters")
         } else {
             std_curve_alpha = model_fit@std_curve_alpha
             std_curve_beta = model_fit@std_curve_beta            
@@ -99,6 +99,11 @@ est_p_detect = function(variable_levels,
               variable_levels = variable_levels,
               reps = n_rep,
               class = c("eDNA_p_detect", class(ans)))
+}
+
+dup_arg_warn = function(arg)
+{
+    warning(sprintf("Both %s and model_fit provided. Using %s provided.", arg, arg))
 }
 
 ##' @rdname est_power_lmer
