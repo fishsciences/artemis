@@ -11,7 +11,7 @@ vars = list(Intercept = -10.6,
 X = expand.grid(vars)
 betas = c(distance = -0.002, volume = 0.01, biomass = 1, alive = 1)
 
-test_that("P-detect", {
+test_that("P-detect: basic tests", {
     expect_error(est_p_detect(variable_levels = c(intecept = 1, Distance = 500),
                               betas = c(intercept = -10.6, Distance = -0.005, Volume = 0.01),
                               Cq_sd = 1, n_rep = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5))
@@ -48,6 +48,43 @@ test_that("P-detect", {
    
     
 })
+
+test_that("P-detect: numeric", {
+    # Mirrors analytic solution for estimating the detection probabilities
+    # Here Volume is centered at 50ml and Biomass at 22.5
+    known_betas = c(Intercept = -10.6, Distance = -0.009, Volume = 0.008, Biomass = 0.023)
+    std_curve = c(alpha = 21.073, beta = -1.453)
+    upper_Cq = 40
+    ln_conc_thresh = (upper_Cq - std_curve["alpha"]) / std_curve["beta"]
+
+    max_dist = (ln_conc_thresh - known_betas["Intercept"]) / known_betas["Distance"]
+
+    ans = est_p_detect(variable_levels = c(Intercept = 1,
+                                           Distance = max_dist,
+                                           Volume = 0, Biomass = 0),
+                       betas = known_betas, Cq_sd = 1.5,
+                       std_curve_alpha = std_curve["alpha"],
+                       std_curve_beta = std_curve["beta"],
+                       n_rep = 1)
+    expect_true(0.5 == ans)
+
+    tar_Cq = 42.46465
+    tar_ln_conc = (tar_Cq - std_curve["alpha"]) / std_curve["beta"]
+
+    max_dist = (tar_ln_conc - known_betas["Intercept"]) / known_betas["Distance"]
+
+    ans = est_p_detect(variable_levels = c(Intercept = 1,
+                                           Distance = max_dist,
+                                           Volume = 0, Biomass = 0),
+                       betas = known_betas, Cq_sd = 1.5,
+                       std_curve_alpha = std_curve["alpha"],
+                       std_curve_beta = std_curve["beta"],
+                       n_rep = 1)
+
+    expect_true(abs(ans - 0.05) < 0.001)
+})
+
+
 if(FALSE){
 test_that("Power function", {
     ans = est_power_lm(Cq ~ 1 + distance,
