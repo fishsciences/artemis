@@ -36,7 +36,9 @@
 ##'     detection.
 ##' @param betas numeric vector, the effect sizes for each of the
 ##'     variable level
-##' @param Cq_sd numeric, the measurement error on CQ
+##' @param Cq_sd numeric, the measurement error on CQ. If a model_fit
+##'     is provided and this is missing, the estimated sd(CQ) from the
+##'     model will be used.
 ##' @param std_curve_alpha the alpha for the std. curve formula for
 ##'     conversion between log(concentration) and CQ
 ##' @param std_curve_beta the alpha for the std. curve formula for
