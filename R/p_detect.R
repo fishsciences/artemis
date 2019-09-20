@@ -112,3 +112,37 @@ dup_arg_warn = function(arg)
 {
     warning(sprintf("Both %s and model_fit provided. Using %s provided.", arg, arg))
 }
+
+if(FALSE){
+    ## not ready yet
+var_level_given_detect = function(p, model_fit,
+                                  varying = character(), fixed_levels,
+                                  upper_Cq = model_fit@upper_Cq,
+                                  Cq_sd = model_fit@Cq_sd,
+                                  std_curve_alpha = model_fit@std_curve_alpha,
+                                  std_curve_beta = model_fit@std_curve_beta)
+    # replicated the analytic steps taken in Expt5Design.R
+{
+    ln_conc_thresh = (upper_Cq - std_curve_alpha) / std_curve_beta
+
+    if(is.null(names(fixed_levels)))
+        stop("Please provide a named vector of fixed levels")
+    
+    fixed_order = match(names(fixed_levels), colnames(model_fit@x))
+
+    if(any(is.na(fixed_order)))
+        stop("Unable to match names of 'fixed_levels' to parameters")
+
+    var = match(varying, colnames(model_fit@x))
+
+    if(any(is.na(var)))
+        stop("Could not match 'varying' with a parameter. Please check the spelling.")
+    
+    # Fix this
+    var_at_threshold = (ln_conc_thresh -
+                        (fixed_levels[fixed_order] %*%
+                         model_fit@x[,names(fixed_levels[fixed_order])]) /
+                        model_fix@betas)
+    
+}
+}

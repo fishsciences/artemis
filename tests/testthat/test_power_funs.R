@@ -68,7 +68,8 @@ test_that("P-detect: numeric", {
                        n_rep = 1)
     expect_true(0.5 == ans)
 
-    tar_Cq = 42.46465
+    # Target of 5% detection
+    tar_Cq = 42.46465 # 40 corresponds to the 5% quantile 
     tar_ln_conc = (tar_Cq - std_curve["alpha"]) / std_curve["beta"]
 
     max_dist = (tar_ln_conc - known_betas["Intercept"]) / known_betas["Distance"]
@@ -81,11 +82,13 @@ test_that("P-detect: numeric", {
                        std_curve_beta = std_curve["beta"],
                        n_rep = 1)
 
+    #Should be close to 5%
     expect_true(abs(ans - 0.05) < 0.001)
 })
 
 
-if(FALSE){
+if(FALSE){ #These can take a really long time to run
+    
 test_that("Power function", {
     ans = est_power_lm(Cq ~ 1 + distance,
                        variable_list = list(Cq = 1, distance = c(0,100,300), rep = 1:3),
