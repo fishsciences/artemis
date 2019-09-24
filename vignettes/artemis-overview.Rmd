@@ -2,7 +2,7 @@
 title: "Getting started with the artemis package"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Getting_started}
+  %\VignetteIndexEntry{An overview of the artemis package}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -39,20 +39,20 @@ it would benefit from a different modeling approach:
      related to Cq via a standard curve generated in the lab for the
      target species. This standard curve formula typically takes the
      form: $$Cq = log[eDNA] * \beta + \alpha$$ The standard curve is
-     specific to the lab reagents and techniques used. **The
+     specific to the lab reagents and techniques used. *The
      implication of this is that models using Cq values (or a derived
      value such as "postitive detection") as the response result in
      estimates of effect sizes which cannot be directly compared
-     between different studies using different standard curves.**
+     between different studies using different standard curves.*
 	 
   2. A higher Cq value corresponds to a lower concentration of eDNA in
      a sample. Above a pre-determined threshold, additional
      quantification cycles are not attempted. Therefore,
      "non-detection" is taken to be any sample which requires more
-     than the threshold number of cycles to detect. **Not taking this
+     than the threshold number of cycles to detect. *Not taking this
      data truncation process into account in the model can result in
      increased uncertainty and bias in our estimates of the effect
-     sizes.**
+     sizes.*
   
   3. The potential sources of measurement error in the extraction and
      qPCR processes are difficult to separate and quantify. For
