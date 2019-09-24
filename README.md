@@ -26,7 +26,7 @@ compiler (e.g. gcc, clang).
 
 ## Basic use
 
-Please refer to the Getting Started vignette, which covers most of the
+Please refer to the `artemis-overview` vignette, which covers most of the
 major functionality of artemis,
 
 ```
