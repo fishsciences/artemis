@@ -1,8 +1,6 @@
-# artemis: an R package for eDNA analysis
+# artemis: an R package for eDNA analysis  
 
-<p>
 ![artemis logo](man/figures/logo.png)
-</p>
 
 #### 
 
