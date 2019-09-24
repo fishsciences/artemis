@@ -1,5 +1,6 @@
-# artemis: an R package for eDNA analysis
+# artemis: an R package for eDNA analysis   &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;    ![](man/figures/logo.png)
 
+#### 
 The `artemis` package was created to aid in the design and analysis of
 eDNA survey studies by offering a custom suite of models for eDNA
 sampling and qPCR data. It implements a set of Bayesian
