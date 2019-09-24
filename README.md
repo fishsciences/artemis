@@ -27,7 +27,7 @@ Please refer to the Getting Started vignette, which covers most of the
 major functionality of artemis,
 
 ```
-vignette("Getting_started", package = "artemis")
+vignette("artemis-overview", package = "artemis")
 ```
 
 ## Reporting bugs
