@@ -1,6 +1,8 @@
 # artemis: an R package for eDNA analysis
 
-<p> ![](man/figures/logo.png) </p>
+<p>
+![artemis logo](man/figures/logo.png)
+</p>
 
 #### 
 
