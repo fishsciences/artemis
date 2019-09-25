@@ -18,7 +18,7 @@ page](https://github.com/fishsciences/artemis/releases). Alternatively,
 you can install the package from github using the `devtools` package,
 
 ```
-devtools::install_github("fishsciences/artemis")
+devtools::install_github("fishsciences/artemis", build_vignettes = TRUE)
 ```
 
 Please note, installing the package from github requires a C++
@@ -26,12 +26,14 @@ compiler (e.g. gcc, clang).
 
 ## Basic use
 
-Please refer to the `artemis-overview` vignette, which covers most of the
-major functionality of artemis,
+Please refer to the `artemis-overview` vignette, which covers most of the functionality of artemis,
 
 ```
 vignette("artemis-overview", package = "artemis")
 ```
+
+Additional vignettes are forthcoming!
+
 
 ## Reporting bugs
 
