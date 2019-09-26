@@ -24,12 +24,12 @@ library(artemis)
 ## Introduction
 
 The `artemis` package was created to aid in the design and analysis of
-eDNA survey studies by offering a custom suite of models for eDNA
-sampling and qPCR data. Typically, data collected from these studies
-are modeled using a simple binary response of detection/no
-detection. While this approach has been OK, there are several
-characteristics of eDNA data which made us feel that
-it would benefit from a different modeling approach:
+environmental DNA (eDNA) survey studies by offering a custom suite of
+models for eDNA sampling and qPCR data. Typically, data collected from
+these studies are modeled using a simple binary response of
+detection/no detection. While this approach has been OK, there are
+several characteristics of eDNA data which made us feel that it would
+benefit from a different modeling approach:
 
   1. In eDNA samples, the concentration of eDNA is not directly
      measured. Instead, the amount of eDNA present is represented as a
