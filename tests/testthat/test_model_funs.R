@@ -37,10 +37,11 @@ test_that("Lmer", {
                      eDNA_data,
                      std_curve_alpha = 21.2, std_curve_beta = -1.5, verbose = FALSE)
 
-
-    ans2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID),
-                     eDNA_data,
-                     std_curve_alpha = 21.2, std_curve_beta = -1.5, verbose = FALSE,
-                     cores = 4L, iter = 2000)
-
+    #Only run if multicore available
+    if(parallel::detectCores() > 1)
+        ans2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID),
+                         eDNA_data,
+                         std_curve_alpha = 21.2, std_curve_beta = -1.5, verbose = FALSE,
+                         cores = parallel::detectCores() / 2, iter = 2000)
+    
 })
