@@ -3,3 +3,4 @@
 clean.R
 ^\.travis\.yml$
 ^codecov\.yml$
+.covrignore
