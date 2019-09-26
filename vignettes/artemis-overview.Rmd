@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup, echo = FALSE}
+```{r setup, echo = FALSE, eval=TRUE, message=FALSE, warning=FALSE}
 library(artemis)
 ```
 
@@ -133,10 +133,23 @@ In the following examples, `tech_rep` refers to technical replicates
 extracted from a single eDNA sample; `rep` refers to a single eDNA
 sample.
 
+## Functions overview
+
+The functions included in `artemis` can be grouped into a few categories:
+
+1. Simulation of data
+1. Conducting power or precision analysis
+1. Modeling data
+1. Conducting post-hoc analysis
+      * including estimating the probability of detection, or generating predictions from model fits.
+
+In addition to these functions, `artemis` includes methods for R's `plot()`, `summary()`, and `data.frame()` functions.
+
+
 ## Simulations
 
 One of the most basic tasks for the `artemis` package is simulating
-data. This data is generated using the same data generation process as
+data. This data is simulated using the same data generation process as
 the model outlined above. Simulated data is useful for testing
 assumptions, designing a study, or doing a post-hoc analysis.
 
@@ -146,7 +159,7 @@ experiment had varying levels of the variables `distance`, `volume`,
 `tech_rep`, and `rep`, we would create a list with the variable names
 and the associated levels:
 
-```{r}
+```{r eval=TRUE}
 vars = list(Intercept = 1,
             distance = c(0, 15, 50),
             volume = c(25, 50),
@@ -166,7 +179,7 @@ Next, we must provide a set of effect sizes for each of the variables
 we have in the variable levels. For example, if we were only
 simulating data using distance and volume, we might specify the effect sizes as:
 
-```{r}
+```{r, eval=TRUE}
 betas = c(intercept = -10.6, distance = -0.05, volume = 0.02)
 ```
 
@@ -181,19 +194,17 @@ fair assumption for the intercept beta.)
 Finally, to simulate data from a fixed-effects model, we use the
 `sim_eDNA_lm()` function:
 
-```{r warning = FALSE}
+```{r warning = FALSE, eval=TRUE}
 set.seed(1234)
 ans = sim_eDNA_lm(Cq ~ distance + volume, 
                   variable_list = vars,
-                  betas = c(intercept = -10.6, distance = -0.05, volume = 0.1),
+                  betas = betas,
                   sigma_Cq = 1, 
                   std_curve_alpha = 21.2, 
                   std_curve_beta = -1.5)
 ```
 
-Notice that we must provide the parameters for the conversion formula
-between $log[eDNA]$ and Cq values to the simulation function, as well
-as the measurement error on Cq (`sigma_Cq`). 
+Notice that we must provide the parameters from a standard curve equation for the conversion formula between $log[eDNA]$ and Cq values to the simulation function, as well as the measurement error on Cq (`sigma_Cq`). 
 
 You might have noticed that when we specified the `vars` above, we
 included many variables that we did not include in the formula. By
@@ -225,8 +236,18 @@ model matrix.
 The returned object from the `sim_eDNA_*` functions is a list
 containing the latent variable `ln_conc`, the equivalent Cq value
 before truncation and measurement error `Cq_hat`, and the Cq value
-following the truncation and measurement error `Cq_star`. When
-multiple simulations are requested, each of these will be stored in a
+following the truncation and measurement error `Cq_star`. If n_sim = 1, you can convert the simulations to a dataframe by calling `as.data.frame` or `data.frame`. This can be useful when you wish to create custom plots of simulated data.
+
+```{r include=TRUE, eval=TRUE}
+simsdf <- data.frame(ans)
+
+head(simsdf)
+
+
+```
+
+
+When multiple simulations are requested, each of these will be stored in a
 matrix, with each column representing a single simulated instance.
 
 To simulate for a mixed-effects model, we use the function
@@ -258,7 +279,7 @@ simulated data are, and to test the assumptions behind the model and
 the betas used. For example, the results simulated for the
 fixed-effects model above can be summarized by calling:
 
-```{r}
+```{r eval=TRUE}
 summary(ans)
 ```
 
@@ -274,39 +295,37 @@ So in the output above, 95% of the simulated data with `distance` = 0
 was between 28.2 and 34.8.  The `p_detect` column is the percentage of
 each effect that was below the detection threshold.  In this
 simulation, the intercept is pretty low and the effects of distance
-and volume are small.  100% of all levels resulted in samples below
+and volume are small.  Most levels resulted in samples below
 the detection threshold.
 
 The results of the simulations can be plotted with `plot()`,
 
-```{r fig = TRUE}
+```{r eval=TRUE, fig.show='hold'}
 plot(ans)
 ```
 
-Similar to `summary()`, this plots the response (either Cq or $log[eNDA]$)
+Similar to `summary()`, this plots (in the same order as they appear in the formula) the marginal response (either Cq or $log[eDNA]$)
 by each level of the variables used to simulate the data. 
 
-### Simulating Study Designs
+## Power and Precision Functions
+### Evaluating Simulated Study Designs with the power 
 
 Simulations are helpful for designing new studies. Given a set of
-assumptions about the effect sizes, we can simulate a full study and evaluate how well we are
-able to detect eDNA, and/or or whether the proposed design allows us to estimate those
-effects.
+assumptions about the effect sizes, we can simulate a full study and evaluate how well we are able to detect eDNA, and/or or whether the proposed design allows us to estimate those effects with precision.
 
 For example, suppose we wanted to design a study exploring the effects
 of different distances on the detection of eDNA. From previous
 studies, we have estimated the effect of distance to be a -0.04 decrease
 in log[eDNA] per meter distance away from source. If we want to have a
 sense of how many replicates we need for this study to have at least
-80% power (at least 80% chance to estimate the effect of distance
-without including 0 in the CI), we can get a quick estimate of this
-using the `est_power_lm()` and a given number of samples, say 5 reps. To
-do this, we specify the number of replicates in the `variable_list` as
-`rep = 1:5`, and also specify our effect sizes:
+80% power (>=80% chance of estimating a beta for distance
+without including 0 in its CI), we can do this using the `est_power_lm()` and specifying a design. To do this, we specify the number of replicate filters as a vector (`rep`) in the `variable_list`, along with the rest of our variables and argument values.  *Note that these functions are not yet parallelized and may take some time to run on your machine*
 
 ```{r warning = FALSE}
 dist_power = est_power_lm(Cq ~ 1 + distance,
-                          variable_list = list(Cq = 1, distance = c(0,100,300), rep = 1:5),
+                          variable_list = list(Cq = 1, 
+                                               distance = c(0,100,300), 
+                                               rep = 1:3),
                           betas = c(intercept = -10.6, distance = -0.04),
                           sigma_Cq = 1, 
                           std_curve_alpha = 21.2, std_curve_beta = -1.5,
@@ -316,19 +335,20 @@ dist_power
 
 ```
 
-It appears that 5 samples was not enough to estimate the effect of distance in this case. We could keep trying different number of replicates until we get the number we
+It appears that 3 samples was not enough to estimate the effect of distance in this case. We could keep trying different number of replicates until we get the number we
 would like. However, it is easier to use the function
 `est_power_range_lm()`, which will automate this process for us. The
 call is similar to the one above, but instead of specifying the number of
 replicates in the `variable_list`, we provide a `rep_range`, which is
-`seq(2,20,2)` (every 2 from 2 to 20) by default. Warning, this is
+`seq(2,20,2)` (every 2 from 2 to 20) by default. It will stop running once the specified power level is reached.  Warning, this is
 quite CPU intensive, so for this demonstation, we will be lowering the
 `rep_range` and the number of iterations for each case:
 
 ```{r warning = FALSE}
 set.seed(1234)
 dist_power_range = est_power_range_lm(Cq ~ 1 + distance,
-                                variable_list = list(Cq = 1, distance = c(0,100,300)),
+                                variable_list = list(Cq = 1, 
+                                                     distance = c(0,100,300)),
                                 betas = c(intercept = -10.6, distance = -0.04),
                                 sigma_Cq = 1, 
                                 std_curve_alpha = 21.2, std_curve_beta = -1.5,
@@ -336,10 +356,17 @@ dist_power_range = est_power_range_lm(Cq ~ 1 + distance,
                                 rep_range = c(5,10))
 
 dist_power_range
+
+#> $`n_rep: 5`
+#> (Intercept)    distance 
+#>           1           0 
+#> 
+#> $`n_rep: 10`
+#> (Intercept)    distance 
+#>           1           1 
 ```
 
-For this study, it looks like we will need greater then 5 replicates
-to have our desired 80% power. 
+For this study, it looks like we will need greater then 5 replicates (but perhaps less than 10) to have our desired 80% power. 
 
 
 ## Modeling
@@ -381,10 +408,11 @@ but users can (and should) enable it with `verbose = TRUE` when the model is slo
 output suggests the MCMC algorithm might not have converged, for
 example,
 
-```{r warning = FALSE}
-model_fit = eDNA_lm(Cq ~ Distance, eDNA_data,
+```{r warning = FALSE, eval=TRUE}
+model_fit = eDNA_lm(Cq ~ Distance + Volume + Distance*Volume, 
+                    data = eDNA_data,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                    iter = 100, n_chain = 1,
+                    iter = 300, n_chain = 2,
                     verbose = TRUE)
 ```
 
@@ -402,32 +430,31 @@ model_fit2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID),
 As with the simulations, the model results can be summarized with
 `summary()` and can be plotted with `plot()`,
 
-```{r}
-summary(model_fit2)
-plot(model_fit2)
+```{r, eval=TRUE}
+summary(model_fit)
+
+plot(model_fit, pars = c(sprintf("betas[%d]", 2:4)))
 ```
 
-**TODO:** PLOT
 
-## Post-hoc p(detect)
+## Post-hoc analyses p(detect)
 
-It is common that the purpose of a eDNA sampling study is to inform
-the deployment of an automated sampler in the field. For these cases,
-we often want to know how likely we are to detect eDNA given the
-estimated parameters of the model and a set of conditions. For these
-circumstances, we can use the `est_p_detect()` function to see how
-well we can detect given effect sizes and conditions,
+Often purpose of a eDNA sampling study is to inform a field sampling protocol. For these cases, we often want to know how likely we are to detect eDNA, given the way that we sampled. `est_p_detect()` returns the probability of getting a detection across all planned samples and replicates, where `n_rep` represents the product of the number of filters and technical replicates for each filter.  For example, if you planned to take 2-5 filters at each variable level and then complete 6 extractions for each filter, that would be `n_rep = 12:30`.
 
-```{r}
-p_detect = est_p_detect(variable_levels = c(Intercept = 1, Distance = 100),
-                        betas = c(Intercept = -10.5, Distance = -0.04),
-                        Cq_sd = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                        n_rep = 1:12)
-print(p_detect)
+```{r eval=TRUE}
+p_detect = est_p_detect(variable_levels = c(Intercept = 1, 
+                                            Distance = 1000),
+                        betas = c(Intercept = -12, Distance = -0.0001),
+                        Cq_sd = 1, 
+                        std_curve_alpha = 21.2, std_curve_beta = -1.5,
+                        n_rep = 12:30)
+p_detect
 ```
-and we can plot this,
 
-```{r fig = TRUE}
+
+We can also plot this,
+
+```{r fig = TRUE, eval=TRUE}
 plot(p_detect)
 
 ```
@@ -438,9 +465,10 @@ us to estimate the probability of detection with the uncertainty in
 our effect size estimates taken into account.
 
 ```{r}
-p_detect2 = est_p_detect(variable_levels = c(Intercept = 1, Distance = 100),
+p_detect2 = est_p_detect(variable_levels = c(Intercept = 1, 
+                                             Distance = 100,
+                                             Volume = 50),
                         model_fit = model_fit, 
-                        Cq_sd = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5,
                         n_rep = 1:12)
 
 print(p_detect2)
