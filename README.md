@@ -4,6 +4,10 @@
 
 #### 
 
+  <!-- badges: start -->
+  [![Travis build status](https://travis-ci.org/fishsciences/artemis.svg?branch=master)](https://travis-ci.org/fishsciences/artemis)
+  <!-- badges: end -->
+
 The `artemis` package was created to aid in the design and analysis of
 eDNA survey studies by offering a custom suite of models for eDNA
 sampling and qPCR data. It implements a set of Bayesian

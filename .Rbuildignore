@@ -1,3 +1,4 @@
 ^doc$
 ^Meta$
 clean.R
+^\.travis\.yml$
