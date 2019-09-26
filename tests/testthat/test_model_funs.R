@@ -42,6 +42,6 @@ test_that("Lmer", {
         ans2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID),
                          eDNA_data,
                          std_curve_alpha = 21.2, std_curve_beta = -1.5, verbose = FALSE,
-                         cores = parallel::detectCores() / 2, iter = 2000)
+                         cores = floor(parallel::detectCores() / 2), iter = 2000)
     
 })
