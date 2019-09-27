@@ -17,7 +17,9 @@ X = expand.grid(vars)
 betas = c(distance = -0.002, volume = 0.01, biomass = 1, alive = 1)
 
 test_that("Simulate data: lm", {
-
+    expect_error(sim_eDNA_lm( ~ distance + volume, vars,
+                             betas = c(intercept = -10.6, distance = -0.05)))
+    
     expect_equal(nrow(X), Reduce(`*`, sapply(vars, length)))
 
     expect_error(sim_eDNA_lm(Cq ~ distance + volume, vars,
@@ -36,6 +38,24 @@ test_that("Simulate data: lm", {
 })
 
 test_that("Simulate data: lmer", {
+    expect_error(sim_eDNA_lmer( ~ distance + volume + (1|rep),
+                               vars))
+
+    expect_error(sim_eDNA_lmer(Cq ~ distance + volume + (1|rep),
+                               vars,
+                               betas = c(intercept = -10.6, distance = -0.05,
+                                         volume = 0.01),
+                               sigma_Cq = 1,
+                               std_curve_alpha = 21.2,
+                               std_curve_beta = -1.5))
+
+    expect_error(sim_eDNA_lmer(Cq ~ distance + volume + (1|rep),
+                               vars,
+                               betas = c(intercept = -10.6, volume = 0.01),
+                               sigma_Cq = 1,
+                               sigma_rand = 0.1,
+                               std_curve_alpha = 21.2,
+                               std_curve_beta = -1.5))
 
     #rand effects not provided
     expect_error(sim_eDNA_lmer(Cq ~ distance + volume + (1|rep),

@@ -50,3 +50,22 @@ test_that("Summary methods: model", {
     print(res2)
     
 })
+
+test_that("Summary methods: p-detect", {
+    p_detect = est_p_detect(variable_levels = c(Intercept = 1, 
+                                                Distance = 1000),
+                            betas = c(Intercept = -12, Distance = -0.0001),
+                            Cq_sd = 1, 
+                            std_curve_alpha = 21.2, std_curve_beta = -1.5,
+                            n_rep = 12:30)
+    expect_is(summary(p_detect), "data.frame")
+
+})
+
+
+test_that("Summary methods: predict", {
+    model_fit = eDNA_lm(Cq ~ Distance, eDNA_data,
+                        std_curve_alpha = 21.2, std_curve_beta = -1.5)
+    ans = predict(model_fit)
+    expect_is(summary(ans), "list")
+})
