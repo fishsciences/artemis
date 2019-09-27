@@ -34,13 +34,3 @@ in_interval = function(ci, beta)
     beta > ci[1] & beta < ci[2]
 }
 
-power_calc = function(interval_excludes_mat)
-{
-    rowSums(interval_excludes_mat) / ncol(interval_excludes_mat)
-}
-
-Cq2conc = function(Cq, alpha = 21.167769, beta = -1.528683)
-    # Cq = -1.528683 * log(conc) + 21.167769
-{
-   exp((Cq - alpha) / beta)
-}
