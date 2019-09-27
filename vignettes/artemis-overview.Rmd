@@ -143,7 +143,7 @@ The functions included in `artemis` can be grouped into a few categories:
 1. Conducting post-hoc analysis
       * including estimating the probability of detection, or generating predictions from model fits.
 
-In addition to these functions, `artemis` includes methods for R's `plot()`, `summary()`, and `data.frame()` functions.
+In addition to these functions, `artemis` includes methods for R's `plot()`, `summary()`, `data.frame()`, and `predict()` functions.
 
 
 ## Simulations
@@ -383,7 +383,7 @@ data, and then the parameters for standard curve formula to convert
 between log[eDNA] and Cq values. For example, to fit a
 model to the sample data included in `artemis`, `eDNA_data`:
 
-```{r warning = FALSE}
+```{r warning = FALSE, eval=FALSE}
 
 model_fit = eDNA_lm(Cq ~ Distance, eDNA_data,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5)
@@ -396,7 +396,7 @@ passing arguments to `rstan::stan()` in the modeling functions. For
 example, 
 
 
-```{r warning = FALSE}
+```{r warning = FALSE, message=FALSE, eval=FALSE}
 model_fit = eDNA_lm(Cq ~ Distance, eDNA_data,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5,
                     iter = 1000)
@@ -420,7 +420,7 @@ To fit a model with a random effect, use the
 `eDNA_lmer()` function and specify the random effects using the syntax
 used by `lme4`:
 
-```{r warning = FALSE}
+```{r warning = FALSE, eval=FALSE}
 model_fit2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID),
                        eDNA_data,
                        std_curve_alpha = 21.2, std_curve_beta = -1.5)
@@ -443,8 +443,8 @@ Often purpose of a eDNA sampling study is to inform a field sampling protocol. F
 
 ```{r eval=TRUE}
 p_detect = est_p_detect(variable_levels = c(Intercept = 1, 
-                                            Distance = 1000),
-                        betas = c(Intercept = -12, Distance = -0.0001),
+                                            Distance = 100),
+                        betas = c(Intercept = -10.5, Distance = -0.03),
                         Cq_sd = 1, 
                         std_curve_alpha = 21.2, std_curve_beta = -1.5,
                         n_rep = 12:30)
@@ -467,7 +467,9 @@ our effect size estimates taken into account.
 ```{r}
 p_detect2 = est_p_detect(variable_levels = c(Intercept = 1, 
                                              Distance = 100,
-                                             Volume = 50),
+                                             Volume = 50,
+                                             DistanceXVolume = 100*50
+                                             ),
                         model_fit = model_fit, 
                         n_rep = 1:12)
 
@@ -477,7 +479,7 @@ print(p_detect2)
 and we can plot the results,
 
 ```{r fig = TRUE}
-plot(p_detect2)
+plot(p_detect2, error_width = 0.1)
 ```
 
 Notice how we get uncertainty intervals when we use a fit model. 
@@ -486,4 +488,6 @@ Notice how we get uncertainty intervals when we use a fit model.
 
 Once a model is fit, it can be helpful to predict the outcome, either
 for the data used to fit the model or new data. For this, `artemis`
-provides methods for `predict()` for models fit with `eDNA_lm*()`. 
+provides methods for `predict()` for models fit with `eDNA_lm*()`.  This prediction process is very closely related to simulating data with fixed effect sizes.
+
+
