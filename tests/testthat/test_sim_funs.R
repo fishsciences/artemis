@@ -134,5 +134,5 @@ test_that("Simulation accuracy", {
     expect_true(all(tt[c("15", "50") == 40]))
     
     tt = tapply(ans@Cq_star, ans@x$distance, sd)
-    expect_true(all(abs(tt[1] - 1) < 0.2)) # the sd of Cq should be close to 1
+    expect_true(all(abs(tt[1] - 1) < 0.25)) # the sd of Cq should be close to 1
 })
