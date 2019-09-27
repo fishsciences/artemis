@@ -2,3 +2,4 @@ src/*
 R/print.R
 R/plot.R
 src/stan_files/*
+R/zzz.R
