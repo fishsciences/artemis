@@ -4,3 +4,8 @@ clean.R
 ^\.travis\.yml$
 ^codecov\.yml$
 .covrignore
+^.*\.Rproj$
+^\.Rproj\.user$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
