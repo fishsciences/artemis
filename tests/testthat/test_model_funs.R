@@ -38,7 +38,7 @@ test_that("Lmer", {
                      std_curve_alpha = 21.2, std_curve_beta = -1.5, verbose = FALSE)
 
     #Only run if multicore available
-    if(parallel::detectCores() > 1)
+    if(FALSE)
         ans2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID),
                          eDNA_data,
                          std_curve_alpha = 21.2, std_curve_beta = -1.5, verbose = FALSE,
