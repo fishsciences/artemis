@@ -9,3 +9,4 @@ clean.R
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^lib$
