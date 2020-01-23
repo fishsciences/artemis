@@ -15,7 +15,7 @@ The `artemis` package was created to aid in the design and analysis of
 eDNA survey studies by offering a custom suite of models for eDNA
 sampling and qPCR data. It implements a set of Bayesian
 latent-variable, truncated data models which are fit using
-[Stan](mc-stan.org). 
+[Stan](https://mc-stan.org/). 
 
 ## Installation
 
