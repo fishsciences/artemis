@@ -4,6 +4,7 @@ prep_data = function(mod_list,
                      alpha, beta,
                      Cq_sd, betas,
                      Cq_upper = 40, rand_sd = double(0),
+                     b_prior_mu, b_prior_sd,
                      type = c("model", "sim"))
 {
     model_data = list(N = length(mod_list$y),
@@ -12,7 +13,9 @@ prep_data = function(mod_list,
                       std_curve_alpha = alpha,
                       std_curve_beta = beta,
                       upper_Cq = Cq_upper,
-                      rand_sigma = as.array(rand_sd))
+                      rand_sigma = as.array(rand_sd),
+                      prior_mu = b_prior_mu,
+                      prior_sd = b_prior_sd)
 
     if(is.null(mod_list$groups)){
         model_data$has_rand = 0L

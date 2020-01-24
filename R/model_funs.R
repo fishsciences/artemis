@@ -5,14 +5,17 @@ eDNA_lm = function(formula, data,
                    std_curve_alpha, std_curve_beta,
                    upper_Cq = 40,
                    n_chain = 4L, iters = 1000L, verbose = FALSE,
-                   sink_file = tempfile(), ...)
+                   sink_file = tempfile(),
+                   betas_prior_mu = numeric(), betas_prior_sd = numeric(), ...)
 {
     
     ml = gen_model_list_lm(formula, data)
        
     # This works because Stan ignores extra input data
     md = prep_data(ml, std_curve_alpha, std_curve_beta,
-                    Cq_upper = upper_Cq, type = "model")
+                   Cq_upper = upper_Cq, type = "model",
+                   b_prior_mu = betas_prior_mu,
+                   b_prior_sd = betas_prior_sd)
     md$y = ml$y
     fit = run_model(data = md, n_chain = n_chain, iters = iters,
                     verbose = verbose, sink_file = sink_file, ...)
@@ -136,7 +139,8 @@ eDNA_lmer = function(formula, data,
     return(fit)
 }
 
-run_model = function(model = stanmodels$eDNA_lm, data, n_chain,
+run_model = function(model = if(length(data$prior_mu)) stanmodels$eDNA_lm_prior else stanmodels$eDNA_lm,
+                     data, n_chain,
                   iters, verbose, sink_file, ...)
 
 {

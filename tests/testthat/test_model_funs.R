@@ -45,3 +45,21 @@ test_that("Lmer", {
                          cores = floor(parallel::detectCores() / 2), iter = 2000)
     
 })
+
+test_that("lm with priors", {
+    # This should still work
+    ans = eDNA_lm(Cq ~ Distance, eDNA_data,
+                  std_curve_alpha = 21.2, std_curve_beta = -1.5)
+
+    ans = eDNA_lm(Cq ~ Distance, eDNA_data,
+                  std_curve_alpha = 21.2, std_curve_beta = -1.5,
+                  betas_prior_mu = c(-8,0), betas_prior_sd =c(1,1))
+                  
+    d = eDNA_data
+    d$Distance = 5
+
+    ans = eDNA_lm(Cq ~ Distance, d,
+                  std_curve_alpha = 21.2, std_curve_beta = -1.5,
+                  betas_prior_mu = c(-8,-2), betas_prior_sd =c(5,.1))
+
+})
