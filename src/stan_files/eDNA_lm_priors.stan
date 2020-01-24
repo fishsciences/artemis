@@ -45,22 +45,25 @@ transformed data{
 }
 
 parameters{
-  vector[n_vars] betas;
+  vector[n_vars] betas_raw;
   real<lower = 0> sigma_Cq;
 }
 transformed parameters{
-  
+  vector[n_vars] betas = (betas_raw .* prior_sd) + prior_mu;
 }
 
 model{
-  vector[N] ln_conc_hat = X * betas; 
+  vector[N] ln_conc_hat;
   vector[N] Cq_hat;
+
   
   // Priors
   /* thetas ~ normal(0 , 1); */
-  betas ~ normal(prior_mu, prior_sd);
-  sigma_Cq ~ normal(0, 1);
+  betas_raw ~ normal(0, 1);
   
+  sigma_Cq ~ normal(0, 1);
+
+  ln_conc_hat = X * betas; 
   Cq_hat = ln_conc_hat * std_curve_beta + std_curve_alpha;
   
   for(n in 1:N){
