@@ -1,0 +1,41 @@
+---
+title: "artemis-installation-guide"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{artemis-installation-guide}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(artemis)
+```
+
+The easiest way to install `artemis` will depend on whether you are set up to build compiled code from source on your machine.  If you don't know whether your system is set up to deal with compiled code or not, try running `devtools::has_devel()`.  If you see the message "`Your system is ready to build packages!`", then the `install_github()` function from the `devtools` package should do the trick on most platforms*:
+
+```{r}
+devtools::install_github("fishsciences/artemis", build_vignettes = FALSE) # you can change to TRUE if you want to launch the vignettes from R, but note that install will be slower.
+```
+
+If you see "`Could not find tools necessary to compile a package`", then you will either need to install your platform-specific toolchain for building compiled code (not covered here), or install from one of the pre-compiled binaries on the `artemis` [releases page](https://github.com/fishsciences/artemis/releases).
+
+To install the binary, either download your platform-specific binary and use the appropriate  `install.packages()` call, or use `install.packages()` with the url that goes to the correct binary:
+
+```{r}
+
+# Mac OSX:
+install.packages("")
+
+```
+
+
+
+
+*currently, installing from source on Windows is not well-supported.  We recommend installing from the binary if at all possible.
