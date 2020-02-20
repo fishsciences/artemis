@@ -3,8 +3,10 @@ title: "ARTEMIS Installation Guide"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{artemis-installation-guide}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -16,19 +18,22 @@ knitr::opts_chunk$set(
 ```
 
 <br>
-The easiest way to install `artemis` is from one of the pre-compiled binaries on the `artemis` [releases page](https://github.com/fishsciences/artemis/releases).  To do this, run the R code for your specific platform below:
+The easiest way to install `artemis` is from one of the pre-compiled binaries on the `artemis` [releases page](https://github.com/fishsciences/artemis/releases).  Install package dependencies (first line below), then run the line below that applies to your particular platform. 
 
 
 ```{r, eval=FALSE, include=TRUE}
-# MacOSX
+# install dependencies
+install.packages(c("StanHeaders", "Rcpp", "rstan"))
+
+##-- MacOSX --##
 install.packages("https://github.com/fishsciences/artemis/releases/download/v0.9/artemis_0.9.0_R_OSX.tgz",
                  repos = NULL)
 
-# LINUX
+##-- LINUX --##
 install.packages("https://github.com/fishsciences/artemis/releases/download/v0.9/artemis_0.9.0_R_x86_64-pc-linux-gnu.tar.gz", 
                  repos = NULL)
 
-# Windows
+##-- Windows --#
 install.packages("https://github.com/fishsciences/artemis/releases/download/v0.9/artemis.zip", 
                  repos = NULL)
 
@@ -36,7 +41,23 @@ install.packages("https://github.com/fishsciences/artemis/releases/download/v0.9
 ```
 <br>
 
-### Installing `artemis` from source
+## Testing your installation
+
+If your installation of `artemis` and its dependencies was successful, the following code should run without error (although you may see warning messages from `rstan` about Bulk/Tail Effective Samples Sizes being too low):
+
+```{r, eval=FALSE}
+
+library(artemis)
+model_fit = eDNA_lm(Cq ~ Distance + Volume + Distance*Volume, 
+                    data = eDNA_data,
+                    std_curve_alpha = 21.2, std_curve_beta = -1.5,
+                    iter = 300, n_chain = 2,
+                    verbose = TRUE)
+
+```
+
+
+## Installing `artemis` from source
 
 Installing `artemis` from source on Windows is not currently well-supported; we recommend installing from the pre-compiled binary if you're on Windows.  If you're on MacOS or Linux and you prefer to install from source, then go ahead and do that with your function/utility of choice (`devtools::install_github()`, `utils::install.packages(type = "source")`, `R CMD INSTALL`, etc.).  
 <br>
