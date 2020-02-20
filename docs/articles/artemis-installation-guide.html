@@ -105,27 +105,15 @@
 <a class="sourceLine" id="cb1-10" data-line-number="10"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"https://github.com/fishsciences/artemis/releases/download/v0.9/artemis.zip"</span>, </a>
 <a class="sourceLine" id="cb1-11" data-line-number="11">                 <span class="dt">repos =</span> <span class="ot">NULL</span>)</a></code></pre></div>
 <p><br></p>
-<p>If you’re set up to build compiled code from source on your machine, you can use also the <code>devtools</code> package to build <code>artemis</code> from its source on GitHub. If you don’t know whether your system is set up to do this, try running <code><a href="https://rdrr.io/pkg/devtools/man/reexports.html">devtools::has_devel()</a></code>.</p>
-<p><br></p>
-<p><strong>If you see the message “<code>Your system is ready to build packages!</code>”, and you’re on Windows, we still recommend installing from the pre-compiled binary.</strong> If you’re on MacOS or Linux, then go ahead and install from source however you like to do that (the <code>install_github()</code> function from the <code>devtools</code> package, <code><a href="https://rdrr.io/r/utils/install.packages.html">utils::install.packages("path-to-.tz", type = "source")</a></code>, <code>R CMD INSTALL</code>, etc.</p>
-<div id="macos-or-linux-from-source-using-devtoolsinstall_github" class="section level2">
-<h2 class="hasAnchor">
-<a href="#macos-or-linux-from-source-using-devtoolsinstall_github" class="anchor"></a>MacOS or Linux from source using <code>devtools::install_github()</code>
-</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/reexports.html">install_github</a></span>(<span class="st">"fishsciences/artemis"</span>, <span class="dt">build_vignettes =</span> <span class="ot">FALSE</span>) <span class="co"># you can change to TRUE if you want to launch the vignettes from R, but note that install will be slower.</span></a></code></pre></div>
-<p>If you have sub-architecture you’re really in to customizing on install, the source code is <a href="https://github.com/fishsciences/artemis/releases">here</a>, go nuts.</p>
+<div id="installing-artemis-from-source" class="section level3">
+<h3 class="hasAnchor">
+<a href="#installing-artemis-from-source" class="anchor"></a>Installing <code>artemis</code> from source</h3>
+<p>Installing <code>artemis</code> from source on Windows is not currently well-supported; we recommend installing from the pre-compiled binary if you’re on Windows. If you’re on MacOS or Linux and you prefer to install from source, then go ahead and do that with your function/utility of choice (<code><a href="https://rdrr.io/pkg/devtools/man/reexports.html">devtools::install_github()</a></code>, <code><a href="https://rdrr.io/r/utils/install.packages.html">utils::install.packages(type = "source")</a></code>, <code>R CMD INSTALL</code>, etc.).<br><br> If you have sub-architecture you’re really in to customizing, the source code is <a href="https://github.com/fishsciences/artemis/releases">here</a>, go nuts.</p>
 <p><br></p>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-        <div id="tocnav">
-      <h2 class="hasAnchor">
-<a href="#tocnav" class="anchor"></a>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-<li><a href="#macos-or-linux-from-source-using-devtoolsinstall_github">MacOS or Linux from source using <code>devtools::install_github()</code></a></li>
-      </ul>
-</div>
       </div>
 
 </div>

@@ -34,22 +34,12 @@ install.packages("https://github.com/fishsciences/artemis/releases/download/v0.9
 
 
 ```
-
 <br>
 
-If you're set up to build compiled code from source on your machine, you can use also the `devtools` package to build `artemis` from its source on GitHub.  If you don't know whether your system is set up to do this, try running `devtools::has_devel()`.  
+### Installing `artemis` from source
 
+Installing `artemis` from source on Windows is not currently well-supported; we recommend installing from the pre-compiled binary if you're on Windows.  If you're on MacOS or Linux and you prefer to install from source, then go ahead and do that with your function/utility of choice (`devtools::install_github()`, `utils::install.packages(type = "source")`, `R CMD INSTALL`, etc.).  
 <br>
-
-**If you see the message "`Your system is ready to build packages!`", and you're on Windows, we still recommend installing from the pre-compiled binary.**  If you're on MacOS or Linux, then go ahead and install from source however you like to do that (the `install_github()` function from the `devtools` package, `utils::install.packages("path-to-.tz", type = "source")`, `R CMD INSTALL`, etc.  
-
-
-## MacOS or Linux from source using `devtools::install_github()`
-
-```{r, eval=FALSE}
-devtools::install_github("fishsciences/artemis", build_vignettes = FALSE) # you can change to TRUE if you want to launch the vignettes from R, but note that install will be slower.
-```
-
-If you have sub-architecture you're really in to customizing on install, the source code is [here](https://github.com/fishsciences/artemis/releases), go nuts.
+If you have sub-architecture you're really in to customizing, the source code is [here](https://github.com/fishsciences/artemis/releases), go nuts.
 
 <br>
