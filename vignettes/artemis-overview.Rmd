@@ -21,15 +21,16 @@ knitr::opts_chunk$set(
 library(artemis)
 ```
 
-## Introduction
+## Background
 
-The `artemis` package was created to aid in the design and analysis of
+The `artemis` R package was created to aid in the design and analysis of
 environmental DNA (eDNA) survey studies by offering a custom suite of
-models for eDNA sampling and qPCR data. Typically, data collected from
-these studies are modeled using a simple binary response of
-detection/no detection. While this approach has been OK, there are
-several characteristics of eDNA data which made us feel that it would
-benefit from a different modeling approach:
+models for qPCR data from eDNA samples. eDNA data has often been analysed with occupancy models or GLMS, but there are
+several characteristics of eDNA qPCR data which made us feel that it would
+benefit from a different modeling approach.  Specifically, truncated latent variable models written in [Stan](mcmc-stan.org) and included with `artemis`.
+
+
+## Modeling eDNA Data with `artemis`
 
   1. In eDNA samples, the concentration of eDNA is not directly
      measured. Instead, the amount of eDNA present is represented as a
@@ -39,20 +40,20 @@ benefit from a different modeling approach:
      related to Cq via a standard curve generated in the lab for the
      target species. This standard curve formula typically takes the
      form: $$Cq = log[eDNA] * \beta + \alpha$$ The standard curve is
-     specific to the lab reagents and techniques used. *The
+     specific to the lab reagents and techniques used. The
      implication of this is that models using Cq values (or a derived
-     value such as "postitive detection") as the response result in
+     value such as a "positive" detection) as the response result in
      estimates of effect sizes which cannot be directly compared
-     between different studies using different standard curves.*
+     between different studies using different standard curves.
 	 
   2. A higher Cq value corresponds to a lower concentration of eDNA in
      a sample. Above a pre-determined threshold, additional
      quantification cycles are not attempted. Therefore,
      "non-detection" is taken to be any sample which requires more
-     than the threshold number of cycles to detect. *Not taking this
-     data truncation process into account in the model can result in
+     than the threshold number of cycles to detect. Failing to account for this
+     data truncation process can result in
      increased uncertainty and bias in our estimates of the effect
-     sizes.*
+     sizes.
   
   3. The potential sources of measurement error in the extraction and
      qPCR processes are difficult to separate and quantify. For
@@ -60,17 +61,19 @@ benefit from a different modeling approach:
      threshold of detection, i.e. as the number of eDNA molecules
      available for amplification approaches zero.  This source of
      variability in the response is different from that produced by
-     error introduced in the pipetting process during extraction, but
+     error introduced in the pipetting process, but
      they have the same effect on Cq (namely, increasing variability).
 	 
 The `artemis` package addresses these issues by directly modeling the
 effect of the predictors on the latent (unobserved) variable, eDNA
 concentration. It does this by linking eDNA concentration to the 
-observed response via the standard curve parameters. The general model is as follows:
+observed response via the parameters of an associated standard curve. The general model is as follows:
 
 $$ Cq_i \sim Normal(\hat{Cq_i}, \sigma_{Cq}) \\
 \hat{Cq_i} = \alpha_{std\_curve} + \beta_{std\_curve}* log[eDNA]_i  \\
-log[eDNA]_{i} = X_{i} \beta$$
+log[eDNA]_{i} = X_{i} \beta$$ 
+
+<br>
 
 where $\beta$ is a vector of effects on $log[eDNA]$, $X$ is the model
 matrix of predictors and
@@ -121,6 +124,11 @@ construct the model on $log[eDNA]$.
 
 The functions in `artemis` generalize to any eDNA survey data containing Cq values associated with a standard curve for the target species.
 
+## Installing `artemis` 
+
+The `artemis` installation guide can be found [here]("https://fishsciences.github.io/artemis/articles/artemis-installation-guide.html").
+
+
 ## A note on included sample data
 
 Since `artemis` was originally written to analyze aquatic eDNA samples, the examples and sample data included in the package (see `?eDNA_data`) reference
@@ -129,186 +137,150 @@ variables that are specific to aquatic eDNA survey data. These variables include
 each sample) and `distance` (the distance in meters from the source of
 eDNA).  For example, `eDNA_data` is from a "live car" experiment, where eDNA was sampled at known distances from a source of eDNA (fish in a net pen in unidirectional flow). 
 
-In the following examples, `tech_rep` refers to technical replicates
-extracted from a single eDNA sample; `rep` refers to a single eDNA
-sample.
+In the following examples, `tech_rep` refers to qPCR replicates generated
+ from a single extracted sample or filter; `rep` refers to a single extracted filter or sample.
 
-## Functions overview
+## Overview of `artemis` Functionality
 
-The functions included in `artemis` can be grouped into a few categories:
+The functions included in `artemis` can be grouped into a few categories; each category is either introduced in this vignette, or addressed in detail by its own vignette.  [Available vignettes](https://fishsciences.github.io/artemis/articles/) are linked to individually below:
 
-1. Simulation of data
-1. Conducting power or precision analysis
-1. Modeling data
-1. Conducting post-hoc analysis
-      * including estimating the probability of detection, or generating predictions from model fits.
+1. [Simulation of data](https://fishsciences.github.io/artemis/articles/simulation.html)
+2. Modeling data
+3. Conducting post-hoc analyses
+      * estimating probability of detection, generating predictions from model fits.
+4. Conducting power and precision analyses
 
-In addition to these functions, `artemis` includes methods for R's `plot()`, `summary()`, `data.frame()`, and `predict()` functions.
+These categories are addressed in the sections that follow.    
+<br>
+
+The `artemis` package also includes methods for R's `plot()`, `summary()`, `data.frame()`, and `predict()` functions.
 
 
-## Simulations
 
-One of the most basic tasks for the `artemis` package is simulating
-data. This data is simulated using the same data generation process as
-the model outlined above. Simulated data is useful for testing
-assumptions, designing a study, or doing a post-hoc analysis.
+## Modeling
 
-To simulate data, we first must provide a set of levels for each
-variable in your survey data.  For example, if the hypothetical
-experiment had varying levels of the variables `distance`, `volume`,
-`tech_rep`, and `rep`, we would create a list with the variable names
-and the associated levels:
+The primary purpose of the `artemis` package is to fit the model to
+collected data. Similar to the simulation functions, the `artemis`
+package has two functions which fit a Bayesian latent variable model
+to eDNA data; `eDNA_lm()` for fixed effects models and `eDNA_lmer()`
+for mixed effects models.
 
-```{r eval=TRUE}
-vars = list(Intercept = 1,
-            distance = c(0, 15, 50),
-            volume = c(25, 50),
-            tech_rep = 1:10,
-            rep = 1:3,
-            Cq = 1)
+We provide a model formula, a `dataframe` or `list` of the observed
+data, and the parameters for the associated standard curve equation to convert
+between log[eDNA] and Cq values. For example, to fit a
+model to the sample data included in `artemis`, `eDNA_data`:
+
+```{r warning = FALSE, eval=FALSE}
+
+model_fit = eDNA_lm(Cq ~ Distance, 
+                    data = eDNA_data,
+                    std_curve_alpha = 21.2, std_curve_beta = -1.5)
+
 ```
 
-Notice that we provided a level for the intercept, as well as a dummy
-variable for the response. The response dummy variable (`Cq = 1`
-above) is only used internally to create the model matrix.  By
-default, the simulation functions construct a model matrix assuming a
-complete block design (i.e. every level of each variable is
-represented). 
+The modeling functions use [Stan](mc-stan.org) to fit the Bayesian
+model. Full control of the MCMC algorithm can be accomplished by
+passing arguments to `rstan::stan()` in the modeling functions. For
+example, 
 
-Next, we must provide a set of effect sizes for each of the variables
-we have in the variable levels. For example, if we were only
-simulating data using distance and volume, we might specify the effect sizes as:
 
-```{r, eval=TRUE}
-betas = c(intercept = -10.6, distance = -0.05, volume = 0.02)
+```{r warning = FALSE, message=FALSE, eval=FALSE}
+model_fit = eDNA_lm(Cq ~ Distance, 
+                    data = eDNA_data,
+                    std_curve_alpha = 21.2, std_curve_beta = -1.5,
+                    iter = 1000, seed = 1234, n_chain = 2)
+
 ```
 
-Again, it is important to remember that these are the effect sizes on
-$log[eDNA]$, *not* on the Cq values themselves. All the parameters of
-the model are on the scale of $log[eDNA]$, including the
-intercept. Hence, we specified the intercept to be -10, which
-corresponds to exp(-10)$[eDNA]$. (In practice, if the default value
-for log[eDNA] is close to 0, some a negative number less than -10 is a
-fair assumption for the intercept beta.)
-
-Finally, to simulate data from a fixed-effects model, we use the
-`sim_eDNA_lm()` function:
+By default, `artemis` suppresses the (often verbose) output from Stan,
+but users can (and should) enable it with `verbose = TRUE` when the model is slow or the
+output suggests the MCMC algorithm might not have converged, for
+example,
 
 ```{r warning = FALSE, eval=TRUE}
-set.seed(1234)
-ans = sim_eDNA_lm(Cq ~ distance + volume, 
-                  variable_list = vars,
-                  betas = betas,
-                  sigma_Cq = 1, 
-                  std_curve_alpha = 21.2, 
-                  std_curve_beta = -1.5)
+model_fit = eDNA_lm(Cq ~ Distance + Volume + Distance*Volume, 
+                    data = eDNA_data,
+                    std_curve_alpha = 21.2, std_curve_beta = -1.5,
+                    iter = 300, seed = 1234, n_chain = 2,
+                    verbose = TRUE)
 ```
 
-Notice that we must provide the parameters from a standard curve equation for the conversion formula between $log[eDNA]$ and Cq values to the simulation function, as well as the measurement error on Cq (`sigma_Cq`). 
+To fit a model with a random effect, use the
+`eDNA_lmer()` function and specify the random effects using the syntax
+used by `lme4`:
 
-You might have noticed that when we specified the `vars` above, we
-included many variables that we did not include in the formula. By
-design, all of the functions ignore extra variables in input
-variable_list or data (in the case of the modeling functions). This
-allows us to create a comprehensive list of variables we might be
-interested in, and then only adjust the model formula to change the
-simulations.
-
-By default, the `sim_eDNA_*` functions will only simulate one instance
-of the hypothetical survey/experiment, but we can easily simulate many
-data sets in one go by adjusting the `n_sim` parameter, e.g.
-
-```{r eval = FALSE}
-ans2 = sim_eDNA_lm(Cq ~ distance + volume, 
-                  vars,
-                  betas = c(intercept = -10.6, distance = -0.05, volume = 0.1),
-                  sigma_Cq = 1, 
-                  std_curve_alpha = 21.2, 
-                  std_curve_beta = -1.5,
-                  n_sim = 500)
-```
-
-If we want to simulate data for an incomplete block design, we can
-specify our own variable data.frame, `X`, in which case the variable
-levels are ignored and the provided data frame is used to create a
-model matrix.
-
-The returned object from the `sim_eDNA_*` functions is a list
-containing the latent variable `ln_conc`, the equivalent Cq value
-before truncation and measurement error `Cq_hat`, and the Cq value
-following the truncation and measurement error `Cq_star`. If n_sim = 1, you can convert the simulations to a dataframe by calling `as.data.frame` or `data.frame`. This can be useful when you wish to create custom plots of simulated data.
-
-```{r include=TRUE, eval=TRUE}
-simsdf <- data.frame(ans)
-
-head(simsdf)
-
+```{r warning = FALSE, eval=FALSE}
+model_fit2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID),
+                       data = eDNA_data,
+                       std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
 ```
 
+As with the simulations, the model results can be summarized with
+`summary()` and can be plotted with `plot()`,
 
-When multiple simulations are requested, each of these will be stored in a
-matrix, with each column representing a single simulated instance.
+```{r, eval=TRUE}
+summary(model_fit)
 
-To simulate for a mixed-effects model, we use the function
-`sim_eDNA_lmer()`. Random effects are specified using the syntax of
-the `lme4` package, e.g. `(1|random effect)`:
-
-```{r warning = FALSE}
-ans3 = sim_eDNA_lmer(Cq ~ distance + volume + (1|rep) + (1|tech_rep),
-                     variable_list = vars,
-                     betas = c(intercept = -10.6, distance = -0.05, volume = 0.01),
-                     sigma_Cq = 1,
-                     sigma_rand = c(0.1, 0.1), #stdev of the random effects
-                     std_curve_alpha = 21.2,
-                     std_curve_beta = -1.5)
-
+plot(model_fit, pars = c(sprintf("betas[%d]", 2:4)))
 ```
 
-When we are simulating data with random effects, we must provide the
-standard deviation of the random effects (one for each effect) in
-addition to the information for the fixed effects. Random effects are
-assumed to be generated from a normal distribution for these
-simulations using this standard deviation (`sigma_rand`). When
-`n_sims` > 1, different random effects are generated for each
-simulation.
 
-The results of a simulation can be inspected via the `summary` and
-`plot` methods. These can be helpful when assessing how realistic the
-simulated data are, and to test the assumptions behind the model and
-the betas used. For example, the results simulated for the
-fixed-effects model above can be summarized by calling:
+## Post-hoc analyses (*p(detect)*)
+
+Often purpose of an eDNA sampling study is to inform a field sampling protocol. For these cases, we often want to know how likely we are to detect eDNA, given the way that we sampled. `est_p_detect()` returns the probability of getting a detection across all planned samples and replicates, where `n_rep` represents the product of the number of filters and technical replicates for each filter.  For example, if you planned to take 2-5 filters at each variable level and then complete 6 extractions for each filter, that would be `n_rep = 12:30`.
 
 ```{r eval=TRUE}
-summary(ans)
+p_detect = est_p_detect(variable_levels = c(Intercept = 1, 
+                                            Distance = 100),
+                        betas = c(Intercept = -10.5, Distance = -0.03),
+                        Cq_sd = 1, 
+                        std_curve_alpha = 21.2, std_curve_beta = -1.5,
+                        n_rep = 12:30)
+p_detect
 ```
 
-The default behavior of `summary()` is to give the empirical marginal
-distributions of the simulated data, i.e. the response summarized by
-each level of the variables used to simulate the data. *WARNING: these
-marginal effects can be misleading in cases where interactions are
-used in the formula.* The summary also includes an empirical summary
-of the percent of each level which was detected, i.e. had a Cq value
-below the threshold.
 
-So in the output above, 95% of the simulated data with `distance` = 0
-was between 28.2 and 34.8.  The `p_detect` column is the percentage of
-each effect that was below the detection threshold.  In this
-simulation, the intercept is pretty low and the effects of distance
-and volume are small.  Most levels resulted in samples below
-the detection threshold.
+We can also plot this,
 
-The results of the simulations can be plotted with `plot()`,
+```{r fig = TRUE, eval=TRUE}
+plot(p_detect)
 
-```{r eval=TRUE, fig.show='hold'}
-plot(ans)
 ```
 
-Similar to `summary()`, this plots (in the same order as they appear in the formula) the marginal response (either Cq or $log[eDNA]$)
-by each level of the variables used to simulate the data. 
+Alternatively, we can also use a fit model to estimate the p(detect)
+for a set of circumstances. Unlike the above, using a fit model allows
+us to estimate the probability of detection with the uncertainty in
+our effect size estimates taken into account.
+
+```{r}
+p_detect2 = est_p_detect(variable_levels = c(Intercept = 1, 
+                                             Distance = 100,
+                                             Volume = 50,
+                                             DistanceXVolume = 100*50
+                                             ),
+                        model_fit = model_fit, 
+                        n_rep = 1:12)
+
+print(p_detect2)
+```
+
+and we can plot the results,
+
+```{r fig = TRUE}
+plot(p_detect2, error_width = 0.1)
+```
+
+Notice how we get uncertainty intervals when we use a fit model. 
+
+## Predicting outcomes
+
+Once a model is fit, it can be helpful to predict the outcome, either
+for the data used to fit the model or new data. For this, `artemis`
+provides methods for `predict()` for models fit with `eDNA_lm*()`.  This prediction process is very closely related to simulating data with fixed effect sizes.
 
 ## Power and Precision Functions
-### Evaluating Simulated Study Designs with the power 
+### Evaluating Simulated Study Designs with the `est_power_*()` functions
 
 Simulations are helpful for designing new studies. Given a set of
 assumptions about the effect sizes, we can simulate a full study and evaluate how well we are able to detect eDNA, and/or or whether the proposed design allows us to estimate those effects with precision.
@@ -368,126 +340,8 @@ dist_power_range
 
 For this study, it looks like we will need greater then 5 replicates (but perhaps less than 10) to have our desired 80% power. 
 
-
-## Modeling
-
-The second purpose of the `artemis` package is to fit a model to
-collected data. Similar to the simulation functions, the `artemis`
-package has two functions which fit a Bayesian latent variable model
-to eDNA data; `eDNA_lm()` for fixed effects models and `eDNA_lmer()`
-for mixed effects models.
-
-The syntax of these functions is similar to the simulation
-functions. We provide a model formula, a data frame with the observed
-data, and then the parameters for standard curve formula to convert
-between log[eDNA] and Cq values. For example, to fit a
-model to the sample data included in `artemis`, `eDNA_data`:
-
-```{r warning = FALSE, eval=FALSE}
-
-model_fit = eDNA_lm(Cq ~ Distance, eDNA_data,
-                    std_curve_alpha = 21.2, std_curve_beta = -1.5)
-
-```
-
-The modeling functions use [Stan](mc-stan.org) to fit the Bayesian
-model. Full control of the MCMC algorithm can be accomplished by
-passing arguments to `rstan::stan()` in the modeling functions. For
-example, 
-
-
-```{r warning = FALSE, message=FALSE, eval=FALSE}
-model_fit = eDNA_lm(Cq ~ Distance, eDNA_data,
-                    std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                    iter = 1000)
-
-```
-
-By default, `artemis` suppresses the (often verbose) output from Stan,
-but users can (and should) enable it with `verbose = TRUE` when the model is slow or the
-output suggests the MCMC algorithm might not have converged, for
-example,
-
-```{r warning = FALSE, eval=TRUE}
-model_fit = eDNA_lm(Cq ~ Distance + Volume + Distance*Volume, 
-                    data = eDNA_data,
-                    std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                    iter = 300, n_chain = 2,
-                    verbose = TRUE)
-```
-
-To fit a model with a random effect, use the
-`eDNA_lmer()` function and specify the random effects using the syntax
-used by `lme4`:
-
-```{r warning = FALSE, eval=FALSE}
-model_fit2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID),
-                       eDNA_data,
-                       std_curve_alpha = 21.2, std_curve_beta = -1.5)
-
-```
-
-As with the simulations, the model results can be summarized with
-`summary()` and can be plotted with `plot()`,
-
-```{r, eval=TRUE}
-summary(model_fit)
-
-plot(model_fit, pars = c(sprintf("betas[%d]", 2:4)))
-```
-
-
-## Post-hoc analyses p(detect)
-
-Often purpose of a eDNA sampling study is to inform a field sampling protocol. For these cases, we often want to know how likely we are to detect eDNA, given the way that we sampled. `est_p_detect()` returns the probability of getting a detection across all planned samples and replicates, where `n_rep` represents the product of the number of filters and technical replicates for each filter.  For example, if you planned to take 2-5 filters at each variable level and then complete 6 extractions for each filter, that would be `n_rep = 12:30`.
-
-```{r eval=TRUE}
-p_detect = est_p_detect(variable_levels = c(Intercept = 1, 
-                                            Distance = 100),
-                        betas = c(Intercept = -10.5, Distance = -0.03),
-                        Cq_sd = 1, 
-                        std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                        n_rep = 12:30)
-p_detect
-```
-
-
-We can also plot this,
-
-```{r fig = TRUE, eval=TRUE}
-plot(p_detect)
-
-```
-
-Alternatively, we can also use a fit model to estimate the p(detect)
-for a set of circumstances. Unlike the above, using a fit model allows
-us to estimate the probability of detection with the uncertainty in
-our effect size estimates taken into account.
-
-```{r}
-p_detect2 = est_p_detect(variable_levels = c(Intercept = 1, 
-                                             Distance = 100,
-                                             Volume = 50,
-                                             DistanceXVolume = 100*50
-                                             ),
-                        model_fit = model_fit, 
-                        n_rep = 1:12)
-
-print(p_detect2)
-```
-
-and we can plot the results,
-
-```{r fig = TRUE}
-plot(p_detect2, error_width = 0.1)
-```
-
-Notice how we get uncertainty intervals when we use a fit model. 
-
-## Predicting outcomes
-
-Once a model is fit, it can be helpful to predict the outcome, either
-for the data used to fit the model or new data. For this, `artemis`
-provides methods for `predict()` for models fit with `eDNA_lm*()`.  This prediction process is very closely related to simulating data with fixed effect sizes.
-
-
+<br>
+<br>
+---
+<br>
+<br>

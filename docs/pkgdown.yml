@@ -4,4 +4,5 @@ pkgdown_sha: ~
 articles:
   artemis-installation-guide: artemis-installation-guide.html
   artemis-overview: artemis-overview.html
+  simulation: simulation.html
 
