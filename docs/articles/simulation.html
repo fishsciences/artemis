@@ -67,6 +67,9 @@
       <a href="../articles/artemis-overview.html">Getting started with the artemis package</a>
     </li>
     <li>
+      <a href="../articles/modeling.html">Modeling eDNA qPCR Data with `artemis`</a>
+    </li>
+    <li>
       <a href="../articles/simulation.html">Simulating eDNA Data with `artemis`</a>
     </li>
   </ul>
@@ -98,20 +101,17 @@
     
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(artemis)</a></code></pre></div>
 <p><br></p>
+<div id="introduction" class="section level1">
+<h1 class="hasAnchor">
+<a href="#introduction" class="anchor"></a>Introduction</h1>
 <p>Simulating data is extremely useful. It’s like a sandbox to play and practice in without the anxiety of wasting resources, allowing us to test assumptions, visualize model relationships, and conduct power analyses on hypothetical experiments.</p>
 <p><br></p>
-<p>The <code>artemis</code> package includes two flexible functions for simulating data: <code><a href="../reference/sim_eDNA_lmer.html">sim_eDNA_lm()</a></code> and <code><a href="../reference/sim_eDNA_lmer.html">sim_eDNA_lmer()</a></code>. These functions use the same data generation process outlined in the <a href="https://fishsciences.github.io/artemis/articles/artemis-overview.html">Getting Started with <code>artemis</code> vignette</a>).</p>
-<p>In the sections that follow, we will go through the three steps of the data simulation process in <code>artemis</code>:</p>
-<ol style="list-style-type: decimal">
-<li><p>Creating a list of predictor variables and their levels</p></li>
-<li><p>Creating a vector of beta values for each predictor variable</p></li>
-<li><p>Calling the <code>sim_eDNA_*()</code> functions to simulate data, depending on the structure of the model (fixed or mixed effects).</p></li>
-</ol>
-<p>Once generated, simulations can be stored as an object in R. We can manipulate, summarize, and plot them.</p>
-<div id="step-1--create-a-variable-list" class="section level3">
-<h3 class="hasAnchor">
-<a href="#step-1--create-a-variable-list" class="anchor"></a>Step 1. Create a variable list</h3>
-<p>In order to simulate data, we first must provide a list of variables in our survey data and their associated levels. For example, if the hypothetical survey or experiment had varying levels of the variables <code>distance</code>, <code>volume</code>,<code>tech_rep</code>, and <code>rep</code>, we might create the following complete list of variables:</p>
+<p>The <code>artemis</code> package includes two flexible functions for simulating data: <code><a href="../reference/sim_eDNA_lmer.html">sim_eDNA_lm()</a></code> and <code><a href="../reference/sim_eDNA_lmer.html">sim_eDNA_lmer()</a></code>. These functions use the same data generation process outlined in the <a href="https://fishsciences.github.io/artemis/articles/artemis-overview.html">Getting Started with <code>artemis</code> vignette</a>.</p>
+<p>In this vignette, we will work through the three main steps of the data simulation process in <code>artemis</code>, and show how the results of data simulation can be stored, summarized, and plotted.</p>
+<div id="step-1--create-a-list-of-variables" class="section level2">
+<h2 class="hasAnchor">
+<a href="#step-1--create-a-list-of-variables" class="anchor"></a>Step 1. Create a list of variables</h2>
+<p>In order to simulate data, we first must provide a list of variables and their associated levels. For example, if the hypothetical survey or experiment had varying levels of the variables <code>distance</code>, <code>volume</code>,<code>tech_rep</code>, and <code>rep</code>, we might create the following complete list of variables:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">vars =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">Cq =</span> <span class="dv">1</span>,</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">            <span class="dt">Intercept =</span> <span class="dv">1</span>,</a>
 <a class="sourceLine" id="cb2-3" data-line-number="3">            <span class="dt">distance =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">0</span>, <span class="dv">15</span>, <span class="dv">50</span>),</a>
@@ -121,18 +121,18 @@
 <p>There is nothing special about the names used here, other than that they must be matched in the formula eventually expressed in <code><a href="../reference/sim_eDNA_lmer.html">sim_eDNA_lm()</a></code>. The variables can have as many levels as we like, and be categorical or continuous (we would wrap categorical variables with <code><a href="https://rdrr.io/r/base/factor.html">as.factor()</a></code>).</p>
 <p>We included two dummy variables in our list: one for the response (“<code>Cq</code>”), and one for the intercept. The response dummy variable is used internally by the simulation functions to create the model matrix. We could have omitted the intercept variable here, but the <code><a href="https://rdrr.io/r/stats/model.matrix.html">model.matrix()</a></code> function that gets called downstream will create one by default, so it’s good practice to include it in our variable list.</p>
 </div>
-<div id="step-2--provide-effect-sizes" class="section level3">
-<h3 class="hasAnchor">
-<a href="#step-2--provide-effect-sizes" class="anchor"></a>Step 2. Provide effect sizes</h3>
-<p>Next, we must provide effect sizes (<code>betas</code>) for the variables we we plan to include in the model formula. The values we assign the <code>betas</code> will no doubt depend on our reasons for doing the simulation. If we have previous model results for the effects of distance and volume, for example, we might use those for our <code>betas</code> vector:</p>
+<div id="step-2--provide-effect-sizes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#step-2--provide-effect-sizes" class="anchor"></a>Step 2. Provide effect sizes</h2>
+<p>Next, we must provide effect sizes (<code>betas</code>) for the variables we plan to include in the model formula. The values we assign the <code>betas</code> will no doubt depend on our reasons for doing the simulation. If we have previous model results for the effects of distance and volume, for example, we might use those for our <code>betas</code> vector:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">betas =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dt">intercept =</span> <span class="fl">-10.6</span>, <span class="dt">distance =</span> <span class="fl">-0.05</span>, <span class="dt">volume =</span> <span class="fl">0.02</span>)</a></code></pre></div>
-<p>By default, the first beta value in <code>betas</code> will be considered the term for the intercept. The names of the <code>betas</code> don’t need to be the same as they are in the <code>vars</code> list or the model formula expression, but the <code>sim_eDNA_*()</code> functions do reference the <code>betas</code> vector with respect to the model formula, so the <em>order</em> of the variables does need to match, and we need one beta for each predictor in the model formula.</p>
+<p>By default, the first beta value in <code>betas</code> will be considered the term for the intercept. The names of the <code>betas</code> don’t need to be the same as they are in the <code>vars</code> list above, or even the model formula expression, but the <code>sim_eDNA_*()</code> functions do reference the <code>betas</code> vector with respect to the model formula. This means that it’s the <em>order</em> of the variables between the <code>betas</code> vector and the model formula that needs to match, and that there needs to be one beta for each predictor in the model formula.</p>
 <p>When specifying the <code>betas</code> values, it helps to remember that all the model parameters are on the scale of <span class="math inline">\(log[eDNA]\)</span>, including the intercept. Here we specified the intercept to be -10, which came from previous modeling results but also corresponds to <code><a href="https://rdrr.io/r/base/Log.html">exp(-10)</a></code><span class="math inline">\([eDNA]\)</span>. This is a very small number, and thus a proxy for eDNA that is very rare in the environment before any covariates are considered. Often if we’re getting simulation results we find bizarre or surprising, the scale of the <code>betas</code> is the place to start debugging.</p>
 </div>
-<div id="step-3--call-the-sim_edna_-functions-to-simulate-data" class="section level3">
-<h3 class="hasAnchor">
-<a href="#step-3--call-the-sim_edna_-functions-to-simulate-data" class="anchor"></a>Step 3. Call the <code>sim_eDNA_*()</code> functions to simulate data</h3>
-<p>With our variable list and our <code>betas</code> decided upon we’re ready to simulate data! For fixed-effects variables, we use the <code><a href="../reference/sim_eDNA_lmer.html">sim_eDNA_lm()</a></code> function. This function takes a model formula (with syntax identical to that used in the <code>lme4</code> package), the variable list and the <code>betas</code> vector, but it also requires the parameters from a standard curve equation for the conversion formula between <span class="math inline">\(log[eDNA]\)</span> and Cq values to the simulation function, as well as the measurement error on Cq (<code>sigma_Cq</code>):</p>
+<div id="step-3--call-the-sim_edna_-functions-to-simulate-data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#step-3--call-the-sim_edna_-functions-to-simulate-data" class="anchor"></a>Step 3. Call the <code>sim_eDNA_*()</code> functions to simulate data</h2>
+<p>With our variable list and <code>betas</code> decided, we’re ready to simulate data! For fixed-effects variables, we use the <code><a href="../reference/sim_eDNA_lmer.html">sim_eDNA_lm()</a></code> function. This function takes a model formula (with syntax identical to that used in the <code>lme4</code> package), the variable list and the <code>betas</code> vector, but it also requires the parameters from a standard curve equation for the conversion formula between <span class="math inline">\(log[eDNA]\)</span> and Cq values to the simulation function, as well as the measurement error on Cq (<code>sigma_Cq</code>):</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">1234</span>)</a>
 <a class="sourceLine" id="cb4-2" data-line-number="2">ans =<span class="st"> </span><span class="kw"><a href="../reference/sim_eDNA_lmer.html">sim_eDNA_lm</a></span>(Cq <span class="op">~</span><span class="st"> </span>distance <span class="op">+</span><span class="st"> </span>volume, </a>
 <a class="sourceLine" id="cb4-3" data-line-number="3">                  <span class="dt">variable_list =</span> vars,</a>
@@ -178,9 +178,10 @@
 <p><strong><em>WARNING</em></strong>: <em>these marginal effects can be misleading in cases where interactions are simulated; if you have interaction effects, additional analysis is recommended.</em></p>
 <p>The last column of the table returned by <code>summary</code> is the percent of observations that represented positive detections, i.e. a Cq value below the upper cycle threshold for non-detection (set to 40 by default). In the output above, 100% of the simulated data with <code>distance</code> = 0 was below 40.0.</p>
 </div>
-<div id="simulating-many-many-datasets" class="section level2">
-<h2 class="hasAnchor">
-<a href="#simulating-many-many-datasets" class="anchor"></a>Simulating many many datasets</h2>
+</div>
+<div id="simulating-many-many-datasets" class="section level1">
+<h1 class="hasAnchor">
+<a href="#simulating-many-many-datasets" class="anchor"></a>Simulating many many datasets</h1>
 <p>By default, the <code>sim_eDNA_*</code> functions will only simulate one instance of the hypothetical survey/experiment, but we can easily simulate many datasets by adjusting the <code>n_sim</code> parameter. This becomes especially useful when we want to do power analyses on simulated results.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">ans2 =<span class="st"> </span><span class="kw"><a href="../reference/sim_eDNA_lmer.html">sim_eDNA_lm</a></span>(Cq <span class="op">~</span><span class="st"> </span>distance <span class="op">+</span><span class="st"> </span>volume, </a>
 <a class="sourceLine" id="cb7-2" data-line-number="2">                  <span class="dt">variable_list =</span> vars,</a>
@@ -191,9 +192,9 @@
 <a class="sourceLine" id="cb7-7" data-line-number="7">                  <span class="dt">n_sim =</span> <span class="dv">500</span>) <span class="co"># specifies the number of simulated datasets to generate</span></a></code></pre></div>
 <p>When multiple simulations are requested, each of these will be stored in a matrix, with each column representing a single simulated instance.</p>
 </div>
-<div id="plotting-simulated-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plotting-simulated-data" class="anchor"></a>Plotting simulated data</h2>
+<div id="plotting-simulated-data" class="section level1">
+<h1 class="hasAnchor">
+<a href="#plotting-simulated-data" class="anchor"></a>Plotting simulated data</h1>
 <p>The results of the simulations can be plotted with <code><a href="https://rdrr.io/r/graphics/plot.html">plot()</a></code>:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(ans)</a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#&gt; [[1]]</span></a>
@@ -204,9 +205,9 @@
 <p><img src="simulation_files/figure-html/unnamed-chunk-8-1.png" width="700"><img src="simulation_files/figure-html/unnamed-chunk-8-2.png" width="700"><img src="simulation_files/figure-html/unnamed-chunk-8-3.png" width="700"></p>
 <p><br></p>
 <p>Similar to <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>, each plot panel shows the marginal distribution of the response (either Cq or <span class="math inline">\(log[eDNA]\)</span>) across the levels of the variables used to simulate the data.</p>
-<div id="creating-custom-plots" class="section level3">
-<h3 class="hasAnchor">
-<a href="#creating-custom-plots" class="anchor"></a>Creating custom plots</h3>
+<div id="creating-custom-plots" class="section level2">
+<h2 class="hasAnchor">
+<a href="#creating-custom-plots" class="anchor"></a>Creating custom plots</h2>
 <p><code><a href="https://rdrr.io/r/graphics/plot.html">plot()</a></code> is a generic method intended for quick visualization of simulations. When we wish to create custom plots, we can convert a simulated dataset to a <code>dataframe</code> by calling <code><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame()</a></code> or <code><a href="https://rdrr.io/r/base/data.frame.html">data.frame()</a></code> on the simulation object, and then plot them with our method of choice. Here is an example using <code>ggplot2</code>:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">simsdf &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(ans)</a>
 <a class="sourceLine" id="cb9-2" data-line-number="2"></a>
@@ -220,9 +221,9 @@
 <p><br></p>
 </div>
 </div>
-<div id="simulating-data-from-mixed-effects-models" class="section level2">
-<h2 class="hasAnchor">
-<a href="#simulating-data-from-mixed-effects-models" class="anchor"></a>Simulating data from mixed effects models</h2>
+<div id="simulating-data-from-mixed-effects-models" class="section level1">
+<h1 class="hasAnchor">
+<a href="#simulating-data-from-mixed-effects-models" class="anchor"></a>Simulating data from mixed effects models</h1>
 <p>To simulate from a mixed-effects model, we use the function <code><a href="../reference/sim_eDNA_lmer.html">sim_eDNA_lmer()</a></code>. Random effects are specified using the syntax of the <code>lme4</code> package, e.g. <code>(1|random effect)</code>:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">ans3 =<span class="st"> </span><span class="kw"><a href="../reference/sim_eDNA_lmer.html">sim_eDNA_lmer</a></span>(Cq <span class="op">~</span><span class="st"> </span>distance <span class="op">+</span><span class="st"> </span>volume <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>rep) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>tech_rep),</a>
 <a class="sourceLine" id="cb10-2" data-line-number="2">                     <span class="dt">variable_list =</span> vars,</a>
@@ -234,9 +235,9 @@
 <p>When we are simulating data with random effects, we must provide the standard deviation of the random effects (<code>sigma_rand</code>, a vector containing one value for each random effect <code>beta</code>), in addition to the information for the fixed effects.</p>
 <p>Random effects are assumed to be generated from a normal distribution for these simulations using this standard deviation (<code>sigma_rand</code>). When <code>n_sims</code> &gt; 1, different random effects are generated for each simulation.</p>
 </div>
-<div id="final-notes-on-the-simulation-functions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#final-notes-on-the-simulation-functions" class="anchor"></a>Final notes on the simulation functions</h2>
+<div id="final-notes-on-the-simulation-functions" class="section level1">
+<h1 class="hasAnchor">
+<a href="#final-notes-on-the-simulation-functions" class="anchor"></a>Final notes on the simulation functions</h1>
 <p>By default, the simulation functions construct a model matrix assuming a complete block design (i.e. every level of each variable is represented). If we want to simulate data for an incomplete block design, we can specify our own variable <code>data.frame</code>, <code>X</code>, to create a model matrix.</p>
 <p><br></p>
 <p>When we specified the <code>vars</code> above, we included many variables that we did not use in the formula. By design, the simulation and modeling functions ignore extra variables in the <code>variable_list</code> or <code>data</code> inputs. This is just a workflow perk; it allows us to create a comprehensive list of variables we might be interested in, and then we only need adjust the model formula to change the simulations.</p>
@@ -251,8 +252,19 @@
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#simulating-many-many-datasets">Simulating many many datasets</a></li>
-      <li><a href="#plotting-simulated-data">Plotting simulated data</a></li>
+<li>
+<a href="#introduction">Introduction</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#step-1--create-a-list-of-variables">Step 1. Create a list of variables</a></li>
+      <li><a href="#step-2--provide-effect-sizes">Step 2. Provide effect sizes</a></li>
+      <li><a href="#step-3--call-the-sim_edna_-functions-to-simulate-data">Step 3. Call the <code>sim_eDNA_*()</code> functions to simulate data</a></li>
+      </ul>
+</li>
+      <li><a href="#simulating-many-many-datasets">Simulating many many datasets</a></li>
+      <li>
+<a href="#plotting-simulated-data">Plotting simulated data</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#creating-custom-plots">Creating custom plots</a></li>
+      </ul>
+</li>
       <li><a href="#simulating-data-from-mixed-effects-models">Simulating data from mixed effects models</a></li>
       <li><a href="#final-notes-on-the-simulation-functions">Final notes on the simulation functions</a></li>
       </ul>
