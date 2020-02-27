@@ -25,14 +25,14 @@ library(artemis)
 
 The `artemis` R package was created to aid in the design and analysis of
 environmental DNA (eDNA) survey studies by offering a custom suite of
-models for qPCR data from eDNA samples. eDNA data has often been analysed with occupancy models or GLMS, but there are
-several characteristics of eDNA qPCR data which made us feel that it would
-benefit from a different modeling approach.  Specifically, truncated latent variable models written in [Stan](mcmc-stan.org) and included with `artemis`.
+models for quantitative polymerase chain reaction (qPCR) data from extracted eDNA samples. Data from eDNA sampling surveys is often analyzed with occupancy models or GLMS, but there are
+several characteristics of qPCR data in particular which made us feel that it would
+benefit from a different modeling approach.  Specifically, our approach to this data makes use of Bayesian truncated latent variable models written in [Stan](mcmc-stan.org).
 
 
 ## Modeling eDNA Data with `artemis`
 
-  1. In eDNA samples, the concentration of eDNA is not directly
+  1. In eDNA samples that are extracted and run through qPCR analysis, the concentration of eDNA is not directly
      measured. Instead, the amount of eDNA present is represented as a
      function of the number of quantification cycles of qPCR
      (hereafter referred to as the "Cq" value) completed before
@@ -145,7 +145,7 @@ In the following examples, `tech_rep` refers to qPCR replicates generated
 The functions included in `artemis` can be grouped into a few categories; each category is either introduced in this vignette, or addressed in detail by its own vignette.  [Available vignettes](https://fishsciences.github.io/artemis/articles/) are linked to individually below:
 
 1. [Simulation of data](https://fishsciences.github.io/artemis/articles/simulation.html)
-2. Modeling data
+2. [Modeling data](https://fishsciences.github.io/artemis/articles/modeling.html)
 3. Conducting post-hoc analyses
       * estimating probability of detection, generating predictions from model fits.
 4. Conducting power and precision analyses
@@ -154,76 +154,6 @@ These categories are addressed in the sections that follow.
 <br>
 
 The `artemis` package also includes methods for R's `plot()`, `summary()`, `data.frame()`, and `predict()` functions.
-
-
-
-## Modeling
-
-The primary purpose of the `artemis` package is to fit the model to
-collected data. Similar to the simulation functions, the `artemis`
-package has two functions which fit a Bayesian latent variable model
-to eDNA data; `eDNA_lm()` for fixed effects models and `eDNA_lmer()`
-for mixed effects models.
-
-We provide a model formula, a `dataframe` or `list` of the observed
-data, and the parameters for the associated standard curve equation to convert
-between log[eDNA] and Cq values. For example, to fit a
-model to the sample data included in `artemis`, `eDNA_data`:
-
-```{r warning = FALSE, eval=FALSE}
-
-model_fit = eDNA_lm(Cq ~ Distance, 
-                    data = eDNA_data,
-                    std_curve_alpha = 21.2, std_curve_beta = -1.5)
-
-```
-
-The modeling functions use [Stan](mc-stan.org) to fit the Bayesian
-model. Full control of the MCMC algorithm can be accomplished by
-passing arguments to `rstan::stan()` in the modeling functions. For
-example, 
-
-
-```{r warning = FALSE, message=FALSE, eval=FALSE}
-model_fit = eDNA_lm(Cq ~ Distance, 
-                    data = eDNA_data,
-                    std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                    iter = 1000, seed = 1234, n_chain = 2)
-
-```
-
-By default, `artemis` suppresses the (often verbose) output from Stan,
-but users can (and should) enable it with `verbose = TRUE` when the model is slow or the
-output suggests the MCMC algorithm might not have converged, for
-example,
-
-```{r warning = FALSE, eval=TRUE}
-model_fit = eDNA_lm(Cq ~ Distance + Volume + Distance*Volume, 
-                    data = eDNA_data,
-                    std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                    iter = 300, seed = 1234, n_chain = 2,
-                    verbose = TRUE)
-```
-
-To fit a model with a random effect, use the
-`eDNA_lmer()` function and specify the random effects using the syntax
-used by `lme4`:
-
-```{r warning = FALSE, eval=FALSE}
-model_fit2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID),
-                       data = eDNA_data,
-                       std_curve_alpha = 21.2, std_curve_beta = -1.5)
-
-```
-
-As with the simulations, the model results can be summarized with
-`summary()` and can be plotted with `plot()`,
-
-```{r, eval=TRUE}
-summary(model_fit)
-
-plot(model_fit, pars = c(sprintf("betas[%d]", 2:4)))
-```
 
 
 ## Post-hoc analyses (*p(detect)*)

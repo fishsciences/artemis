@@ -1,0 +1,91 @@
+---
+title: "Modeling eDNA qPCR Data with `artemis`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Modeling eDNA qPCR Data with `artemis`}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, message = FALSE, warning = FALSE}
+library(artemis)
+```
+
+# Introduction
+
+A primary purpose of the `artemis` package is to allow fitting Bayesian latent variable models to
+collected qPCR data. Similar to the simulation functions, the `artemis`
+package has two functions with which to do this: `eDNA_lm()` for fixed effects models and `eDNA_lmer()`
+for mixed effects models.
+
+
+# Fitting fixed effects models with `eDNA_lm()`
+
+This function takes a model formula (with syntax identical to that of the `lme4` package), a `dataframe` or `list` of the observed data, and the parameters for the data's associated standard curve equation. For example, to fit a
+model to the sample data included in `artemis`, `eDNA_data`:
+
+```{r warning = FALSE, eval=FALSE}
+
+model_fit = eDNA_lm(Cq ~ Distance, 
+                    data = eDNA_data,
+                    std_curve_alpha = 21.2, std_curve_beta = -1.5)
+
+```
+
+The modeling functions use [Stan](mc-stan.org) to fit the Bayesian
+model. Full control of the MCMC algorithm can be accomplished by adding them to the end of the `eDNA_lm*()` call, which then passes the arguments to `rstan::stan()`. For example, 
+
+
+```{r warning = FALSE, message=FALSE, eval=FALSE}
+model_fit = eDNA_lm(Cq ~ Distance, 
+                    data = eDNA_data,
+                    std_curve_alpha = 21.2, std_curve_beta = -1.5,
+                    iter = 1000, seed = 1234, n_chain = 2)
+
+```
+
+By default, `artemis` suppresses the (often verbose) output from Stan,
+but users can (and should) enable it with `verbose = TRUE` when the model is slow or the
+output suggests the MCMC algorithm might not have converged, for example,
+
+```{r warning = FALSE, eval=TRUE}
+model_fit = eDNA_lm(Cq ~ Distance + Volume + Distance*Volume, 
+                    data = eDNA_data,
+                    std_curve_alpha = 21.2, std_curve_beta = -1.5,
+                    iter = 300, seed = 1234, n_chain = 2,
+                    verbose = TRUE)
+```
+
+# Fitting mixed effects models with `eDNA_lmer()`
+
+To fit a model with a random effect, use the
+`eDNA_lmer()` function. Random effects are specified using the syntax of the `lme4` package, e.g. `(1|random effect)`:
+
+```{r warning = FALSE, eval=FALSE}
+
+model_fit2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID),
+                       data = eDNA_data,
+                       std_curve_alpha = 21.2, std_curve_beta = -1.5)
+
+```
+
+# Summarizing and plotting model output
+
+As with the simulation objects, the model results can be summarized or plotted with default methods using
+`summary()` and `plot()`,
+
+```{r, eval=TRUE}
+summary(model_fit)
+
+plot(model_fit, pars = c(sprintf("betas[%d]", 2:4)))
+```
+

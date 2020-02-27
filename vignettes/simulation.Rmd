@@ -21,13 +21,11 @@ options(digits = 4)
 library(artemis)
 ```
 
-<br>
 
 # Introduction
 
 Simulating data is extremely useful.  It's like a sandbox to play and practice in without the anxiety of wasting resources, allowing us to test assumptions, visualize model relationships, and conduct power analyses on hypothetical experiments. 
 
-<br>
 
 The `artemis` package includes two flexible functions for simulating
 data: `sim_eDNA_lm()` and `sim_eDNA_lmer()`.  These functions use the same data generation process outlined in the [Getting Started with `artemis` vignette](https://fishsciences.github.io/artemis/articles/artemis-overview.html).  
