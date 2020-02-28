@@ -27,11 +27,35 @@ collected qPCR data. Similar to the simulation functions, the `artemis`
 package has two functions with which to do this: `eDNA_lm()` for fixed effects models and `eDNA_lmer()`
 for mixed effects models.
 
+# What you will need in order to fit a model
+
+The truncated latent variable models included in the `artemis` package require the following inputs:
+
+1. A numeric Cq value for each qPCR replicate, where non-detections are recorded as the cutoff number for cycles of qPCR (the default is 40.0 cycles).
+
+2. The intercept value $\alpha$ and the slope value $\beta$) from a standard curve equation associated with the qPCR analysis.
+
+An example of qPCR data in the correct format for modeling with `artemis` can be viewed by calling `eDNA_data`, which is a `dataframe` with Cq values from live car experiments completed in the California Sacramento-San Joaquin Delta with Delta Smelt:
+
+```{r}
+head(eDNA_data)
+
+```
+
+As this sample data is a subset of a larger dataset, it's a bit unbalanced; some variable levels are associated with 15 replicate filters and 8 technical replicates per filter, while others have 5 replicate filters with 12 technical replicates:
+
+```{r}
+table(eDNA_data$FilterNumber, eDNA_data$TechnicalRep)
+table(eDNA_data$Volume, eDNA_data$TechnicalRep)
+table(eDNA_data$Distance, eDNA_data$TechnicalRep)
+table(eDNA_data$FilterNumber, eDNA_data$Distance)
+
+```
+
 
 # Fitting fixed effects models with `eDNA_lm()`
 
-This function takes a model formula (with syntax identical to that of the `lme4` package), a `dataframe` or `list` of the observed data, and the parameters for the data's associated standard curve equation. For example, to fit a
-model to the sample data included in `artemis`, `eDNA_data`:
+This function takes a model formula (with syntax identical to that of the `lme4` package), a `dataframe` or `list` of the observed data, and the parameters for the data's associated standard curve equation. For example, to fit a model to the sample data included in `artemis`, `eDNA_data`:
 
 ```{r warning = FALSE, eval=FALSE}
 
