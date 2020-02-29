@@ -27,10 +27,10 @@ The `artemis` R package was created to aid in the design and analysis of
 environmental DNA (eDNA) survey studies by offering a custom suite of
 models for quantitative polymerase chain reaction (qPCR) data from extracted eDNA samples. Data from eDNA sampling surveys is often analyzed with occupancy models or GLMS, but there are
 several characteristics of qPCR data in particular which made us feel that it would
-benefit from a different modeling approach.  Specifically, our approach to this data makes use of Bayesian truncated latent variable models written in [Stan](mcmc-stan.org).
+benefit from a different modeling approach.  Specifically, our approach to this data makes use of Bayesian truncated latent variable models written in [Stan](mc-stan.org).
 
 
-## Modeling eDNA Data with `artemis`
+## Modeling qPCR eDNA Data with `artemis`
 
   1. In eDNA samples that are extracted and run through qPCR analysis, the concentration of eDNA is not directly
      measured. Instead, the amount of eDNA present is represented as a

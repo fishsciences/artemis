@@ -22,90 +22,104 @@ library(artemis)
 
 # Introduction
 
-A primary purpose of the `artemis` package is to allow fitting Bayesian latent variable models to
-collected qPCR data. Similar to the simulation functions, the `artemis`
-package has two functions with which to do this: `eDNA_lm()` for fixed effects models and `eDNA_lmer()`
-for mixed effects models.
+A primary purpose of the `artemis` package is to facilitate modeling of qPCR data from eDNA samples.  It does this via two functions: `eDNA_lm()` for fixed effects models and `eDNA_lmer()` for mixed effects models.
 
-# What you will need in order to fit a model
+The underlying [Stan](https://mc-stan.org) models are pre-compiled in the package, but can be found in the `artemis` source code [here](https://github.com/fishsciences/artemis/tree/master/src/stan_files). 
 
-The truncated latent variable models included in the `artemis` package require the following inputs:
+## Model Inputs
 
-1. A numeric Cq value for each qPCR replicate, where non-detections are recorded as the cutoff number for cycles of qPCR (the default is 40.0 cycles).
+Both modeling functions require the following inputs:
 
-2. The intercept value $\alpha$ and the slope value $\beta$) from a standard curve equation associated with the qPCR analysis.
+1. A vector of numeric Cq values (one for each qPCR replicate). Cq values corresponding to non-detections for your assay should be recorded as the threshold value (the default is 40.0 cycles).
+
+2. The intercept value $\alpha$ and the slope value $\beta$ from a standard curve equation associated with the qPCR analysis.
 
 An example of qPCR data in the correct format for modeling with `artemis` can be viewed by calling `eDNA_data`, which is a `dataframe` with Cq values from live car experiments completed in the California Sacramento-San Joaquin Delta with Delta Smelt:
 
 ```{r}
 head(eDNA_data)
-
+str(eDNA_data)
 ```
 
-As this sample data is a subset of a larger dataset, it's a bit unbalanced; some variable levels are associated with 15 replicate filters and 8 technical replicates per filter, while others have 5 replicate filters with 12 technical replicates:
+As the sample data is just a subset, it's a bit unbalanced - some variable levels are associated with 15 replicate filters and 8 technical replicates per filter, while others have 5 replicate filters with 12 technical replicates, and the distribution of technical replicates across variable levels is uneven:
 
 ```{r}
 table(eDNA_data$FilterNumber, eDNA_data$TechnicalRep)
-table(eDNA_data$Volume, eDNA_data$TechnicalRep)
-table(eDNA_data$Distance, eDNA_data$TechnicalRep)
-table(eDNA_data$FilterNumber, eDNA_data$Distance)
+table(eDNA_data$Volume, eDNA_data$Distance)
 
 ```
 
+The models handle this, as long as there are no variable levels with missing or `NA` values - Stan models do not take `NA` values, and any rows with `NA`s in the data will be dropped in the construction of the model matrix when the data is prepped for modeling.
 
-# Fitting fixed effects models with `eDNA_lm()`
+<br>
 
-This function takes a model formula (with syntax identical to that of the `lme4` package), a `dataframe` or `list` of the observed data, and the parameters for the data's associated standard curve equation. For example, to fit a model to the sample data included in `artemis`, `eDNA_data`:
+# Fixed effects models with `eDNA_lm()`
+
+To fit a fixed effects model to the sample `eDNA_data` where `Distance` is the only predictor, we give the function a model formula and the input data listed above:
 
 ```{r warning = FALSE, eval=FALSE}
-
 model_fit = eDNA_lm(Cq ~ Distance, 
                     data = eDNA_data,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
 ```
 
-The modeling functions use [Stan](mc-stan.org) to fit the Bayesian
-model. Full control of the MCMC algorithm can be accomplished by adding them to the end of the `eDNA_lm*()` call, which then passes the arguments to `rstan::stan()`. For example, 
+<br>
+
+The model functions will add an intercept term, but you can explicitly omit the intercept if you have a good reason for doing so.  Full control of the MCMC algorithm can be accomplished by adding these control arguments to the end of the `eDNA_lm*()` call, which then passes them on to `rstan::stan()`. For example, 
 
 
 ```{r warning = FALSE, message=FALSE, eval=FALSE}
 model_fit = eDNA_lm(Cq ~ Distance, 
                     data = eDNA_data,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                    iter = 1000, seed = 1234, n_chain = 2)
+                    iter = 500, 
+                    seed = 1234, 
+                    n_chain = 1) # we don't recommend sampling just 1 chain; the default is 4
 
 ```
 
+<br>
+
 By default, `artemis` suppresses the (often verbose) output from Stan,
-but users can (and should) enable it with `verbose = TRUE` when the model is slow or the
+but users can (and should) enable it with `verbose = TRUE` when the model is sampling slowly or the
 output suggests the MCMC algorithm might not have converged, for example,
 
 ```{r warning = FALSE, eval=TRUE}
 model_fit = eDNA_lm(Cq ~ Distance + Volume + Distance*Volume, 
                     data = eDNA_data,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                    iter = 300, seed = 1234, n_chain = 2,
+                    iter = 500, 
+                    seed = 1234, 
+                    n_chain = 1, # set to 1 for vignette; default is 4
                     verbose = TRUE)
 ```
 
-# Fitting mixed effects models with `eDNA_lmer()`
+<br>
 
-To fit a model with a random effect, use the
-`eDNA_lmer()` function. Random effects are specified using the syntax of the `lme4` package, e.g. `(1|random effect)`:
+# Mixed effects models with `eDNA_lmer()`
 
-```{r warning = FALSE, eval=FALSE}
+<br>
 
-model_fit2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID),
-                       data = eDNA_data,
-                       std_curve_alpha = 21.2, std_curve_beta = -1.5)
+To fit a model with one or more random effect(s), use the `eDNA_lmer()` function. Random effects are specified using the same syntax as the `lme4` package, e.g. `(1|random effect)`:
+
+```{r warning = FALSE, eval=TRUE}
+d = eDNA_data # create a copy to modify 
+d$Year = factor(sample(2018:2020, size = nrow(d), replace = TRUE)) # create a random variable
+
+model_fit2 = eDNA_lmer(Cq ~ Distance + Volume + (1|Year),
+                       data = d,
+                       std_curve_alpha = 21.2, std_curve_beta = -1.5,
+                       iter = 1000, 
+                       seed = 1234, 
+                       n_chain = 1) # set to 1 for vignette; default is 4
 
 ```
 
 # Summarizing and plotting model output
 
 As with the simulation objects, the model results can be summarized or plotted with default methods using
-`summary()` and `plot()`,
+`summary()` and `plot()`, or converted to a `dataframe` object for further manipulation.
 
 ```{r, eval=TRUE}
 summary(model_fit)
@@ -113,3 +127,21 @@ summary(model_fit)
 plot(model_fit, pars = c(sprintf("betas[%d]", 2:4)))
 ```
 
+<br>
+
+Matching `lme4` convention, random effects are not included in the default `summary()` output.  You can view or plot the random effects estimates by subsetting the `stanfit` slot of the model object with `@`, and specifying the `random_betas` parameters with the `pars` argument:
+
+```{r}
+summary(model_fit2@stanfit, pars = "rand_betas", probs = c(0.50, 0.025, 0.975))$summary
+plot(model_fit2@stanfit, pars = "rand_betas")
+```
+
+<br>
+
+# Further notes on modeling
+
+Because the models implemented in `artemis` are Bayesian, you will get the most out of their results when you can work with and summarize posterior probabilities.  Some helpful resources for this are the [Stan User's Guide](https://mc-stan.org/docs/2_22/stan-users-guide/index.html), and the [stanfit objects vignette](http://mc-stan.org/rstan/articles/stanfit_objects.html) from the `rstan` package.
+
+<br>
+---
+<br>
