@@ -29,7 +29,8 @@ sim_eDNA_lm = function(formula, variable_list,
 
     sims = sampling(stanmodels$eDNA_sim, data = md, chains = 1L,
                     algorithm = "Fixed_param", iter = n_sim, warmup = 0L,
-                    refresh = ifelse(verbose, 100, -1), show_messages = verbose)
+                    refresh = ifelse(verbose, 100, -1), show_messages = verbose,
+                    open_progress = FALSE)
 
     if(!verbose) sink()
     
@@ -184,7 +185,8 @@ sim_eDNA_lmer = function(formula, variable_list,
     
     sims = sampling(stanmodels$eDNA_sim_lmer, data = md, chains = 1L,
                     algorithm = "Fixed_param", iter = n_sim, warmup = 0L,
-                    refresh = ifelse(verbose, 100, -1), show_messages = verbose)
+                    refresh = ifelse(verbose, 100, -1), show_messages = verbose,
+                    open_progress = FALSE)
     
     if(!verbose) sink()
 

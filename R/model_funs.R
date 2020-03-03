@@ -144,7 +144,8 @@ run_model = function(model = stanmodels$eDNA_lm, data, n_chain,
     
     fit = sampling(model, data, chains = n_chain,
                   iter = iters,
-                  refresh = ifelse(verbose, 100, -1), show_messages = verbose, ...)
+                  refresh = ifelse(verbose, 100, -1), show_messages = verbose,
+                  open_progress = FALSE, ...)
 
     if(!verbose) sink()
     
