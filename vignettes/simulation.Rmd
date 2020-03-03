@@ -21,7 +21,6 @@ options(digits = 4)
 library(artemis)
 ```
 
-
 # Introduction
 
 Simulating data is extremely useful.  It's like a sandbox to play and practice in without the anxiety of wasting resources, allowing us to test assumptions, visualize model relationships, and conduct power analyses on hypothetical experiments. 

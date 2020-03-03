@@ -183,7 +183,14 @@ for a set of circumstances. Unlike the above, using a fit model allows
 us to estimate the probability of detection with the uncertainty in
 our effect size estimates taken into account.
 
-```{r}
+```{r, eval=TRUE, fig = TRUE}
+model_fit = eDNA_lm(Cq ~ Distance + Volume + Distance*Volume, 
+                    data = eDNA_data,
+                    std_curve_alpha = 21.2, std_curve_beta = -1.5,
+                    iter = 500, 
+                    seed = 1234, 
+                    n_chain = 1) # set to 1 for vignette; default is 4
+
 p_detect2 = est_p_detect(variable_levels = c(Intercept = 1, 
                                              Distance = 100,
                                              Volume = 50,
@@ -193,21 +200,17 @@ p_detect2 = est_p_detect(variable_levels = c(Intercept = 1,
                         n_rep = 1:12)
 
 print(p_detect2)
+
 ```
 
 and we can plot the results,
 
-```{r fig = TRUE}
+```{r, fig = TRUE, eval = TRUE}
 plot(p_detect2, error_width = 0.1)
 ```
 
 Notice how we get uncertainty intervals when we use a fit model. 
 
-## Predicting outcomes
-
-Once a model is fit, it can be helpful to predict the outcome, either
-for the data used to fit the model or new data. For this, `artemis`
-provides methods for `predict()` for models fit with `eDNA_lm*()`.  This prediction process is very closely related to simulating data with fixed effect sizes.
 
 ## Power and Precision Functions
 ### Evaluating Simulated Study Designs with the `est_power_*()` functions
@@ -223,8 +226,8 @@ sense of how many replicates we need for this study to have at least
 80% power (>=80% chance of estimating a beta for distance
 without including 0 in its CI), we can do this using the `est_power_lm()` and specifying a design. To do this, we specify the number of replicate filters as a vector (`rep`) in the `variable_list`, along with the rest of our variables and argument values.  *Note that these functions are not yet parallelized and may take some time to run on your machine*
 
-```{r warning = FALSE}
-dist_power = est_power_lm(Cq ~ 1 + distance,
+```{r warning = FALSE, eval=FALSE}
+est_power_lm(Cq ~ 1 + distance,
                           variable_list = list(Cq = 1, 
                                                distance = c(0,100,300), 
                                                rep = 1:3),
@@ -233,18 +236,15 @@ dist_power = est_power_lm(Cq ~ 1 + distance,
                           std_curve_alpha = 21.2, std_curve_beta = -1.5,
                           type = "exclude_zero")
 
-dist_power
+#> (Intercept)    distance 
+#>           1           0 
 
 ```
 
-It appears that 3 samples was not enough to estimate the effect of distance in this case. We could keep trying different number of replicates until we get the number we
-would like. However, it is easier to use the function
-`est_power_range_lm()`, which will automate this process for us. The
+The `distance` result indicates that we don't have a sufficient number of replicates to detect the effect of distance here.  We could keep trying different number of replicates until we get a power number we like. However, it is easier to use the function`est_power_range_lm()`, which will automate this process for us. The
 call is similar to the one above, but instead of specifying the number of
 replicates in the `variable_list`, we provide a `rep_range`, which is
-`seq(2,20,2)` (every 2 from 2 to 20) by default. It will stop running once the specified power level is reached.  Warning, this is
-quite CPU intensive, so for this demonstation, we will be lowering the
-`rep_range` and the number of iterations for each case:
+`seq(2,20,2)` (every 2 from 2 to 20) by default. It will stop running once the specified power level is reached.  Warning, this is quite CPU intensive, so for this demonstation, we will be lowering the `rep_range` and the number of iterations for each case:
 
 ```{r warning = FALSE}
 set.seed(1234)
@@ -268,7 +268,7 @@ dist_power_range
 #>           1           1 
 ```
 
-For this study, it looks like we will need greater then 5 replicates (but perhaps less than 10) to have our desired 80% power. 
+For this study, it looks like we will need greater than 5 replicates (but perhaps less than 10) to have our desired 80% power. 
 
 <br>
 <br>
