@@ -2,5 +2,8 @@ pandoc: 2.3.1
 pkgdown: 1.4.1
 pkgdown_sha: ~
 articles:
+  artemis-installation-guide: artemis-installation-guide.html
   artemis-overview: artemis-overview.html
+  modeling: modeling.html
+  simulation: simulation.html
 

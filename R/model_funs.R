@@ -148,7 +148,8 @@ run_model = function(model = if(length(data$prior_mu)) stanmodels$eDNA_lm_prior 
     
     fit = sampling(model, data, chains = n_chain,
                   iter = iters,
-                  refresh = ifelse(verbose, 100, -1), show_messages = verbose, ...)
+                  refresh = ifelse(verbose, 100, -1), show_messages = verbose,
+                  open_progress = FALSE, ...)
 
     if(!verbose) sink()
     

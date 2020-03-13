@@ -2,6 +2,7 @@
 
 ![artemis logo](man/figures/logo.png)
 
+
 #### 
 
 <!-- badges: start -->
@@ -19,25 +20,13 @@ latent-variable, truncated data models which are fit using
 
 ## Installation
 
-Currently, artemis can be installed using one of the pre-built
+`artemis` can be installed on most platforms using one of the pre-built
 binaries available from the [releases
-page](https://github.com/fishsciences/artemis/releases). Alternatively,
-you can install the package from github using the `devtools` package,
-
-```
-devtools::install_github("fishsciences/artemis", build_vignettes = TRUE)
-```
-
-Please note, installing the package from github requires a C++
-compiler (e.g. gcc, clang).
+page](https://github.com/fishsciences/artemis/releases), with more detailed installation instructions found [here](https://fishsciences.github.io/artemis/articles/artemis-installation-guide.html).
 
 ## Basic use
 
-Please refer to the `artemis-overview` vignette, which covers most of the functionality of artemis,
-
-```
-vignette("artemis-overview", package = "artemis")
-```
+Please refer to the [Getting Started with the `artemis` package](https://fishsciences.github.io/artemis/articles/artemis-overview.html) vignette, which covers most of the functionality of artemis.
 
 Additional vignettes are forthcoming!
 

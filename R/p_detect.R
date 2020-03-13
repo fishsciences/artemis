@@ -79,8 +79,11 @@ est_p_detect = function(variable_levels,
         stop("Sorry, only one set of variable levels at a time currently supported")
     if(is.null(model_fit) && length(variable_levels) != length(betas))
         stop("Variable levels and betas cannot be of different lengths")
-
-    if(is.null(model_fit)) {
+    if(missing(betas) && is.null(model_fit))
+        stop("Must provide either a set of beta values or a model_fit object")
+    
+    if(!missing(betas)) {
+        if(!is.null(model_fit)) dup_arg_warn("beta")
         ln_conc_hat = variable_levels %*% betas
     } else {
         # model_fit provided
@@ -89,13 +92,12 @@ est_p_detect = function(variable_levels,
         } else {
             Cq_sd = model_fit@sigma_Cq
         }
-        if(!missing(std_curve_alpha) & !missing(std_curve_beta)) {
+        if(!missing(std_curve_alpha) || !missing(std_curve_beta)) {
             dup_arg_warn("std_curve parameters")
         } else {
             std_curve_alpha = model_fit@std_curve_alpha
             std_curve_beta = model_fit@std_curve_beta            
         }
-        
         ln_conc_hat = apply(model_fit@betas, 1, function(y) variable_levels %*% y)
     }
     
