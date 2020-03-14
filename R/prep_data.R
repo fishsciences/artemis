@@ -18,12 +18,14 @@ prep_data = function(mod_list,
                       prior_sd = b_prior_sd)
 
     if(is.null(mod_list$groups)){
-        model_data$has_rand = 0L
-        model_data$n_rand_var = 0L
-        model_data$n_rand_total = 0L
-        model_data$rand_var_shared = double(0)
-        model_data$groups = double(0)
+        model_data$has_random = 0L
+        model_data$n_rand = 0L
+        model_data$groups = as.array(integer(0))
+        model_data$rand_x = array(double(0), dim = c(nrow(mod_list$x, 0)))
+        model_data$n_grp = 0L
+        model_data$rand_sigma = as.array(rand_sd)
     } else { 
+        model_data$has_random = 1L
         model_data$n_rand = mod_list$n_rand
         model_data$groups = mod_list$groups
         model_data$rand_x = mod_list$rand_x
