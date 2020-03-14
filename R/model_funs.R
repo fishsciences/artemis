@@ -77,6 +77,14 @@ eDNA_lm = function(formula, data,
 ##' @param iters integer, the number of iterations per chain
 ##' @param verbose logical, when TRUE output from
 ##'     \code{rstan::sampling} is written to the console.
+##' @param betas_prior_mu numeric vector of the same length as the
+##'     number of fixed effects in the model. Each element will
+##'     correspond to the mean value for the prior normal distribution
+##'     for the parameter. If no values are provided, 
+##' @param betas_prior_sd numeric vector of the same length as the
+##'     number of fixed effects in the model. Each element will
+##'     correspond to the std. deviation value for the prior normal
+##'     distribution for the parameter.
 ##' @param sink_file character, a file to write the console output to
 ##'     if \code{verbose = FALSE}, by default writes to
 ##'     \code{tempfile()}
@@ -118,17 +126,20 @@ eDNA_lmer = function(formula, data,
                      upper_Cq = 40,
                      n_chain = 4L, iters = 500L,
                      verbose = FALSE,
+                     betas_prior_mu = numeric(), betas_prior_sd = numeric(),
                      sink_file = tempfile(), ...)
 {
     
     ml = gen_model_list_lmer(formula, data)
     
     md = prep_data(ml, std_curve_alpha, std_curve_beta,
-                   Cq_upper = upper_Cq, type = "model")
+                   Cq_upper = upper_Cq, type = "model",
+                   b_prior_mu = betas_prior_mu,
+                   b_prior_sd = betas_prior_sd)
+
     md$y = ml$y
 
-    fit = run_model(model = stanmodels$eDNA_lmer,
-                    data = md, n_chain = n_chain, iters = iters,
+    fit = run_model(data = md, n_chain = n_chain, iters = iters,
                     verbose = verbose, sink_file = sink_file, ...)
     fit = load_slots_model(fit)
     
@@ -139,7 +150,7 @@ eDNA_lmer = function(formula, data,
     return(fit)
 }
 
-run_model = function(model = if(length(data$prior_mu)) stanmodels$eDNA_lm_prior else stanmodels$eDNA_lm,
+run_model = function(model = if(length(data$prior_mu)) stanmodels$eDNA_lm_prior else stanmodels$eDNA_omni,
                      data, n_chain,
                   iters, verbose, sink_file, ...)
 

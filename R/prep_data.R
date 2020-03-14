@@ -21,7 +21,7 @@ prep_data = function(mod_list,
         model_data$has_random = 0L
         model_data$n_rand = 0L
         model_data$groups = as.array(integer(0))
-        model_data$rand_x = array(double(0), dim = c(nrow(mod_list$x, 0)))
+        model_data$rand_x = array(double(0), dim = c(nrow(mod_list$x), 0))
         model_data$n_grp = 0L
         model_data$rand_sigma = as.array(rand_sd)
     } else { 
