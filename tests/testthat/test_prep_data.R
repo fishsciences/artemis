@@ -18,7 +18,7 @@ test_that("Prep data", {
     expect_is(ans, "list")
 
     expect_true(all(sapply(ans[c("groups", "rand_var_shared", "rand_sigma")], length) == 0))
-    expect_true(all(sapply(ans[c("has_rand", "n_rand_var", "n_rand_total")], `==`, 0)))
+    expect_true(all(sapply(ans[c("has_random", "n_rand_var", "n_rand_total")], `==`, 0)))
 
     ## lmer
     mler = gen_model_list_lmer(Cq ~ distance + (1|volume), X)
