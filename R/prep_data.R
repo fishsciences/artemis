@@ -17,6 +17,9 @@ prep_data = function(mod_list,
                       prior_mu = b_prior_mu,
                       prior_sd = b_prior_sd)
 
+    model_data$has_prior = ifelse(length(b_prior_mu), 1, 0)
+    model_data$n_prior = length(b_prior_mu)
+    
     if(is.null(mod_list$groups)){
         model_data$has_random = 0L
         model_data$n_rand = 0L
