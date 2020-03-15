@@ -150,7 +150,7 @@ eDNA_lmer = function(formula, data,
     return(fit)
 }
 
-run_model = function(model = if(length(data$prior_mu)) stanmodels$eDNA_lm_prior else stanmodels$eDNA_omni,
+run_model = function(model = stanmodels$eDNA_omni,
                      data, n_chain,
                   iters, verbose, sink_file, ...)
 
