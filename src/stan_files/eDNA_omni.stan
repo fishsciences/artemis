@@ -27,6 +27,39 @@ functions{
 	return ans;
   }
 
+  int[] get_group_end(int[] groups){
+	int n_grp = max(groups);
+	int n = dims(groups)[1];
+	int ans[n_grp] = rep_array(0, n_grp);
+	int i = 1;
+	int pos = 1;
+	
+	while(pos < n_grp){
+	  if(groups[i + 1] != groups[i]){
+		ans[pos] = i;
+		pos += 1;
+	  }
+	  i += 1;
+	}
+	ans[n_grp] = n; // the last group ends at the end of the vector
+
+	return ans;
+  }
+
+  vector groups_sum_to_zero(vector raw_betas, int[] group_ends){
+	
+	int n_grps = size(group_ends);
+	int start = 1;
+	vector[dims(raw_betas)[1]] ans = raw_betas;
+	
+	for(i in 1:n_grps){
+	  ans[group_ends[i]] = -sum(ans[start:(group_ends[i] - 1)]);
+	  start = group_ends[i] + 1;
+	}
+	
+	return ans;	
+  }
+
   // Enforce sum to 0 on randoms
   vector raw_to_beta(vector raw_betas){
 	int n = dims(raw_betas)[1];
@@ -34,21 +67,6 @@ functions{
 
 	return ans;		   
   }
-
-  /*
-	Not finished
-	vector expand_raw_betas(vector raw_betas, int[] grps){
-	int N = size(grps);
-	int n_grps = max(grps);
-	int group_lengths[n_grps] = get_group_lengths(grps);
-	vector[N] betas;
-	
-	for(n in 1:N){
-	  
-	}
-	
-  }
-  */
   
   // multiply the vector of random effects by the correct
   // variance param
@@ -78,6 +96,12 @@ data{
   int groups[n_rand];
   matrix[N,n_rand] rand_x;
 
+  // user priors
+  int<lower = 0, upper = 1> has_prior;
+  int n_prior;
+  vector[n_prior] prior_mu;
+  vector[n_prior] prior_sd;  
+  
   // alpha and beta of the ln_conc -> Cq conversion according to
   // beta * log(conc) + alpha
   real std_curve_alpha;
@@ -91,10 +115,10 @@ transformed data{
   matrix[n_vars, n_vars] R_ast = qr_thin_R(X) / sqrt(N - 1);
   matrix[n_vars, n_vars] R_ast_inverse = inverse(R_ast);
 
-  int group_lengths[has_random ? n_grp : 0];
+  int group_ends[has_random ? n_grp : 0];
   
   if(has_random)
-	group_lengths = get_group_lengths(groups);
+	group_ends = get_group_end(groups);
 }
 
 parameters{
@@ -103,11 +127,14 @@ parameters{
   vector[has_random ? n_rand : 0] rand_betas_raw;
   vector<lower = 0>[has_random ? n_grp : 0] rand_sigma;
 }
+
 transformed parameters{
   vector[n_vars] betas = R_ast_inverse * thetas;
   vector[has_random ? n_rand : 0] rand_betas;
-  if(has_random)
+  if(has_random){
+	rand_betas = groups_sum_to_zero(rand_betas_raw, group_ends);
 	rand_betas = make_random_betas(rand_betas_raw, groups, rand_sigma);
+  }
 }
 
 model{
@@ -118,12 +145,17 @@ model{
 	ln_conc_hat = ln_conc_hat + rand_x * rand_betas;
   
   // Priors
-  thetas ~ normal(0 , 1);
   sigma_Cq ~ normal(0, 1);
   rand_sigma ~ normal(0, 1);
   
   // not sure if this works
   rand_betas_raw ~ normal(0, 1);
+
+  if(has_prior){
+	betas ~ normal(prior_mu, prior_sd);
+  } else {
+	thetas ~ normal(0 , 1);
+  }
   
   Cq_hat = ln_conc_hat * std_curve_beta + std_curve_alpha;
   

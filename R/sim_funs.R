@@ -24,11 +24,11 @@ sim_eDNA_lm = function(formula, variable_list,
              "Required: ", ncol(ml$x), "\n")
 
     md = prep_data(ml, std_curve_alpha, std_curve_beta, sigma_Cq, betas,
-                   b_prior_mu = numeric(), b_prior_sd = numeric(), type = "sim")
+                   b_prior_mu = NULL, b_prior_sd = NULL, type = "sim")
 
     if(!verbose) sink(sink_file)
 
-    sims = sampling(stanmodels$eDNA_sim_omni, data = md, chains = 1L,
+    sims = sampling(stanmodels$eDNA_sim, data = md, chains = 1L,
                     algorithm = "Fixed_param", iter = n_sim, warmup = 0L,
                     refresh = ifelse(verbose, 100, -1), show_messages = verbose,
                     open_progress = FALSE)
@@ -180,12 +180,12 @@ sim_eDNA_lmer = function(formula, variable_list,
     
     md = prep_data(ml, std_curve_alpha, std_curve_beta, sigma_Cq,
                    betas = betas, rand_sd = sigma_rand,
-                   b_prior_mu = numeric(), b_prior_sd = numeric(),
+                   b_prior_mu = NULL, b_prior_sd = NULL,
                    type = "sim")
 
     if(!verbose) sink(sink_file)
     
-    sims = sampling(stanmodels$eDNA_sim_omni, data = md, chains = 1L,
+    sims = sampling(stanmodels$eDNA_sim_lmer, data = md, chains = 1L,
                     algorithm = "Fixed_param", iter = n_sim, warmup = 0L,
                     refresh = ifelse(verbose, 100, -1), show_messages = verbose,
                     open_progress = FALSE)
