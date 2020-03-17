@@ -27,9 +27,9 @@ gen_model_list_lmer = function(formula, data)
     y = mf$fr[, as.character(mf$formula[2L])]
     if (is.matrix(y) && ncol(y) == 1L) 
         y = as.vector(y)
-
-    rand_x = t(as.matrix(mf$reTrms$Zt))
-    groups = mf$reTrms$Lind
+    rt = mk_rand_mat(mf$reTrms)
+    rand_x = rt$random_effects
+    groups = rt$groups
     
     n_rand = ncol(rand_x)
     n_grp = length(unique(groups))
@@ -47,3 +47,23 @@ check_formula = function(formula)
         stop("Sorry, only random intercepts are supported at this time.")
     return(NULL)
 }
+
+mk_rand_mat = function(rt)
+{
+    mats = lapply(rt$Ztlist, as.matrix)
+    vars = mapply(function(x, var, nm)
+        paste(rep(x, times = nlevels(var)), nm, sep = ":"),
+        x = rt$cnms, var = rt$flist, nm = names(rt$flist),
+        SIMPLIFY = FALSE)
+
+    groups = as.integer(factor(unlist(vars), levels = unique(unlist(vars))))
+    var_names = unlist(mapply(function(x, y) paste(x, rownames(y), sep = ""),
+                              x = vars, y = mats,
+                              SIMPLIFY = FALSE))
+    rand_mat = do.call(cbind, lapply(mats, t))
+    colnames(rand_mat) = var_names
+
+    return(list(random_effects = rand_mat,
+                groups = groups))
+}
+
