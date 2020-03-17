@@ -58,12 +58,3 @@ test_that("lmer model.list", {
 
 })
 
-test_that("Check formulas", {
-    expect_error(check_formula(lme4::lFormula(mpg ~ cyl + (am|cyl), mtcars)))
-    expect_error(check_formula(lme4::lFormula(mpg ~ cyl + (am + 1|cyl), mtcars)))
-    expect_error(check_formula(lme4::lFormula(mpg ~ cyl + (1+ am|cyl), mtcars)))
-    expect_null(check_formula(lme4::lFormula(mpg ~ cyl + (1|cyl), mtcars)))
-
-    expect_error(gen_model_list_lmer(mpg ~ cyl + (am|cyl), mtcars))
-
-})

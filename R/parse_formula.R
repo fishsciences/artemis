@@ -20,7 +20,6 @@ gen_model_list_lm = function(formula, data)
 gen_model_list_lmer = function(formula, data)
 {
     mf = lFormula(formula, data)
-    check_formula(mf)
 
     x = mf$X
     
@@ -41,12 +40,6 @@ gen_model_list_lmer = function(formula, data)
                 n_grp = n_grp))
 }
 
-check_formula = function(formula)
-{
-    ## if(!all(unlist(formula$reTrms$cnms) == "(Intercept)"))
-        ## stop("Sorry, only random intercepts are supported at this time.")
-    return(NULL)
-}
 
 mk_rand_mat = function(rt)
 {
