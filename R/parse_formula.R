@@ -43,8 +43,8 @@ gen_model_list_lmer = function(formula, data)
 
 check_formula = function(formula)
 {
-    if(!all(unlist(formula$reTrms$cnms) == "(Intercept)"))
-        stop("Sorry, only random intercepts are supported at this time.")
+    ## if(!all(unlist(formula$reTrms$cnms) == "(Intercept)"))
+        ## stop("Sorry, only random intercepts are supported at this time.")
     return(NULL)
 }
 
