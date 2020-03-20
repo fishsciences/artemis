@@ -51,7 +51,7 @@ functions{
 	int n_grps = size(group_ends);
 	int start = 1;
 	vector[dims(raw_betas)[1]] ans = raw_betas;
-	
+
 	for(i in 1:n_grps){
 	  ans[group_ends[i]] = -sum(ans[start:(group_ends[i] - 1)]);
 	  start = group_ends[i] + 1;
@@ -77,8 +77,8 @@ functions{
 	vector[n] betas;
 	
 	for(i in 1:n)
-	  betas[i] = raw_betas[n] * random_sigmas[grps[n]];
-	
+	  betas[i] = raw_betas[i] * random_sigmas[grps[i]];
+		
 	return betas;  
   }
 }
@@ -117,8 +117,9 @@ transformed data{
 
   int group_ends[has_random ? n_grp : 0];
   
-  if(has_random)
+  if(has_random){
 	group_ends = get_group_end(groups);
+  }
 }
 
 parameters{
@@ -133,7 +134,7 @@ transformed parameters{
   vector[has_random ? n_rand : 0] rand_betas;
   if(has_random){
 	rand_betas = groups_sum_to_zero(rand_betas_raw, group_ends);
-	rand_betas = make_random_betas(rand_betas_raw, groups, rand_sigma);
+  	rand_betas = make_random_betas(rand_betas, groups, rand_sigma);
   }
 }
 
