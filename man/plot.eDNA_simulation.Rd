@@ -4,8 +4,15 @@
 \alias{plot.eDNA_simulation}
 \title{Plot method for eDNA simulations}
 \usage{
-\method{plot}{eDNA_simulation}(x, y, response = "Cq_star",
-  probs = c(0.025, 0.975), alpha = 0.1, jitter_width = 0.35, ...)
+\method{plot}{eDNA_simulation}(
+  x,
+  y,
+  response = "Cq_star",
+  probs = c(0.025, 0.975),
+  alpha = 0.1,
+  jitter_width = 0.35,
+  ...
+)
 }
 \arguments{
 \item{x}{object of class eDNA_simulation}

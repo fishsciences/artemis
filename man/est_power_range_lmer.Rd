@@ -5,17 +5,40 @@
 \alias{est_power_range_lmer}
 \title{Estimate power for a range of replicates}
 \usage{
-est_power_range_lm(formula, variable_list, betas, sigma_Cq,
-  std_curve_alpha, std_curve_beta, type = c("exclude_zero", "accuracy"),
-  rep_range = seq(2, 20, 2), accuracy_level = 0.2, conf_level = 0.95,
-  n_sim = 200L, probs = conf_to_probs(conf_level), upper_Cq = 40,
-  verbose = FALSE)
+est_power_range_lm(
+  formula,
+  variable_list,
+  betas,
+  sigma_Cq,
+  std_curve_alpha,
+  std_curve_beta,
+  type = c("exclude_zero", "accuracy"),
+  rep_range = seq(2, 20, 2),
+  accuracy_level = 0.2,
+  conf_level = 0.95,
+  n_sim = 200L,
+  probs = conf_to_probs(conf_level),
+  upper_Cq = 40,
+  verbose = FALSE
+)
 
-est_power_range_lmer(formula, variable_list, betas, sigma_Cq, sigma_rand,
-  std_curve_alpha, std_curve_beta, type = c("exclude_zero", "accuracy"),
-  rep_range = seq(2, 20, 2), accuracy_level = 0.2, conf_level = 0.95,
-  n_sim = 200L, probs = conf_to_probs(conf_level), upper_Cq = 40,
-  verbose = FALSE)
+est_power_range_lmer(
+  formula,
+  variable_list,
+  betas,
+  sigma_Cq,
+  sigma_rand,
+  std_curve_alpha,
+  std_curve_beta,
+  type = c("exclude_zero", "accuracy"),
+  rep_range = seq(2, 20, 2),
+  accuracy_level = 0.2,
+  conf_level = 0.95,
+  n_sim = 200L,
+  probs = conf_to_probs(conf_level),
+  upper_Cq = 40,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{formula}{a model formula, e.g. \code{y ~ x1 + x2}. For

@@ -4,7 +4,8 @@
 \name{eDNA_data}
 \alias{eDNA_data}
 \title{eDNA_data}
-\format{A data frame of 732 observations and 7 variables associated with individaul eDNA samples.
+\format{
+A data frame of 732 observations and 7 variables associated with individaul eDNA samples.
  \describe{
    \item{Date}{Date of sample, yyyy-mm-dd}
    \item{SampleID}{Represents a single Sterivex filter, associated with 8-12 extractions (technical replicates)}
@@ -13,7 +14,8 @@
    \item{Distance}{Distance (in meters) from the 'source' of eDNA, which was a small underwater enclosure containing 22.5 deceased individual (hatchery-origin) Delta Smelt.}
    \item{Volume}{Volume (in milliliters) of water pulled through the Sterivex filter in the sample.}
    \item{Cq}{Quantification cycle of qPCR - lower values represent higher concentration of eDNA.  Cq == 40.0 indicates no eDNA present (the cutoff value for amplification cycles during qPCR).}
-   }}
+   }
+}
 \usage{
 eDNA_data
 }

@@ -4,8 +4,13 @@
 \alias{print.eDNA_simulation}
 \title{Print eDNA simulation}
 \usage{
-\method{print}{eDNA_simulation}(x, FUN = summary,
-  digits = getOption("digits"), show_variables = FALSE, ...)
+\method{print}{eDNA_simulation}(
+  x,
+  FUN = summary,
+  digits = getOption("digits"),
+  show_variables = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{object of class eDNA_simulation}

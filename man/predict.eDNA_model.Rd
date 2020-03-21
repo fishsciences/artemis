@@ -5,12 +5,16 @@
 \alias{predict.eDNA_model_lmer}
 \title{Predict eDNA model}
 \usage{
-\method{predict}{eDNA_model}(object, newdata = NULL,
-  include_sigma = FALSE, interval = FALSE,
-  interval_fun = posterior_interval, ...)
+\method{predict}{eDNA_model}(
+  object,
+  newdata = NULL,
+  include_sigma = FALSE,
+  interval = FALSE,
+  interval_fun = posterior_interval,
+  ...
+)
 
-\method{predict}{eDNA_model_lmer}(object, newdata = NULL, type = c(),
-  ...)
+\method{predict}{eDNA_model_lmer}(object, newdata = NULL, type = c(), ...)
 }
 \arguments{
 \item{object}{an object of class eDNA_lm{er}}

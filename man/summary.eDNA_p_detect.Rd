@@ -4,8 +4,7 @@
 \alias{summary.eDNA_p_detect}
 \title{Summary method for eDNA p(detect)}
 \usage{
-\method{summary}{eDNA_p_detect}(object, probs = c(0.025, 0.5, 0.975),
-  ...)
+\method{summary}{eDNA_p_detect}(object, probs = c(0.025, 0.5, 0.975), ...)
 }
 \arguments{
 \item{object}{an object of class eDNA_p_detect}

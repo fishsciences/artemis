@@ -4,8 +4,16 @@
 \alias{plot.eDNA_p_detect}
 \title{Plot p(detect)}
 \usage{
-\method{plot}{eDNA_p_detect}(x, y, probs = c(0.025, 0.975), ylim = c(0,
-  1), point_size = 2.5, n_breaks = 5, error_width = rel(1.5), ...)
+\method{plot}{eDNA_p_detect}(
+  x,
+  y,
+  probs = c(0.025, 0.975),
+  ylim = c(0, 1),
+  point_size = 2.5,
+  n_breaks = 5,
+  error_width = rel(1.5),
+  ...
+)
 }
 \arguments{
 \item{x}{object of class eDNA_p_detect}

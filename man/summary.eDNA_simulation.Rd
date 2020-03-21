@@ -4,8 +4,7 @@
 \alias{summary.eDNA_simulation}
 \title{Summary of eDNA simulations}
 \usage{
-\method{summary}{eDNA_simulation}(object, var = "Cq_star",
-  probs = c(0.025, 0.5, 0.975), ...)
+\method{summary}{eDNA_simulation}(object, var = "Cq_star", probs = c(0.025, 0.5, 0.975), ...)
 }
 \arguments{
 \item{object}{an object of class eDNA_simulation_*}

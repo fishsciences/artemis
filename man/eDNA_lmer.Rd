@@ -5,13 +5,35 @@
 \alias{eDNA_lmer}
 \title{Fit eDNA Model}
 \usage{
-eDNA_lm(formula, data, std_curve_alpha, std_curve_beta, upper_Cq = 40,
-  n_chain = 4L, iters = 1000L, verbose = FALSE,
-  sink_file = tempfile(), ...)
+eDNA_lm(
+  formula,
+  data,
+  std_curve_alpha,
+  std_curve_beta,
+  upper_Cq = 40,
+  n_chain = 4L,
+  iters = 1000L,
+  verbose = FALSE,
+  sink_file = tempfile(),
+  betas_prior_mu = numeric(),
+  betas_prior_sd = numeric(),
+  ...
+)
 
-eDNA_lmer(formula, data, std_curve_alpha, std_curve_beta, upper_Cq = 40,
-  n_chain = 4L, iters = 500L, verbose = FALSE,
-  sink_file = tempfile(), ...)
+eDNA_lmer(
+  formula,
+  data,
+  std_curve_alpha,
+  std_curve_beta,
+  upper_Cq = 40,
+  n_chain = 4L,
+  iters = 500L,
+  verbose = FALSE,
+  betas_prior_mu = numeric(),
+  betas_prior_sd = numeric(),
+  sink_file = tempfile(),
+  ...
+)
 }
 \arguments{
 \item{formula}{a formula, specifying the relationship between the
@@ -40,6 +62,16 @@ that less than two is not recommended.}
 \item{sink_file}{character, a file to write the console output to
 if \code{verbose = FALSE}, by default writes to
 \code{tempfile()}}
+
+\item{betas_prior_mu}{numeric vector of the same length as the
+number of fixed effects in the model. Each element will
+correspond to the mean value for the prior normal distribution
+for the parameter. If no values are provided,}
+
+\item{betas_prior_sd}{numeric vector of the same length as the
+number of fixed effects in the model. Each element will
+correspond to the std. deviation value for the prior normal
+distribution for the parameter.}
 
 \item{...}{additional arguments passed to
 \code{\link[rstan]{sampling}}}
