@@ -30,10 +30,7 @@ test_that("Lmer", {
     ans2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID), eDNA_data,
                    std_curve_alpha = 21.2, std_curve_beta = -1.5, verbose = FALSE)
 
-    ## ans2 = eDNA_lmer(Cq ~ Distance + Volume + (1|Distance), eDNA_data,
-    ##                  std_curve_alpha = 21.2, std_curve_beta = -1.5, verbose = FALSE)
-
-    
+   
     summary(ans2)
 
     ans2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID),
