@@ -111,7 +111,7 @@ data{
   real upper_Cq; // upper value that Cq can take
 
   // for HS prior - from Piironen and Vehtari 2018
-  real<lower = 0> scale_global; // scale for the half -t prior for tau
+  real<lower = 0> global_scale; // scale for the half -t prior for tau
   real<lower = 1> nu_global; // degrees of freedom for the half -t priors for tau
   real<lower = 1> nu_local; // degrees of freedom for the half - t priors for lambdas
   real<lower = 0> slab_scale; // slab scale for the regularized horseshoe
@@ -136,11 +136,19 @@ parameters{
   real<lower = 0> sigma_Cq;
   vector[has_random ? n_rand : 0] rand_betas_raw;
   vector<lower = 0>[has_random ? n_grp : 0] rand_sigma;
+  real<lower=0> tau; // global shrinkage parameter
+  vector<lower=0>[n_vars] lambda; // local shrinkage parameter
+  real<lower=0> caux;
 }
 
 transformed parameters{
-  vector[n_vars] betas = R_ast_inverse * thetas;
+  vector[n_vars] betas;
   vector[has_random ? n_rand : 0] rand_betas;
+  real<lower=0> c = slab_scale * sqrt(caux); // slab scale
+  vector<lower=0>[n_vars] lambda_tilde = sqrt(c ^ 2 * square(lambda) ./
+										 (c ^ 2 + tau ^ 2 * square(lambda)));
+  
+  betas = R_ast_inverse * thetas .* lambda_tilde * tau;
   if(has_random){
 	rand_betas = groups_sum_to_zero(rand_betas_raw, group_ends);
   	rand_betas = make_random_betas(rand_betas, groups, rand_sigma);
@@ -148,7 +156,7 @@ transformed parameters{
 }
 
 model{
-  vector[N] ln_conc_hat = Q_ast * thetas;
+  vector[N] ln_conc_hat = X * betas;
   vector[N] Cq_hat;
 
   if(has_random)
@@ -157,14 +165,19 @@ model{
   // Priors
   sigma_Cq ~ normal(0, 1);
   rand_sigma ~ normal(0, 1);
-  
+
+  // HS+
+  lambda ~ student_t(nu_local, 0, 1);
+  tau ~ student_t(nu_global, 0, global_scale * 1); // was sigma
+  caux ~ inv_gamma(0.5 * slab_df, 0.5 * slab_df);
+
   // not sure if this works
   rand_betas_raw ~ normal(0, 1);
 
   if(has_prior){
 	betas ~ normal(prior_mu, prior_sd);
   } else {
-	thetas ~ normal(0 , 1);
+	thetas ~ normal(0, 1);
   }
   
   Cq_hat = ln_conc_hat * std_curve_beta + std_curve_alpha;
