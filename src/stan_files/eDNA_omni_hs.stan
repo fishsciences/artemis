@@ -91,6 +91,12 @@ data{
   matrix[N, n_vars] X;
   vector[N] y; // Cq 
 
+  // intercept stuff
+  int<lower = 0, upper = 1> has_intercept;
+  real intercept_mu;
+  real intercept_sd;
+  int<lower = 0, upper = 1> hs_prior; // 0 = normal, 1 = hs_plus
+
   // stuff for random effects
   int<lower = 0, upper = 1> has_random;
   int n_rand; // number of columns of rand effects
@@ -100,9 +106,8 @@ data{
 
   // user priors
   int<lower = 0, upper = 1> has_prior;
-  int n_prior;
-  vector[n_prior] prior_mu;
-  vector[n_prior] prior_sd;  
+  vector[n_vars] prior_mu;
+  vector[n_vars] prior_sd;  
   
   // alpha and beta of the ln_conc -> Cq conversion according to
   // beta * log(conc) + alpha
@@ -132,23 +137,33 @@ transformed data{
 }
 
 parameters{
+  real alpha[has_intercept ? 1 : 0];
   vector[n_vars] thetas;
   real<lower = 0> sigma_Cq;
   vector[has_random ? n_rand : 0] rand_betas_raw;
   vector<lower = 0>[has_random ? n_grp : 0] rand_sigma;
-  real<lower=0> tau; // global shrinkage parameter
-  vector<lower=0>[n_vars] lambda; // local shrinkage parameter
-  real<lower=0> caux;
+  real<lower=0> tau[hs_prior ? 1 : 0]; // global shrinkage parameter
+  vector<lower=0>[hs_prior ? n_vars : 0] lambda; // local shrinkage parameter
+  real<lower=0> caux[hs_prior ? 1 : 0];
 }
 
 transformed parameters{
   vector[n_vars] betas;
   vector[has_random ? n_rand : 0] rand_betas;
-  real<lower=0> c = slab_scale * sqrt(caux); // slab scale
-  vector<lower=0>[n_vars] lambda_tilde = sqrt(c ^ 2 * square(lambda) ./
-										 (c ^ 2 + tau ^ 2 * square(lambda)));
+  real<lower=0> c[hs_prior ? 1 : 0];
+
+  vector<lower=0>[hs_prior ? n_vars : 0] lambda_tilde;
+
+  if(hs_prior){
+	c[1] = slab_scale * sqrt(caux[1]); // slab scale
+	lambda_tilde = sqrt(c[1] ^ 2 * square(lambda) ./
+						(c[1] ^ 2 + tau[1] ^ 2 * square(lambda)));
+
+	betas = R_ast_inverse * thetas .* lambda_tilde * tau[1];
+  } else {
+	betas = R_ast_inverse * thetas;
+  }
   
-  betas = R_ast_inverse * thetas .* lambda_tilde * tau;
   if(has_random){
 	rand_betas = groups_sum_to_zero(rand_betas_raw, group_ends);
   	rand_betas = make_random_betas(rand_betas, groups, rand_sigma);
@@ -156,21 +171,27 @@ transformed parameters{
 }
 
 model{
-  vector[N] ln_conc_hat = X * betas;
+  vector[N] ln_conc_hat = has_intercept ? alpha[1] + X * betas :
+	                                      X * betas;
   vector[N] Cq_hat;
 
   if(has_random)
 	ln_conc_hat = ln_conc_hat + rand_x * rand_betas;
   
   // Priors
+  if(has_intercept)
+	alpha ~ normal(intercept_mu, intercept_sd);
+  
   sigma_Cq ~ normal(0, 1);
   rand_sigma ~ normal(0, 1);
 
   // HS+
-  lambda ~ student_t(nu_local, 0, 1);
-  tau ~ student_t(nu_global, 0, global_scale * 1); // was sigma
-  caux ~ inv_gamma(0.5 * slab_df, 0.5 * slab_df);
-
+  if(hs_prior) {
+	lambda ~ student_t(nu_local, 0, 1);
+	tau ~ student_t(nu_global, 0, global_scale * 1); // was sigma
+	caux ~ inv_gamma(0.5 * slab_df, 0.5 * slab_df);
+  }
+  
   // not sure if this works
   rand_betas_raw ~ normal(0, 1);
 
