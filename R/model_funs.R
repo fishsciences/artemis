@@ -6,7 +6,8 @@ eDNA_lm = function(formula, data,
                    upper_Cq = 40,
                    n_chain = 4L, iters = 1000L, verbose = FALSE,
                    sink_file = tempfile(),
-                   betas_prior_mu = numeric(), betas_prior_sd = numeric(), ...)
+                   prior_intercept = normal(-15, 10), priors = normal(),
+                   QR = TRUE, ...)
 {
     
     ml = gen_model_list_lm(formula, data)
@@ -14,8 +15,8 @@ eDNA_lm = function(formula, data,
     # This works because Stan ignores extra input data
     md = prep_data(ml, std_curve_alpha, std_curve_beta,
                    Cq_upper = upper_Cq, type = "model",
-                   b_prior_mu = betas_prior_mu,
-                   b_prior_sd = betas_prior_sd)
+                   prior_int = prior_intercept,
+                   prior_beta = priors, qr = QR)
     md$y = ml$y
     fit = run_model(data = md, n_chain = n_chain, iters = iters,
                     verbose = verbose, sink_file = sink_file, ...)
@@ -126,7 +127,7 @@ eDNA_lmer = function(formula, data,
                      upper_Cq = 40,
                      n_chain = 4L, iters = 500L,
                      verbose = FALSE,
-                     betas_prior_mu = numeric(), betas_prior_sd = numeric(),
+                     prior_intercept = normal(-15, 10), priors = normal(),
                      sink_file = tempfile(), ...)
 {
     
@@ -134,8 +135,8 @@ eDNA_lmer = function(formula, data,
     
     md = prep_data(ml, std_curve_alpha, std_curve_beta,
                    Cq_upper = upper_Cq, type = "model",
-                   b_prior_mu = betas_prior_mu,
-                   b_prior_sd = betas_prior_sd)
+                   prior_int = prior_intercept,
+                   prior_beta = priors, qr = QR)
 
     md$y = ml$y
 
@@ -150,7 +151,7 @@ eDNA_lmer = function(formula, data,
     return(fit)
 }
 
-run_model = function(model = stanmodels$eDNA_omni,
+run_model = function(model = stanmodels$eDNA_omni_hs,
                      data, n_chain,
                   iters, verbose, sink_file, ...)
 

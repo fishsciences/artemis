@@ -4,7 +4,7 @@ prep_data = function(mod_list,
                      alpha, beta,
                      Cq_sd, betas,
                      Cq_upper = 40, rand_sd = double(0),
-                     b_prior_mu, b_prior_sd,
+                     prior_int, prior_beta, qr, 
                      type = c("model", "sim"))
 {
     model_data = list(N = length(mod_list$y),
@@ -14,12 +14,19 @@ prep_data = function(mod_list,
                       std_curve_beta = beta,
                       upper_Cq = Cq_upper,
                       rand_sigma = as.array(rand_sd),
-                      prior_mu = b_prior_mu,
-                      prior_sd = b_prior_sd)
-
-    model_data$has_prior = ifelse(length(b_prior_mu), 1, 0)
-    model_data$n_prior = length(b_prior_mu)
+                      intercept_mu = prior_int$location,
+                      intercept_sd = prior_int$scale)
+    prior_beta = prep_priors(prior_beta, mod_list$x)
+    model_data$prior_mu = prior_beta$location
+    model_data$prior_sd = prior_beta$scale
+    model_data$has_intercept = has_intercept(mod_list$x)
     
+    ## placeholder for HS priors
+    model_data[c("global_scale", "nu_global","nu_local", "slab_scale", "slab_df")] = 1.0
+    model_data$hs_prior = 0L
+    
+    model_data$has_prior = as.integer(!qr)
+            
     if(is.null(mod_list$groups)){
         model_data$has_random = 0L
         model_data$n_rand = 0L
@@ -40,4 +47,24 @@ prep_data = function(mod_list,
     }
 
     return(model_data)
+}
+
+
+prep_priors = function(priors, X)
+{
+    n = ncol(X)
+    
+    if(!all(c("location", "scale", "df") %in% names(priors)))
+        stop("Priors must be a named list with elements 'location', 'scale', and 'df'")
+
+    if(length(priors$location) != 1 && length(priors$location) != n)
+        stop("Prior location must either be length 1 or length ", n)
+
+    if(length(priors$location) != n)
+        priors$location = rep(priors$location, n)
+
+    if(length(priors$scale) != n)
+        priors$scale = rep(priors$scale, n)
+    
+    return(priors)
 }
