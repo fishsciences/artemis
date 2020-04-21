@@ -34,3 +34,7 @@ in_interval = function(ci, beta)
     beta > ci[1] & beta < ci[2]
 }
 
+has_intercept = function(x)
+{
+    as.integer(any(colnames(x) == "(Intercept)"))
+}
