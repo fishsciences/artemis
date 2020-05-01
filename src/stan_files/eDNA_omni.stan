@@ -96,6 +96,11 @@ data{
   int groups[n_rand];
   matrix[N,n_rand] rand_x;
 
+  // intercepts
+  int<lower = 0, upper = 1> has_inter;
+  real prior_int_mu;
+  real<lower = 0> prior_int_sd;
+  
   // user priors
   int<lower = 0, upper = 1> has_prior;
   int n_prior;
@@ -110,19 +115,34 @@ data{
 }
 
 transformed data{
+  matrix[N, n_vars] Xc; // centered X
+  vector[n_vars - has_inter] mean_x; // x means
+
   // thin and scale the QR decomposition
-  matrix[N, n_vars] Q_ast = qr_thin_Q(X) * sqrt(N - 1);
-  matrix[n_vars, n_vars] R_ast = qr_thin_R(X) / sqrt(N - 1);
-  matrix[n_vars, n_vars] R_ast_inverse = inverse(R_ast);
+  matrix[N, n_vars] Q_ast; 
+  matrix[n_vars, n_vars] R_ast; 
+  matrix[n_vars, n_vars] R_ast_inverse; 
 
   int group_ends[has_random ? n_grp : 0];
-  
+
   if(has_random){
 	group_ends = get_group_end(groups);
   }
+  
+  if(has_inter) // copy over intercept
+	Xc[,1] = X[,1];
+  
+  for(i in (has_inter + 1):n_vars){ // either start at 1 (no inter) or 2 (inter)
+	mean_x[i - has_inter] = mean(X[,i]);
+	Xc[,i] = X[,i] - mean_x[i - has_inter];
+  }
+  
+  Q_ast = qr_thin_Q(Xc) * sqrt(N - 1);      
+  R_ast = qr_thin_R(Xc) / sqrt(N - 1);
+  R_ast_inverse = inverse(R_ast);
 }
-
 parameters{
+  vector[has_inter ? 1 : 0] temp_intercept;
   vector[n_vars] thetas;
   real<lower = 0> sigma_Cq;
   vector[has_random ? n_rand : 0] rand_betas_raw;
@@ -153,7 +173,10 @@ model{
   rand_betas_raw ~ normal(0, 1);
 
   if(has_prior){
-	betas ~ normal(prior_mu, prior_sd);
+	if(has_inter)
+	  betas[1] ~ normal(prior_int_mu, prior_int_sd);
+	for(i in (has_inter + 1):n_vars)
+	  betas[i] ~ normal(prior_mu[i], prior_sd[i]);
   } else {
 	thetas ~ normal(0 , 1);
   }
