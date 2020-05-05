@@ -85,7 +85,7 @@ functions{
 
 data{
   int N;
-  int n_vars;
+  int n_vars; // excludes intercept
   matrix[N, n_vars] X;
   vector[N] y; // Cq 
 
@@ -116,7 +116,7 @@ data{
 
 transformed data{
   matrix[N, n_vars] Xc; // centered X
-  vector[n_vars - has_inter] mean_x; // x means
+  vector[n_vars] mean_x; // x means
 
   // thin and scale the QR decomposition
   matrix[N, n_vars] Q_ast; 
@@ -128,19 +128,19 @@ transformed data{
   if(has_random){
 	group_ends = get_group_end(groups);
   }
-  
-  if(has_inter) // copy over intercept
-	Xc[,1] = X[,1];
-  
-  for(i in (has_inter + 1):n_vars){ // either start at 1 (no inter) or 2 (inter)
-	mean_x[i - has_inter] = mean(X[,i]);
-	Xc[,i] = X[,i] - mean_x[i - has_inter];
+
+  if(n_vars > 0) {
+	for(i in 1:n_vars){ // either start at 1 (no inter) or 2 (inter)
+	  mean_x[i] = mean(X[,i]);
+	  Xc[,i] = X[,i] - mean_x[i];
+	}
+	
+    Q_ast = qr_thin_Q(Xc) * sqrt(N - 1);      
+	R_ast = qr_thin_R(Xc) / sqrt(N - 1);
+	R_ast_inverse = inverse(R_ast);
   }
-  
-  Q_ast = qr_thin_Q(Xc) * sqrt(N - 1);      
-  R_ast = qr_thin_R(Xc) / sqrt(N - 1);
-  R_ast_inverse = inverse(R_ast);
 }
+
 parameters{
   vector[has_inter ? 1 : 0] temp_intercept;
   vector[n_vars] thetas;
@@ -150,16 +150,25 @@ parameters{
 }
 
 transformed parameters{
-  vector[n_vars] betas = R_ast_inverse * thetas;
+  vector[n_vars] betas;
   vector[has_random ? n_rand : 0] rand_betas;
+
   if(has_random){
 	rand_betas = groups_sum_to_zero(rand_betas_raw, group_ends);
   	rand_betas = make_random_betas(rand_betas, groups, rand_sigma);
   }
+
+  if(n_vars > 0)
+	betas = R_ast_inverse * thetas;
 }
 
 model{
-  vector[N] ln_conc_hat = Q_ast * thetas;
+  vector[N] ln_conc_hat;
+  if(n_vars > 0) {
+	 ln_conc_hat = Q_ast * thetas + (has_inter ? temp_intercept[1] : 0.0);
+  } else {
+	ln_conc_hat = temp_intercept;
+  }
   vector[N] Cq_hat;
 
   if(has_random)
@@ -172,20 +181,23 @@ model{
   // not sure if this works
   rand_betas_raw ~ normal(0, 1);
 
-  if(has_prior){
-	if(has_inter)
-	  betas[1] ~ normal(prior_int_mu, prior_int_sd);
-	for(i in (has_inter + 1):n_vars)
-	  betas[i] ~ normal(prior_mu[i], prior_sd[i]);
-  } else {
-	thetas ~ normal(0 , 1);
+  if(has_inter)
+	temp_intercept ~ normal(prior_int_mu, prior_int_sd);
+
+  if(n_vars > 0) {
+	if(has_prior){ 
+	  for(i in 1:n_vars)
+		betas[i] ~ normal(prior_mu[i], prior_sd[i]);
+	} else {
+	  thetas ~ normal(0 , 1);
+	}
   }
-  
+
   Cq_hat = ln_conc_hat * std_curve_beta + std_curve_alpha;
   
   for(n in 1:N){
 	if(y[n] < upper_Cq) {
-	  y[n] ~ normal(Cq_hat[n], sigma_Cq);  
+		y[n] ~ normal(Cq_hat[n], sigma_Cq);  
 	} else {
 	  target += normal_lccdf(upper_Cq | Cq_hat[n], sigma_Cq);
 	}
@@ -193,5 +205,10 @@ model{
 }
 
 generated quantities{
- 
+  real intercept[has_inter ? 1 : 0];
+  if(n_vars > 0){
+	intercept[1] = temp_intercept[1] - dot_product(mean_x, betas);
+  } else {
+	intercept[1] = temp_intercept[1];
+  }
 }
