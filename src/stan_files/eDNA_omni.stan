@@ -164,12 +164,13 @@ transformed parameters{
 
 model{
   vector[N] ln_conc_hat;
+  vector[N] Cq_hat;
+
   if(n_vars > 0) {
 	 ln_conc_hat = Q_ast * thetas + (has_inter ? temp_intercept[1] : 0.0);
   } else {
 	ln_conc_hat = temp_intercept;
   }
-  vector[N] Cq_hat;
 
   if(has_random)
 	ln_conc_hat = ln_conc_hat + rand_x * rand_betas;
