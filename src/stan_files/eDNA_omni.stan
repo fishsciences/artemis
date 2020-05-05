@@ -169,7 +169,7 @@ model{
   if(n_vars > 0) {
 	 ln_conc_hat = Q_ast * thetas + (has_inter ? temp_intercept[1] : 0.0);
   } else {
-	ln_conc_hat = temp_intercept;
+	ln_conc_hat = rep_vector(temp_intercept[1], N);
   }
 
   if(has_random)
