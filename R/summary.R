@@ -62,6 +62,7 @@ summary.eDNA_simulation = function(object, var = "Cq_star",
 ##' @export
 summary.eDNA_model = function(object, probs = c(0.025, 0.5, 0.975), ...)
 {
+    
     res = apply(object@betas, 2, quantile, prob = probs, simplify = FALSE)
     
     if(!is.null(ncol(res))) {
@@ -70,11 +71,18 @@ summary.eDNA_model = function(object, probs = c(0.025, 0.5, 0.975), ...)
     } else {
         res = c(res, quantile(object@sigma_Cq, probs))
     }
-    res = data.frame(res)
+    beta_nms = c(colnames(object@x), "CQ sd")
     
+    if(length(object@intercept)){
+        inter = quantile(object@intercept, probs)
+        res = rbind(inter, res)
+        beta_nms = c("(Intercept)", beta_nms)
+    }
+        
+    res = data.frame(res)
+    rownames(res) = beta_nms
     colnames(res) = paste0(probs * 100, "%")
     
-    rownames(res) = c(colnames(object@x), "CQ sd")
     res = cbind(mean = colMeans(cbind(object@betas, object@sigma_Cq)),
                 res)
     

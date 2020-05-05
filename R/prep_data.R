@@ -8,9 +8,8 @@ prep_data = function(mod_list,
                      type = c("model", "sim"))
 {
     has_inter = has_intercept(mod_list$x)
-    i = grep("(Intercept)", colnames(mod_list$x), invert = TRUE)
-    x = as.data.frame(mod_list$x[,i])
-    n_vars = ifelse(is.null(ncol(x)), 0, ncol(x)) #inefficient
+    x = remove_intercept(mod_list$x)
+    n_vars = if(is.null(ncol(x))) 0 else ncol(x)
     model_data = list(N = length(mod_list$y),
                       n_vars = n_vars,
                       X = x,
@@ -48,4 +47,14 @@ prep_data = function(mod_list,
     }
 
     return(model_data)
+}
+
+remove_intercept = function(x)
+{
+    cnms = colnames(x)
+    i = grep("(Intercept)", cnms, invert = TRUE)
+
+    x = as.data.frame(x[,i])
+    colnames(x) = cnms[i]
+    return(x)
 }
