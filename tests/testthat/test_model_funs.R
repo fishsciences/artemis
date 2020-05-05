@@ -63,3 +63,9 @@ test_that("lm with priors", {
                   betas_prior_mu = c(-8,-2), betas_prior_sd =c(5,.1))
 
 })
+
+test_that("Intercepts", {
+    ans = eDNA_lm(Cq ~ 1,  eDNA_data,
+                  std_curve_alpha = 21.2, std_curve_beta = -1.5)
+
+})

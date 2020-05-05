@@ -7,16 +7,24 @@ prep_data = function(mod_list,
                      b_prior_mu, b_prior_sd,
                      type = c("model", "sim"))
 {
+    has_inter = has_intercept(mod_list$x)
+    i = grep("(Intercept)", colnames(mod_list$x), invert = TRUE)
+    x = as.data.frame(mod_list$x[,i])
+    n_vars = ifelse(is.null(ncol(x)), 0, ncol(x)) #inefficient
     model_data = list(N = length(mod_list$y),
-                      n_vars = ncol(mod_list$x),
-                      X = mod_list$x,
+                      n_vars = n_vars,
+                      X = x,
                       std_curve_alpha = alpha,
                       std_curve_beta = beta,
                       upper_Cq = Cq_upper,
                       rand_sigma = as.array(rand_sd),
                       prior_mu = b_prior_mu,
-                      prior_sd = b_prior_sd)
+                      prior_sd = b_prior_sd,
+                      has_inter = has_inter)
 
+    ## Temp for testing
+    model_data$prior_int_mu = 0
+    model_data$prior_int_sd = 10
     model_data$has_prior = ifelse(length(b_prior_mu), 1, 0)
     model_data$n_prior = length(b_prior_mu)
     

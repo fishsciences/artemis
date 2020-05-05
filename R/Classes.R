@@ -114,6 +114,7 @@ p_detect = function(y, thresh)
 ##' @export
 setClass("eDNA_model",
          slots = c(ln_conc = "matrix", Cq_star = "matrix",
+                   intercept = "array",
                    betas = "array", sigma_Cq = "array",
                    formula = "formula", x = "data.frame",
                    std_curve_alpha = "numeric", std_curve_beta = "numeric",
@@ -139,8 +140,11 @@ setAs("stanfit", "eDNA_model_lm", function(from) callNextMethod())
 setAs("stanfit", "eDNA_model",
       function(from){
           tmp = extract(from)
-          new("eDNA_model", 
-              betas = tmp$betas,
+          betas = if("betas" %in% names(tmp)) tmp$betas else array()
+          intercept = if("intercept" %in% names(tmp)) tmp$intercept else array()
+          new("eDNA_model",
+              intercept = intercept,
+              betas = betas,
               sigma_Cq = tmp$sigma_Cq,
               stanfit = from)
        
