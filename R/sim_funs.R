@@ -24,7 +24,7 @@ sim_eDNA_lm = function(formula, variable_list,
              "Required: ", ncol(ml$x), "\n")
 
     md = prep_data(ml, std_curve_alpha, std_curve_beta, sigma_Cq, betas,
-                   b_prior_mu = numeric(), b_prior_sd = numeric(), type = "sim")
+                   prior_int = normal(), prior_b = normal(), type = "sim")
 
     if(!verbose) sink(sink_file)
 
@@ -180,8 +180,7 @@ sim_eDNA_lmer = function(formula, variable_list,
     
     md = prep_data(ml, std_curve_alpha, std_curve_beta, sigma_Cq,
                    betas = betas, rand_sd = sigma_rand,
-                   b_prior_mu = numeric(), b_prior_sd = numeric(),
-                   type = "sim")
+                   prior_int = normal(), prior_b = normal(), type = "sim")
 
     if(!verbose) sink(sink_file)
     

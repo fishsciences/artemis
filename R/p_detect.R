@@ -98,7 +98,8 @@ est_p_detect = function(variable_levels,
             std_curve_alpha = model_fit@std_curve_alpha
             std_curve_beta = model_fit@std_curve_beta            
         }
-        ln_conc_hat = apply(model_fit@betas, 1, function(y) variable_levels %*% y)
+        inter = if(length(model_fit@intercept)) as.vector(model_fit@intercept) else 0
+        ln_conc_hat = apply(model_fit@betas, 1, function(y) variable_levels %*% y) + inter
     }
     
     Cq_hat = ln_conc_hat * std_curve_beta + std_curve_alpha

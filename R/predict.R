@@ -30,14 +30,15 @@ predict.eDNA_model = function(object, newdata = NULL, include_sigma = FALSE,
 
     
     if(!is.null(newdata)){
-        if(ncol(object@x) != ncol(object@betas))
+        if(ncol(newdata) != ncol(object@betas))
             stop("Please provide the same number of predictors as the original data, including the intercept")
         X = newdata
     } else {
         X = object@x
     }
+    inter = if(length(object@intercept)) as.vector(object@intercept) else 0
     
-    ln_conc = apply(object@betas, 1, function(x) as.matrix(X) %*% x)
+    ln_conc = apply(object@betas, 1, function(x) (as.matrix(X) %*% x)) + inter
     Cq_hat = object@std_curve_alpha + object@std_curve_beta * ln_conc
     if(include_sigma) {
         Cq_star = sapply(seq(ncol(Cq_hat)), function(i)

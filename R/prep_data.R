@@ -8,7 +8,12 @@ prep_data = function(mod_list,
                      type = c("model", "sim"))
 {
     has_inter = has_intercept(mod_list$x)
-    x = remove_intercept(mod_list$x)
+    if(type == "model"){
+        x = remove_intercept(mod_list$x)
+    } else {
+        x = mod_list$x
+    }
+    
     n_vars = if(is.null(ncol(x))) 0 else ncol(x)
     priors = prep_priors(prior_b, x, mod_list$y)
     model_data = list(N = length(mod_list$y),
