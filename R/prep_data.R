@@ -4,12 +4,13 @@ prep_data = function(mod_list,
                      alpha, beta,
                      Cq_sd, betas,
                      Cq_upper = 40, rand_sd = double(0),
-                     b_prior_mu, b_prior_sd,
+                     prior_int, prior_b,
                      type = c("model", "sim"))
 {
     has_inter = has_intercept(mod_list$x)
     x = remove_intercept(mod_list$x)
     n_vars = if(is.null(ncol(x))) 0 else ncol(x)
+    priors = prep_priors(prior_b, x)
     model_data = list(N = length(mod_list$y),
                       n_vars = n_vars,
                       X = x,
@@ -17,15 +18,13 @@ prep_data = function(mod_list,
                       std_curve_beta = beta,
                       upper_Cq = Cq_upper,
                       rand_sigma = as.array(rand_sd),
-                      prior_mu = b_prior_mu,
-                      prior_sd = b_prior_sd,
+                      prior_mu = priors$location,
+                      prior_sd = priors$scale,
                       has_inter = has_inter)
 
-    ## Temp for testing
-    model_data$prior_int_mu = 0
-    model_data$prior_int_sd = 10
-    model_data$has_prior = ifelse(length(b_prior_mu), 1, 0)
-    model_data$n_prior = length(b_prior_mu)
+    model_data$prior_int_mu = prior_int$location
+    model_data$prior_int_sd = prior_int$scale
+    model_data$has_prior = 1L # for testing ifelse(length(b_prior_mu), 1, 0)
     
     if(is.null(mod_list$groups)){
         model_data$has_random = 0L
@@ -57,4 +56,22 @@ remove_intercept = function(x)
     x = as.data.frame(x[,i])
     colnames(x) = cnms[i]
     return(x)
+}
+
+prep_priors = function(prior, x, y)
+{
+    n = ncol(x)
+    
+    if(length(prior$location) < n)
+        prior$location = rep(prior$location, n)
+    if(length(prior$scale) < n)
+        prior$scale = rep(prior$scale, n)
+    if(prior$autoscale){
+        prior$scale = prior_scale * sd(y)
+        multi_val = apply(x, 2, function(x) length(unique) > 2)
+        x_sd = apply(x, 2, sd)
+        prior$scale[multi_val] = prior$scale[multi_val] * x_sd[multi_val] 
+    }
+    
+    return(prior)
 }

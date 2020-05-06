@@ -6,7 +6,8 @@ eDNA_lm = function(formula, data,
                    upper_Cq = 40,
                    n_chain = 4L, iters = 1000L, verbose = FALSE,
                    sink_file = tempfile(),
-                   betas_prior_mu = numeric(), betas_prior_sd = numeric(), ...)
+                   prior_intercept = normal(location = -15, scale = 10),
+                   priors = normal(), ...)
 {
     
     ml = gen_model_list_lm(formula, data)
@@ -14,8 +15,8 @@ eDNA_lm = function(formula, data,
     # This works because Stan ignores extra input data
     md = prep_data(ml, std_curve_alpha, std_curve_beta,
                    Cq_upper = upper_Cq, type = "model",
-                   b_prior_mu = betas_prior_mu,
-                   b_prior_sd = betas_prior_sd)
+                   prior_int = prior_intercept,
+                   prior_b = priors)
     md$y = ml$y
     fit = run_model(data = md, n_chain = n_chain, iters = iters,
                     verbose = verbose, sink_file = sink_file, ...)
@@ -77,19 +78,24 @@ eDNA_lm = function(formula, data,
 ##' @param iters integer, the number of iterations per chain
 ##' @param verbose logical, when TRUE output from
 ##'     \code{rstan::sampling} is written to the console.
-##' @param betas_prior_mu numeric vector of the same length as the
-##'     number of fixed effects in the model. Each element will
-##'     correspond to the mean value for the prior normal distribution
-##'     for the parameter. If no values are provided, 
-##' @param betas_prior_sd numeric vector of the same length as the
-##'     number of fixed effects in the model. Each element will
-##'     correspond to the std. deviation value for the prior normal
-##'     distribution for the parameter.
+##' @param prior_intercept named list such as created by
+##'     \code{rstanarm::normal}. The list must contain elements named
+##'     "location" and "scale", which are the location and scale for a
+##'     normal prior over the intercept. Ignored when the intercept is
+##'     omitted in the model formula.
+##' @param priors named list such as created by
+##'     \code{rstanarm::normal}. The list must contain elements named
+##'     "location" and "scale", which are the location and scale for a
+##'     normal prior over the betas, and "autoscale". If a single
+##'     value is provided, this value will be repeated for each
+##'     beta. If \code{autoscale = TRUE}, the scale of the priors is
+##'     scaled by the sd of the predictors similar to rstanarm handles
+##'     them.
+##' @param ... additional arguments passed to
+##'     \code{\link[rstan]{sampling}}
 ##' @param sink_file character, a file to write the console output to
 ##'     if \code{verbose = FALSE}, by default writes to
 ##'     \code{tempfile()}
-##' @param ... additional arguments passed to
-##'     \code{\link[rstan]{sampling}}
 ##' @return S4 object, with the following slots: \describe{
 ##'     \item{ln_conc}{matrix, the posterior samples for the latent
 ##'     variable, eDNA concentration} \item{Cq_star}{matrix, the
@@ -126,7 +132,8 @@ eDNA_lmer = function(formula, data,
                      upper_Cq = 40,
                      n_chain = 4L, iters = 500L,
                      verbose = FALSE,
-                     betas_prior_mu = numeric(), betas_prior_sd = numeric(),
+                     prior_intercept = normal(location = -15, scale = 10),
+                     priors = normal(), ...)
                      sink_file = tempfile(), ...)
 {
     
@@ -134,8 +141,8 @@ eDNA_lmer = function(formula, data,
     
     md = prep_data(ml, std_curve_alpha, std_curve_beta,
                    Cq_upper = upper_Cq, type = "model",
-                   b_prior_mu = betas_prior_mu,
-                   b_prior_sd = betas_prior_sd)
+                   prior_int = prior_intercept,
+                   prior_b = priors)
 
     md$y = ml$y
 
