@@ -53,7 +53,8 @@ test_that("lm with priors", {
 
     ans = eDNA_lm(Cq ~ Distance, eDNA_data,
                   std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                  betas_prior_mu = c(-8,0), betas_prior_sd =c(1,1))
+                  prior_intercept = normal(-8,1),
+                  priors = normal(0, 1))
                   
     d = eDNA_data
     d$Distance = 5
