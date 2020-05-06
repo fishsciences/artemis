@@ -10,7 +10,7 @@ prep_data = function(mod_list,
     has_inter = has_intercept(mod_list$x)
     x = remove_intercept(mod_list$x)
     n_vars = if(is.null(ncol(x))) 0 else ncol(x)
-    priors = prep_priors(prior_b, x)
+    priors = prep_priors(prior_b, x, mod_list$y)
     model_data = list(N = length(mod_list$y),
                       n_vars = n_vars,
                       X = x,
@@ -61,17 +61,24 @@ remove_intercept = function(x)
 prep_priors = function(prior, x, y)
 {
     n = ncol(x)
+    if(n == 0){
+        prior$location = double(0)
+        prior$scale = double(0)
+        return(prior)
+    }
     
     if(length(prior$location) < n)
         prior$location = rep(prior$location, n)
     if(length(prior$scale) < n)
         prior$scale = rep(prior$scale, n)
+
     if(prior$autoscale){
-        prior$scale = prior_scale * sd(y)
+        prior$scale = prior$scale * sd(y)
         multi_val = apply(x, 2, function(x) length(unique) > 2)
         x_sd = apply(x, 2, sd)
         prior$scale[multi_val] = prior$scale[multi_val] * x_sd[multi_val] 
     }
+    prior[c("location","scale")] = lapply(prior[c("location","scale")], as.array)
     
     return(prior)
 }
