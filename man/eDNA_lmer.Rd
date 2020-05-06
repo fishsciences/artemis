@@ -14,9 +14,9 @@ eDNA_lm(
   n_chain = 4L,
   iters = 1000L,
   verbose = FALSE,
+  prior_intercept = normal(location = -15, scale = 10),
+  priors = normal(),
   sink_file = tempfile(),
-  betas_prior_mu = numeric(),
-  betas_prior_sd = numeric(),
   ...
 )
 
@@ -29,8 +29,8 @@ eDNA_lmer(
   n_chain = 4L,
   iters = 500L,
   verbose = FALSE,
-  betas_prior_mu = numeric(),
-  betas_prior_sd = numeric(),
+  prior_intercept = normal(location = -15, scale = 10),
+  priors = normal(),
   sink_file = tempfile(),
   ...
 )
@@ -59,19 +59,24 @@ that less than two is not recommended.}
 \item{verbose}{logical, when TRUE output from
 \code{rstan::sampling} is written to the console.}
 
+\item{prior_intercept}{named list such as created by
+\code{rstanarm::normal}. The list must contain elements named
+"location" and "scale", which are the location and scale for a
+normal prior over the intercept. Ignored when the intercept is
+omitted in the model formula.}
+
+\item{priors}{named list such as created by
+\code{rstanarm::normal}. The list must contain elements named
+"location" and "scale", which are the location and scale for a
+normal prior over the betas, and "autoscale". If a single
+value is provided, this value will be repeated for each
+beta. If \code{autoscale = TRUE}, the scale of the priors is
+scaled by the sd of the predictors similar to rstanarm handles
+them.}
+
 \item{sink_file}{character, a file to write the console output to
 if \code{verbose = FALSE}, by default writes to
 \code{tempfile()}}
-
-\item{betas_prior_mu}{numeric vector of the same length as the
-number of fixed effects in the model. Each element will
-correspond to the mean value for the prior normal distribution
-for the parameter. If no values are provided,}
-
-\item{betas_prior_sd}{numeric vector of the same length as the
-number of fixed effects in the model. Each element will
-correspond to the std. deviation value for the prior normal
-distribution for the parameter.}
 
 \item{...}{additional arguments passed to
 \code{\link[rstan]{sampling}}}
