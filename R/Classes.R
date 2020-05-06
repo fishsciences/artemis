@@ -140,8 +140,8 @@ setAs("stanfit", "eDNA_model_lm", function(from) callNextMethod())
 setAs("stanfit", "eDNA_model",
       function(from){
           tmp = extract(from)
-          betas = if("betas" %in% names(tmp)) tmp$betas else array()
-          intercept = if("intercept" %in% names(tmp)) tmp$intercept else array()
+          betas = if("betas" %in% names(tmp)) tmp$betas else array(numeric())
+          intercept = if("intercept" %in% names(tmp)) tmp$intercept else array(numeric())
           new("eDNA_model",
               intercept = intercept,
               betas = betas,
