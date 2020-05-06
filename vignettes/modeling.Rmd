@@ -124,7 +124,7 @@ As with the simulation objects, the model results can be summarized or plotted w
 ```{r, eval=TRUE}
 summary(model_fit)
 
-plot(model_fit, pars = c(sprintf("betas[%d]", 2:4)))
+plot(model_fit, pars = c(sprintf("betas[%d]", 1:3)))
 ```
 
 <br>
