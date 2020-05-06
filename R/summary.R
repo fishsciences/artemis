@@ -62,33 +62,33 @@ summary.eDNA_simulation = function(object, var = "Cq_star",
 ##' @export
 summary.eDNA_model = function(object, probs = c(0.025, 0.5, 0.975), ...)
 {
+    res = c(mean = mean(object@sigma_Cq), quantile(object@sigma_Cq, probs))
+    nms = "Cq_sigma"
     
-    res = apply(object@betas, 2, quantile, prob = probs, simplify = FALSE)
-    
-    if(!is.null(ncol(res))) {
-        res = t(res)
-        res = rbind(res, quantile(object@sigma_Cq, probs))
-    } else {
-        res = c(res, quantile(object@sigma_Cq, probs))
+    if(length(object@betas)){
+        res = cbind(res, summarize_par(object@betas, probs))
+        nms = c(nms, colnames(object@x))
     }
-    beta_nms = c(colnames(object@x), "CQ sd")
     
     if(length(object@intercept)){
-        inter = quantile(object@intercept, probs)
-        res = rbind(inter, res)
-        beta_nms = c("(Intercept)", beta_nms)
+        res = cbind(summarize_par(object@intercept, probs), res)
+        nms = c("(Intercept)", nms)
     }
-        
-    res = data.frame(res)
-    rownames(res) = beta_nms
-    colnames(res) = paste0(probs * 100, "%")
-    
-    res = cbind(mean = colMeans(cbind(object@betas, object@sigma_Cq)),
-                res)
-    
+
+    res = data.frame(t(res))
+    rownames(res) = nms
+    colnames(res) = c("Mean", paste0(probs * 100, "%"))
+  
     structure(res,
               iter = object@stanfit@stan_args$iter,
               class = c("eDNA_model.summary", "data.frame"))
+}
+
+summarize_par = function(x, p)
+{
+    means = apply(x, 2, mean, simplify = FALSE)
+    qs = apply(x, 2, quantile, prob = p, simplify = FALSE)
+    rbind(mean = means, qs)
 }
 
 summary.eDNA_predict_lm = function(object, probs = c(0.025, 0.5, 0.975), ...)
