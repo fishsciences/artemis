@@ -20,7 +20,7 @@
 #' @import Rcpp
 #' @import rstantools
 #' @import ggplot2
-#' @importFrom stats model.matrix model.response model.frame pnorm quantile rnorm terms
+#' @importFrom stats model.matrix model.response model.frame pnorm quantile rnorm terms sd
 #' @importFrom graphics lines segments plot
 #' @importFrom rstan sampling extract plot
 #' @importFrom lme4 lFormula ranef
