@@ -66,8 +66,8 @@ summary.eDNA_model = function(object, probs = c(0.025, 0.5, 0.975), ...)
     nms = "Cq_sigma"
     
     if(length(object@betas)){
-        res = cbind(res, summarize_par(object@betas, probs))
-        nms = c(nms, colnames(object@x))
+        res = cbind(summarize_par(object@betas, probs), res)
+        nms = c(colnames(object@x), nms)
     }
     
     if(length(object@intercept)){
