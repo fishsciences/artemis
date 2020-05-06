@@ -39,7 +39,7 @@ test_that("Summary methods: model", {
     expect_is(res, "eDNA_model.summary")
     expect_is(res, "data.frame")
 
-    expect_true(nrow(res) == ncol(ans@betas) + 1)
+    expect_true(nrow(res) == ncol(ans@betas) + 2)
     expect_true(ncol(res) == 4)
     
     res2 = summary(ans, prob = 0.5)

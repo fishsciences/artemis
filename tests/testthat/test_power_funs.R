@@ -27,14 +27,14 @@ test_that("P-detect: basic tests", {
     ans = eDNA_lm(Cq ~ Distance, eDNA_data,
                   std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
-
-    res = est_p_detect(variable_levels = c(intecept = 1, Distance = 50),
+    res = est_p_detect(variable_levels = c(Distance = 50),
                  model_fit = ans, 
                  n_rep = 2)
+
     expect_true(nrow(res) == nrow(ans@betas))
     expect_true(ncol(res) == 1)
 
-    res = est_p_detect(variable_levels = c(intecept = 1, Distance = 50),
+    res = est_p_detect(variable_levels = c(Distance = 50),
                  model_fit = ans, 
                  n_rep = 2:6)
     expect_true(nrow(res) == nrow(ans@betas))

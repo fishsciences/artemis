@@ -14,7 +14,7 @@ test_that("Prep data", {
     ## lm
     ml = gen_model_list_lm(Cq ~ distance, X)
     ans = prep_data(ml, 21, -1.5, 1, betas,
-                    b_prior_mu = NULL, b_prior_sd = NULL, type = "sim")
+                    prior_int = normal(), prior_b = normal(), type = "sim")
 
     expect_is(ans, "list")
 
@@ -24,7 +24,7 @@ test_that("Prep data", {
     ## lmer
     mler = gen_model_list_lmer(Cq ~ distance + (1|volume), X)
     ans = prep_data(mler, 21, -1.5, 1, betas, rand_sd = 0.1,
-                    b_prior_mu = NULL, b_prior_sd = NULL, type = "sim")
+                    prior_int = normal(), prior_b = normal(), type = "sim")
 
     expect_is(ans, "list")
 

@@ -15,7 +15,7 @@ test_that("Model predictions",{
     ans3 = predict(dd, interval = TRUE, include_sigma = TRUE)
     expect_true(!is.null(ans3$Cq_star))
 
-    x = data.frame(Intercept = 1, Distance = c(0,50))
+    x = data.frame(Distance = c(0,50))
  
     ans4 = predict(dd, newdata = x)
 

@@ -10,7 +10,9 @@ test_that("User priors: lm", {
     # Priors
     ans2 = eDNA_lm(Cq ~ Distance, eDNA_data,
                    std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                   betas_prior_mu = c(0,0), betas_prior_sd = c(1,1))
+                   prior_intercept = normal(-12, 10),
+                   priors = normal(0,1))
+    
     expect_is(ans2, "eDNA_model_lm")
     
 })
