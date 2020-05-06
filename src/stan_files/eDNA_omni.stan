@@ -103,9 +103,8 @@ data{
   
   // user priors
   int<lower = 0, upper = 1> has_prior;
-  int n_prior;
-  vector[n_prior] prior_mu;
-  vector[n_prior] prior_sd;  
+  vector[n_vars] prior_mu;
+  vector[n_vars] prior_sd;  
   
   // alpha and beta of the ln_conc -> Cq conversion according to
   // beta * log(conc) + alpha
