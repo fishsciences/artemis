@@ -5,9 +5,9 @@ eDNA_lm = function(formula, data,
                    std_curve_alpha, std_curve_beta,
                    upper_Cq = 40,
                    n_chain = 4L, iters = 1000L, verbose = FALSE,
-                   sink_file = tempfile(),
                    prior_intercept = normal(location = -15, scale = 10),
-                   priors = normal(), ...)
+                   priors = normal(),
+                   sink_file = tempfile(), ...)
 {
     
     ml = gen_model_list_lm(formula, data)
@@ -133,7 +133,7 @@ eDNA_lmer = function(formula, data,
                      n_chain = 4L, iters = 500L,
                      verbose = FALSE,
                      prior_intercept = normal(location = -15, scale = 10),
-                     priors = normal(), ...)
+                     priors = normal(),
                      sink_file = tempfile(), ...)
 {
     
