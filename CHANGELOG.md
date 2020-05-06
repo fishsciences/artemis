@@ -1,6 +1,13 @@
 # artemis: ChangeLog
 
-# v 0.9.5
+
+# Beta
+
+WARNING: Any versions here are still under active developement, and
+will change in ways that will likely break your existing code. Until
+formal release v1.0.0, do not expect stability!
+
+## v0.9.5
 
 Refactoring of how the package handled intercepts. Previously,
 intercepts were just part of the model matrix. While conceptually
@@ -22,6 +29,6 @@ the Regularized Hierarchical Shrinkage prior.
   distributions in the future.
 - summary and predict methods automatically detect the intercept and handle it if present.
 
-# v 0.9.0
+## v0.9.0
 
 First "public" beta.
