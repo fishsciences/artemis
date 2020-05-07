@@ -4,7 +4,7 @@ prep_data = function(mod_list,
                      alpha, beta,
                      Cq_sd, betas,
                      Cq_upper = 40, rand_sd = double(0),
-                     prior_int, prior_b,
+                     prior_int, prior_b, error_type = "fixed",
                      type = c("model", "sim"))
 {
     has_inter = has_intercept(mod_list$x)
@@ -30,6 +30,12 @@ prep_data = function(mod_list,
     model_data$prior_int_mu = prior_int$location
     model_data$prior_int_sd = prior_int$scale
     model_data$has_prior = 1L # for testing ifelse(length(b_prior_mu), 1, 0)
+
+    model_data$sd_vary = switch(error_type,
+                                "fixed" = 0L,
+                                "varying" = 1L,
+                                stop("Error type must be either 'fixed' or 'varying'"))
+    model_data$center_Cq = 30 ## for testing
     
     if(is.null(mod_list$groups)){
         model_data$has_random = 0L

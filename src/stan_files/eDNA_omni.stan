@@ -105,12 +105,16 @@ data{
   int<lower = 0, upper = 1> has_prior;
   vector[n_vars] prior_mu;
   vector[n_vars] prior_sd;  
-  
+
   // alpha and beta of the ln_conc -> Cq conversion according to
   // beta * log(conc) + alpha
   real std_curve_alpha;
   real std_curve_beta;
   real upper_Cq; // upper value that Cq can take
+
+  // measurement error model
+  int<lower = 0, upper = 1> sd_vary; // 0 = fixed, 1 = varying
+  real<lower = 0, upper = upper_Cq> center_Cq; // CQ for centering 
 }
 
 transformed data{
@@ -146,6 +150,8 @@ parameters{
   real<lower = 0> sigma_Cq;
   vector[has_random ? n_rand : 0] rand_betas_raw;
   vector<lower = 0>[has_random ? n_grp : 0] rand_sigma;
+  vector[sd_vary ? 1 : 0] sd_slope_location;
+  vector<lower = 0>[sd_vary ? 1 : 0] sd_slope_scale;  
 }
 
 transformed parameters{
@@ -164,7 +170,8 @@ transformed parameters{
 model{
   vector[N] ln_conc_hat;
   vector[N] Cq_hat;
-
+  real sd_slope_temp;
+  
   if(n_vars > 0) {
 	 ln_conc_hat = Q_ast * thetas + (has_inter ? temp_intercept[1] : 0.0);
   } else {
@@ -184,6 +191,14 @@ model{
   if(has_inter)
 	temp_intercept ~ normal(prior_int_mu, prior_int_sd);
 
+  // 30 to 40 CQ = +1 sd - seems like a reasonable prior
+  if(sd_vary){
+	sd_slope_location ~ normal(0, 1);
+	sd_slope_scale ~ normal(0, 0.1);
+  }
+  
+  sd_slope_temp = sd_vary ? sd_slope_location[1] * sd_slope_scale[1] : 0.0;
+  
   if(n_vars > 0) {
 	if(has_prior){ 
 	  for(i in 1:n_vars)
@@ -194,12 +209,16 @@ model{
   }
 
   Cq_hat = ln_conc_hat * std_curve_beta + std_curve_alpha;
+
   
   for(n in 1:N){
 	if(y[n] < upper_Cq) {
-		y[n] ~ normal(Cq_hat[n], sigma_Cq);  
+	  y[n] ~ normal(Cq_hat[n], sigma_Cq +
+					((Cq_hat[n] - center_Cq) * sd_slope_temp));  
 	} else {
-	  target += normal_lccdf(upper_Cq | Cq_hat[n], sigma_Cq);
+	  target += normal_lccdf(upper_Cq | Cq_hat[n],
+							 sigma_Cq +
+							 ((upper_Cq - center_Cq) * sd_slope_temp));
 	}
   }
 }

@@ -6,7 +6,7 @@ eDNA_lm = function(formula, data,
                    upper_Cq = 40,
                    n_chain = 4L, iters = 1000L, verbose = FALSE,
                    prior_intercept = normal(location = -15, scale = 10),
-                   priors = normal(),
+                   priors = normal(), Cq_error_type = "fixed", 
                    sink_file = tempfile(), ...)
 {
     
@@ -16,7 +16,7 @@ eDNA_lm = function(formula, data,
     md = prep_data(ml, std_curve_alpha, std_curve_beta,
                    Cq_upper = upper_Cq, type = "model",
                    prior_int = prior_intercept,
-                   prior_b = priors)
+                   prior_b = priors, error_type = Cq_error_type)
     md$y = ml$y
     fit = run_model(data = md, n_chain = n_chain, iters = iters,
                     verbose = verbose, sink_file = sink_file, ...)
@@ -133,7 +133,7 @@ eDNA_lmer = function(formula, data,
                      n_chain = 4L, iters = 500L,
                      verbose = FALSE,
                      prior_intercept = normal(location = -15, scale = 10),
-                     priors = normal(),
+                     priors = normal(), Cq_error_type = "fixed", 
                      sink_file = tempfile(), ...)
 {
     
@@ -142,7 +142,7 @@ eDNA_lmer = function(formula, data,
     md = prep_data(ml, std_curve_alpha, std_curve_beta,
                    Cq_upper = upper_Cq, type = "model",
                    prior_int = prior_intercept,
-                   prior_b = priors)
+                   prior_b = priors, error_type = Cq_error_type)
 
     md$y = ml$y
 

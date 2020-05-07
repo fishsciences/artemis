@@ -70,5 +70,16 @@ test_that("lm with priors", {
 test_that("Intercepts", {
     ans = eDNA_lm(Cq ~ 1,  eDNA_data,
                   std_curve_alpha = 21.2, std_curve_beta = -1.5)
+    expect_is(ans, "eDNA_model")
+
+})
+
+test_that("Varying measurement error", {
+  ans = eDNA_lm(Cq ~ Distance + Volume, eDNA_data,
+                std_curve_alpha = 21.2, std_curve_beta = -1.5,
+                Cq_error_type = "varying")
+
+  expect_is(ans, "eDNA_model")
+  
 
 })
