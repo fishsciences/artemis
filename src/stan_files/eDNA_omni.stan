@@ -170,7 +170,7 @@ transformed parameters{
 model{
   vector[N] ln_conc_hat;
   vector[N] Cq_hat;
-  real sd_slope_temp;
+  real sd_slope_temp = 0;
   
   if(n_vars > 0) {
 	 ln_conc_hat = Q_ast * thetas + (has_inter ? temp_intercept[1] : 0.0);
