@@ -225,9 +225,12 @@ model{
 
 generated quantities{
   real intercept[has_inter ? 1 : 0];
+  real sd_slope[sd_vary ? 1 : 0];
   if(n_vars > 0){
 	intercept[1] = temp_intercept[1] - dot_product(mean_x, betas);
   } else {
 	intercept[1] = temp_intercept[1];
   }
+  if(sd_vary)
+	sd_slope[1] = sd_slope_location[1] * sd_slope_scale[1];
 }
