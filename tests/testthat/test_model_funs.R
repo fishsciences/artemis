@@ -81,9 +81,9 @@ test_that("Varying measurement error", {
 
   expect_is(ans, "eDNA_model")
 
-  expect_error(Cq ~ Distance + Volume, eDNA_data,
+  expect_error(eDNA_lm(Cq ~ Distance + Volume, eDNA_data,
                 std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                Cq_error_type = "bob")
+                Cq_error_type = "bob"))
 
 
 })

@@ -34,7 +34,7 @@ prep_data = function(mod_list,
     model_data$sd_vary = switch(error_type,
                                 "fixed" = 0L,
                                 "varying" = 1L,
-                                stop("Error type must be either 'fixed' or 'varying'"))
+                                stop("CQ Error type must be either 'fixed' or 'varying'"))
     model_data$center_Cq = 30 ## for testing
     
     if(is.null(mod_list$groups)){
