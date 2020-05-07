@@ -91,11 +91,14 @@ eDNA_lm = function(formula, data,
 ##'     beta. If \code{autoscale = TRUE}, the scale of the priors is
 ##'     scaled by the sd of the predictors similar to rstanarm handles
 ##'     them.
-##' @param ... additional arguments passed to
-##'     \code{\link[rstan]{sampling}}
+##' @param Cq_error_type either "fixed" or "varying", specifying if
+##'     measurement error is assumed to be the same for all values of
+##'     CQ, or if it increases or decreases as CQ increases.
 ##' @param sink_file character, a file to write the console output to
 ##'     if \code{verbose = FALSE}, by default writes to
 ##'     \code{tempfile()}
+##' @param ... additional arguments passed to
+##'     \code{\link[rstan]{sampling}}
 ##' @return S4 object, with the following slots: \describe{
 ##'     \item{ln_conc}{matrix, the posterior samples for the latent
 ##'     variable, eDNA concentration} \item{Cq_star}{matrix, the
