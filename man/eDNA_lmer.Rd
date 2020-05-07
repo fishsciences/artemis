@@ -16,6 +16,7 @@ eDNA_lm(
   verbose = FALSE,
   prior_intercept = normal(location = -15, scale = 10),
   priors = normal(),
+  Cq_error_type = "fixed",
   sink_file = tempfile(),
   ...
 )
@@ -31,6 +32,7 @@ eDNA_lmer(
   verbose = FALSE,
   prior_intercept = normal(location = -15, scale = 10),
   priors = normal(),
+  Cq_error_type = "fixed",
   sink_file = tempfile(),
   ...
 )
@@ -73,6 +75,10 @@ value is provided, this value will be repeated for each
 beta. If \code{autoscale = TRUE}, the scale of the priors is
 scaled by the sd of the predictors similar to rstanarm handles
 them.}
+
+\item{Cq_error_type}{either "fixed" or "varying", specifying if
+measurement error is assumed to be the same for all values of
+CQ, or if it increases or decreases as CQ increases.}
 
 \item{sink_file}{character, a file to write the console output to
 if \code{verbose = FALSE}, by default writes to
