@@ -7,6 +7,24 @@ WARNING: Any versions here are still under active developement, and
 will change in ways that will likely break your existing code. Until
 formal release v1.0.0, do not expect stability!
 
+## v0.11.0
+
+Added the ability to provide multiple standard curves, which is useful
+when analyzing data from multiple experiments in a single model.
+
+## v0.10.0
+
+Added the ability to allow measurement error to vary across different
+Cq values. This was driven by the observation that the measurement
+error tended to increase as Cq increased (i.e., fewer particles of
+eDNA to detect). This is enabled in the modeling functions by setting
+`Cq_error_type = varying`. By default, the error is assumed to be
+stationary, i.e. fixed for all values of Cq.
+
+WARNING: In general, more data is required to reliably estimate a
+varying measurement error. Enabling this with small datasets is likely
+to result in unreliable estiamtes. 
+
 ## v0.9.5
 
 Refactoring of how the package handled intercepts. Previously,
