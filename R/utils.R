@@ -39,3 +39,8 @@ has_intercept = function(X)
 {
     as.integer(any(grepl("\\(Intercept\\)", colnames(X))))
 }
+
+conc_thresh = function(a, b, thresh = 40)
+{
+    (thresh - a) / b
+}
