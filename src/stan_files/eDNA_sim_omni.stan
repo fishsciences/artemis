@@ -32,8 +32,8 @@ data{
   
   // alpha and beta of the ln_conc -> Cq conversion according to
   // beta * log(conc) + alpha
-  real std_curve_alpha;
-  real std_curve_beta;
+  real std_curve_alpha[N];
+  real std_curve_beta[N];
   real upper_Cq; // upper value that Cq can take
 
   real<lower = 0> sigma_Cq; // sd on Cq - assumed to be only on measurement
@@ -69,7 +69,7 @@ generated quantities{
   }
   
   for(n in 1:N){
-	real Cq_hat = ln_conc[n] * std_curve_beta + std_curve_alpha;
+	real Cq_hat = ln_conc[n] * std_curve_beta[n] + std_curve_alpha[n];
 	
 	Cq_star[n] = normal_rng(Cq_hat, sigma_Cq);
 	if(Cq_star[n] > upper_Cq)
