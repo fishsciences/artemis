@@ -108,8 +108,8 @@ data{
 
   // alpha and beta of the ln_conc -> Cq conversion according to
   // beta * log(conc) + alpha
-  real std_curve_alpha;
-  real std_curve_beta;
+  real std_curve_alpha[N];
+  real std_curve_beta[N];
   real upper_Cq; // upper value that Cq can take
 
   // measurement error model
@@ -208,10 +208,10 @@ model{
 	}
   }
 
-  Cq_hat = ln_conc_hat * std_curve_beta + std_curve_alpha;
-
-  
+   
   for(n in 1:N){
+	Cq_hat[n] = ln_conc_hat[n] * std_curve_beta[n] + std_curve_alpha[n];
+	
 	if(y[n] < upper_Cq) {
 	  y[n] ~ normal(Cq_hat[n], sigma_Cq +
 					((Cq_hat[n] - center_Cq) * sd_slope_temp));  

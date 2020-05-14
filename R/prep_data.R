@@ -13,20 +13,27 @@ prep_data = function(mod_list,
     } else {
         x = mod_list$x
     }
-    
+
     n_vars = if(is.null(ncol(x))) 0 else ncol(x)
     priors = prep_priors(prior_b, x, mod_list$y)
+
     model_data = list(N = length(mod_list$y),
                       n_vars = n_vars,
                       X = x,
-                      std_curve_alpha = alpha,
-                      std_curve_beta = beta,
                       upper_Cq = Cq_upper,
                       rand_sigma = as.array(rand_sd),
                       prior_mu = priors$location,
                       prior_sd = priors$scale,
                       has_inter = has_inter)
 
+    if(length(alpha) < model_data$N)
+        alpha = rep(alpha, model_data$N)
+    if(length(beta) < model_data$N)
+        beta = rep(beta, model_data$N)
+
+    model_data$std_curve_alpha = alpha
+    model_data$std_curve_beta = beta
+    
     model_data$prior_int_mu = prior_int$location
     model_data$prior_int_sd = prior_int$scale
     model_data$has_prior = 1L # for testing ifelse(length(b_prior_mu), 1, 0)

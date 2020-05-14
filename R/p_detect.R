@@ -92,12 +92,14 @@ est_p_detect = function(variable_levels,
         } else {
             Cq_sd = model_fit@sigma_Cq
         }
-        if(!missing(std_curve_alpha) || !missing(std_curve_beta)) {
-            dup_arg_warn("std_curve parameters")
-        } else {
-            std_curve_alpha = model_fit@std_curve_alpha
-            std_curve_beta = model_fit@std_curve_beta            
+        if(missing(std_curve_alpha) && missing(std_curve_beta)){
+            std_curve_alpha = unique(model_fit@std_curve_alpha)
+            std_curve_beta = unique(model_fit@std_curve_beta)
         }
+    
+        if(length(std_curve_alpha) > 1 || length(std_curve_beta) > 1)
+            stop("Model was fit with multiple curves - please provide a single set of standard curve parameters")
+        
         inter = if(length(model_fit@intercept)) as.vector(model_fit@intercept) else 0
         ln_conc_hat = apply(model_fit@betas, 1, function(y) variable_levels %*% y) + inter
     }
