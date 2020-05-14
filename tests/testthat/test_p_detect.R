@@ -11,12 +11,6 @@ test_that("Duplicate arg warnings", {
                             Cq_sd = 1, 
                             std_curve_alpha = 21.2, std_curve_beta = -1.5,
                             n_rep = 12:30))
-    
-    expect_warning(est_p_detect(variable_levels = c(Distance = 1000),
-                                model_fit = model_fit, 
-                                std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                                n_rep = 12:30))
-
 
 })
 
