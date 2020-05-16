@@ -61,6 +61,7 @@ prep_data = function(mod_list,
     }
     if(type == "sim"){
         model_data$betas = as.array(betas)
+        model_data$sigma_Cq = Cq_sd
     }
 
     return(model_data)

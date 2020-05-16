@@ -27,9 +27,10 @@ sim_eDNA_lm = function(formula, variable_list,
                    prior_int = normal(), prior_b = normal(), type = "sim")
 
     # if(!verbose) sink(sink_file)
-    model = system.file("eDNA_sim_omni.stan", "stan_files", package = "artemis")
-    sm = model$sampling(data = md, chains = 1L,
-                    algorithm = "Fixed_param", warmup = 0L)
+    model = cmdstan_model(system.file("stan_files","eDNA_sim_omni.stan",
+                                      package = "artemis"))
+    sm = model$sample(data = md, chains = 1L, iter_sampling = n_sim,
+                        fixed_param = TRUE, iter_warmup = 0L)
 
     # if(!verbose) sink()
     sims = read_stan_csv(sm$output_files())
@@ -180,15 +181,15 @@ sim_eDNA_lmer = function(formula, variable_list,
                    betas = betas, rand_sd = sigma_rand,
                    prior_int = normal(), prior_b = normal(), type = "sim")
 
-    if(!verbose) sink(sink_file)
-    
-    sims = sampling(stanmodels$eDNA_sim_omni, data = md, chains = 1L,
-                    algorithm = "Fixed_param", iter = n_sim, warmup = 0L,
-                    refresh = ifelse(verbose, 100, -1), show_messages = verbose,
-                    open_progress = FALSE)
-    
-    if(!verbose) sink()
+    # if(!verbose) sink(sink_file)
+    model = cmdstan_model(system.file("stan_files","eDNA_sim_omni.stan",
+                                      package = "artemis"))
+    sm = model$sample(data = md, chains = 1L, iter_sampling = n_sim,
+                        fixed_param = TRUE, iter_warmup = 0L)
 
+    # if(!verbose) sink()
+    sims = read_stan_csv(sm$output_files())
+        
     # hacky
     sims = as(sims, "eDNA_simulation_lmer")
     sims = load_slots(sims)
