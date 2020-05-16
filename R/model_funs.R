@@ -6,7 +6,7 @@ eDNA_lm = function(formula, data,
                    upper_Cq = 40,
                    n_chain = 4L, iters = 1000L, verbose = FALSE,
                    prior_intercept = normal(location = -15, scale = 10),
-                   priors = normal(), Cq_error_type = "fixed", 
+                   priors = normal(), Cq_error_type = "fixed",
                    sink_file = tempfile(), ...)
 {
     
@@ -160,19 +160,23 @@ eDNA_lmer = function(formula, data,
     return(fit)
 }
 
-run_model = function(model = stanmodels$eDNA_omni,
+run_model = function(model = cmdstan_model(model_file),
+                     model_file = system.file("stan_files",
+                                              "eDNA_omni.stan",
+                                              package = "artemis"),
                      data, n_chain,
-                  iters, verbose, sink_file, ...)
-
-{
-    if(!verbose) sink(sink_file)
+                     iters, verbose, sink_file, ...)
     
-    fit = sampling(model, data, chains = n_chain,
-                  iter = iters,
-                  refresh = ifelse(verbose, 100, -1), show_messages = verbose,
-                  open_progress = FALSE, ...)
-
-    if(!verbose) sink()
+{
+    # if(!verbose) sink(sink_file)
+    
+    m = model$sample(data = data, chains = n_chain,
+#                  iter = iters,
+ #                 refresh = ifelse(verbose, 100, -1), show_messages = verbose,
+                                        #                open_progress = FALSE,
+                 ...)
+    fit = read_stan_csv(m$output_files())
+    # if(!verbose) sink()
     
     fit = as(fit, "eDNA_model")
     return(fit)

@@ -26,15 +26,13 @@ sim_eDNA_lm = function(formula, variable_list,
     md = prep_data(ml, std_curve_alpha, std_curve_beta, sigma_Cq, betas,
                    prior_int = normal(), prior_b = normal(), type = "sim")
 
-    if(!verbose) sink(sink_file)
+    # if(!verbose) sink(sink_file)
+    model = system.file("eDNA_sim_omni.stan", "stan_files", package = "artemis")
+    sm = model$sampling(data = md, chains = 1L,
+                    algorithm = "Fixed_param", warmup = 0L)
 
-    sims = sampling(stanmodels$eDNA_sim_omni, data = md, chains = 1L,
-                    algorithm = "Fixed_param", iter = n_sim, warmup = 0L,
-                    refresh = ifelse(verbose, 100, -1), show_messages = verbose,
-                    open_progress = FALSE)
-
-    if(!verbose) sink()
-    
+    # if(!verbose) sink()
+    sims = read_stan_csv(sm$output_files())
     # hacky
     sims = as(sims, "eDNA_simulation_lm")
     sims = load_slots(sims)
