@@ -15,11 +15,12 @@
 #' @docType package
 #' @name artemis-package
 #' @aliases artemis
-#' @useDynLib artemis, .registration = TRUE
+#' #@useDynLib artemis, .registration = TRUE
 #' @import methods
 #' @import Rcpp
 #' @import rstantools
 #' @import ggplot2
+#' @import cmdstanr
 #' @importFrom stats model.matrix model.response model.frame pnorm quantile rnorm terms sd
 #' @importFrom graphics lines segments plot
 #' @importFrom rstan sampling extract plot
