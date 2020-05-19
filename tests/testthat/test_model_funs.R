@@ -1,8 +1,15 @@
 context("Model fitting")
 
+ans = eDNA_lm(Cq ~ Distance, eDNA_data,
+              std_curve_alpha = 21.2, std_curve_beta = -1.5)
+ans2 = eDNA_lm(Cq ~ Distance + Volume, eDNA_data,
+               std_curve_alpha = 21.2, std_curve_beta = -1.5)
+ans_prior = eDNA_lm(Cq ~ Distance, eDNA_data,
+              std_curve_alpha = 21.2, std_curve_beta = -1.5,
+              prior_intercept = normal(-8,1),
+              priors = normal(0, 1))
+
 test_that("Fit the model with simple data",{
-    ans = eDNA_lm(Cq ~ Distance, eDNA_data,
-                  std_curve_alpha = 21.2, std_curve_beta = -1.5)
     expect_is(ans, "eDNA_model_lm")
 
     expect_true(all(slotNames(ans) %in% c("ln_conc", "Cq_star", "intercept", "betas",
@@ -14,8 +21,6 @@ test_that("Fit the model with simple data",{
 
     expect_is(aa, "data.frame")
 
-    ans2 = eDNA_lm(Cq ~ Distance + Volume, eDNA_data,
-                  std_curve_alpha = 21.2, std_curve_beta = -1.5)
     expect_is(ans, "eDNA_model_lm")
 
     expect_true(all(slotNames(ans) %in% c("ln_conc", "Cq_star", "intercept","betas",
@@ -33,10 +38,6 @@ test_that("Lmer", {
    
     summary(ans2)
 
-    ans2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID),
-                     eDNA_data,
-                     std_curve_alpha = 21.2, std_curve_beta = -1.5, verbose = FALSE)
-
     #Only run if multicore available
     if(FALSE)
         ans2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID),
@@ -48,16 +49,12 @@ test_that("Lmer", {
 
 test_that("lm with priors", {
     # This should still work
-    ans = eDNA_lm(Cq ~ Distance, eDNA_data,
-                  std_curve_alpha = 21.2, std_curve_beta = -1.5)
+    # ans = eDNA_lm(Cq ~ Distance, eDNA_data,
+    #               std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
-    ans = eDNA_lm(Cq ~ Distance, eDNA_data,
-                  std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                  prior_intercept = normal(-8,1),
-                  priors = normal(0, 1))
                   
-    d = eDNA_data
-    d$Distance = 5
+    # d = eDNA_data
+    # d$Distance = 5
 
     # Does not run - not sure why not
     # ans = eDNA_lm(Cq ~ Distance -1, d,
