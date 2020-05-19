@@ -9,8 +9,15 @@ eDNA_lm = function(formula, data,
                    priors = normal(), Cq_error_type = "fixed", 
                    sink_file = tempfile(), ...)
 {
-    
-    ml = gen_model_list_lm(formula, data)
+    # from lm
+    mf <- match.call(expand.dots = FALSE)
+    m <- match(c("formula", "data"), names(mf), 0L)
+    mf <- mf[c(1L, m)]
+
+    mf[[1]] = quote(gen_model_list_lm)
+
+    ml = eval(mf, parent.frame(1L))
+    # ml = gen_model_list_lm(formula, data)
        
     # This works because Stan ignores extra input data
     md = prep_data(ml, std_curve_alpha, std_curve_beta,
@@ -139,8 +146,15 @@ eDNA_lmer = function(formula, data,
                      priors = normal(), Cq_error_type = "fixed", 
                      sink_file = tempfile(), ...)
 {
+    # from lm
+    mf <- match.call(expand.dots = FALSE)
+    m <- match(c("formula", "data"), names(mf), 0L)
+    mf <- mf[c(1L, m)]
+
+    mf[[1]] = quote(gen_model_list_lmer)
+    ml = eval(mf, parent.frame(1L))
     
-    ml = gen_model_list_lmer(formula, data)
+    # ml = gen_model_list_lmer(formula, data)
     
     md = prep_data(ml, std_curve_alpha, std_curve_beta,
                    Cq_upper = upper_Cq, type = "model",
@@ -166,7 +180,7 @@ run_model = function(model = stanmodels$eDNA_omni,
 
 {
     if(!verbose) sink(sink_file)
-    
+    # on.exit(if(!vebose(sink())) sink())
     fit = sampling(model, data, chains = n_chain,
                   iter = iters,
                   refresh = ifelse(verbose, 100, -1), show_messages = verbose,
