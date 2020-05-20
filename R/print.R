@@ -61,8 +61,8 @@ print.eDNA_model = function(x, digits = getOption("digits"), ...)
 {
     cat("\nformula: "); print(x@formula)
     cat("\nStandard curve parameters: Cq = alpha + beta * log(concentration)\n")
-    cat("\tStandard curve alpha = ", x@std_curve_alpha, "\n")
-    cat("\tStandard curve beta = ", x@std_curve_beta, "\n\n")
+    cat("\tStandard curve alpha = ", head(x@std_curve_alpha), "\n")
+    cat("\tStandard curve beta = ", head(x@std_curve_beta), "\n\n")
 
     cat("\nParameter estimates:\n")
     print(summary(x, ...), digits = digits, ...)
