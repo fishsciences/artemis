@@ -17,7 +17,7 @@ eDNA_lm = function(formula, data,
                    Cq_upper = upper_Cq, type = "model",
                    prior_int = prior_intercept,
                    prior_b = priors, error_type = Cq_error_type)
-    md$y = ml$y
+    # md$y = ml$y
     fit = run_model(data = md, n_chain = n_chain, iters = iters,
                     verbose = verbose, sink_file = sink_file, ...)
     fit = load_slots_model(fit)
@@ -147,7 +147,7 @@ eDNA_lmer = function(formula, data,
                    prior_int = prior_intercept,
                    prior_b = priors, error_type = Cq_error_type)
 
-    md$y = ml$y
+    # md$y = ml$y
 
     fit = run_model(data = md, n_chain = n_chain, iters = iters,
                     verbose = verbose, sink_file = sink_file, ...)
