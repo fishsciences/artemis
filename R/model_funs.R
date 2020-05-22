@@ -14,7 +14,7 @@ eDNA_lm = function(formula, data,
     m <- match(c("formula", "data"), names(mf), 0L)
     mf <- mf[c(1L, m)]
 
-    mf[[1]] = quote(gen_model_list_lm)
+    mf[[1]] = quote(artemis:::gen_model_list_lm)
 
     ml = eval(mf, parent.frame(1L))
     # ml = gen_model_list_lm(formula, data)
@@ -151,7 +151,7 @@ eDNA_lmer = function(formula, data,
     m <- match(c("formula", "data"), names(mf), 0L)
     mf <- mf[c(1L, m)]
 
-    mf[[1]] = quote(gen_model_list_lmer)
+    mf[[1]] = quote(artemis:::gen_model_list_lmer)
     ml = eval(mf, parent.frame(1L))
     
     # ml = gen_model_list_lmer(formula, data)
