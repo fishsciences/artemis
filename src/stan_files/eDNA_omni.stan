@@ -13,6 +13,13 @@
   outside of the generated quantities block, we need to generate data
   in R, and then feed it to Stan to get estimates and calculate the 
   power for the test.
+
+  The data generating process is assumed to be:
+
+  Cq ~ mix( normal(Cq_hat, sigma) [, Upper_Cq] , 0 ) // truncated
+  0 ~ bernoulli(p_zero)
+  Cq_hat = std_curve_beta * ln_conc_eDNA + std_curve_alpha
+  ln_conc_eDNA = alpha + beta * X + U
  */
 
 functions{
@@ -151,7 +158,8 @@ parameters{
   vector[has_random ? n_rand : 0] rand_betas_raw;
   vector<lower = 0>[has_random ? n_grp : 0] rand_sigma;
   vector[sd_vary ? 1 : 0] sd_slope_location;
-  vector<lower = 0>[sd_vary ? 1 : 0] sd_slope_scale;  
+  vector<lower = 0>[sd_vary ? 1 : 0] sd_slope_scale;
+  real<lower = 0, upper = 1> p_zero;
 }
 
 transformed parameters{
@@ -213,12 +221,15 @@ model{
 	Cq_hat[n] = ln_conc_hat[n] * std_curve_beta[n] + std_curve_alpha[n];
 	
 	if(y[n] < upper_Cq) {
-	  y[n] ~ normal(Cq_hat[n], sigma_Cq +
-					((Cq_hat[n] - center_Cq) * sd_slope_temp));  
+	  target += normal_lpdf(y[n] | Cq_hat[n], sigma_Cq +
+							((Cq_hat[n] - center_Cq) * sd_slope_temp)) +
+		bernoulli_lpmf(0 | p_zero);  
 	} else {
-	  target += normal_lccdf(upper_Cq | Cq_hat[n],
-							 sigma_Cq +
-							 ((upper_Cq - center_Cq) * sd_slope_temp));
+	  target += log_sum_exp(bernoulli_lpmf(1 | p_zero),
+							bernoulli_lpmf(0 | p_zero) +
+							normal_lccdf(upper_Cq | Cq_hat[n],
+										 sigma_Cq +
+										 ((upper_Cq - center_Cq) * sd_slope_temp)));
 	}
   }
 }

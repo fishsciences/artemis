@@ -179,12 +179,14 @@ run_model = function(model = stanmodels$eDNA_omni,
                   iters, verbose, sink_file, ...)
 
 {
+    if(FALSE)
     if(!verbose) {
         zz = file(sink_file, open = "wt")
         sink(zz)
         sink(zz, type = "message")
         on.exit(sink())
     }
+
     fit = sampling(model, data, chains = n_chain,
                   iter = iters,
                   refresh = ifelse(verbose, 100, -1), show_messages = verbose,
