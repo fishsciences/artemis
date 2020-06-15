@@ -122,6 +122,9 @@ data{
   // measurement error model
   int<lower = 0, upper = 1> sd_vary; // 0 = fixed, 1 = varying
   real<lower = 0, upper = upper_Cq> center_Cq; // CQ for centering 
+
+  // for vectorized sampling
+  int n_below;
 }
 
 transformed data{
@@ -135,6 +138,8 @@ transformed data{
 
   int group_ends[has_random ? n_grp : 0];
 
+  int n_above = N - n_below;
+  
   if(has_random){
 	group_ends = get_group_end(groups);
   }
@@ -216,22 +221,21 @@ model{
 	}
   }
 
-   
-  for(n in 1:N){
+  for(n in 1:N)
 	Cq_hat[n] = ln_conc_hat[n] * std_curve_beta[n] + std_curve_alpha[n];
-	
-	if(y[n] < upper_Cq) {
-	  target += normal_lpdf(y[n] | Cq_hat[n], sigma_Cq +
-							((Cq_hat[n] - center_Cq) * sd_slope_temp)) +
-		bernoulli_lpmf(0 | p_zero);  
-	} else {
-	  target += log_sum_exp(bernoulli_lpmf(1 | p_zero),
-							bernoulli_lpmf(0 | p_zero) +
-							normal_lccdf(upper_Cq | Cq_hat[n],
-										 sigma_Cq +
-										 ((upper_Cq - center_Cq) * sd_slope_temp)));
-	}
-  }
+
+  if(n_below)
+	target += normal_lpdf(head(y, n_below) |
+						  head(Cq_hat, n_below), sigma_Cq +
+						  ((head(Cq_hat, n_below) - center_Cq) * sd_slope_temp)) +
+	  bernoulli_lpmf(0 | p_zero) * n_below;   
+  if(n_above)
+	target += log_sum_exp(bernoulli_lpmf(1 | p_zero) * n_above,
+						  bernoulli_lpmf(0 | p_zero) * n_above +
+						  normal_lccdf(rep_vector(upper_Cq, n_above) | tail(Cq_hat, n_above),
+									   sigma_Cq +
+									   ((upper_Cq - center_Cq) * sd_slope_temp)));
+  
 }
 
 generated quantities{

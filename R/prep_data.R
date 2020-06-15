@@ -7,24 +7,32 @@ prep_data = function(mod_list,
                      prior_int, prior_b, error_type = "fixed",
                      type = c("model", "sim"))
 {
+    
+    
     has_inter = has_intercept(mod_list$x)
     if(type == "model"){
         x = remove_intercept(mod_list$x)
+        idx = order(mod_list$y)
+        n_below = sum(mod_list$y < Cq_upper)
     } else {
         x = mod_list$x
+        idx = seq(length(mod_list$y))
+        n_below = 1
     }
 
     n_vars = if(is.null(ncol(x))) 0 else ncol(x)
     priors = prep_priors(prior_b, x, mod_list$y)
 
-    model_data = list(N = length(mod_list$y),
+    model_data = list(y = mod_list$y,
+                      N = length(mod_list$y),
                       n_vars = n_vars,
-                      X = x,
+                      X = as.matrix(x[idx,]),
                       upper_Cq = Cq_upper,
                       rand_sigma = as.array(rand_sd),
                       prior_mu = priors$location,
                       prior_sd = priors$scale,
-                      has_inter = has_inter)
+                      has_inter = has_inter,
+                      n_below = n_below)
 
     if(length(alpha) < model_data$N)
         alpha = rep(alpha, model_data$N)
@@ -55,12 +63,13 @@ prep_data = function(mod_list,
         model_data$has_random = 1L
         model_data$n_rand = mod_list$n_rand
         model_data$groups = mod_list$groups
-        model_data$rand_x = mod_list$rand_x
+        model_data$rand_x = mod_list$rand_x[idx,]
         model_data$n_grp = mod_list$n_grp
         model_data$rand_sigma = as.array(rand_sd)
     }
     if(type == "sim"){
         model_data$betas = as.array(betas)
+        model_data$sigma_Cq = Cq_sd
     }
 
     return(model_data)
