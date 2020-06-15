@@ -5,6 +5,8 @@
 *.so
 *.hpp
 inst/doc
+inst/stan_files/eDNA_omni
+inst/stan_files/eDNA_sim_omni
 doc
 Meta
 .Rproj.user
