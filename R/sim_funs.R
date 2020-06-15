@@ -23,8 +23,8 @@ sim_eDNA_lm = function(formula, variable_list,
              "Provided: ", length(betas), "\n",
              "Required: ", ncol(ml$x), "\n")
 
-    md = prep_data(ml, std_curve_alpha, std_curve_beta, sigma_Cq, betas,
-                   prior_int = normal(), prior_b = normal(), type = "sim")
+    md = prep_data.sim(ml, std_curve_alpha, std_curve_beta, sigma_Cq, betas,
+                   prior_int = normal(), prior_b = normal())
 
     # if(!verbose) sink(sink_file)
     model = cmdstan_model(system.file("stan_files","eDNA_sim_omni.stan",
@@ -177,9 +177,9 @@ sim_eDNA_lmer = function(formula, variable_list,
              "Random effects: ", colnames(ml$groups))
 
     
-    md = prep_data(ml, std_curve_alpha, std_curve_beta, sigma_Cq,
+    md = prep_data.sim(ml, std_curve_alpha, std_curve_beta, sigma_Cq,
                    betas = betas, rand_sd = sigma_rand,
-                   prior_int = normal(), prior_b = normal(), type = "sim")
+                   prior_int = normal(), prior_b = normal())
 
     # if(!verbose) sink(sink_file)
     model = cmdstan_model(system.file("stan_files","eDNA_sim_omni.stan",

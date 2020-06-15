@@ -20,8 +20,8 @@ eDNA_lm = function(formula, data,
     # ml = gen_model_list_lm(formula, data)
        
     # This works because Stan ignores extra input data
-    md = prep_data(ml, std_curve_alpha, std_curve_beta,
-                   Cq_upper = upper_Cq, type = "model",
+    md = prep_data.model(ml, std_curve_alpha, std_curve_beta,
+                   Cq_upper = upper_Cq,
                    prior_int = prior_intercept,
                    prior_b = priors, error_type = Cq_error_type)
     # md$y = ml$y
@@ -156,8 +156,8 @@ eDNA_lmer = function(formula, data,
     
     # ml = gen_model_list_lmer(formula, data)
     
-    md = prep_data(ml, std_curve_alpha, std_curve_beta,
-                   Cq_upper = upper_Cq, type = "model",
+    md = prep_data.model(ml, std_curve_alpha, std_curve_beta,
+                   Cq_upper = upper_Cq, 
                    prior_int = prior_intercept,
                    prior_b = priors, error_type = Cq_error_type)
 
