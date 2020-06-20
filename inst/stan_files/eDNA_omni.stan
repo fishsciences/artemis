@@ -195,19 +195,19 @@ model{
 	ln_conc_hat = ln_conc_hat + rand_x * rand_betas;
   
   // Priors
-  sigma_Cq ~ normal(0, 1);
-  rand_sigma ~ normal(0, 1);
+  sigma_Cq ~ std_normal();
+  rand_sigma ~ std_normal();
   
   // not sure if this works
-  rand_betas_raw ~ normal(0, 1);
+  rand_betas_raw ~ std_normal();
 
   if(has_inter)
 	temp_intercept ~ normal(prior_int_mu, prior_int_sd);
 
   // 30 to 40 CQ = +1 sd - seems like a reasonable prior
   if(sd_vary){
-	sd_slope_location ~ normal(0, 1);
-	sd_slope_scale ~ normal(0, 0.1);
+	sd_slope_location ~ std_normal();
+	sd_slope_scale ~ normal(0.0, 0.1);
   }
   
   sd_slope_temp = sd_vary ? sd_slope_location[1] * sd_slope_scale[1] : 0.0;
@@ -217,7 +217,7 @@ model{
 	  for(i in 1:n_vars)
 		betas[i] ~ normal(prior_mu[i], prior_sd[i]);
 	} else {
-	  thetas ~ normal(0 , 1);
+	  thetas ~ std_normal();
 	}
   }
 
