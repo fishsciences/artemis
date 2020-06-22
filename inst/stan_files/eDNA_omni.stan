@@ -170,7 +170,10 @@ parameters{
 transformed parameters{
   vector[n_vars] betas;
   vector[has_random ? n_rand : 0] rand_betas;
-
+  vector[N] ln_conc_hat;
+  vector[N] Cq_hat;
+  real sd_slope_temp = 0;
+  
   if(has_random){
 	rand_betas = groups_sum_to_zero(rand_betas_raw, group_ends);
   	rand_betas = make_random_betas(rand_betas, groups, rand_sigma);
@@ -178,21 +181,25 @@ transformed parameters{
 
   if(n_vars > 0)
 	betas = R_ast_inverse * thetas;
-}
 
-model{
-  vector[N] ln_conc_hat;
-  vector[N] Cq_hat;
-  real sd_slope_temp = 0;
-  
+  // moved from model block
   if(n_vars > 0) {
-	 ln_conc_hat = Q_ast * thetas + (has_inter ? temp_intercept[1] : 0.0);
+	ln_conc_hat = Q_ast * thetas + (has_inter ? temp_intercept[1] : 0.0);
   } else {
 	ln_conc_hat = rep_vector(temp_intercept[1], N);
   }
 
   if(has_random)
 	ln_conc_hat = ln_conc_hat + rand_x * rand_betas;
+  
+  sd_slope_temp = sd_vary ? sd_slope_location[1] * sd_slope_scale[1] : 0.0;
+
+  for(n in 1:N)
+	Cq_hat[n] = ln_conc_hat[n] * std_curve_beta[n] + std_curve_alpha[n];
+
+}
+
+model{
   
   // Priors
   sigma_Cq ~ std_normal();
@@ -209,9 +216,7 @@ model{
 	sd_slope_location ~ std_normal();
 	sd_slope_scale ~ normal(0.0, 0.1);
   }
-  
-  sd_slope_temp = sd_vary ? sd_slope_location[1] * sd_slope_scale[1] : 0.0;
-  
+    
   if(n_vars > 0) {
 	if(has_prior){ 
 	  for(i in 1:n_vars)
@@ -221,9 +226,7 @@ model{
 	}
   }
 
-  for(n in 1:N)
-	Cq_hat[n] = ln_conc_hat[n] * std_curve_beta[n] + std_curve_alpha[n];
-
+  
   if(n_below)
 	target += normal_lpdf(head(y, n_below) |
 						  head(Cq_hat, n_below), sigma_Cq +
@@ -241,6 +244,7 @@ model{
 generated quantities{
   real intercept[has_inter ? 1 : 0];
   real sd_slope[sd_vary ? 1 : 0];
+  vector[N] log_lik;
   if(n_vars > 0){
 	intercept[1] = temp_intercept[1] - dot_product(mean_x, betas);
   } else {
@@ -248,4 +252,20 @@ generated quantities{
   }
   if(sd_vary)
 	sd_slope[1] = sd_slope_location[1] * sd_slope_scale[1];
+
+  // For WAIC
+  for(n in 1:N){
+	if(y[n] < upper_Cq) {
+	  log_lik[n] = normal_lpdf(y[n] |
+							   Cq_hat[n], sigma_Cq +
+							   (Cq_hat[n] - center_Cq) * sd_slope_temp) +
+		bernoulli_lpmf(0 | p_zero);   
+	} else {
+	  log_lik[n] = log_sum_exp(bernoulli_lpmf(1 | p_zero),
+								bernoulli_lpmf(0 | p_zero) +
+								normal_lccdf(upper_Cq | Cq_hat[n],
+											 sigma_Cq +
+											 ((upper_Cq - center_Cq) * sd_slope_temp)));
+	}
+  }
 }
