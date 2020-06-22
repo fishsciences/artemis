@@ -3,5 +3,8 @@
 language: R
 cache: packages
 
+repos:
+	stan: https://mc-stan.org/r-packages/
+
 # after_success:
 #   - Rscript -e 'covr::codecov()'

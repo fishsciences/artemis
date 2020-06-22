@@ -19,7 +19,8 @@ Depends:
 	ggplot2,
     R (>= 3.5.0),
     Rcpp (>= 1.0.1),
-	rstan (>= 2.18.2)
+	rstan (>= 2.18.2),
+	cmdstanr (>= 2.22.0)	
 Imports: 
     rstantools (>= 1.5.1),
 	lme4 (>= 1.1.21)
