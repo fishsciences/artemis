@@ -6,7 +6,9 @@
 \usage{
 compile_models(
   model_names = c("eDNA_omni.stan", "eDNA_sim_omni.stan"),
-  models = system.file("stan_files", model_names, package = "artemis")
+  models = system.file("stan_files", model_names, package = "artemis"),
+  rewrite = TRUE,
+  ...
 )
 }
 \arguments{
