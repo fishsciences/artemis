@@ -4,6 +4,8 @@
 ##' @title Compile models
 ##' @param model_names the names of the models to compile
 ##' @param models full file path to the location of models
+##' @param rewrite logical, whether to re-compile the models
+##' @param ... additional arguments passed to \code{cmdstan_model}
 ##' @return NULL
 ##' @author Matt Espe
 ##' @export

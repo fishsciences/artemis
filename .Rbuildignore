@@ -10,3 +10,5 @@ clean.R
 ^docs$
 ^pkgdown$
 ^lib$
+inst/stan_files/eDNA_omni
+inst/stan_files/eDNA_sim_omni

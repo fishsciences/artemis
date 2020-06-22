@@ -5,7 +5,7 @@
 ##' See ?loo::loo for more information about this calculation
 ##' @title Approximate leave-one-out cross-validation
 ##' @param x a eDNA_model object
-##' @param ... 
+##' @param ... additional args passed to \code{loo}
 ##' @return a list with the results of the calculation. 
 ##' @author Matt Espe
 ##' @export
@@ -21,7 +21,7 @@ setMethod("loo", "eDNA_model",
 ##' See ?loo::waic for more information about this calculation
 ##' @title Approximate leave-one-out cross-validation
 ##' @param x a eDNA_model object
-##' @param ... 
+##' @param ... additional args passed to \code{waic}
 ##' @return a list with the results of the calculation. 
 ##' @author Matt Espe
 ##' @export
