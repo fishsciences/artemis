@@ -41,12 +41,3 @@ Additional vignettes are forthcoming!
 Please report all bugs via an issue at the package
 [repo](https://github.com/fishsciences/artemis/issues).
 
-## cmdstanr backend: experimental
-
-If you would prefer to use cmdstan as the backend for fitting the
-models, there is an experimental branch, cmdstan. Using cmdstan as the
-backend reduces the overhead in R associated with fitting the model,
-and allows for more robust parallelization of chains.
-
-However, this branch is experimental, so use at your own risk.
-
