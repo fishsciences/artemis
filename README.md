@@ -17,18 +17,17 @@ sampling and qPCR data. It implements a set of Bayesian
 latent-variable, truncated data models which are fit using
 [Stan](https://mc-stan.org/). 
 
-## Experimental Branch!
-
-This is an experimental branch which uses cmdstanr as the backend for
-fitting the models instead of rstan. Because of this, there are
-several pieces behind the scenes which are different from the master
-branch. 
-
 ## Installation
 
 `artemis` can be installed on most platforms using one of the pre-built
 binaries available from the [releases
 page](https://github.com/fishsciences/artemis/releases), with more detailed installation instructions found [here](https://fishsciences.github.io/artemis/articles/artemis-installation-guide.html).
+
+To install from github using devtools:
+
+```
+devtools::install_github("fishsciences/artemis", ref = "main")
+```
 
 ## Basic use
 
