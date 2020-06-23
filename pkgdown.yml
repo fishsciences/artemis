@@ -1,0 +1,10 @@
+pandoc: 2.9.2.1
+pkgdown: 1.5.1
+pkgdown_sha: ~
+articles:
+  artemis-installation-guide: artemis-installation-guide.html
+  artemis-overview: artemis-overview.html
+  modeling: modeling.html
+  simulation: simulation.html
+last_built: 2020-06-23T19:44Z
+
