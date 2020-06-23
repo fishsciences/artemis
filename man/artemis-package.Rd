@@ -4,11 +4,6 @@
 \name{artemis-package}
 \alias{artemis-package}
 \alias{artemis}
-\alias{#@useDynLib}
-\alias{artemis,}
-\alias{.registration}
-\alias{=}
-\alias{TRUE}
 \title{The 'artemis' package.}
 \description{
 Simulating data and fitting models for eDNA studies

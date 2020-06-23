@@ -131,7 +131,7 @@ plot(model_fit, pars = c(sprintf("betas[%d]", 1:3)))
 
 Matching `lme4` convention, random effects are not included in the default `summary()` output.  You can view or plot the random effects estimates by subsetting the `stanfit` slot of the model object with `@`, and specifying the `random_betas` parameters with the `pars` argument:
 
-```{r}
+```{r, eval=FALSE}
 summary(model_fit2@stanfit, pars = "rand_betas", probs = c(0.50, 0.025, 0.975))$summary
 plot(model_fit2@stanfit, pars = "rand_betas")
 ```
