@@ -15,6 +15,10 @@ compile_models(
 \item{model_names}{the names of the models to compile}
 
 \item{models}{full file path to the location of models}
+
+\item{rewrite}{logical, whether to re-compile the models}
+
+\item{...}{additional arguments passed to \code{cmdstan_model}}
 }
 \description{
 This compiles the models needed for the package.
