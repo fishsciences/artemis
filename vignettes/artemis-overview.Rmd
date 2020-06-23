@@ -2,7 +2,7 @@
 title: "Getting started with the artemis package"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{An overview of the artemis package}
+  %\VignetteIndexEntry{Getting started with the artemis package}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 

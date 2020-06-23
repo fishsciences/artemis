@@ -213,24 +213,24 @@ log[eDNA]_{i} = X_{i} \beta\]</span></p>
                     <span class="kw">iter</span> <span class="kw">=</span> <span class="fl">500</span>,
                     <span class="kw">seed</span> <span class="kw">=</span> <span class="fl">1234</span>,
                     <span class="kw">n_chain</span> <span class="kw">=</span> <span class="fl">1</span>) <span class="co"># set to 1 for vignette; default is 4</span>
-<span class="co">#&gt; Model executable is up to date!</span>
+<span class="co">#&gt; Compiling Stan program...</span>
 <span class="co">#&gt; Running MCMC with 1 chain(s) on 1 core(s)...</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Running ./eDNA_omni 'id=1' random 'seed=1234' data \</span>
-<span class="co">#&gt;   'file=/var/folders/tt/y4p3sd8x1d90ztlbsyjthmfc0000gn/T/RtmpBvz3Vz/standata-20c926dfc095.json' \</span>
+<span class="co">#&gt;   'file=/var/folders/tt/y4p3sd8x1d90ztlbsyjthmfc0000gn/T/RtmpXaseBQ/standata-229e5e6eef9b.json' \</span>
 <span class="co">#&gt;   output \</span>
-<span class="co">#&gt;   'file=/var/folders/tt/y4p3sd8x1d90ztlbsyjthmfc0000gn/T/RtmpBvz3Vz/eDNA_omni-202006231120-1-dc8a23.csv' \</span>
+<span class="co">#&gt;   'file=/var/folders/tt/y4p3sd8x1d90ztlbsyjthmfc0000gn/T/RtmpXaseBQ/eDNA_omni-202006231134-1-34d98c.csv' \</span>
 <span class="co">#&gt;   'method=sample' 'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt \</span>
 <span class="co">#&gt;   'engaged=1'</span>
 <span class="co">#&gt; Chain 1 Rejecting initial value:</span>
 <span class="co">#&gt; Chain 1   Gradient evaluated at the initial value is not finite.</span>
 <span class="co">#&gt; Chain 1   Stan can't start sampling from this initial value.</span>
-<span class="co">#&gt; Chain 1 Gradient evaluation took 0.000137 seconds</span>
-<span class="co">#&gt; Chain 1 1000 transitions using 10 leapfrog steps per transition would take 1.37 seconds.</span>
+<span class="co">#&gt; Chain 1 Gradient evaluation took 0.000101 seconds</span>
+<span class="co">#&gt; Chain 1 1000 transitions using 10 leapfrog steps per transition would take 1.01 seconds.</span>
 <span class="co">#&gt; Chain 1 Adjust your expectations accordingly!</span>
 <span class="co">#&gt; Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup)</span>
 <span class="co">#&gt; Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:</span>
-<span class="co">#&gt; Chain 1 Exception: normal_lpdf: Scale parameter[1] is 0, but must be &gt; 0! (in '/var/folders/tt/y4p3sd8x1d90ztlbsyjthmfc0000gn/T/RtmpievvJ0/model-20501811b54e.stan', line 231, column 1 to line 234, column 40)</span>
+<span class="co">#&gt; Chain 1 Exception: normal_lpdf: Scale parameter[1] is 0, but must be &gt; 0! (in '/var/folders/tt/y4p3sd8x1d90ztlbsyjthmfc0000gn/T/RtmpXaseBQ/model-229e29aa197b.stan', line 231, column 1 to line 234, column 40)</span>
 <span class="co">#&gt; Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,</span>
 <span class="co">#&gt; Chain 1 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.</span>
 <span class="co">#&gt; Chain 1</span>
@@ -255,7 +255,7 @@ log[eDNA]_{i} = X_{i} \beta\]</span></p>
 <span class="co">#&gt; Chain 1 Iteration: 1800 / 2000 [ 90%]  (Sampling) </span>
 <span class="co">#&gt; Chain 1 Iteration: 1900 / 2000 [ 95%]  (Sampling) </span>
 <span class="co">#&gt; Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 finished in 44.5 seconds.</span>
+<span class="co">#&gt; Chain 1 finished in 38.8 seconds.</span>
 <span class="co">#&gt; 309 of 1000 (31.0%) transitions ended with a divergence.</span>
 <span class="co">#&gt; These divergent transitions indicate that HMC is not fully able to explore the posterior distribution.</span>
 <span class="co">#&gt; Try increasing adapt delta closer to 1.</span>
