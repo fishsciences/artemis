@@ -9,10 +9,9 @@
 ##' @return a list with the results of the calculation. 
 ##' @author Matt Espe
 ##' @export
-setMethod("loo", "eDNA_model",
-          function(x, ...) {
+loo.eDNA_model = function(x, ...) {
               loo(extract_log_lik(x@stanfit), ...)
-          })
+          }
 
 
 ##' A 'waic' method for eDNA_model objects, which is simply a wrapper
@@ -25,7 +24,6 @@ setMethod("loo", "eDNA_model",
 ##' @return a list with the results of the calculation. 
 ##' @author Matt Espe
 ##' @export
-setMethod("waic", "eDNA_model",
-          function(x, ...) {
+waic.eDNA_model = function(x, ...) {
               waic(extract_log_lik(x@stanfit), ...)
-          })
+          }
