@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Authors • artemis</title>
+<title>artemis: ChangeLog • artemis</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
@@ -46,7 +46,7 @@
 
 
 
-<meta property="og:title" content="Authors" />
+<meta property="og:title" content="artemis: ChangeLog" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -66,7 +66,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-authors">
+    <div class="container template-title-body">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -131,20 +131,54 @@
 <div class="row">
   <div class="contents col-md-9">
     <div class="page-header">
-      <h1>Authors</h1>
+      <h1>artemis: ChangeLog</h1>
     </div>
 
-    <ul class="list-unstyled">
-      <li>
-        <p><strong>Myfanwy Johnston</strong>. Author, maintainer. 
-        </p>
-      </li>
-      <li>
-        <p><strong>Matt Espe</strong>. Author, contractor. 
-        </p>
-      </li>
-    </ul>
 
+<div id="artemis-changelog" class="section level1">
+
+</div>
+<div id="beta" class="section level1">
+<h1 class="hasAnchor">
+<a href="#beta" class="anchor"></a>Beta</h1>
+<p>WARNING: Any versions here are still under active developement, and will change in ways that will likely break your existing code. Until formal release v1.0.0, do not expect stability!</p>
+<div id="v0-11-0" class="section level2">
+<h2 class="hasAnchor">
+<a href="#v0-11-0" class="anchor"></a>v0.11.0</h2>
+<p>Added the ability to provide multiple standard curves, which is useful when analyzing data from multiple experiments in a single model.</p>
+</div>
+<div id="v0-10-0" class="section level2">
+<h2 class="hasAnchor">
+<a href="#v0-10-0" class="anchor"></a>v0.10.0</h2>
+<p>Added the ability to allow measurement error to vary across different Cq values. This was driven by the observation that the measurement error tended to increase as Cq increased (i.e., fewer particles of eDNA to detect). This is enabled in the modeling functions by setting <code>Cq_error_type = varying</code>. By default, the error is assumed to be stationary, i.e. fixed for all values of Cq.</p>
+<p>WARNING: In general, more data is required to reliably estimate a varying measurement error. Enabling this with small datasets is likely to result in unreliable estiamtes.</p>
+</div>
+<div id="v0-9-5" class="section level2">
+<h2 class="hasAnchor">
+<a href="#v0-9-5" class="anchor"></a>v0.9.5</h2>
+<p>Refactoring of how the package handled intercepts. Previously, intercepts were just part of the model matrix. While conceptually simple and easy to implement, this arrangement created issues when trying to add other features, primarily priors over the betas such as the Regularized Hierarchical Shrinkage prior.</p>
+<ul>
+<li>Intercepts have priors applied separately from other predictors.</li>
+<li>Each column of the model matrix is centered internally for more efficient computations</li>
+<li>By default, weakly informative priors are put on all of the “betas”. We followed the general recommendations of the developers of <a href="https://cran.r-project.org/web/packages/rstanarm/vignettes/priors.html">Stan/rstanarm</a>. There is a <code><a href="reference/normal.html">normal()</a></code> function which facilitates specifying these priors.</li>
+<li>Priors are no longer specified by providing the <code>mu</code> and <code>sd</code> values. Rather, similar to rstanarm, the priors are now specified using a named list. This will help us implement more prior distributions in the future.</li>
+<li>summary and predict methods automatically detect the intercept and handle it if present.</li>
+</ul>
+</div>
+<div id="v0-9-0" class="section level2">
+<h2 class="hasAnchor">
+<a href="#v0-9-0" class="anchor"></a>v0.9.0</h2>
+<p>First “public” beta.</p>
+</div>
+</div>
+
+
+  </div>
+
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 
 </div>

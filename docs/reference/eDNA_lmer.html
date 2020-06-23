@@ -15,23 +15,29 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -39,12 +45,11 @@
 
 
 
+
 <meta property="og:title" content="Fit eDNA Model — eDNA_lm" />
-
 <meta property="og:description" content="Fit eDNA model" />
-
 <meta property="og:image" content="/logo.png" />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -61,7 +66,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -75,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">artemis</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.0</span>
       </span>
     </div>
 
@@ -112,7 +117,6 @@
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -134,19 +138,41 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Fit eDNA model</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>eDNA_lm</span>(<span class='no'>formula</span>, <span class='no'>data</span>, <span class='no'>std_curve_alpha</span>, <span class='no'>std_curve_beta</span>, <span class='kw'>upper_Cq</span> <span class='kw'>=</span> <span class='fl'>40</span>,
-  <span class='kw'>n_chain</span> <span class='kw'>=</span> <span class='fl'>4L</span>, <span class='kw'>iters</span> <span class='kw'>=</span> <span class='fl'>1000L</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>sink_file</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span>(), <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>eDNA_lm</span>(
+  <span class='no'>formula</span>,
+  <span class='no'>data</span>,
+  <span class='no'>std_curve_alpha</span>,
+  <span class='no'>std_curve_beta</span>,
+  <span class='kw'>upper_Cq</span> <span class='kw'>=</span> <span class='fl'>40</span>,
+  <span class='kw'>n_chain</span> <span class='kw'>=</span> <span class='fl'>4L</span>,
+  <span class='kw'>iters</span> <span class='kw'>=</span> <span class='fl'>1000L</span>,
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>prior_intercept</span> <span class='kw'>=</span> <span class='fu'><a href='normal.html'>normal</a></span>(<span class='kw'>location</span> <span class='kw'>=</span> -<span class='fl'>15</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>10</span>),
+  <span class='kw'>priors</span> <span class='kw'>=</span> <span class='fu'><a href='normal.html'>normal</a></span>(),
+  <span class='kw'>Cq_error_type</span> <span class='kw'>=</span> <span class='st'>"fixed"</span>,
+  <span class='kw'>sink_file</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span>(),
+  <span class='no'>...</span>
+)
 
-<span class='fu'>eDNA_lmer</span>(<span class='no'>formula</span>, <span class='no'>data</span>, <span class='no'>std_curve_alpha</span>, <span class='no'>std_curve_beta</span>, <span class='kw'>upper_Cq</span> <span class='kw'>=</span> <span class='fl'>40</span>,
-  <span class='kw'>n_chain</span> <span class='kw'>=</span> <span class='fl'>4L</span>, <span class='kw'>iters</span> <span class='kw'>=</span> <span class='fl'>500L</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>sink_file</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span>(), <span class='no'>...</span>)</pre>
-    
+<span class='fu'>eDNA_lmer</span>(
+  <span class='no'>formula</span>,
+  <span class='no'>data</span>,
+  <span class='no'>std_curve_alpha</span>,
+  <span class='no'>std_curve_beta</span>,
+  <span class='kw'>upper_Cq</span> <span class='kw'>=</span> <span class='fl'>40</span>,
+  <span class='kw'>n_chain</span> <span class='kw'>=</span> <span class='fl'>4L</span>,
+  <span class='kw'>iters</span> <span class='kw'>=</span> <span class='fl'>500L</span>,
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>prior_intercept</span> <span class='kw'>=</span> <span class='fu'><a href='normal.html'>normal</a></span>(<span class='kw'>location</span> <span class='kw'>=</span> -<span class='fl'>15</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>10</span>),
+  <span class='kw'>priors</span> <span class='kw'>=</span> <span class='fu'><a href='normal.html'>normal</a></span>(),
+  <span class='kw'>Cq_error_type</span> <span class='kw'>=</span> <span class='st'>"fixed"</span>,
+  <span class='kw'>sink_file</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span>(),
+  <span class='no'>...</span>
+)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -190,6 +216,31 @@ that less than two is not recommended.</p></td>
 <code><a href='https://rdrr.io/pkg/rstan/man/stanmodel-method-sampling.html'>rstan::sampling</a></code> is written to the console.</p></td>
     </tr>
     <tr>
+      <th>prior_intercept</th>
+      <td><p>named list such as created by
+<code>rstanarm::normal</code>. The list must contain elements named
+"location" and "scale", which are the location and scale for a
+normal prior over the intercept. Ignored when the intercept is
+omitted in the model formula.</p></td>
+    </tr>
+    <tr>
+      <th>priors</th>
+      <td><p>named list such as created by
+<code>rstanarm::normal</code>. The list must contain elements named
+"location" and "scale", which are the location and scale for a
+normal prior over the betas, and "autoscale". If a single
+value is provided, this value will be repeated for each
+beta. If <code>autoscale = TRUE</code>, the scale of the priors is
+scaled by the sd of the predictors similar to rstanarm handles
+them.</p></td>
+    </tr>
+    <tr>
+      <th>Cq_error_type</th>
+      <td><p>either "fixed" or "varying", specifying if
+measurement error is assumed to be the same for all values of
+CQ, or if it increases or decreases as CQ increases.</p></td>
+    </tr>
+    <tr>
       <th>sink_file</th>
       <td><p>character, a file to write the console output to
 if <code>verbose = FALSE</code>, by default writes to
@@ -201,10 +252,10 @@ if <code>verbose = FALSE</code>, by default writes to
 <code><a href='https://rdrr.io/pkg/rstan/man/stanmodel-method-sampling.html'>sampling</a></code></p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>S4 object, with the following slots:</p><dl class='dl-horizontal'>
+    <p>S4 object, with the following slots:</p><dl'>
     <dt>ln_conc</dt><dd><p>matrix, the posterior samples for the latent
     variable, eDNA concentration</p></dd> <dt>Cq_star</dt><dd><p>matrix, the
     posterior prediction for the observed response</p></dd>
@@ -220,7 +271,6 @@ if <code>verbose = FALSE</code>, by default writes to
     <code><a href='https://rdrr.io/pkg/rstan/man/stanmodel-method-sampling.html'>rstan::sampling</a></code></p></dd> 
 </dl>
 
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>These functions fit a Bayesian latent variable model to data
@@ -238,7 +288,6 @@ Carlo algorithm to estimate parameters for the model. Users are
 encouraged to refer to the documentation for Stan and RStan at
 <a href='https://mc-stan.org/users/documentation/'>https://mc-stan.org/users/documentation/</a> for details about
 how models are fit.</p>
-    
     <h2 class="hasAnchor" id="diagnosing-warning-and-error-messages"><a class="anchor" href="#diagnosing-warning-and-error-messages"></a>Diagnosing warning and error messages</h2>
 
     
@@ -255,14 +304,127 @@ first action attempted, as increasing the <code>iters</code> increases
 both the warm-up and sampling iterations. If users continue to
 have issues, additional control arguments can be passed to
 <code><a href='https://rdrr.io/pkg/rstan/man/stanmodel-method-sampling.html'>rstan::sampling</a></code> via the <code>...</code> argument.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'>## Fixed effect model</span>
 <span class='no'>ans</span> <span class='kw'>=</span> <span class='fu'>eDNA_lm</span>(<span class='no'>Cq</span> ~ <span class='no'>Distance</span>, <span class='no'>eDNA_data</span>,
-              <span class='kw'>std_curve_alpha</span> <span class='kw'>=</span> <span class='fl'>21.2</span>, <span class='kw'>std_curve_beta</span> <span class='kw'>=</span> -<span class='fl'>1.5</span>)
-
+              <span class='kw'>std_curve_alpha</span> <span class='kw'>=</span> <span class='fl'>21.2</span>, <span class='kw'>std_curve_beta</span> <span class='kw'>=</span> -<span class='fl'>1.5</span>)</div><div class='output co'>#&gt; <span class='message'>Compiling Stan program...</span></div><div class='output co'>#&gt; Running MCMC with 4 chain(s) on 1 core(s)...
+#&gt; 
+#&gt; Running ./eDNA_omni 'id=1' random 'seed=1669462462' data \
+#&gt;   'file=/var/folders/tt/y4p3sd8x1d90ztlbsyjthmfc0000gn/T/RtmpievvJ0/standata-20503296203a.json' \
+#&gt;   output \
+#&gt;   'file=/var/folders/tt/y4p3sd8x1d90ztlbsyjthmfc0000gn/T/RtmpievvJ0/eDNA_omni-202006231119-1-1dd9c8.csv' \
+#&gt;   'method=sample' 'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt \
+#&gt;   'engaged=1'</div><div class='output co'>#&gt; <span class='message'>Chain 1 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 Gradient evaluation took 0.000118 seconds</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 1000 transitions using 10 leapfrog steps per transition would take 1.18 seconds.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 Adjust your expectations accordingly!</span></div><div class='output co'>#&gt; Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup) </div><div class='output co'>#&gt; <span class='message'>Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 Exception: normal_lpdf: Scale parameter[1] is 0, but must be &gt; 0! (in '/var/folders/tt/y4p3sd8x1d90ztlbsyjthmfc0000gn/T/RtmpievvJ0/model-20501811b54e.stan', line 231, column 1 to line 234, column 40)</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 </span></div><div class='output co'>#&gt; Chain 1 Iteration:  100 / 2000 [  5%]  (Warmup) 
+#&gt; Chain 1 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+#&gt; Chain 1 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+#&gt; Chain 1 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+#&gt; Chain 1 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+#&gt; Chain 1 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+#&gt; Chain 1 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+#&gt; Chain 1 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+#&gt; Chain 1 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+#&gt; Chain 1 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+#&gt; Chain 1 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+#&gt; Chain 1 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+#&gt; Chain 1 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+#&gt; Chain 1 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+#&gt; Chain 1 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+#&gt; Chain 1 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+#&gt; Chain 1 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+#&gt; Chain 1 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+#&gt; Chain 1 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+#&gt; Chain 1 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+#&gt; Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) 
+#&gt; Chain 1 finished in 11.3 seconds.
+#&gt; Running ./eDNA_omni 'id=2' random 'seed=1245097387' data \
+#&gt;   'file=/var/folders/tt/y4p3sd8x1d90ztlbsyjthmfc0000gn/T/RtmpievvJ0/standata-20503296203a.json' \
+#&gt;   output \
+#&gt;   'file=/var/folders/tt/y4p3sd8x1d90ztlbsyjthmfc0000gn/T/RtmpievvJ0/eDNA_omni-202006231119-2-1dd9c8.csv' \
+#&gt;   'method=sample' 'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt \
+#&gt;   'engaged=1'</div><div class='output co'>#&gt; <span class='message'>Chain 2 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2 Gradient evaluation took 8.6e-05 seconds</span></div><div class='output co'>#&gt; <span class='message'>Chain 2 1000 transitions using 10 leapfrog steps per transition would take 0.86 seconds.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2 Adjust your expectations accordingly!</span></div><div class='output co'>#&gt; Chain 2 Iteration:    1 / 2000 [  0%]  (Warmup) 
+#&gt; Chain 2 Iteration:  100 / 2000 [  5%]  (Warmup) 
+#&gt; Chain 2 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+#&gt; Chain 2 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+#&gt; Chain 2 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+#&gt; Chain 2 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+#&gt; Chain 2 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+#&gt; Chain 2 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+#&gt; Chain 2 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+#&gt; Chain 2 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+#&gt; Chain 2 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+#&gt; Chain 2 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+#&gt; Chain 2 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+#&gt; Chain 2 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+#&gt; Chain 2 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+#&gt; Chain 2 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+#&gt; Chain 2 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+#&gt; Chain 2 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+#&gt; Chain 2 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+#&gt; Chain 2 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+#&gt; Chain 2 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+#&gt; Chain 2 Iteration: 2000 / 2000 [100%]  (Sampling) 
+#&gt; Chain 2 finished in 12.2 seconds.
+#&gt; Running ./eDNA_omni 'id=3' random 'seed=1010643499' data \
+#&gt;   'file=/var/folders/tt/y4p3sd8x1d90ztlbsyjthmfc0000gn/T/RtmpievvJ0/standata-20503296203a.json' \
+#&gt;   output \
+#&gt;   'file=/var/folders/tt/y4p3sd8x1d90ztlbsyjthmfc0000gn/T/RtmpievvJ0/eDNA_omni-202006231119-3-1dd9c8.csv' \
+#&gt;   'method=sample' 'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt \
+#&gt;   'engaged=1'</div><div class='output co'>#&gt; <span class='message'>Chain 3 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 3   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 3   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 3 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 3   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 3   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 3 Gradient evaluation took 8.6e-05 seconds</span></div><div class='output co'>#&gt; <span class='message'>Chain 3 1000 transitions using 10 leapfrog steps per transition would take 0.86 seconds.</span></div><div class='output co'>#&gt; <span class='message'>Chain 3 Adjust your expectations accordingly!</span></div><div class='output co'>#&gt; Chain 3 Iteration:    1 / 2000 [  0%]  (Warmup) 
+#&gt; Chain 3 Iteration:  100 / 2000 [  5%]  (Warmup) 
+#&gt; Chain 3 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+#&gt; Chain 3 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+#&gt; Chain 3 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+#&gt; Chain 3 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+#&gt; Chain 3 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+#&gt; Chain 3 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+#&gt; Chain 3 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+#&gt; Chain 3 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+#&gt; Chain 3 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+#&gt; Chain 3 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+#&gt; Chain 3 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+#&gt; Chain 3 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+#&gt; Chain 3 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+#&gt; Chain 3 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+#&gt; Chain 3 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+#&gt; Chain 3 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+#&gt; Chain 3 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+#&gt; Chain 3 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+#&gt; Chain 3 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+#&gt; Chain 3 Iteration: 2000 / 2000 [100%]  (Sampling) 
+#&gt; Chain 3 finished in 10.1 seconds.
+#&gt; Running ./eDNA_omni 'id=4' random 'seed=2063908309' data \
+#&gt;   'file=/var/folders/tt/y4p3sd8x1d90ztlbsyjthmfc0000gn/T/RtmpievvJ0/standata-20503296203a.json' \
+#&gt;   output \
+#&gt;   'file=/var/folders/tt/y4p3sd8x1d90ztlbsyjthmfc0000gn/T/RtmpievvJ0/eDNA_omni-202006231119-4-1dd9c8.csv' \
+#&gt;   'method=sample' 'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt \
+#&gt;   'engaged=1'</div><div class='output co'>#&gt; <span class='message'>Chain 4 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 4   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 4   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 4 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 4   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 4   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 4 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 4   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 4   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 4 Gradient evaluation took 8.7e-05 seconds</span></div><div class='output co'>#&gt; <span class='message'>Chain 4 1000 transitions using 10 leapfrog steps per transition would take 0.87 seconds.</span></div><div class='output co'>#&gt; <span class='message'>Chain 4 Adjust your expectations accordingly!</span></div><div class='output co'>#&gt; Chain 4 Iteration:    1 / 2000 [  0%]  (Warmup) </div><div class='output co'>#&gt; <span class='message'>Chain 4 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:</span></div><div class='output co'>#&gt; <span class='message'>Chain 4 Exception: normal_lpdf: Scale parameter[1] is 0, but must be &gt; 0! (in '/var/folders/tt/y4p3sd8x1d90ztlbsyjthmfc0000gn/T/RtmpievvJ0/model-20501811b54e.stan', line 231, column 1 to line 234, column 40)</span></div><div class='output co'>#&gt; <span class='message'>Chain 4 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,</span></div><div class='output co'>#&gt; <span class='message'>Chain 4 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.</span></div><div class='output co'>#&gt; <span class='message'>Chain 4 </span></div><div class='output co'>#&gt; Chain 4 Iteration:  100 / 2000 [  5%]  (Warmup) 
+#&gt; Chain 4 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+#&gt; Chain 4 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+#&gt; Chain 4 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+#&gt; Chain 4 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+#&gt; Chain 4 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+#&gt; Chain 4 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+#&gt; Chain 4 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+#&gt; Chain 4 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+#&gt; Chain 4 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+#&gt; Chain 4 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+#&gt; Chain 4 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+#&gt; Chain 4 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+#&gt; Chain 4 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+#&gt; Chain 4 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+#&gt; Chain 4 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+#&gt; Chain 4 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+#&gt; Chain 4 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+#&gt; Chain 4 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+#&gt; Chain 4 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+#&gt; Chain 4 Iteration: 2000 / 2000 [100%]  (Sampling) 
+#&gt; Chain 4 finished in 10.7 seconds.
+#&gt; 
+#&gt; All 4 chains finished successfully.
+#&gt; Mean chain execution time: 11.1 seconds.
+#&gt; Total execution time: 44.4 seconds.</div><div class='input'>
 <span class='co'>## Mixed-effect model</span>
 <span class='co'>## This takes a while to run</span>
 <span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
@@ -271,22 +433,10 @@ have issues, additional control arguments can be passed to
 
 }</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-
-      <li><a href="#diagnosing-warning-and-error-messages">Diagnosing warning and error messages</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Matt Espe</p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -297,7 +447,7 @@ have issues, additional control arguments can be passed to
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
