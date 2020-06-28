@@ -170,9 +170,6 @@ parameters{
 transformed parameters{
   vector[n_vars] betas;
   vector[has_random ? n_rand : 0] rand_betas;
-  vector[N] ln_conc_hat;
-  vector[N] Cq_hat;
-  real sd_slope_temp = 0;
   
   if(has_random){
 	rand_betas = groups_sum_to_zero(rand_betas_raw, group_ends);
@@ -181,8 +178,13 @@ transformed parameters{
 
   if(n_vars > 0)
 	betas = R_ast_inverse * thetas;
+}
 
-  // moved from model block
+model{
+  vector[N] ln_conc_hat;
+  vector[N] Cq_hat;
+  real sd_slope_temp = 0;
+
   if(n_vars > 0) {
 	ln_conc_hat = Q_ast * thetas + (has_inter ? temp_intercept[1] : 0.0);
   } else {
@@ -196,10 +198,6 @@ transformed parameters{
 
   for(n in 1:N)
 	Cq_hat[n] = ln_conc_hat[n] * std_curve_beta[n] + std_curve_alpha[n];
-
-}
-
-model{
   
   // Priors
   sigma_Cq ~ std_normal();
@@ -253,19 +251,41 @@ generated quantities{
   if(sd_vary)
 	sd_slope[1] = sd_slope_location[1] * sd_slope_scale[1];
 
-  // For WAIC
-  for(n in 1:N){
-	if(y[n] < upper_Cq) {
-	  log_lik[n] = normal_lpdf(y[n] |
-							   Cq_hat[n], sigma_Cq +
-							   (Cq_hat[n] - center_Cq) * sd_slope_temp) +
-		bernoulli_lpmf(0 | p_zero);   
-	} else {
-	  log_lik[n] = log_sum_exp(bernoulli_lpmf(1 | p_zero),
-								bernoulli_lpmf(0 | p_zero) +
-								normal_lccdf(upper_Cq | Cq_hat[n],
-											 sigma_Cq +
-											 ((upper_Cq - center_Cq) * sd_slope_temp)));
-	}
+  // copied from above - needed to avoid saving all this as parameters
+  // slightly inefficient, but saves on processing time later
+  {
+	  vector[N] ln_conc_hat_tmp;
+	  vector[N] Cq_hat_tmp;
+	  real sd_slope_temp_tmp = 0;
+
+	  if(n_vars > 0) {
+		ln_conc_hat_tmp = Q_ast * thetas + (has_inter ? temp_intercept[1] : 0.0);
+	  } else {
+		ln_conc_hat_tmp = rep_vector(temp_intercept[1], N);
+	  }
+	  
+	  if(has_random)
+		ln_conc_hat_tmp = ln_conc_hat_tmp + rand_x * rand_betas;
+  
+	  sd_slope_temp_tmp = sd_vary ? sd_slope_location[1] * sd_slope_scale[1] : 0.0;
+
+	  for(n in 1:N)
+		Cq_hat_tmp[n] = ln_conc_hat_tmp[n] * std_curve_beta[n] + std_curve_alpha[n];
+	  
+	  // For WAIC
+	  for(n in 1:N){
+		if(y[n] < upper_Cq) {
+		  log_lik[n] = normal_lpdf(y[n] |
+								   Cq_hat_tmp[n], sigma_Cq +
+								   (Cq_hat_tmp[n] - center_Cq) * sd_slope_temp_tmp) +
+			bernoulli_lpmf(0 | p_zero);   
+		} else {
+		  log_lik[n] = log_sum_exp(bernoulli_lpmf(1 | p_zero),
+								   bernoulli_lpmf(0 | p_zero) +
+								   normal_lccdf(upper_Cq | Cq_hat_tmp[n],
+												sigma_Cq +
+												((upper_Cq - center_Cq) * sd_slope_temp_tmp)));
+		}
+	  }
   }
 }
