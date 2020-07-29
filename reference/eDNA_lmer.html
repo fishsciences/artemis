@@ -213,7 +213,7 @@ that less than two is not recommended.</p></td>
     <tr>
       <th>verbose</th>
       <td><p>logical, when TRUE output from
-<code><a href='https://rdrr.io/pkg/rstan/man/stanmodel-method-sampling.html'>rstan::sampling</a></code> is written to the console.</p></td>
+<code><a href='https://mc-stan.org/rstan/reference/stanmodel-method-sampling.html'>rstan::sampling</a></code> is written to the console.</p></td>
     </tr>
     <tr>
       <th>prior_intercept</th>
@@ -249,7 +249,7 @@ if <code>verbose = FALSE</code>, by default writes to
     <tr>
       <th>...</th>
       <td><p>additional arguments passed to
-<code><a href='https://rdrr.io/pkg/rstan/man/stanmodel-method-sampling.html'>sampling</a></code></p></td>
+<code><a href='https://mc-stan.org/rstan/reference/stanmodel-method-sampling.html'>sampling</a></code></p></td>
     </tr>
     </table>
 
@@ -268,7 +268,7 @@ if <code>verbose = FALSE</code>, by default writes to
     used</p></dd> <dt>std_curve_beta</dt><dd><p>numeric, the std. curve value
     used</p></dd> <dt>upper_Cq</dt><dd><p>numeric, the upper limit for observed CQ
     used</p></dd> <dt>stanfit</dt><dd><p>stanfit, the original results from
-    <code><a href='https://rdrr.io/pkg/rstan/man/stanmodel-method-sampling.html'>rstan::sampling</a></code></p></dd> 
+    <code><a href='https://mc-stan.org/rstan/reference/stanmodel-method-sampling.html'>rstan::sampling</a></code></p></dd> 
 </dl>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -283,7 +283,7 @@ artemis package.</p>
 <code>eDNA_lm</code> and <code>eDNA_lmer</code>. <code>eDNA_lm</code> is for fitting
 a fixed effects model, while <code>eDNA_lmer</code> is for fitting a
 mixed or random effects model. Both models are fit using the
-<code><a href='https://rdrr.io/pkg/rstan/man/stanmodel-method-sampling.html'>rstan::sampling</a></code> function, which uses a Hamiltonian Monte
+<code><a href='https://mc-stan.org/rstan/reference/stanmodel-method-sampling.html'>rstan::sampling</a></code> function, which uses a Hamiltonian Monte
 Carlo algorithm to estimate parameters for the model. Users are
 encouraged to refer to the documentation for Stan and RStan at
 <a href='https://mc-stan.org/users/documentation/'>https://mc-stan.org/users/documentation/</a> for details about
@@ -303,7 +303,7 @@ specifying <code>iters</code> to be a larger value. This should be the
 first action attempted, as increasing the <code>iters</code> increases
 both the warm-up and sampling iterations. If users continue to
 have issues, additional control arguments can be passed to
-<code><a href='https://rdrr.io/pkg/rstan/man/stanmodel-method-sampling.html'>rstan::sampling</a></code> via the <code>...</code> argument.</p>
+<code><a href='https://mc-stan.org/rstan/reference/stanmodel-method-sampling.html'>rstan::sampling</a></code> via the <code>...</code> argument.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
@@ -312,9 +312,9 @@ have issues, additional control arguments can be passed to
               <span class='kw'>std_curve_alpha</span> <span class='kw'>=</span> <span class='fl'>21.2</span>, <span class='kw'>std_curve_beta</span> <span class='kw'>=</span> -<span class='fl'>1.5</span>)</div><div class='output co'>#&gt; <span class='message'>Model executable is up to date!</span></div><div class='output co'>#&gt; Running MCMC with 4 chain(s) on 1 core(s)...
 #&gt; 
 #&gt; Running ./eDNA_omni 'id=1' random 'seed=346871191' data \
-#&gt;   'file=/tmp/Rtmpe8oEkC/standata-10dfe79a4e35.json' output \
-#&gt;   'file=/tmp/Rtmpe8oEkC/eDNA_omni-202006231344-1-b8aec1.csv' 'method=sample' \
-#&gt;   'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt 'engaged=1'</div><div class='output co'>#&gt; <span class='message'>Chain 1 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 Gradient evaluation took 8.8e-05 seconds</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 1000 transitions using 10 leapfrog steps per transition would take 0.88 seconds.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 Adjust your expectations accordingly!</span></div><div class='output co'>#&gt; Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup) 
+#&gt;   'file=/tmp/Rtmp9h81JN/standata-2d713d769333.json' output \
+#&gt;   'file=/tmp/Rtmp9h81JN/eDNA_omni-202007291522-1-1ccd3e.csv' 'method=sample' \
+#&gt;   'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt 'engaged=1'</div><div class='output co'>#&gt; <span class='message'>Chain 1 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 Gradient evaluation took 0.000195 seconds</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 1000 transitions using 10 leapfrog steps per transition would take 1.95 seconds.</span></div><div class='output co'>#&gt; <span class='message'>Chain 1 Adjust your expectations accordingly!</span></div><div class='output co'>#&gt; Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup) 
 #&gt; Chain 1 Iteration:  100 / 2000 [  5%]  (Warmup) 
 #&gt; Chain 1 Iteration:  200 / 2000 [ 10%]  (Warmup) 
 #&gt; Chain 1 Iteration:  300 / 2000 [ 15%]  (Warmup) 
@@ -336,11 +336,11 @@ have issues, additional control arguments can be passed to
 #&gt; Chain 1 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
 #&gt; Chain 1 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
 #&gt; Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) 
-#&gt; Chain 1 finished in 7.7 seconds.
+#&gt; Chain 1 finished in 7.9 seconds.
 #&gt; Running ./eDNA_omni 'id=2' random 'seed=432744511' data \
-#&gt;   'file=/tmp/Rtmpe8oEkC/standata-10dfe79a4e35.json' output \
-#&gt;   'file=/tmp/Rtmpe8oEkC/eDNA_omni-202006231344-2-b8aec1.csv' 'method=sample' \
-#&gt;   'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt 'engaged=1'</div><div class='output co'>#&gt; <span class='message'>Chain 2 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2 Gradient evaluation took 0.000104 seconds</span></div><div class='output co'>#&gt; <span class='message'>Chain 2 1000 transitions using 10 leapfrog steps per transition would take 1.04 seconds.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2 Adjust your expectations accordingly!</span></div><div class='output co'>#&gt; Chain 2 Iteration:    1 / 2000 [  0%]  (Warmup) 
+#&gt;   'file=/tmp/Rtmp9h81JN/standata-2d713d769333.json' output \
+#&gt;   'file=/tmp/Rtmp9h81JN/eDNA_omni-202007291522-2-1ccd3e.csv' 'method=sample' \
+#&gt;   'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt 'engaged=1'</div><div class='output co'>#&gt; <span class='message'>Chain 2 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2 Gradient evaluation took 9e-05 seconds</span></div><div class='output co'>#&gt; <span class='message'>Chain 2 1000 transitions using 10 leapfrog steps per transition would take 0.9 seconds.</span></div><div class='output co'>#&gt; <span class='message'>Chain 2 Adjust your expectations accordingly!</span></div><div class='output co'>#&gt; Chain 2 Iteration:    1 / 2000 [  0%]  (Warmup) 
 #&gt; Chain 2 Iteration:  100 / 2000 [  5%]  (Warmup) 
 #&gt; Chain 2 Iteration:  200 / 2000 [ 10%]  (Warmup) 
 #&gt; Chain 2 Iteration:  300 / 2000 [ 15%]  (Warmup) 
@@ -362,11 +362,11 @@ have issues, additional control arguments can be passed to
 #&gt; Chain 2 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
 #&gt; Chain 2 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
 #&gt; Chain 2 Iteration: 2000 / 2000 [100%]  (Sampling) 
-#&gt; Chain 2 finished in 8.1 seconds.
+#&gt; Chain 2 finished in 7.2 seconds.
 #&gt; Running ./eDNA_omni 'id=3' random 'seed=31749990' data \
-#&gt;   'file=/tmp/Rtmpe8oEkC/standata-10dfe79a4e35.json' output \
-#&gt;   'file=/tmp/Rtmpe8oEkC/eDNA_omni-202006231344-3-b8aec1.csv' 'method=sample' \
-#&gt;   'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt 'engaged=1'</div><div class='output co'>#&gt; <span class='message'>Chain 3 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 3   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 3   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 3 Gradient evaluation took 0.000229 seconds</span></div><div class='output co'>#&gt; <span class='message'>Chain 3 1000 transitions using 10 leapfrog steps per transition would take 2.29 seconds.</span></div><div class='output co'>#&gt; <span class='message'>Chain 3 Adjust your expectations accordingly!</span></div><div class='output co'>#&gt; Chain 3 Iteration:    1 / 2000 [  0%]  (Warmup) </div><div class='output co'>#&gt; <span class='message'>Chain 3 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:</span></div><div class='output co'>#&gt; <span class='message'>Chain 3 Exception: normal_lpdf: Scale parameter[1] is 0, but must be &gt; 0! (in '/tmp/RtmpGK0qHi/model-e18d6ef39c68.stan', line 231, column 1 to line 234, column 40)</span></div><div class='output co'>#&gt; <span class='message'>Chain 3 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,</span></div><div class='output co'>#&gt; <span class='message'>Chain 3 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.</span></div><div class='output co'>#&gt; <span class='message'>Chain 3 </span></div><div class='output co'>#&gt; Chain 3 Iteration:  100 / 2000 [  5%]  (Warmup) 
+#&gt;   'file=/tmp/Rtmp9h81JN/standata-2d713d769333.json' output \
+#&gt;   'file=/tmp/Rtmp9h81JN/eDNA_omni-202007291522-3-1ccd3e.csv' 'method=sample' \
+#&gt;   'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt 'engaged=1'</div><div class='output co'>#&gt; <span class='message'>Chain 3 Rejecting initial value:</span></div><div class='output co'>#&gt; <span class='message'>Chain 3   Gradient evaluated at the initial value is not finite.</span></div><div class='output co'>#&gt; <span class='message'>Chain 3   Stan can't start sampling from this initial value.</span></div><div class='output co'>#&gt; <span class='message'>Chain 3 Gradient evaluation took 0.000132 seconds</span></div><div class='output co'>#&gt; <span class='message'>Chain 3 1000 transitions using 10 leapfrog steps per transition would take 1.32 seconds.</span></div><div class='output co'>#&gt; <span class='message'>Chain 3 Adjust your expectations accordingly!</span></div><div class='output co'>#&gt; Chain 3 Iteration:    1 / 2000 [  0%]  (Warmup) </div><div class='output co'>#&gt; <span class='message'>Chain 3 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:</span></div><div class='output co'>#&gt; <span class='message'>Chain 3 Exception: normal_lpdf: Scale parameter[1] is 0, but must be &gt; 0! (in '/tmp/Rtmp3jbE5U/model-21e34794dc052.stan', line 230, column 1 to line 233, column 40)</span></div><div class='output co'>#&gt; <span class='message'>Chain 3 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,</span></div><div class='output co'>#&gt; <span class='message'>Chain 3 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.</span></div><div class='output co'>#&gt; <span class='message'>Chain 3 </span></div><div class='output co'>#&gt; Chain 3 Iteration:  100 / 2000 [  5%]  (Warmup) 
 #&gt; Chain 3 Iteration:  200 / 2000 [ 10%]  (Warmup) 
 #&gt; Chain 3 Iteration:  300 / 2000 [ 15%]  (Warmup) 
 #&gt; Chain 3 Iteration:  400 / 2000 [ 20%]  (Warmup) 
@@ -387,10 +387,10 @@ have issues, additional control arguments can be passed to
 #&gt; Chain 3 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
 #&gt; Chain 3 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
 #&gt; Chain 3 Iteration: 2000 / 2000 [100%]  (Sampling) 
-#&gt; Chain 3 finished in 8.4 seconds.
+#&gt; Chain 3 finished in 8.3 seconds.
 #&gt; Running ./eDNA_omni 'id=4' random 'seed=2137934383' data \
-#&gt;   'file=/tmp/Rtmpe8oEkC/standata-10dfe79a4e35.json' output \
-#&gt;   'file=/tmp/Rtmpe8oEkC/eDNA_omni-202006231344-4-b8aec1.csv' 'method=sample' \
+#&gt;   'file=/tmp/Rtmp9h81JN/standata-2d713d769333.json' output \
+#&gt;   'file=/tmp/Rtmp9h81JN/eDNA_omni-202007291522-4-1ccd3e.csv' 'method=sample' \
 #&gt;   'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt 'engaged=1'
 #&gt; Chain 4 Iteration:    1 / 2000 [  0%]  (Warmup) 
 #&gt; Chain 4 Iteration:  100 / 2000 [  5%]  (Warmup) 
@@ -414,11 +414,11 @@ have issues, additional control arguments can be passed to
 #&gt; Chain 4 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
 #&gt; Chain 4 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
 #&gt; Chain 4 Iteration: 2000 / 2000 [100%]  (Sampling) 
-#&gt; Chain 4 finished in 7.9 seconds.
+#&gt; Chain 4 finished in 8.0 seconds.
 #&gt; 
 #&gt; All 4 chains finished successfully.
-#&gt; Mean chain execution time: 8.0 seconds.
-#&gt; Total execution time: 32.2 seconds.</div><div class='input'>
+#&gt; Mean chain execution time: 7.8 seconds.
+#&gt; Total execution time: 31.5 seconds.</div><div class='input'>
 <span class='co'>## Mixed-effect model</span>
 <span class='co'>## This takes a while to run</span>
 <span class='kw'>if</span> (<span class='fl'>FALSE</span>) {

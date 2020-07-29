@@ -85,7 +85,7 @@
 
       
 
-      </header><script src="modeling_files/header-attrs-2.2/header-attrs.js"></script><div class="row">
+      </header><script src="modeling_files/header-attrs-2.3/header-attrs.js"></script><script src="modeling_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Modeling eDNA qPCR Data with <code>artemis</code>
@@ -169,7 +169,7 @@
                     <span class="kw">data</span> <span class="kw">=</span> <span class="no">eDNA_data</span>,
                     <span class="kw">std_curve_alpha</span> <span class="kw">=</span> <span class="fl">21.2</span>, <span class="kw">std_curve_beta</span> <span class="kw">=</span> -<span class="fl">1.5</span>)</pre></body></html></div>
 <p><br></p>
-<p>The model functions will add an intercept term, but you can explicitly omit the intercept if you have a good reason for doing so. Full control of the MCMC algorithm can be accomplished by adding these control arguments to the end of the <code>eDNA_lm*()</code> call, which then passes them on to <code><a href="https://rdrr.io/pkg/rstan/man/stan.html">rstan::stan()</a></code>. For example,</p>
+<p>The model functions will add an intercept term, but you can explicitly omit the intercept if you have a good reason for doing so. Full control of the MCMC algorithm can be accomplished by adding these control arguments to the end of the <code>eDNA_lm*()</code> call, which then passes them on to <code><a href="https://mc-stan.org/rstan/reference/stan.html">rstan::stan()</a></code>. For example,</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">model_fit</span> <span class="kw">=</span> <span class="fu"><a href="../reference/eDNA_lmer.html">eDNA_lm</a></span>(<span class="no">Cq</span> ~ <span class="no">Distance</span>,
                     <span class="kw">data</span> <span class="kw">=</span> <span class="no">eDNA_data</span>,
                     <span class="kw">std_curve_alpha</span> <span class="kw">=</span> <span class="fl">21.2</span>, <span class="kw">std_curve_beta</span> <span class="kw">=</span> -<span class="fl">1.5</span>,
@@ -189,18 +189,18 @@
 <span class="co">#&gt; Running MCMC with 1 chain(s) on 1 core(s)...</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Running ./eDNA_omni 'id=1' random 'seed=1234' data \</span>
-<span class="co">#&gt;   'file=/tmp/Rtmp77uw1C/standata-10ed22454ec11.json' output \</span>
-<span class="co">#&gt;   'file=/tmp/Rtmp77uw1C/eDNA_omni-202006231346-1-dc65e9.csv' 'method=sample' \</span>
+<span class="co">#&gt;   'file=/tmp/RtmpICy4nS/standata-2e60371e4f96.json' output \</span>
+<span class="co">#&gt;   'file=/tmp/RtmpICy4nS/eDNA_omni-202007291524-1-5519de.csv' 'method=sample' \</span>
 <span class="co">#&gt;   'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt 'engaged=1'</span>
 <span class="co">#&gt; Chain 1 Rejecting initial value:</span>
 <span class="co">#&gt; Chain 1   Gradient evaluated at the initial value is not finite.</span>
 <span class="co">#&gt; Chain 1   Stan can't start sampling from this initial value.</span>
-<span class="co">#&gt; Chain 1 Gradient evaluation took 0.000108 seconds</span>
-<span class="co">#&gt; Chain 1 1000 transitions using 10 leapfrog steps per transition would take 1.08 seconds.</span>
+<span class="co">#&gt; Chain 1 Gradient evaluation took 9.6e-05 seconds</span>
+<span class="co">#&gt; Chain 1 1000 transitions using 10 leapfrog steps per transition would take 0.96 seconds.</span>
 <span class="co">#&gt; Chain 1 Adjust your expectations accordingly!</span>
 <span class="co">#&gt; Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup)</span>
 <span class="co">#&gt; Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:</span>
-<span class="co">#&gt; Chain 1 Exception: normal_lpdf: Scale parameter[1] is 0, but must be &gt; 0! (in '/tmp/RtmpGK0qHi/model-e18d6ef39c68.stan', line 231, column 1 to line 234, column 40)</span>
+<span class="co">#&gt; Chain 1 Exception: normal_lpdf: Scale parameter[1] is 0, but must be &gt; 0! (in '/tmp/Rtmp3jbE5U/model-21e34794dc052.stan', line 230, column 1 to line 233, column 40)</span>
 <span class="co">#&gt; Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,</span>
 <span class="co">#&gt; Chain 1 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.</span>
 <span class="co">#&gt; Chain 1</span>
@@ -225,7 +225,7 @@
 <span class="co">#&gt; Chain 1 Iteration: 1800 / 2000 [ 90%]  (Sampling) </span>
 <span class="co">#&gt; Chain 1 Iteration: 1900 / 2000 [ 95%]  (Sampling) </span>
 <span class="co">#&gt; Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 finished in 36.4 seconds.</span>
+<span class="co">#&gt; Chain 1 finished in 32.2 seconds.</span>
 <span class="co">#&gt; 243 of 1000 (24.0%) transitions ended with a divergence.</span>
 <span class="co">#&gt; These divergent transitions indicate that HMC is not fully able to explore the posterior distribution.</span>
 <span class="co">#&gt; Try increasing adapt delta closer to 1.</span>
@@ -251,8 +251,8 @@
 <span class="co">#&gt; Running MCMC with 1 chain(s) on 1 core(s)...</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Running ./eDNA_omni 'id=1' random 'seed=1234' data \</span>
-<span class="co">#&gt;   'file=/tmp/Rtmp77uw1C/standata-10ed25ee170e3.json' output \</span>
-<span class="co">#&gt;   'file=/tmp/Rtmp77uw1C/eDNA_omni-202006231347-1-5e9064.csv' 'method=sample' \</span>
+<span class="co">#&gt;   'file=/tmp/RtmpICy4nS/standata-2e6073cc3f6d.json' output \</span>
+<span class="co">#&gt;   'file=/tmp/RtmpICy4nS/eDNA_omni-202007291524-1-7f4f36.csv' 'method=sample' \</span>
 <span class="co">#&gt;   'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt 'engaged=1'</span>
 <span class="co">#&gt; Chain 1 Rejecting initial value:</span>
 <span class="co">#&gt; Chain 1   Gradient evaluated at the initial value is not finite.</span>
@@ -281,8 +281,8 @@
 <span class="co">#&gt; Chain 1 Rejecting initial value:</span>
 <span class="co">#&gt; Chain 1   Gradient evaluated at the initial value is not finite.</span>
 <span class="co">#&gt; Chain 1   Stan can't start sampling from this initial value.</span>
-<span class="co">#&gt; Chain 1 Gradient evaluation took 0.00013 seconds</span>
-<span class="co">#&gt; Chain 1 1000 transitions using 10 leapfrog steps per transition would take 1.3 seconds.</span>
+<span class="co">#&gt; Chain 1 Gradient evaluation took 0.000154 seconds</span>
+<span class="co">#&gt; Chain 1 1000 transitions using 10 leapfrog steps per transition would take 1.54 seconds.</span>
 <span class="co">#&gt; Chain 1 Adjust your expectations accordingly!</span>
 <span class="co">#&gt; Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup) </span>
 <span class="co">#&gt; Chain 1 Iteration:  100 / 2000 [  5%]  (Warmup) </span>
@@ -306,7 +306,7 @@
 <span class="co">#&gt; Chain 1 Iteration: 1800 / 2000 [ 90%]  (Sampling) </span>
 <span class="co">#&gt; Chain 1 Iteration: 1900 / 2000 [ 95%]  (Sampling) </span>
 <span class="co">#&gt; Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 finished in 14.5 seconds.</span></pre></body></html></div>
+<span class="co">#&gt; Chain 1 finished in 17.0 seconds.</span></pre></body></html></div>
 </div>
 <div id="summarizing-and-plotting-model-output" class="section level1">
 <h1 class="hasAnchor">
