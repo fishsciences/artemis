@@ -1,5 +1,7 @@
 context("Model fitting")
-
+test_that("Model setup", {
+    skip_on_cran()
+    skip_on_travis()
 ans = eDNA_lm(Cq ~ Distance, eDNA_data,
               std_curve_alpha = 21.2, std_curve_beta = -1.5)
 ans2 = eDNA_lm(Cq ~ Distance + Volume, eDNA_data,
@@ -8,8 +10,12 @@ ans_prior = eDNA_lm(Cq ~ Distance, eDNA_data,
               std_curve_alpha = 21.2, std_curve_beta = -1.5,
               prior_intercept = normal(-8,1),
               priors = normal(0, 1))
+expect_true(TRUE)
+})
 
 test_that("Fit the model with simple data",{
+    skip_on_cran()
+    skip_on_travis()
     expect_is(ans, "eDNA_model_lm")
 
     expect_true(all(slotNames(ans) %in% c("ln_conc", "Cq_star", "intercept", "betas",
@@ -32,6 +38,8 @@ test_that("Fit the model with simple data",{
 })
 
 test_that("Lmer", {
+    skip_on_cran()
+    skip_on_travis()
     ans2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID), eDNA_data,
                    std_curve_alpha = 21.2, std_curve_beta = -1.5, verbose = FALSE)
 
@@ -48,7 +56,9 @@ test_that("Lmer", {
 })
 
 test_that("lm with priors", {
-    # This should still work
+    skip_on_cran()
+    skip_on_travis()
+    ## This should still work
     # ans = eDNA_lm(Cq ~ Distance, eDNA_data,
     #               std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
@@ -65,6 +75,8 @@ test_that("lm with priors", {
 })
 
 test_that("Intercepts", {
+    skip_on_cran()
+    skip_on_travis()
     ans = eDNA_lm(Cq ~ 1,  eDNA_data,
                   std_curve_alpha = 21.2, std_curve_beta = -1.5)
     expect_is(ans, "eDNA_model")
@@ -72,7 +84,9 @@ test_that("Intercepts", {
 })
 
 test_that("Varying measurement error", {
-  ans = eDNA_lm(Cq ~ Distance + Volume, eDNA_data,
+    skip_on_cran()
+    skip_on_travis()
+    ans = eDNA_lm(Cq ~ Distance + Volume, eDNA_data,
                 std_curve_alpha = 21.2, std_curve_beta = -1.5,
                 Cq_error_type = "varying")
 
