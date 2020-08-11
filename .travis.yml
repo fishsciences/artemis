@@ -11,3 +11,4 @@ before_install:
 before_script:
 - Rscript -e "cmdstanr::install_cmdstan()"
 	
+install: travis_wait mvn install
