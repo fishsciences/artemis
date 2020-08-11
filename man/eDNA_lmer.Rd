@@ -141,6 +141,7 @@ have issues, additional control arguments can be passed to
 }
 
 \examples{
+\dontrun{
 
 ## Fixed effect model
 ans = eDNA_lm(Cq ~ Distance, eDNA_data,
@@ -148,7 +149,6 @@ ans = eDNA_lm(Cq ~ Distance, eDNA_data,
 
 ## Mixed-effect model
 ## This takes a while to run
-\dontrun{
 ans2 = eDNA_lmer(Cq ~ Distance + (1|SampleID), eDNA_data,
                  std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
