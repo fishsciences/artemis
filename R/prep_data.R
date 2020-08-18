@@ -20,7 +20,7 @@ prep_data.model = function(mod_list,
     model_data = list(y = mod_list$y,
                       N = length(mod_list$y),
                       n_vars = n_vars,
-                      X = as.matrix(x[idx,]),
+                      X = as.matrix(x[idx, , drop = FALSE],),
                       upper_Cq = Cq_upper,
                       rand_sigma = as.array(rand_sd),
                       prior_mu = priors$location,
@@ -136,8 +136,8 @@ remove_intercept = function(x)
     cnms = colnames(x)
     i = grep("(Intercept)", cnms, invert = TRUE)
 
-    x = as.data.frame(x[,i])
-    colnames(x) = cnms[i]
+    x = as.data.frame(subset(x, select = i)) ## Fixes dropping names on 1 column df
+    
     return(x)
 }
 
