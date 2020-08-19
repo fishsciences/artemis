@@ -77,11 +77,12 @@ est_p_detect = function(variable_levels,
 {
     if(!is.null(dim(variable_levels)))
         stop("Sorry, only one set of variable levels at a time currently supported")
-    if(is.null(model_fit) && length(variable_levels) != length(betas))
+    if((is.null(model_fit) && length(variable_levels) != length(betas)) ||
+       (!is.null(model_fit) && length(variable_levels) != ncol(model_fit@betas)) )
         stop("Variable levels and betas cannot be of different lengths")
     if(missing(betas) && is.null(model_fit))
         stop("Must provide either a set of beta values or a model_fit object")
-    
+
     if(!missing(betas)) {
         if(!is.null(model_fit)) dup_arg_warn("beta")
         ln_conc_hat = variable_levels %*% betas
