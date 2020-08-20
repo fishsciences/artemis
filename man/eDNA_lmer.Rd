@@ -11,6 +11,7 @@ eDNA_lm(
   std_curve_alpha,
   std_curve_beta,
   upper_Cq = 40,
+  QR = TRUE,
   n_chain = 4L,
   iters = 1000L,
   verbose = FALSE,
@@ -27,6 +28,7 @@ eDNA_lmer(
   std_curve_alpha,
   std_curve_beta,
   upper_Cq = 40,
+  QR = TRUE,
   n_chain = 4L,
   iters = 500L,
   verbose = FALSE,
@@ -52,6 +54,12 @@ converting between log(eDNA concentration) and CQ value}
 \item{upper_Cq}{numeric, the upper limit on CQ detection. Any
 value of log(concentration) which would result in a value
 greater than this limit is instead recorded as the limit.}
+
+\item{QR}{logical, use the QR decomposition. Typically more
+efficient when informative priors are not used. When TRUE, the
+priors are ignored and a standard normal prior is used on
+theta, the parameters estimates on the QR decomposed model
+matrix.}
 
 \item{n_chain}{integer, the number of chains to use. Please note
 that less than two is not recommended.}

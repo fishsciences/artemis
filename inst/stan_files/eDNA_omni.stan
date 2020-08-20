@@ -108,8 +108,8 @@ data{
   real prior_int_mu;
   real<lower = 0> prior_int_sd;
   
-  // user priors
-  int<lower = 0, upper = 1> has_prior;
+  // user priors vs. QR
+  int<lower = 0, upper = 1> use_qr;
   vector[n_vars] prior_mu;
   vector[n_vars] prior_sd;  
 
@@ -183,6 +183,7 @@ transformed parameters{
 model{
   vector[N] ln_conc_hat;
   vector[N] Cq_hat;
+  vector[N] sigmas = rep_vector(sigma_Cq, N);
   real sd_slope_temp = 0;
 
   if(n_vars > 0) {
@@ -194,8 +195,6 @@ model{
   if(has_random)
 	ln_conc_hat = ln_conc_hat + rand_x * rand_betas;
   
-  sd_slope_temp = sd_vary ? sd_slope_location[1] * sd_slope_scale[1] : 0.0;
-
   for(n in 1:N)
 	Cq_hat[n] = ln_conc_hat[n] * std_curve_beta[n] + std_curve_alpha[n];
   
@@ -209,14 +208,16 @@ model{
   if(has_inter)
 	temp_intercept ~ normal(prior_int_mu, prior_int_sd);
 
+  // For variable measurement error by Cq_hat
   // 30 to 40 CQ = +1 sd - seems like a reasonable prior
   if(sd_vary){
+	sigmas = sigmas + (sd_slope_location[1] + (Cq_hat - center_Cq) * sd_slope_scale[1]);
 	sd_slope_location ~ std_normal();
 	sd_slope_scale ~ normal(0.0, 0.1);
   }
     
   if(n_vars > 0) {
-	if(has_prior){ 
+	if(use_qr){ 
 	  for(i in 1:n_vars)
 		betas[i] ~ normal(prior_mu[i], prior_sd[i]);
 	} else {
@@ -227,15 +228,14 @@ model{
   
   if(n_below)
 	target += normal_lpdf(head(y, n_below) |
-						  head(Cq_hat, n_below), sigma_Cq +
-						  ((head(Cq_hat, n_below) - center_Cq) * sd_slope_temp)) +
+						  head(Cq_hat, n_below), head(sigmas, n_below)) +
 	  bernoulli_lpmf(0 | p_zero) * n_below;   
   if(n_above)
 	target += log_sum_exp(bernoulli_lpmf(1 | p_zero) * n_above,
 						  bernoulli_lpmf(0 | p_zero) * n_above +
-						  normal_lccdf(rep_vector(upper_Cq, n_above) | tail(Cq_hat, n_above),
-									   sigma_Cq +
-									   ((upper_Cq - center_Cq) * sd_slope_temp)));
+						  normal_lccdf(rep_vector(upper_Cq, n_above) |
+									   tail(Cq_hat, n_above),
+									   tail(sigmas, n_above)));
   
 }
 

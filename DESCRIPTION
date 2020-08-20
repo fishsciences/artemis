@@ -1,6 +1,6 @@
 Package: artemis
 Title: Analysis and Simulation of eDNA Experiments
-Version: 0.11.0
+Version: 0.12.0
 Authors@R: 
     c(person(given = "Myfanwy",
 		   family = "Johnston",

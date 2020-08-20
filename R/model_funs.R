@@ -3,7 +3,7 @@
 ##' @export
 eDNA_lm = function(formula, data, 
                    std_curve_alpha, std_curve_beta,
-                   upper_Cq = 40,
+                   upper_Cq = 40, QR = TRUE,
                    n_chain = 4L, iters = 1000L, verbose = FALSE,
                    prior_intercept = normal(location = -15, scale = 10),
                    priors = normal(), Cq_error_type = "fixed",
@@ -21,7 +21,7 @@ eDNA_lm = function(formula, data,
        
     # This works because Stan ignores extra input data
     md = prep_data.model(ml, std_curve_alpha, std_curve_beta,
-                   Cq_upper = upper_Cq,
+                   Cq_upper = upper_Cq, qr = QR,
                    prior_int = prior_intercept,
                    prior_b = priors, error_type = Cq_error_type)
     # md$y = ml$y
@@ -80,6 +80,11 @@ eDNA_lm = function(formula, data,
 ##' @param upper_Cq numeric, the upper limit on CQ detection. Any
 ##'     value of log(concentration) which would result in a value
 ##'     greater than this limit is instead recorded as the limit.
+##' @param QR logical, use the QR decomposition. Typically more
+##'     efficient when informative priors are not used. When TRUE, the
+##'     priors are ignored and a standard normal prior is used on
+##'     theta, the parameters estimates on the QR decomposed model
+##'     matrix.
 ##' @param n_chain integer, the number of chains to use. Please note
 ##'     that less than two is not recommended.
 ##' @param iters integer, the number of iterations per chain
@@ -139,7 +144,7 @@ eDNA_lm = function(formula, data,
 ##' @export
 eDNA_lmer = function(formula, data, 
                      std_curve_alpha, std_curve_beta,
-                     upper_Cq = 40,
+                     upper_Cq = 40, QR = TRUE,
                      n_chain = 4L, iters = 500L,
                      verbose = FALSE,
                      prior_intercept = normal(location = -15, scale = 10),
@@ -157,7 +162,7 @@ eDNA_lmer = function(formula, data,
     # ml = gen_model_list_lmer(formula, data)
     
     md = prep_data.model(ml, std_curve_alpha, std_curve_beta,
-                   Cq_upper = upper_Cq, 
+                   Cq_upper = upper_Cq, qr = QR,
                    prior_int = prior_intercept,
                    prior_b = priors, error_type = Cq_error_type)
 

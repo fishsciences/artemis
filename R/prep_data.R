@@ -6,6 +6,7 @@
 prep_data.model = function(mod_list,
                      alpha, beta,
                      Cq_sd, betas,
+                     qr,
                      Cq_upper = 40, rand_sd = double(0),
                      prior_int, prior_b, error_type = "fixed")
 {
@@ -26,6 +27,7 @@ prep_data.model = function(mod_list,
                       prior_mu = priors$location,
                       prior_sd = priors$scale,
                       has_inter = has_inter,
+                      use_qr = as.integer(qr),
                       n_below = n_below)
 
     if(length(alpha) < model_data$N)
@@ -38,7 +40,6 @@ prep_data.model = function(mod_list,
     
     model_data$prior_int_mu = prior_int$location
     model_data$prior_int_sd = prior_int$scale
-    model_data$has_prior = 1L # for testing ifelse(length(b_prior_mu), 1, 0)
 
     model_data$sd_vary = switch(error_type,
                                 "fixed" = 0L,
@@ -142,6 +143,7 @@ remove_intercept = function(x)
 }
 
 prep_priors = function(prior, x, y)
+## Follows general advice from rstanarm package
 {
     n = ncol(x)
     if(n == 0){
