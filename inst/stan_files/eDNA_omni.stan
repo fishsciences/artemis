@@ -123,6 +123,9 @@ data{
   int<lower = 0, upper = 1> sd_vary; // 0 = fixed, 1 = varying
   real<lower = 0, upper = upper_Cq> center_Cq; // CQ for centering 
 
+  // For zero-inflation
+  real<lower = 0, upper = 1> p_zero;
+
   // for vectorized sampling
   int n_below;
 }
@@ -139,7 +142,7 @@ transformed data{
   int group_ends[has_random ? n_grp : 0];
 
   int n_above = N - n_below;
-  
+    
   if(has_random){
 	group_ends = get_group_end(groups);
   }
@@ -164,7 +167,7 @@ parameters{
   vector<lower = 0>[has_random ? n_grp : 0] rand_sigma;
   vector[sd_vary ? 1 : 0] sd_slope_location;
   vector<lower = 0>[sd_vary ? 1 : 0] sd_slope_scale;
-  real<lower = 0, upper = 1> p_zero;
+  /* real<lower = 0, upper = 1> p_zero; */
 }
 
 transformed parameters{
@@ -185,7 +188,7 @@ model{
   vector[N] Cq_hat;
   vector[N] sigmas = rep_vector(sigma_Cq, N);
   real sd_slope_temp = 0;
-
+  
   if(n_vars > 0) {
 	ln_conc_hat = Q_ast * thetas + (has_inter ? temp_intercept[1] : 0.0);
   } else {
@@ -201,6 +204,8 @@ model{
   // Priors
   sigma_Cq ~ std_normal();
   rand_sigma ~ std_normal();
+
+  /* p_zero ~ normal(0.08, 0.01); */
   
   // not sure if this works
   rand_betas_raw ~ std_normal();

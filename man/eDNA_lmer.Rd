@@ -12,6 +12,7 @@ eDNA_lm(
   std_curve_beta,
   upper_Cq = 40,
   QR = TRUE,
+  probability_zero = 0.08,
   n_chain = 4L,
   iters = 1000L,
   verbose = FALSE,
@@ -29,6 +30,7 @@ eDNA_lmer(
   std_curve_beta,
   upper_Cq = 40,
   QR = TRUE,
+  probability_zero = 0.08,
   n_chain = 4L,
   iters = 500L,
   verbose = FALSE,
@@ -60,6 +62,10 @@ efficient when informative priors are not used. When TRUE, the
 priors are ignored and a standard normal prior is used on
 theta, the parameters estimates on the QR decomposed model
 matrix.}
+
+\item{probability_zero}{numeric, between 0 and 1. The probability
+of a non-detection from a source other than low concentration
+of eDNA, e.g. a filter failure}
 
 \item{n_chain}{integer, the number of chains to use. Please note
 that less than two is not recommended.}

@@ -4,6 +4,7 @@
 eDNA_lm = function(formula, data, 
                    std_curve_alpha, std_curve_beta,
                    upper_Cq = 40, QR = TRUE,
+                   probability_zero = 0.08,
                    n_chain = 4L, iters = 1000L, verbose = FALSE,
                    prior_intercept = normal(location = -15, scale = 10),
                    priors = normal(), Cq_error_type = "fixed",
@@ -21,7 +22,7 @@ eDNA_lm = function(formula, data,
        
     # This works because Stan ignores extra input data
     md = prep_data.model(ml, std_curve_alpha, std_curve_beta,
-                   Cq_upper = upper_Cq, qr = QR,
+                   Cq_upper = upper_Cq, qr = QR, prob_zero = probability_zero,
                    prior_int = prior_intercept,
                    prior_b = priors, error_type = Cq_error_type)
     # md$y = ml$y
@@ -85,6 +86,9 @@ eDNA_lm = function(formula, data,
 ##'     priors are ignored and a standard normal prior is used on
 ##'     theta, the parameters estimates on the QR decomposed model
 ##'     matrix.
+##' @param probability_zero numeric, between 0 and 1. The probability
+##'     of a non-detection from a source other than low concentration
+##'     of eDNA, e.g. a filter failure
 ##' @param n_chain integer, the number of chains to use. Please note
 ##'     that less than two is not recommended.
 ##' @param iters integer, the number of iterations per chain
@@ -145,6 +149,7 @@ eDNA_lm = function(formula, data,
 eDNA_lmer = function(formula, data, 
                      std_curve_alpha, std_curve_beta,
                      upper_Cq = 40, QR = TRUE,
+                     probability_zero = 0.08,
                      n_chain = 4L, iters = 500L,
                      verbose = FALSE,
                      prior_intercept = normal(location = -15, scale = 10),
@@ -162,7 +167,7 @@ eDNA_lmer = function(formula, data,
     # ml = gen_model_list_lmer(formula, data)
     
     md = prep_data.model(ml, std_curve_alpha, std_curve_beta,
-                   Cq_upper = upper_Cq, qr = QR,
+                   Cq_upper = upper_Cq, qr = QR, prob_zero = probability_zero,
                    prior_int = prior_intercept,
                    prior_b = priors, error_type = Cq_error_type)
 

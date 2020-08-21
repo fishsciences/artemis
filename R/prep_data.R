@@ -5,7 +5,7 @@
 
 prep_data.model = function(mod_list,
                      alpha, beta,
-                     Cq_sd, betas,
+                     Cq_sd, betas, prob_zero,
                      qr,
                      Cq_upper = 40, rand_sd = double(0),
                      prior_int, prior_b, error_type = "fixed")
@@ -23,6 +23,7 @@ prep_data.model = function(mod_list,
                       n_vars = n_vars,
                       X = as.matrix(x[idx, , drop = FALSE],),
                       upper_Cq = Cq_upper,
+                      p_zero = prob_zero,
                       rand_sigma = as.array(rand_sd),
                       prior_mu = priors$location,
                       prior_sd = priors$scale,
