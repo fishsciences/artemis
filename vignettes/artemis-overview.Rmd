@@ -80,12 +80,20 @@ matrix of predictors and
 $\alpha_{std\_curve}$ and $\beta_{std\_curve}$ are fixed values
 provided by the standard curve.
 
+Additionally, there is a zero-inflated component in the model. From
+multiple experiments, it was observed there can be near-zero
+concentrations of eDNA even in situations where higher concentrations
+were expected. This was attributed to filter failures. The expected
+probability of this occuring is user-provided, and allows for "true"
+zero observations when set to a value greater than 0. 
+
 As detection limits vary with genetic assay, the upper threshold on Cq
 in the model is adjustable.  Any values of $\hat{Cq_i}$ which are
 greater than the upper limit on $Cq_i$ are recorded as the threshold
 value.  For example, a $\hat{Cq_i}$ value of 42 is recorded as 40 when
 the upper limit is 40 cycles.
-   
+
+
    
 This model formulation makes several assumptions:
  
@@ -184,7 +192,7 @@ us to estimate the probability of detection with the uncertainty in
 our effect size estimates taken into account.
 
 ```{r, eval=TRUE, fig = TRUE}
-model_fit = eDNA_lm(Cq ~ Distance + Volume + Distance*Volume, 
+model_fit = eDNA_lm(Cq ~ Distance + Volume, 
                     data = eDNA_data,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5,
                     iter = 500, 
@@ -193,9 +201,7 @@ model_fit = eDNA_lm(Cq ~ Distance + Volume + Distance*Volume,
 
 # Intercept is automatically supplied if in model_fit
 p_detect2 = est_p_detect(variable_levels = c(Distance = 100,
-                                             Volume = 50,
-                                             DistanceXVolume = 100*50
-                                             ),
+                                             Volume = 50),
                         model_fit = model_fit, 
                         n_rep = 1:12)
 
@@ -246,7 +252,7 @@ call is similar to the one above, but instead of specifying the number of
 replicates in the `variable_list`, we provide a `rep_range`, which is
 `seq(2,20,2)` (every 2 from 2 to 20) by default. It will stop running once the specified power level is reached.  Warning, this is quite CPU intensive, so for this demonstation, we will be lowering the `rep_range` and the number of iterations for each case:
 
-```{r warning = FALSE}
+```{r warning = FALSE, eval = FALSE}
 set.seed(1234)
 dist_power_range = est_power_range_lm(Cq ~ 1 + distance,
                                 variable_list = list(Cq = 1, 

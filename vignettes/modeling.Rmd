@@ -57,7 +57,8 @@ The models handle this, as long as there are no variable levels with missing or 
 
 To fit a fixed effects model to the sample `eDNA_data` where `Distance` is the only predictor, we give the function a model formula and the input data listed above:
 
-```{r warning = FALSE, eval=FALSE}
+```{r warning = FALSE, eval=TRUE}
+
 model_fit = eDNA_lm(Cq ~ Distance, 
                     data = eDNA_data,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5)
@@ -81,21 +82,21 @@ model_fit = eDNA_lm(Cq ~ Distance,
 
 <br>
 
-By default, `artemis` suppresses the (often verbose) output from Stan,
-but users can (and should) enable it with `verbose = TRUE` when the model is sampling slowly or the
-output suggests the MCMC algorithm might not have converged, for example,
+<!-- By default, `artemis` suppresses the (often verbose) output from Stan, -->
+<!-- but users can (and should) enable it with `verbose = TRUE` when the model is sampling slowly or the -->
+<!-- output suggests the MCMC algorithm might not have converged, for example, -->
 
-```{r warning = FALSE, eval=TRUE}
-model_fit = eDNA_lm(Cq ~ Distance + Volume + Distance*Volume, 
-                    data = eDNA_data,
-                    std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                    iter = 500, 
-                    seed = 1234, 
-                    n_chain = 1, # set to 1 for vignette; default is 4
-                    verbose = TRUE)
-```
+<!-- ```{r warning = FALSE, eval=TRUE} -->
+<!-- model_fit = eDNA_lm(Cq ~ Distance + Volume + Distance*Volume,  -->
+<!--                     data = eDNA_data, -->
+<!--                     std_curve_alpha = 21.2, std_curve_beta = -1.5, -->
+<!--                     iter = 500,  -->
+<!--                     seed = 1234,  -->
+<!--                     n_chain = 1, # set to 1 for vignette; default is 4 -->
+<!--                     verbose = TRUE) -->
+<!-- ``` -->
 
-<br>
+<!-- <br> -->
 
 # Mixed effects models with `eDNA_lmer()`
 
@@ -119,12 +120,12 @@ model_fit2 = eDNA_lmer(Cq ~ Distance + Volume + (1|Year),
 # Summarizing and plotting model output
 
 As with the simulation objects, the model results can be summarized or plotted with default methods using
-`summary()` and `plot()`, or converted to a `dataframe` object for further manipulation.
+`summary()` and `plot()`, or converted to a `data.frame` object for further manipulation.
 
 ```{r, eval=TRUE}
 summary(model_fit)
 
-plot(model_fit, pars = c(sprintf("betas[%d]", 1:3)))
+plot(model_fit, pars = c("intercept", "betas"))
 ```
 
 <br>
@@ -132,8 +133,14 @@ plot(model_fit, pars = c(sprintf("betas[%d]", 1:3)))
 Matching `lme4` convention, random effects are not included in the default `summary()` output.  You can view or plot the random effects estimates by subsetting the `stanfit` slot of the model object with `@`, and specifying the `random_betas` parameters with the `pars` argument:
 
 ```{r, eval=FALSE}
-summary(model_fit2@stanfit, pars = "rand_betas", probs = c(0.50, 0.025, 0.975))$summary
-plot(model_fit2@stanfit, pars = "rand_betas")
+rstan::summary(model_fit2@stanfit, pars = "rand_betas", probs = c(0.50, 0.025, 0.975))$summary
+plot(model_fit2, pars = "rand_betas")
+```
+
+Similar to `lme4`, there is a `ranef` method for `eDNA_model` objects
+
+```{r eval=FALSE}
+ranef(model_fit2)
 ```
 
 <br>
