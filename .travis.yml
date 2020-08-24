@@ -12,7 +12,8 @@ install:
 - travis_wait 
 
 before_script:
-- Rscript -e "install.packages('devtools'); devtools::install_github('stan-dev/cmdstanr')"
+- Rscript -e "install.packages(c('lme4', 'ggplot2', 'rstan', 'loo', 'rstantools','devtools')
+- Rscript -e "devtools::install_github('stan-dev/cmdstanr')"
 - Rscript -e "cmdstanr::install_cmdstan()"
 
 	
