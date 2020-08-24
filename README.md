@@ -6,7 +6,7 @@
 #### 
 
 <!-- badges: start -->
-[![Travis build status](https://travis-ci.org/fishsciences/artemis.svg?branch=master)](https://travis-ci.org/fishsciences/artemis)
+[![Travis build status](https://travis-ci.org/fishsciences/artemis.svg?branch=main)](https://travis-ci.org/fishsciences/artemis)
 [![Codecov test coverage](https://codecov.io/gh/fishsciences/artemis/branch/master/graph/badge.svg)](https://codecov.io/gh/fishsciences/artemis?branch=master)
 
 <!-- badges: end -->
