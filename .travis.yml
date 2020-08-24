@@ -3,14 +3,14 @@
 language: r
 cache: packages
 
-r_packages:
-- devtools
-- ggplot2
-- rstan
-- rstantools
-- loo
-- lme4
-- rmarkdown
+# r_packages:
+# - devtools
+# - ggplot2
+# - rstan
+# - rstantools
+# - loo
+# - lme4
+# - rmarkdown
 
 r_github_packages: stan-dev/cmdstanr
 
@@ -21,7 +21,7 @@ install:
 - travis_wait 
 
 before_script:
-#- Rscript -e "install.packages(c('lme4', 'ggplot2', 'rstan', 'loo', 'rstantools','devtools'))"
+- Rscript -e "install.packages(c('lme4', 'ggplot2', 'rstan', 'loo', 'rstantools','devtools', 'rmarkdown'))"
 - Rscript -e "devtools::install_github('stan-dev/cmdstanr')"
 - Rscript -e "cmdstanr::install_cmdstan()"
 
