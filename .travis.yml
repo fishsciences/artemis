@@ -8,12 +8,10 @@ r_github_packages: stan-dev/cmdstanr
 before_install:
 - sudo apt-get -y install libv8-dev
 
-install: travis_wait mvn install
+install:
+- travis_wait mvn install
 
 before_script:
 - Rscript -e "cmdstanr::install_cmdstan()"
+
 	
-# script: 
-# - |
-#   R CMD build --no-build-vignettes .
-#   travis_wait 40 R CMD check --no--vignettes artemis*tar.gz
