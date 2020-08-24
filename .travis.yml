@@ -9,7 +9,7 @@ before_install:
 - sudo apt-get -y install libv8-dev
 
 install:
-- travis_wait mvn install
+- travis_wait 
 
 before_script:
 - Rscript -e "cmdstanr::install_cmdstan()"
