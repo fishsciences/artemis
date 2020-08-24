@@ -88,7 +88,8 @@ eDNA_lm = function(formula, data,
 ##'     matrix.
 ##' @param probability_zero numeric, between 0 and 1. The probability
 ##'     of a non-detection from a source other than low concentration
-##'     of eDNA, e.g. a filter failure
+##'     of eDNA, e.g. a filter failure. Defaults to 8% (0.08), which
+##'     was the estimated p(zero) from a daily sampling experiment.
 ##' @param n_chain integer, the number of chains to use. Please note
 ##'     that less than two is not recommended.
 ##' @param iters integer, the number of iterations per chain
@@ -115,19 +116,27 @@ eDNA_lm = function(formula, data,
 ##'     \code{tempfile()}
 ##' @param ... additional arguments passed to
 ##'     \code{\link[rstan]{sampling}}
-##' @return S4 object, with the following slots: \describe{
-##'     \item{ln_conc}{matrix, the posterior samples for the latent
-##'     variable, eDNA concentration} \item{Cq_star}{matrix, the
+##' @return S4 object, with the following slots:
+##' \describe{
+##'   \item{ln_conc}{matrix, the posterior samples for the latent
+##'     variable, eDNA concentration}
+##'   \item{Cq_star}{matrix, the
 ##'     posterior prediction for the observed response}
-##'     \item{betas}{array, the posterior estimates for the betas for
-##'     the linear model} \item{sigma_Cq}{array, the posterior
+##'   \item{betas}{array, the posterior estimates for the betas for
+##'     the linear model}
+##'   \item{sigma_Cq}{array, the posterior
 ##'     estimates for the measurement error of CQ}
-##'     \item{formula}{formula, the original formula used in the
-##'     model} \item{x}{data.frame, the model matrix used in the
-##'     model} \item{std_curve_alpha}{numeric, the std. curve value
-##'     used} \item{std_curve_beta}{numeric, the std. curve value
-##'     used} \item{upper_Cq}{numeric, the upper limit for observed CQ
-##'     used} \item{stanfit}{stanfit, the original results from
+##'   \item{formula}{formula, the original formula used in the
+##'     model}
+##'   \item{x}{data.frame, the model matrix used in the
+##'     model}
+##'   \item{std_curve_alpha}{numeric, the std. curve value
+##'     used}
+##'   \item{std_curve_beta}{numeric, the std. curve value
+##'     used}
+##'   \item{upper_Cq}{numeric, the upper limit for observed CQ
+##'     used}
+##'   \item{stanfit}{stanfit, the original results from
 ##'     \code{rstan::sampling}} }
 ##' @author Matt Espe
 ##'

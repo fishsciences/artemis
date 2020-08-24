@@ -17,7 +17,7 @@ Depends:
 	graphics,
 	stats,
 	ggplot2,
-    R (>= 3.5.0),
+    R (>= 4.0.0),
  	cmdstanr (>= 0.0.0.9000)
 Imports: 
 	lme4 (>= 1.1.21),

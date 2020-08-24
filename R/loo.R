@@ -1,3 +1,4 @@
+##' @rdname loo.eDNA_model
 ##' @export
 loo = function(x, ...)
     UseMethod("loo")
