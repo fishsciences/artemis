@@ -25,4 +25,4 @@ before_script:
 - Rscript -e "devtools::install_github('stan-dev/cmdstanr')"
 - Rscript -e "cmdstanr::install_cmdstan()"
 
-	
+warnings_are_errors: false	
