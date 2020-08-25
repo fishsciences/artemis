@@ -23,18 +23,14 @@ sim_eDNA_lm = function(formula, variable_list,
              "Provided: ", length(betas), "\n",
              "Required: ", ncol(ml$x), "\n")
 
-    md = prep_data(ml, std_curve_alpha, std_curve_beta, sigma_Cq, betas,
-                   prior_int = normal(), prior_b = normal(), type = "sim")
-
-    if(!verbose) sink(sink_file)
+    md = prep_data.sim(ml, std_curve_alpha, std_curve_beta, sigma_Cq, betas,
+                   prior_int = normal(), prior_b = normal())
 
     sims = sampling(stanmodels$eDNA_sim_omni, data = md, chains = 1L,
                     algorithm = "Fixed_param", iter = n_sim, warmup = 0L,
                     refresh = ifelse(verbose, 100, -1), show_messages = verbose,
                     open_progress = FALSE)
 
-    if(!verbose) sink()
-    
     # hacky
     sims = as(sims, "eDNA_simulation_lm")
     sims = load_slots(sims)
@@ -127,6 +123,8 @@ sim_eDNA_lm = function(formula, variable_list,
 ##' 
 ##' @author Matt Espe
 ##' @examples
+##' \dontrun{
+##' 
 ##' ## Includes extra variables
 ##' vars = list(Intercept = -10.6,
 ##'             distance = c(0, 15, 50),
@@ -147,7 +145,7 @@ sim_eDNA_lm = function(formula, variable_list,
 ##' ans = sim_eDNA_lm(Cq ~ distance + volume, vars,
 ##'                   betas = c(intercept = -10.6, distance = -0.05, volume = 0.1),
 ##'                   sigma_Cq = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
-##'
+##' }
 ##' @export
 sim_eDNA_lmer = function(formula, variable_list,
                          betas, sigma_Cq,
@@ -178,19 +176,15 @@ sim_eDNA_lmer = function(formula, variable_list,
              "Random effects: ", colnames(ml$groups))
 
     
-    md = prep_data(ml, std_curve_alpha, std_curve_beta, sigma_Cq,
+    md = prep_data.sim(ml, std_curve_alpha, std_curve_beta, sigma_Cq,
                    betas = betas, rand_sd = sigma_rand,
-                   prior_int = normal(), prior_b = normal(), type = "sim")
+                   prior_int = normal(), prior_b = normal())
 
-    if(!verbose) sink(sink_file)
-    
     sims = sampling(stanmodels$eDNA_sim_omni, data = md, chains = 1L,
                     algorithm = "Fixed_param", iter = n_sim, warmup = 0L,
                     refresh = ifelse(verbose, 100, -1), show_messages = verbose,
                     open_progress = FALSE)
-    
-    if(!verbose) sink()
-
+                       
     # hacky
     sims = as(sims, "eDNA_simulation_lmer")
     sims = load_slots(sims)

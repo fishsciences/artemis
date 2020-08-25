@@ -1,7 +1,33 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
-language: R
+language: r
 cache: packages
 
-# after_success:
-#   - Rscript -e 'covr::codecov()'
+# r_packages:
+# - devtools
+# - ggplot2
+# - rstan
+# - rstantools
+# - loo
+# - lme4
+# - rmarkdown
+
+r_github_packages: stan-dev/cmdstanr
+
+r_packages: covr
+
+before_install:
+- sudo apt-get -y install libv8-dev
+
+install:
+- travis_wait 
+
+before_script:
+- Rscript -e "install.packages(c('lme4', 'ggplot2', 'rstan', 'loo', 'rstantools','devtools', 'rmarkdown'))"
+- Rscript -e "devtools::install_github('stan-dev/cmdstanr')"
+- Rscript -e "cmdstanr::install_cmdstan()"
+
+warnings_are_errors: false	
+
+after_success:
+- Rscript -e 'library(covr); codecov()'

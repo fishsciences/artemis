@@ -2,7 +2,7 @@
 title: "Simulating eDNA Data with `artemis`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Simulating Data in artemis}
+  %\VignetteIndexEntry{Simulating eDNA Data with `artemis`}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 

@@ -24,7 +24,9 @@ library(artemis)
 
 A primary purpose of the `artemis` package is to facilitate modeling of qPCR data from eDNA samples.  It does this via two functions: `eDNA_lm()` for fixed effects models and `eDNA_lmer()` for mixed effects models.
 
-The underlying [Stan](https://mc-stan.org) models are pre-compiled in the package, but can be found in the `artemis` source code [here](https://github.com/fishsciences/artemis/tree/master/src/stan_files). 
+The underlying [Stan](https://mc-stan.org) models are compiled the
+first time the models are used. Thereafter, the models will not need
+to be re-compiled. The model's Stan code can be found in the `artemis` source code [here](https://github.com/fishsciences/artemis/tree/master/inst/stan_files). 
 
 ## Model Inputs
 
@@ -32,9 +34,12 @@ Both modeling functions require the following inputs:
 
 1. A vector of numeric Cq values (one for each qPCR replicate). Cq values corresponding to non-detections for your assay should be recorded as the threshold value (the default is 40.0 cycles).
 
-2. The intercept value $\alpha$ and the slope value $\beta$ from a standard curve equation associated with the qPCR analysis.
+2. The intercept value $\alpha$ and the slope value $\beta$ from a
+   standard curve equation associated with the qPCR analysis. This is
+   used to convert the observed Cq values to the corresponding log
+   concentration of eDNA.
 
-An example of qPCR data in the correct format for modeling with `artemis` can be viewed by calling `eDNA_data`, which is a `dataframe` with Cq values from live car experiments completed in the California Sacramento-San Joaquin Delta with Delta Smelt:
+An example of qPCR data in the correct format for modeling with `artemis` can be viewed by calling `eDNA_data`, which is a `data.frame` with Cq values from live car experiments completed in the California Sacramento-San Joaquin Delta with Delta Smelt:
 
 ```{r}
 head(eDNA_data)
@@ -57,7 +62,8 @@ The models handle this, as long as there are no variable levels with missing or 
 
 To fit a fixed effects model to the sample `eDNA_data` where `Distance` is the only predictor, we give the function a model formula and the input data listed above:
 
-```{r warning = FALSE, eval=FALSE}
+```{r warning = FALSE, eval=TRUE}
+
 model_fit = eDNA_lm(Cq ~ Distance, 
                     data = eDNA_data,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5)
@@ -66,36 +72,46 @@ model_fit = eDNA_lm(Cq ~ Distance,
 
 <br>
 
-The model functions will add an intercept term, but you can explicitly omit the intercept if you have a good reason for doing so.  Full control of the MCMC algorithm can be accomplished by adding these control arguments to the end of the `eDNA_lm*()` call, which then passes them on to `rstan::stan()`. For example, 
+The model functions, similar to `lm()` in base R, will automatically
+add an intercept term. You can explicitly omit the intercept if you
+have a good reason for doing so.  Full control of the MCMC algorithm
+can be accomplished by adding these control arguments to the end of
+the `eDNA_lm*()` call, which then passes them on to
+`cmdstanr::model$sample()`. *Note: the arguments for the model follow
+the naming conventions for `cmdstan`, which differ from those used by
+`rstan`. Documentation of these arguments can be found
+[here](https://mc-stan.org/cmdstanr/reference/model-method-sample.html)*
+
+For example,
 
 
 ```{r warning = FALSE, message=FALSE, eval=FALSE}
 model_fit = eDNA_lm(Cq ~ Distance, 
                     data = eDNA_data,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                    iter = 500, 
+                    iter_sampling = 500, 
                     seed = 1234, 
-                    n_chain = 1) # we don't recommend sampling just 1 chain; the default is 4
+                    chains = 1) # we don't recommend sampling just 1 chain; the default is 4
 
 ```
 
 <br>
 
-By default, `artemis` suppresses the (often verbose) output from Stan,
-but users can (and should) enable it with `verbose = TRUE` when the model is sampling slowly or the
-output suggests the MCMC algorithm might not have converged, for example,
+<!-- By default, `artemis` suppresses the (often verbose) output from Stan, -->
+<!-- but users can (and should) enable it with `verbose = TRUE` when the model is sampling slowly or the -->
+<!-- output suggests the MCMC algorithm might not have converged, for example, -->
 
-```{r warning = FALSE, eval=TRUE}
-model_fit = eDNA_lm(Cq ~ Distance + Volume + Distance*Volume, 
-                    data = eDNA_data,
-                    std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                    iter = 500, 
-                    seed = 1234, 
-                    n_chain = 1, # set to 1 for vignette; default is 4
-                    verbose = TRUE)
-```
+<!-- ```{r warning = FALSE, eval=TRUE} -->
+<!-- model_fit = eDNA_lm(Cq ~ Distance + Volume + Distance*Volume,  -->
+<!--                     data = eDNA_data, -->
+<!--                     std_curve_alpha = 21.2, std_curve_beta = -1.5, -->
+<!--                     iter = 500,  -->
+<!--                     seed = 1234,  -->
+<!--                     n_chain = 1, # set to 1 for vignette; default is 4 -->
+<!--                     verbose = TRUE) -->
+<!-- ``` -->
 
-<br>
+<!-- <br> -->
 
 # Mixed effects models with `eDNA_lmer()`
 
@@ -110,30 +126,36 @@ d$Year = factor(sample(2018:2020, size = nrow(d), replace = TRUE)) # create a ra
 model_fit2 = eDNA_lmer(Cq ~ Distance + Volume + (1|Year),
                        data = d,
                        std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                       iter = 1000, 
+                       iter_sampling = 1000, 
                        seed = 1234, 
-                       n_chain = 1) # set to 1 for vignette; default is 4
+                       chains = 1) # set to 1 for vignette; default is 4
 
 ```
 
 # Summarizing and plotting model output
 
 As with the simulation objects, the model results can be summarized or plotted with default methods using
-`summary()` and `plot()`, or converted to a `dataframe` object for further manipulation.
+`summary()` and `plot()`, or converted to a `data.frame` object for further manipulation.
 
 ```{r, eval=TRUE}
 summary(model_fit)
 
-plot(model_fit, pars = c(sprintf("betas[%d]", 1:3)))
+plot(model_fit, pars = c("intercept", "betas"))
 ```
 
 <br>
 
 Matching `lme4` convention, random effects are not included in the default `summary()` output.  You can view or plot the random effects estimates by subsetting the `stanfit` slot of the model object with `@`, and specifying the `random_betas` parameters with the `pars` argument:
 
-```{r}
-summary(model_fit2@stanfit, pars = "rand_betas", probs = c(0.50, 0.025, 0.975))$summary
-plot(model_fit2@stanfit, pars = "rand_betas")
+```{r, eval=FALSE}
+rstan::summary(model_fit2@stanfit, pars = "rand_betas", probs = c(0.50, 0.025, 0.975))$summary
+plot(model_fit2, pars = "rand_betas")
+```
+
+Similar to `lme4`, there is a `ranef` method for `eDNA_model` objects
+
+```{r eval=FALSE}
+ranef(model_fit2)
 ```
 
 <br>

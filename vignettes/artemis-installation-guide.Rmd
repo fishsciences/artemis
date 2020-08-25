@@ -2,7 +2,7 @@
 title: "ARTEMIS Installation Guide"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{artemis-installation-guide}
+  %\VignetteIndexEntry{ARTEMIS Installation Guide}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 

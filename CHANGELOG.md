@@ -7,6 +7,19 @@ WARNING: Any versions here are still under active developement, and
 will change in ways that will likely break your existing code. Until
 formal release v1.0.0, do not expect stability!
 
+## v0.13.0
+
+Changed zero-inflated probability to a user-supplied value rather than
+an estimate in the model. This is because a large amount of data is
+required to reliably estimate the probability of zeros. In situations
+with lower amounts of data, the model was failing to fit properly.
+
+## v0.12.0
+
+Added a zero-inflated probability to the model after observing that
+even with fairly consistent concentrations of eDNA, filters sometimes
+experience a zero value. 
+
 ## v0.11.0
 
 Added the ability to provide multiple standard curves, which is useful
@@ -23,7 +36,7 @@ stationary, i.e. fixed for all values of Cq.
 
 WARNING: In general, more data is required to reliably estimate a
 varying measurement error. Enabling this with small datasets is likely
-to result in unreliable estiamtes. 
+to result in unreliable estimates. 
 
 ## v0.9.5
 
