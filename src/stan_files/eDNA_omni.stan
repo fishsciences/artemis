@@ -13,6 +13,13 @@
   outside of the generated quantities block, we need to generate data
   in R, and then feed it to Stan to get estimates and calculate the 
   power for the test.
+
+  The data generating process is assumed to be:
+
+  Cq ~ mix( normal(Cq_hat, sigma) [, Upper_Cq] , 0 ) // truncated
+  0 ~ bernoulli(p_zero)
+  Cq_hat = std_curve_beta * ln_conc_eDNA + std_curve_alpha
+  ln_conc_eDNA = alpha + beta * X + U
  */
 
 functions{
@@ -101,8 +108,8 @@ data{
   real prior_int_mu;
   real<lower = 0> prior_int_sd;
   
-  // user priors
-  int<lower = 0, upper = 1> has_prior;
+  // user priors vs. QR
+  int<lower = 0, upper = 1> use_qr;
   vector[n_vars] prior_mu;
   vector[n_vars] prior_sd;  
 
@@ -115,6 +122,12 @@ data{
   // measurement error model
   int<lower = 0, upper = 1> sd_vary; // 0 = fixed, 1 = varying
   real<lower = 0, upper = upper_Cq> center_Cq; // CQ for centering 
+
+  // For zero-inflation
+  real<lower = 0, upper = 1> p_zero;
+
+  // for vectorized sampling
+  int n_below;
 }
 
 transformed data{
@@ -128,6 +141,8 @@ transformed data{
 
   int group_ends[has_random ? n_grp : 0];
 
+  int n_above = N - n_below;
+    
   if(has_random){
 	group_ends = get_group_end(groups);
   }
@@ -151,13 +166,14 @@ parameters{
   vector[has_random ? n_rand : 0] rand_betas_raw;
   vector<lower = 0>[has_random ? n_grp : 0] rand_sigma;
   vector[sd_vary ? 1 : 0] sd_slope_location;
-  vector<lower = 0>[sd_vary ? 1 : 0] sd_slope_scale;  
+  vector<lower = 0>[sd_vary ? 1 : 0] sd_slope_scale;
+  /* real<lower = 0, upper = 1> p_zero; */
 }
 
 transformed parameters{
   vector[n_vars] betas;
   vector[has_random ? n_rand : 0] rand_betas;
-
+  
   if(has_random){
 	rand_betas = groups_sum_to_zero(rand_betas_raw, group_ends);
   	rand_betas = make_random_betas(rand_betas, groups, rand_sigma);
@@ -170,10 +186,11 @@ transformed parameters{
 model{
   vector[N] ln_conc_hat;
   vector[N] Cq_hat;
+  vector[N] sigmas = rep_vector(sigma_Cq, N);
   real sd_slope_temp = 0;
   
   if(n_vars > 0) {
-	 ln_conc_hat = Q_ast * thetas + (has_inter ? temp_intercept[1] : 0.0);
+	ln_conc_hat = Q_ast * thetas + (has_inter ? temp_intercept[1] : 0.0);
   } else {
 	ln_conc_hat = rep_vector(temp_intercept[1], N);
   }
@@ -181,51 +198,56 @@ model{
   if(has_random)
 	ln_conc_hat = ln_conc_hat + rand_x * rand_betas;
   
+  for(n in 1:N)
+	Cq_hat[n] = ln_conc_hat[n] * std_curve_beta[n] + std_curve_alpha[n];
+  
   // Priors
-  sigma_Cq ~ normal(0, 1);
-  rand_sigma ~ normal(0, 1);
+  sigma_Cq ~ std_normal();
+  rand_sigma ~ std_normal();
+
+  /* p_zero ~ normal(0.08, 0.01); */
   
   // not sure if this works
-  rand_betas_raw ~ normal(0, 1);
+  rand_betas_raw ~ std_normal();
 
   if(has_inter)
 	temp_intercept ~ normal(prior_int_mu, prior_int_sd);
 
+  // For variable measurement error by Cq_hat
   // 30 to 40 CQ = +1 sd - seems like a reasonable prior
   if(sd_vary){
-	sd_slope_location ~ normal(0, 1);
-	sd_slope_scale ~ normal(0, 0.1);
+	sigmas = sigmas + (sd_slope_location[1] + (Cq_hat - center_Cq) * sd_slope_scale[1]);
+	sd_slope_location ~ std_normal();
+	sd_slope_scale ~ normal(0.0, 0.1);
   }
-  
-  sd_slope_temp = sd_vary ? sd_slope_location[1] * sd_slope_scale[1] : 0.0;
-  
+    
   if(n_vars > 0) {
-	if(has_prior){ 
+	if(use_qr){ 
 	  for(i in 1:n_vars)
 		betas[i] ~ normal(prior_mu[i], prior_sd[i]);
 	} else {
-	  thetas ~ normal(0 , 1);
+	  thetas ~ std_normal();
 	}
   }
 
-   
-  for(n in 1:N){
-	Cq_hat[n] = ln_conc_hat[n] * std_curve_beta[n] + std_curve_alpha[n];
-	
-	if(y[n] < upper_Cq) {
-	  y[n] ~ normal(Cq_hat[n], sigma_Cq +
-					((Cq_hat[n] - center_Cq) * sd_slope_temp));  
-	} else {
-	  target += normal_lccdf(upper_Cq | Cq_hat[n],
-							 sigma_Cq +
-							 ((upper_Cq - center_Cq) * sd_slope_temp));
-	}
-  }
+  
+  if(n_below)
+	target += normal_lpdf(head(y, n_below) |
+						  head(Cq_hat, n_below), head(sigmas, n_below)) +
+	  bernoulli_lpmf(0 | p_zero) * n_below;   
+  if(n_above)
+	target += log_sum_exp(bernoulli_lpmf(1 | p_zero) * n_above,
+						  bernoulli_lpmf(0 | p_zero) * n_above +
+						  normal_lccdf(rep_vector(upper_Cq, n_above) |
+									   tail(Cq_hat, n_above),
+									   tail(sigmas, n_above)));
+  
 }
 
 generated quantities{
   real intercept[has_inter ? 1 : 0];
   real sd_slope[sd_vary ? 1 : 0];
+  vector[N] log_lik;
   if(n_vars > 0){
 	intercept[1] = temp_intercept[1] - dot_product(mean_x, betas);
   } else {
@@ -233,4 +255,42 @@ generated quantities{
   }
   if(sd_vary)
 	sd_slope[1] = sd_slope_location[1] * sd_slope_scale[1];
+
+  // copied from above - needed to avoid saving all this as parameters
+  // slightly inefficient, but saves on processing time later
+  {
+	  vector[N] ln_conc_hat_tmp;
+	  vector[N] Cq_hat_tmp;
+	  real sd_slope_temp_tmp = 0;
+
+	  if(n_vars > 0) {
+		ln_conc_hat_tmp = Q_ast * thetas + (has_inter ? temp_intercept[1] : 0.0);
+	  } else {
+		ln_conc_hat_tmp = rep_vector(temp_intercept[1], N);
+	  }
+	  
+	  if(has_random)
+		ln_conc_hat_tmp = ln_conc_hat_tmp + rand_x * rand_betas;
+  
+	  sd_slope_temp_tmp = sd_vary ? sd_slope_location[1] * sd_slope_scale[1] : 0.0;
+
+	  for(n in 1:N)
+		Cq_hat_tmp[n] = ln_conc_hat_tmp[n] * std_curve_beta[n] + std_curve_alpha[n];
+	  
+	  // For WAIC
+	  for(n in 1:N){
+		if(y[n] < upper_Cq) {
+		  log_lik[n] = normal_lpdf(y[n] |
+								   Cq_hat_tmp[n], sigma_Cq +
+								   (Cq_hat_tmp[n] - center_Cq) * sd_slope_temp_tmp) +
+			bernoulli_lpmf(0 | p_zero);   
+		} else {
+		  log_lik[n] = log_sum_exp(bernoulli_lpmf(1 | p_zero),
+								   bernoulli_lpmf(0 | p_zero) +
+								   normal_lccdf(upper_Cq | Cq_hat_tmp[n],
+												sigma_Cq +
+												((upper_Cq - center_Cq) * sd_slope_temp_tmp)));
+		}
+	  }
+  }
 }
