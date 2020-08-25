@@ -216,7 +216,7 @@ model{
   // For variable measurement error by Cq_hat
   // 30 to 40 CQ = +1 sd - seems like a reasonable prior
   if(sd_vary){
-	sigmas = sigmas + (sd_slope_location[1] + (Cq_hat - center_Cq) * sd_slope_scale[1]);
+	sigmas = sigmas + ((Cq_hat - center_Cq) * sd_slope_location[1] * sd_slope_scale[1]);
 	sd_slope_location ~ std_normal();
 	sd_slope_scale ~ normal(0.0, 0.1);
   }
