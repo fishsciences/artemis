@@ -26,8 +26,7 @@ eDNA_lm = function(formula, data,
                    prior_int = prior_intercept,
                    prior_b = priors, error_type = Cq_error_type)
     # md$y = ml$y
-    fit = run_model(data = md, n_chain = n_chain, iters = iters,
-                    verbose = verbose, sink_file = sink_file, ...)
+    fit = run_model(d = md, ...)
     fit = load_slots_model(fit)
     fit = as(fit, "eDNA_model_lm")
     
@@ -182,8 +181,7 @@ eDNA_lmer = function(formula, data,
 
     # md$y = ml$y
 
-    fit = run_model(data = md, n_chain = n_chain, iters = iters,
-                    verbose = verbose, sink_file = sink_file, ...)
+    fit = run_model(d = md, chains = n_chain, iters = iters, ...)
     fit = load_slots_model(fit)
     
     fit = as(fit, "eDNA_model_lmer")
@@ -192,13 +190,12 @@ eDNA_lmer = function(formula, data,
     
     return(fit)
 }
-run_model = function(model = stanmodels$eDNA_omni, ...)
+run_model = function(model = stanmodels$eDNA_omni, d, ...)
     
 {
     # if(!verbose) sink(sink_file)
     
-    fit = sampling(model, data = data,
-                 ...)
+    fit = rstan::sampling(model, data = d, ...)
     
     fit = as(fit, "eDNA_model")
     return(fit)
