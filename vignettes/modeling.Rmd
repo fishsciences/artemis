@@ -24,7 +24,9 @@ library(artemis)
 
 A primary purpose of the `artemis` package is to facilitate modeling of qPCR data from eDNA samples.  It does this via two functions: `eDNA_lm()` for fixed effects models and `eDNA_lmer()` for mixed effects models.
 
-The underlying [Stan](https://mc-stan.org) models are pre-compiled in the package, but can be found in the `artemis` source code [here](https://github.com/fishsciences/artemis/tree/master/src/stan_files). 
+The underlying [Stan](https://mc-stan.org) models are compiled the
+first time the models are used. Thereafter, the models will not need
+to be re-compiled. The model's Stan code can be found in the `artemis` source code [here](https://github.com/fishsciences/artemis/tree/master/inst/stan_files). 
 
 ## Model Inputs
 
@@ -32,9 +34,12 @@ Both modeling functions require the following inputs:
 
 1. A vector of numeric Cq values (one for each qPCR replicate). Cq values corresponding to non-detections for your assay should be recorded as the threshold value (the default is 40.0 cycles).
 
-2. The intercept value $\alpha$ and the slope value $\beta$ from a standard curve equation associated with the qPCR analysis.
+2. The intercept value $\alpha$ and the slope value $\beta$ from a
+   standard curve equation associated with the qPCR analysis. This is
+   used to convert the observed Cq values to the corresponding log
+   concentration of eDNA.
 
-An example of qPCR data in the correct format for modeling with `artemis` can be viewed by calling `eDNA_data`, which is a `dataframe` with Cq values from live car experiments completed in the California Sacramento-San Joaquin Delta with Delta Smelt:
+An example of qPCR data in the correct format for modeling with `artemis` can be viewed by calling `eDNA_data`, which is a `data.frame` with Cq values from live car experiments completed in the California Sacramento-San Joaquin Delta with Delta Smelt:
 
 ```{r}
 head(eDNA_data)
@@ -67,16 +72,26 @@ model_fit = eDNA_lm(Cq ~ Distance,
 
 <br>
 
-The model functions will add an intercept term, but you can explicitly omit the intercept if you have a good reason for doing so.  Full control of the MCMC algorithm can be accomplished by adding these control arguments to the end of the `eDNA_lm*()` call, which then passes them on to `rstan::stan()`. For example, 
+The model functions, similar to `lm()` in base R, will automatically
+add an intercept term. You can explicitly omit the intercept if you
+have a good reason for doing so.  Full control of the MCMC algorithm
+can be accomplished by adding these control arguments to the end of
+the `eDNA_lm*()` call, which then passes them on to
+`cmdstanr::model$sample()`. *Note: the arguments for the model follow
+the naming conventions for `cmdstan`, which differ from those used by
+`rstan`. Documentation of these arguments can be found
+[here](https://mc-stan.org/cmdstanr/reference/model-method-sample.html)*
+
+For example,
 
 
 ```{r warning = FALSE, message=FALSE, eval=FALSE}
 model_fit = eDNA_lm(Cq ~ Distance, 
                     data = eDNA_data,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                    iter = 500, 
+                    iter_sampling = 500, 
                     seed = 1234, 
-                    n_chain = 1) # we don't recommend sampling just 1 chain; the default is 4
+                    chains = 1) # we don't recommend sampling just 1 chain; the default is 4
 
 ```
 
@@ -111,9 +126,9 @@ d$Year = factor(sample(2018:2020, size = nrow(d), replace = TRUE)) # create a ra
 model_fit2 = eDNA_lmer(Cq ~ Distance + Volume + (1|Year),
                        data = d,
                        std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                       iter = 1000, 
+                       iter_sampling = 1000, 
                        seed = 1234, 
-                       n_chain = 1) # set to 1 for vignette; default is 4
+                       chains = 1) # set to 1 for vignette; default is 4
 
 ```
 
