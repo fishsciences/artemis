@@ -5,10 +5,9 @@ eDNA_lm = function(formula, data,
                    std_curve_alpha, std_curve_beta,
                    upper_Cq = 40, QR = TRUE,
                    probability_zero = 0.08,
-                   n_chain = 4L, iters = 1000L, verbose = FALSE,
                    prior_intercept = normal(location = -15, scale = 10),
                    priors = normal(), Cq_error_type = "fixed",
-                   sink_file = tempfile(), ...)
+                   ...)
 {
     # from lm
     mf <- match.call(expand.dots = FALSE)
@@ -158,8 +157,6 @@ eDNA_lmer = function(formula, data,
                      std_curve_alpha, std_curve_beta,
                      upper_Cq = 40, QR = TRUE,
                      probability_zero = 0.08,
-                     n_chain = 4L, iters = 500L,
-                     verbose = FALSE,
                      prior_intercept = normal(location = -15, scale = 10),
                      priors = normal(), Cq_error_type = "fixed", 
                      sink_file = tempfile(), ...)
@@ -181,7 +178,7 @@ eDNA_lmer = function(formula, data,
 
     # md$y = ml$y
 
-    fit = run_model(d = md, chains = n_chain, iters = iters, ...)
+    fit = run_model(d = md, ...)
     fit = load_slots_model(fit)
     
     fit = as(fit, "eDNA_model_lmer")

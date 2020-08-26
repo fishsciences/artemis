@@ -197,7 +197,7 @@ model_fit = eDNA_lm(Cq ~ Distance + Volume,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5,
                     iter = 500, 
                     seed = 1234, 
-                    n_chain = 1) # set to 1 for vignette; default is 4
+                    chains = 1) # set to 1 for vignette; default is 4
 
 # Intercept is automatically supplied if in model_fit
 p_detect2 = est_p_detect(variable_levels = c(Distance = 100,

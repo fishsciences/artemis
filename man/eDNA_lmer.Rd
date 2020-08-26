@@ -13,13 +13,9 @@ eDNA_lm(
   upper_Cq = 40,
   QR = TRUE,
   probability_zero = 0.08,
-  n_chain = 4L,
-  iters = 1000L,
-  verbose = FALSE,
   prior_intercept = normal(location = -15, scale = 10),
   priors = normal(),
   Cq_error_type = "fixed",
-  sink_file = tempfile(),
   ...
 )
 
@@ -31,9 +27,6 @@ eDNA_lmer(
   upper_Cq = 40,
   QR = TRUE,
   probability_zero = 0.08,
-  n_chain = 4L,
-  iters = 500L,
-  verbose = FALSE,
   prior_intercept = normal(location = -15, scale = 10),
   priors = normal(),
   Cq_error_type = "fixed",
@@ -68,14 +61,6 @@ of a non-detection from a source other than low concentration
 of eDNA, e.g. a filter failure. Defaults to 8% (0.08), which
 was the estimated p(zero) from a daily sampling experiment.}
 
-\item{n_chain}{integer, the number of chains to use. Please note
-that less than two is not recommended.}
-
-\item{iters}{integer, the number of iterations per chain}
-
-\item{verbose}{logical, when TRUE output from
-\code{rstan::sampling} is written to the console.}
-
 \item{prior_intercept}{named list such as created by
 \code{rstanarm::normal}. The list must contain elements named
 "location" and "scale", which are the location and scale for a
@@ -95,12 +80,20 @@ them.}
 measurement error is assumed to be the same for all values of
 CQ, or if it increases or decreases as CQ increases.}
 
+\item{...}{additional arguments passed to
+\code{\link[rstan]{sampling}}}
+
 \item{sink_file}{character, a file to write the console output to
 if \code{verbose = FALSE}, by default writes to
 \code{tempfile()}}
 
-\item{...}{additional arguments passed to
-\code{\link[rstan]{sampling}}}
+\item{n_chain}{integer, the number of chains to use. Please note
+that less than two is not recommended.}
+
+\item{iters}{integer, the number of iterations per chain}
+
+\item{verbose}{logical, when TRUE output from
+\code{rstan::sampling} is written to the console.}
 }
 \value{
 S4 object, with the following slots:
