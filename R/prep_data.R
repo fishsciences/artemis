@@ -30,7 +30,9 @@ prep_data.model = function(mod_list,
                       has_inter = has_inter,
                       use_qr = as.integer(qr),
                       n_below = n_below)
-
+    ## avoid #837 in rstan
+    if(typeof(model_data$X) == "logical" && ncol(model_data$X) == 0)
+        storage.mode(model_data$X) = "numeric"
     if(length(alpha) < model_data$N)
         alpha = rep(alpha, model_data$N)
     if(length(beta) < model_data$N)
