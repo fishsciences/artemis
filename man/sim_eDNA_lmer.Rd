@@ -133,6 +133,8 @@ log[eDNA concentration] as the comparison data.
 }
 
 \examples{
+\dontrun{
+
 ## Includes extra variables
 vars = list(Intercept = -10.6,
             distance = c(0, 15, 50),
@@ -153,7 +155,7 @@ print(ans)
 ans = sim_eDNA_lm(Cq ~ distance + volume, vars,
                   betas = c(intercept = -10.6, distance = -0.05, volume = 0.1),
                   sigma_Cq = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
-
+}
 }
 \author{
 Matt Espe

@@ -11,6 +11,8 @@ eDNA_lm(
   std_curve_alpha,
   std_curve_beta,
   upper_Cq = 40,
+  QR = TRUE,
+  probability_zero = 0.08,
   n_chain = 4L,
   iters = 1000L,
   verbose = FALSE,
@@ -27,6 +29,8 @@ eDNA_lmer(
   std_curve_alpha,
   std_curve_beta,
   upper_Cq = 40,
+  QR = TRUE,
+  probability_zero = 0.08,
   n_chain = 4L,
   iters = 500L,
   verbose = FALSE,
@@ -52,6 +56,17 @@ converting between log(eDNA concentration) and CQ value}
 \item{upper_Cq}{numeric, the upper limit on CQ detection. Any
 value of log(concentration) which would result in a value
 greater than this limit is instead recorded as the limit.}
+
+\item{QR}{logical, use the QR decomposition. Typically more
+efficient when informative priors are not used. When TRUE, the
+priors are ignored and a standard normal prior is used on
+theta, the parameters estimates on the QR decomposed model
+matrix.}
+
+\item{probability_zero}{numeric, between 0 and 1. The probability
+of a non-detection from a source other than low concentration
+of eDNA, e.g. a filter failure. Defaults to 8% (0.08), which
+was the estimated p(zero) from a daily sampling experiment.}
 
 \item{n_chain}{integer, the number of chains to use. Please note
 that less than two is not recommended.}
@@ -88,19 +103,27 @@ if \code{verbose = FALSE}, by default writes to
 \code{\link[rstan]{sampling}}}
 }
 \value{
-S4 object, with the following slots: \describe{
-    \item{ln_conc}{matrix, the posterior samples for the latent
-    variable, eDNA concentration} \item{Cq_star}{matrix, the
+S4 object, with the following slots:
+\describe{
+  \item{ln_conc}{matrix, the posterior samples for the latent
+    variable, eDNA concentration}
+  \item{Cq_star}{matrix, the
     posterior prediction for the observed response}
-    \item{betas}{array, the posterior estimates for the betas for
-    the linear model} \item{sigma_Cq}{array, the posterior
+  \item{betas}{array, the posterior estimates for the betas for
+    the linear model}
+  \item{sigma_Cq}{array, the posterior
     estimates for the measurement error of CQ}
-    \item{formula}{formula, the original formula used in the
-    model} \item{x}{data.frame, the model matrix used in the
-    model} \item{std_curve_alpha}{numeric, the std. curve value
-    used} \item{std_curve_beta}{numeric, the std. curve value
-    used} \item{upper_Cq}{numeric, the upper limit for observed CQ
-    used} \item{stanfit}{stanfit, the original results from
+  \item{formula}{formula, the original formula used in the
+    model}
+  \item{x}{data.frame, the model matrix used in the
+    model}
+  \item{std_curve_alpha}{numeric, the std. curve value
+    used}
+  \item{std_curve_beta}{numeric, the std. curve value
+    used}
+  \item{upper_Cq}{numeric, the upper limit for observed CQ
+    used}
+  \item{stanfit}{stanfit, the original results from
     \code{rstan::sampling}} }
 }
 \description{
@@ -141,6 +164,7 @@ have issues, additional control arguments can be passed to
 }
 
 \examples{
+\dontrun{
 
 ## Fixed effect model
 ans = eDNA_lm(Cq ~ Distance, eDNA_data,
@@ -148,7 +172,6 @@ ans = eDNA_lm(Cq ~ Distance, eDNA_data,
 
 ## Mixed-effect model
 ## This takes a while to run
-\dontrun{
 ans2 = eDNA_lmer(Cq ~ Distance + (1|SampleID), eDNA_data,
                  std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
