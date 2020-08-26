@@ -25,6 +25,7 @@
 #' @importFrom rstan sampling extract plot
 #' @importFrom lme4 lFormula ranef
 #' @importFrom loo loo waic extract_log_lik
+#' @importFrom utils head
 #' @references 
 #' Stan Development Team (2018). RStan: the R interface to Stan. R package version 2.18.2. http://mc-stan.org
 #' 
