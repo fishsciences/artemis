@@ -89,7 +89,7 @@ For example,
 model_fit = eDNA_lm(Cq ~ Distance, 
                     data = eDNA_data,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                    iter_sampling = 500, 
+                    iter = 500, 
                     seed = 1234, 
                     chains = 1) # we don't recommend sampling just 1 chain; the default is 4
 
@@ -126,7 +126,7 @@ d$Year = factor(sample(2018:2020, size = nrow(d), replace = TRUE)) # create a ra
 model_fit2 = eDNA_lmer(Cq ~ Distance + Volume + (1|Year),
                        data = d,
                        std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                       iter_sampling = 1000, 
+                       iter = 1000, 
                        seed = 1234, 
                        chains = 1) # set to 1 for vignette; default is 4
 
