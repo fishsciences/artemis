@@ -11,6 +11,7 @@ est_p_detect(
   std_curve_alpha,
   std_curve_beta,
   n_rep = 1:12,
+  prob_zero = 0.08,
   model_fit = NULL,
   upper_Cq = 40
 )
@@ -35,6 +36,10 @@ conversion between log(concentration) and CQ}
 
 \item{n_rep}{the number of replicate measurements at the levels
 specified}
+
+\item{prob_zero}{the probability of seeing a non-detection,
+i.e. zero, from a zero-inflated process. Defaults to 8%, which
+is the rate of inflated zeros in a large sampling experiment.}
 
 \item{model_fit}{optional, a model fit from \code{eDNA_lm} or
 \code{eDNA_lmer}.  If this is provided, an estimate derived
