@@ -14,8 +14,10 @@ loo = function(x, ...)
 ##' @author Matt Espe
 ##' @export
 loo.eDNA_model = function(x, ...) {
-              loo(extract_log_lik(x@stanfit), ...)
-          }
+    ## Need this because rstan also has a loo method which is getting
+    ## picked up first - not sure why the method dispatch is not working
+    loo::loo(extract_log_lik(x@stanfit), ...)
+}
 
 
 ##' A 'waic' method for eDNA_model objects, which is simply a wrapper
@@ -29,5 +31,5 @@ loo.eDNA_model = function(x, ...) {
 ##' @author Matt Espe
 ##' @export
 waic.eDNA_model = function(x, ...) {
-              waic(extract_log_lik(x@stanfit), ...)
-          }
+    waic(extract_log_lik(x@stanfit), ...)
+}
