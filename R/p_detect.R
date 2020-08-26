@@ -50,6 +50,9 @@
 ##'     conversion between log(concentration) and CQ
 ##' @param n_rep the number of replicate measurements at the levels
 ##'     specified
+##' @param prob_zero the probability of seeing a non-detection,
+##'     i.e. zero, from a zero-inflated process. Defaults to 8%, which
+##'     is the rate of inflated zeros in a large sampling experiment.
 ##' @param model_fit optional, a model fit from \code{eDNA_lm} or
 ##'     \code{eDNA_lmer}.  If this is provided, an estimate derived
 ##'     from the posterior estimates of beta is calculated.
@@ -71,6 +74,7 @@ est_p_detect = function(variable_levels,
                         Cq_sd,
                         std_curve_alpha, std_curve_beta,
                         n_rep = 1:12,
+                        prob_zero = 0.08, 
                         model_fit = NULL,
                         upper_Cq = 40)
 
@@ -106,12 +110,21 @@ est_p_detect = function(variable_levels,
     }
     
     Cq_hat = ln_conc_hat * std_curve_beta + std_curve_alpha
-    ans = sapply(n_rep, function(i) 1 - ((1 - pnorm(upper_Cq, Cq_hat, Cq_sd)) ^ i))
+    ans = prob_detect(Cq_hat, Cq_sd, n_rep, prob_zero, upper_Cq)
 
     structure(ans,
               variable_levels = variable_levels,
               reps = n_rep,
               class = c("eDNA_p_detect", class(ans)))
+}
+
+prob_detect = function(Cq_hat, Cq_sd, n_rep, p_zero, upper_Cq = 40)
+{
+    ## 1 - pnorm() is the prob of seeing value over upper_Cq
+    ## p_zero is also the prob of seeing over upper_Cq
+    ## 1 - (pnorm() * (1 - p_zero))
+    p_nondetect = 1 - (pnorm(upper_Cq, Cq_hat, Cq_sd) * (1 - p_zero))
+    sapply(seq(n_rep), function(i) 1 - (p_nondetect ^ i))
 }
 
 dup_arg_warn = function(arg)

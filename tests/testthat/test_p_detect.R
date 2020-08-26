@@ -25,3 +25,13 @@ test_that("Multiple var levels", {
 
     })
     
+test_that("Zero-inflated", {
+    model_fit = eDNA_lm(Cq ~ Distance, eDNA_data,
+                    std_curve_alpha = 21.2, std_curve_beta = -1.5)
+
+    est_p_detect(variable_levels = c(Distance = 100),
+                 model_fit = model_fit, 
+                 std_curve_alpha = 21.2, std_curve_beta = -1.5,
+                 n_rep = 12:30)
+
+})
