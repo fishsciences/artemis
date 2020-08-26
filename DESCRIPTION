@@ -16,7 +16,7 @@ Depends:
     methods,
 	graphics,
 	stats,
-	ggplot2,
+	ggplot2 (>= 3.3.0),
     R (>= 4.0.0),
  	cmdstanr (>= 0.0.0.9000)
 Imports: 
