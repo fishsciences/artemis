@@ -31,7 +31,7 @@ test_that("Summary methods: simulations", {
 })
 
 test_that("Summary methods: model", {
-    ans = eDNA_lm(Cq ~ Distance, eDNA_data,
+    ans = eDNA_lm(Cq ~ Distance_m, eDNA_data,
                   std_curve_alpha = 21.2, std_curve_beta = -1.5)
     
     res = summary(ans)
@@ -53,8 +53,8 @@ test_that("Summary methods: model", {
 
 test_that("Summary methods: p-detect", {
     p_detect = est_p_detect(variable_levels = c(Intercept = 1, 
-                                                Distance = 1000),
-                            betas = c(Intercept = -12, Distance = -0.0001),
+                                                Distance_m = 1000),
+                            betas = c(Intercept = -12, Distance_m = -0.0001),
                             Cq_sd = 1, 
                             std_curve_alpha = 21.2, std_curve_beta = -1.5,
                             n_rep = 12:30)
@@ -64,7 +64,7 @@ test_that("Summary methods: p-detect", {
 
 
 test_that("Summary methods: predict", {
-    model_fit = eDNA_lm(Cq ~ Distance, eDNA_data,
+    model_fit = eDNA_lm(Cq ~ Distance_m, eDNA_data,
                         std_curve_alpha = 21.2, std_curve_beta = -1.5)
     ans = predict(model_fit)
     expect_is(summary(ans), "list")
