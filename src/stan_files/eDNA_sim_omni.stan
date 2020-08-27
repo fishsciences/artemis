@@ -36,6 +36,9 @@ data{
   real std_curve_beta[N];
   real upper_Cq; // upper value that Cq can take
 
+  // zero-inflated
+  real<lower = 0, upper = 1> p_zero;
+  
   real<lower = 0> sigma_Cq; // sd on Cq - assumed to be only on measurement
   vector[n_vars] betas;
 
@@ -73,6 +76,9 @@ generated quantities{
 	
 	Cq_star[n] = normal_rng(Cq_hat, sigma_Cq);
 	if(Cq_star[n] > upper_Cq)
+	  Cq_star[n] = upper_Cq;
+	// zero-inflated part
+	if(bernoulli_rng(p_zero))
 	  Cq_star[n] = upper_Cq;
   }
 }

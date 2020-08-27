@@ -44,3 +44,39 @@ conc_thresh = function(a, b, thresh = 40)
 {
     (thresh - a) / b
 }
+
+##' Convenience function to convert from Cq to [eDNA]
+##'
+##' Convenience function to convert from Cq to [eDNA]
+##' 
+##' @title Convert CQ value to [eDNA]
+##' @param Cq_values numeric vector, value of CQ
+##' @param std_curve_alpha the alpha value for the standard curve
+##' @param std_curve_beta the beta value for the standard curve
+##' @return numeric vector, [eDNA] values
+##' @author Matt Espe
+##' @export
+cq_to_lnconc = function(Cq_values, std_curve_alpha, std_curve_beta)
+{
+    (Cq_values - std_curve_alpha) / std_curve_beta
+}
+
+##' Convenience function for converting values
+##'
+##' Convenience function for converting values
+##' @title Convert [eDNA] to Cq
+##' @param x [eDNA] values
+##' @param std_curve_alpha the alpha value for the standard curve
+##' @param std_curve_beta the beta value for the standard curve
+##' @param upper_Cq the max Cq value
+##' @return vector of Cq values
+##' @author Matt Espe
+##' @export
+lnconc_to_cq = function(x, std_curve_alpha,
+                        std_curve_beta, upper_Cq = 40)
+
+{
+    ans = beta * log(x) + alpha
+    ans[ans > upper_Cq] = upper_Cq
+    ans
+}
