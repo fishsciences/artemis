@@ -145,8 +145,12 @@ simsdf <- data.frame(ans)
 
 # custom plot of simulated data
 ggplot(simsdf, aes(x = factor(distance), y = Cq_star)) +
-  geom_jitter(aes(color = factor(volume)), width = 0.05, alpha = 0.65) +
-   geom_boxplot(alpha = 0.5, width = 0.2, size = 0.5) +
+  geom_jitter(aes(color = factor(volume)),
+              width = 0.05,
+              alpha = 0.65) +
+  geom_boxplot(alpha = 0.5,
+               width = 0.2,
+               size = 0.5) +
   theme_minimal() +
   labs(x = "Distance (m)", y = "Estimated Cq")
 

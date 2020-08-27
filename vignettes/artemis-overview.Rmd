@@ -192,7 +192,7 @@ us to estimate the probability of detection with the uncertainty in
 our effect size estimates taken into account.
 
 ```{r, eval=TRUE, fig = TRUE}
-model_fit = eDNA_lm(Cq ~ Distance + Volume, 
+model_fit = eDNA_lm(Cq ~ Distance_m + Volume_mL, 
                     data = eDNA_data,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5,
                     iter = 500, 
@@ -200,8 +200,8 @@ model_fit = eDNA_lm(Cq ~ Distance + Volume,
                     n_chain = 1) # set to 1 for vignette; default is 4
 
 # Intercept is automatically supplied if in model_fit
-p_detect2 = est_p_detect(variable_levels = c(Distance = 100,
-                                             Volume = 50),
+p_detect2 = est_p_detect(variable_levels = c(Distance_m = 100,
+                                             Volume_mL = 50),
                         model_fit = model_fit, 
                         n_rep = 1:12)
 
@@ -215,66 +215,6 @@ and we can plot the results,
 plot(p_detect2, error_width = 0.1)
 ```
 
-Notice how we get uncertainty intervals when we use a fit model. 
-
-
-## Power and Precision Functions
-### Evaluating Simulated Study Designs with the `est_power_*()` functions
-
-Simulations are helpful for designing new studies. Given a set of
-assumptions about the effect sizes, we can simulate a full study and evaluate how well we are able to detect eDNA, and/or or whether the proposed design allows us to estimate those effects with precision.
-
-For example, suppose we wanted to design a study exploring the effects
-of different distances on the detection of eDNA. From previous
-studies, we have estimated the effect of distance to be a -0.04 decrease
-in log[eDNA] per meter distance away from source. If we want to have a
-sense of how many replicates we need for this study to have at least
-80% power (>=80% chance of estimating a beta for distance
-without including 0 in its CI), we can do this using the `est_power_lm()` and specifying a design. To do this, we specify the number of replicate filters as a vector (`rep`) in the `variable_list`, along with the rest of our variables and argument values.  *Note that these functions are not yet parallelized and may take some time to run on your machine*
-
-```{r warning = FALSE, eval=FALSE}
-est_power_lm(Cq ~ 1 + distance,
-             variable_list = list(Cq = 1, 
-                                  distance = c(0,100,300), 
-                                  rep = 1:3),
-             betas = c(intercept = -10.6, distance = -0.04),
-             sigma_Cq = 1, 
-             std_curve_alpha = 21.2, std_curve_beta = -1.5,
-             type = "exclude_zero")
-
-#> (Intercept)    distance 
-#>           1           0 
-
-```
-
-The `distance` result indicates that we don't have a sufficient number of replicates to detect the effect of distance here.  We could keep trying different number of replicates until we get a power number we like. However, it is easier to use the function`est_power_range_lm()`, which will automate this process for us. The
-call is similar to the one above, but instead of specifying the number of
-replicates in the `variable_list`, we provide a `rep_range`, which is
-`seq(2,20,2)` (every 2 from 2 to 20) by default. It will stop running once the specified power level is reached.  Warning, this is quite CPU intensive, so for this demonstation, we will be lowering the `rep_range` and the number of iterations for each case:
-
-```{r warning = FALSE, eval = FALSE}
-set.seed(1234)
-dist_power_range = est_power_range_lm(Cq ~ 1 + distance,
-                                variable_list = list(Cq = 1, 
-                                                     distance = c(0,100,300)),
-                                betas = c(intercept = -10.6, distance = -0.04),
-                                sigma_Cq = 1, 
-                                std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                                type = "exclude_zero",
-                                rep_range = c(5,10))
-
-dist_power_range
-
-#> $`n_rep: 5`
-#> (Intercept)    distance 
-#>           1           0 
-#> 
-#> $`n_rep: 10`
-#> (Intercept)    distance 
-#>           1           1 
-```
-
-For this study, it looks like we will need greater than 5 replicates (but perhaps less than 10) to have our desired 80% power. 
 
 <br>
 <br>
