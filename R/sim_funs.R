@@ -25,7 +25,7 @@ sim_eDNA_lm = function(formula, variable_list,
              "Required: ", ncol(ml$x), "\n")
 
     md = prep_data.sim(ml, std_curve_alpha, std_curve_beta, sigma_Cq, betas,
-                       p_zero, prior_int = normal(), prior_b = normal())
+                       prob_zero, prior_int = normal(), prior_b = normal())
 
     # if(!verbose) sink(sink_file)
     model = cmdstan_model(system.file("stan_files","eDNA_sim_omni.stan",
@@ -190,7 +190,7 @@ sim_eDNA_lmer = function(formula, variable_list,
 
     
     md = prep_data.sim(ml, std_curve_alpha, std_curve_beta, sigma_Cq,
-                   betas = betas, p_zero, rand_sd = sigma_rand,
+                   betas = betas, prob_zero, rand_sd = sigma_rand,
                    prior_int = normal(), prior_b = normal())
 
     # if(!verbose) sink(sink_file)
@@ -209,11 +209,6 @@ sim_eDNA_lmer = function(formula, variable_list,
     return(sims)
 }
 
-ln_std_curve = function(x, alpha = 21.167769, beta = -1.52868305)
-    ## equation, alpha, and beta from 20180927_VS_standard_curve.xlsx
-{
-    beta * log(x) + alpha
-}
 
 has_response = function(formula)
 {
