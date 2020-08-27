@@ -104,9 +104,6 @@ eDNA_lm = function(formula, data,
 ##' @param Cq_error_type either "fixed" or "varying", specifying if
 ##'     measurement error is assumed to be the same for all values of
 ##'     CQ, or if it increases or decreases as CQ increases.
-##' @param sink_file character, a file to write the console output to
-##'     if \code{verbose = FALSE}, by default writes to
-##'     \code{tempfile()}
 ##' @param ... additional arguments passed to
 ##'     \code{\link[rstan]{sampling}}
 ##' @return S4 object, with the following slots:
@@ -137,12 +134,12 @@ eDNA_lm = function(formula, data,
 ##' \dontrun{
 ##' 
 ##' ## Fixed effect model
-##' ans = eDNA_lm(Cq ~ Distance, eDNA_data,
+##' ans = eDNA_lm(Cq ~ Distance_m, eDNA_data,
 ##'               std_curve_alpha = 21.2, std_curve_beta = -1.5)
 ##'
 ##' ## Mixed-effect model
 ##' ## This takes a while to run
-##' ans2 = eDNA_lmer(Cq ~ Distance + (1|SampleID), eDNA_data,
+##' ans2 = eDNA_lmer(Cq ~ Distance_m + (1|FilterID), eDNA_data,
 ##'                  std_curve_alpha = 21.2, std_curve_beta = -1.5)
 ##'
 ##' }
@@ -154,7 +151,7 @@ eDNA_lmer = function(formula, data,
                      probability_zero = 0.08,
                      prior_intercept = normal(location = -15, scale = 10),
                      priors = normal(), Cq_error_type = "fixed", 
-                     sink_file = tempfile(), ...)
+                     ...)
 {
     # from lm
     mf <- match.call(expand.dots = FALSE)

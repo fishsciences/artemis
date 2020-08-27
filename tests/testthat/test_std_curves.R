@@ -3,12 +3,12 @@ context("Multiple Std. Curves")
 test_that("Multi-curves: model", {
     # TODO: add numerical checks
     n = nrow(eDNA_data)
-    ans = eDNA_lm(Cq ~ Distance, eDNA_data,
+    ans = eDNA_lm(Cq ~ Distance_m, eDNA_data,
                   std_curve_alpha = rep(21.2,n) , std_curve_beta = rep(-1.5, n))
 
     expect_is(ans, "eDNA_model")
 
-    ans = eDNA_lm(Cq ~ Distance, eDNA_data,
+    ans = eDNA_lm(Cq ~ Distance_m, eDNA_data,
                   std_curve_alpha = rnorm(n, 21.2, 0.25) ,
                   std_curve_beta = rnorm(n, -1.5, 0.25))
     
@@ -18,7 +18,7 @@ test_that("Multi-curves: model", {
 test_that("Multi-curves: methods", {
     n = nrow(eDNA_data)
 
-    ans = eDNA_lm(Cq ~ Distance, eDNA_data,
+    ans = eDNA_lm(Cq ~ Distance_m, eDNA_data,
                   std_curve_alpha = rnorm(n, 21.2, 0.25) ,
                   std_curve_beta = rnorm(n, -1.5, 0.25))
 
@@ -28,7 +28,7 @@ test_that("Multi-curves: methods", {
     
     expect_error(est_p_detect(10, model_fit = ans))
 
-    ans2 = eDNA_lm(Cq ~ Distance, eDNA_data,
+    ans2 = eDNA_lm(Cq ~ Distance_m, eDNA_data,
                   std_curve_alpha = rep(21.2,n) , std_curve_beta = rep(-1.5, n))
 
     res2 = est_p_detect(10, model_fit = ans2)

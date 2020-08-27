@@ -1,7 +1,7 @@
 context("Model predictions")
 
 test_that("Model predictions",{
-    dd = eDNA_lm(Cq ~ Distance, eDNA_data, std_curve_alpha = 21.2, std_curve_beta = -1.5)
+    dd = eDNA_lm(Cq ~ Distance_m, eDNA_data, std_curve_alpha = 21.2, std_curve_beta = -1.5)
     ans = predict(dd)
     
     expect_is(ans, "eDNA_predict_lm")
@@ -15,7 +15,7 @@ test_that("Model predictions",{
     ans3 = predict(dd, interval = TRUE, include_sigma = TRUE)
     expect_true(!is.null(ans3$Cq_star))
 
-    x = data.frame(Distance = c(0,50))
+    x = data.frame(Distance_m = c(0,50))
  
     ans4 = predict(dd, newdata = x)
 

@@ -46,25 +46,18 @@ head(eDNA_data)
 str(eDNA_data)
 ```
 
-As the sample data is just a subset, it's a bit unbalanced - some variable levels are associated with 15 replicate filters and 8 technical replicates per filter, while others have 5 replicate filters with 12 technical replicates, and the distribution of technical replicates across variable levels is uneven:
 
-```{r}
-table(eDNA_data$FilterNumber, eDNA_data$TechnicalRep)
-table(eDNA_data$Volume, eDNA_data$Distance)
-
-```
-
-The models handle this, as long as there are no variable levels with missing or `NA` values - Stan models do not take `NA` values, and any rows with `NA`s in the data will be dropped in the construction of the model matrix when the data is prepped for modeling.
+Note that there are no variable levels with missing or `NA` values - Stan models do not take `NA` values, and any rows with `NA`s in the data will be dropped in the construction of the model matrix when the data is prepped for modeling.
 
 <br>
 
 # Fixed effects models with `eDNA_lm()`
 
-To fit a fixed effects model to the sample `eDNA_data` where `Distance` is the only predictor, we give the function a model formula and the input data listed above:
+To fit a fixed effects model to the sample `eDNA_data` where `Distance_m` is the only predictor, we give the function a model formula and the input data listed above:
 
 ```{r warning = FALSE, eval=TRUE}
 
-model_fit = eDNA_lm(Cq ~ Distance, 
+model_fit = eDNA_lm(Cq ~ Distance_m, 
                     data = eDNA_data,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
@@ -86,10 +79,10 @@ For example,
 
 
 ```{r warning = FALSE, message=FALSE, eval=FALSE}
-model_fit = eDNA_lm(Cq ~ Distance, 
+model_fit = eDNA_lm(Cq ~ Distance_m, 
                     data = eDNA_data,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                    iter = 500, 
+                    iter_sampling = 500, 
                     seed = 1234, 
                     chains = 1) # we don't recommend sampling just 1 chain; the default is 4
 
@@ -123,12 +116,11 @@ To fit a model with one or more random effect(s), use the `eDNA_lmer()` function
 d = eDNA_data # create a copy to modify 
 d$Year = factor(sample(2018:2020, size = nrow(d), replace = TRUE)) # create a random variable
 
-model_fit2 = eDNA_lmer(Cq ~ Distance + Volume + (1|Year),
+model_fit2 = eDNA_lmer(Cq ~ Distance_m + Volume_mL + (1|Year),
                        data = d,
                        std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                       iter = 1000, 
-                       seed = 1234, 
-                       chains = 1) # set to 1 for vignette; default is 4
+                       iter_sampling = 1000, 
+                       seed = 1234) 
 
 ```
 
