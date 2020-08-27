@@ -119,7 +119,6 @@ d$Year = factor(sample(2018:2020, size = nrow(d), replace = TRUE)) # create a ra
 model_fit2 = eDNA_lmer(Cq ~ Distance_m + Volume_mL + (1|Year),
                        data = d,
                        std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                       iter_sampling = 1000, 
                        seed = 1234) 
 
 ```
