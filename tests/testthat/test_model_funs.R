@@ -1,4 +1,5 @@
 context("Model fitting")
+
 ans = eDNA_lm(Cq ~ Distance, eDNA_data,
               std_curve_alpha = 21.2, std_curve_beta = -1.5)
 ans2 = eDNA_lm(Cq ~ Distance + Volume, eDNA_data,
@@ -11,8 +12,6 @@ ans_prior = eDNA_lm(Cq ~ Distance, eDNA_data,
 test_that("Fit the model with simple data",{
     skip_on_cran()
     skip_on_travis()
-    ans = eDNA_lm(Cq ~ Distance, eDNA_data,
-                  std_curve_alpha = 21.2, std_curve_beta = -1.5)
     expect_is(ans, "eDNA_model_lm")
 
     expect_true(all(slotNames(ans) %in% c("ln_conc", "Cq_star", "intercept", "betas",
@@ -38,7 +37,7 @@ test_that("Lmer", {
     skip_on_cran()
     skip_on_travis()
     ans2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID), eDNA_data,
-                     std_curve_alpha = 21.2, std_curve_beta = -1.5)
+                   std_curve_alpha = 21.2, std_curve_beta = -1.5, verbose = FALSE)
 
    
     summary(ans2)
