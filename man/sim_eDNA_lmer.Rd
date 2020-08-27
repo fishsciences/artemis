@@ -14,6 +14,7 @@ sim_eDNA_lm(
   std_curve_beta,
   n_sim = 1L,
   upper_Cq = 40,
+  prob_zero = 0.08,
   X = expand.grid(variable_list),
   verbose = FALSE,
   sink_file = tempfile()
@@ -29,65 +30,75 @@ sim_eDNA_lmer(
   std_curve_beta,
   n_sim = 1L,
   upper_Cq = 40,
+  prob_zero = 0.08,
   X = expand.grid(variable_list),
   verbose = FALSE,
   sink_file = tempfile()
 )
 }
 \arguments{
-\item{formula}{a model formula, e.g. \code{y ~ x1 + x2}. For \code{sim_eDNA_lmer},
-random intercepts can also be provided, e.g. \code{ ( 1 | rep ) }.}
+\item{formula}{a model formula, e.g. \code{y ~ x1 + x2}. For
+\code{sim_eDNA_lmer}, random intercepts can also be provided,
+e.g. \code{ ( 1 | rep ) }.}
 
-\item{variable_list}{a named list, with the levels that each variable can take.
-Please note that the variables listed in the formula, including the
-response variable, must be present in the variable_list or in the X design matrix.
-Extra variables, i.e. variables which do not occur in the formula, are ignored.}
+\item{variable_list}{a named list, with the levels that each
+variable can take.  Please note that the variables listed in
+the formula, including the response variable, must be present
+in the variable_list or in the X design matrix.  Extra
+variables, i.e. variables which do not occur in the formula,
+are ignored.}
 
-\item{betas}{numeric vector, the beta for each variable in the design matrix}
+\item{betas}{numeric vector, the beta for each variable in the
+design matrix}
 
 \item{sigma_Cq}{numeric, the measurement error on CQ.}
 
-\item{std_curve_alpha}{the alpha value for the formula for converting between
-log(eDNA concentration) and CQ value}
+\item{std_curve_alpha}{the alpha value for the formula for
+converting between log(eDNA concentration) and CQ value}
 
-\item{std_curve_beta}{the beta value for the formula for converting between
-log(eDNA concentration) and CQ value}
+\item{std_curve_beta}{the beta value for the formula for
+converting between log(eDNA concentration) and CQ value}
 
 \item{n_sim}{integer, the number of cases to simulate}
 
-\item{upper_Cq}{numeric, the upper limit on CQ detection. Any value of
-log(concentration) which would result in a value greater than this limit is
-instead recorded as the limit.}
+\item{upper_Cq}{numeric, the upper limit on CQ detection. Any
+value of log(concentration) which would result in a value
+greater than this limit is instead recorded as the limit.}
+
+\item{prob_zero}{numeric, between 0 and 1. The probability of
+seeing a non-detection (i.e., a "zero") via the zero-inflated
+mechanism. Defaults to 8%}
 
 \item{X}{optional, a design matrix. By default, this is created
-from the variable_list using \code{expand.grid()}, which creates
-a balanced design matrix. However, the user can provide their own \code{X}
-as well, in which case the variable_list is ignored. This allows users to
-provide an unbalanced design matrix.}
+from the variable_list using \code{expand.grid()}, which
+creates a balanced design matrix. However, the user can
+provide their own \code{X} as well, in which case the
+variable_list is ignored. This allows users to provide an
+unbalanced design matrix.}
 
-\item{verbose}{logical, when TRUE output from \code{rstan::sampling} is written
-to the console.}
+\item{verbose}{logical, when TRUE output from
+\code{rstan::sampling} is written to the console.}
 
 \item{sink_file}{character, a file to write the console output to
 if \code{verbose = FALSE}, by default writes to
 \code{tempfile()}}
 
-\item{sigma_rand}{numeric vector, the stdev for the random effects. There must be
-one sigma per random effect specified}
+\item{sigma_rand}{numeric vector, the stdev for the random
+effects. There must be one sigma per random effect specified}
 }
 \value{
-S4 object of class "eDNA_simulation_{lm/lmer}" with the following slots:
-\describe{
-  \item{ln_conc matrix}{the simulated log(concentration)}
-  \item{Cq_star matrix}{the simulated CQ values, including the measurement error}
-  \item{formula}{the formula for the simulation}
-  \item{variable_levels}{named list, the variable levels used for the simulation}
-  \item{betas}{numeric vector, the betas for the simulation}
-  \item{x}{data.frame, the design matrix}
-  \item{std_curve_alpha numeric}{the alpha for the std curve conversion}
-  \item{std_curve_beta numeric}{the alpha for the std curve conversion}
-  \item{upper_Cq}{the upper limit for CQ}
-}
+S4 object of class "eDNA_simulation_{lm/lmer}" with the
+    following slots: \describe{ \item{ln_conc matrix}{the
+    simulated log(concentration)} \item{Cq_star matrix}{the
+    simulated CQ values, including the measurement error}
+    \item{formula}{the formula for the simulation}
+    \item{variable_levels}{named list, the variable levels used
+    for the simulation} \item{betas}{numeric vector, the betas for
+    the simulation} \item{x}{data.frame, the design matrix}
+    \item{std_curve_alpha numeric}{the alpha for the std curve
+    conversion} \item{std_curve_beta numeric}{the alpha for the
+    std curve conversion} \item{upper_Cq}{the upper limit for CQ}
+    }
 }
 \description{
 Simulate eDNA data
