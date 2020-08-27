@@ -67,7 +67,7 @@ greater than this limit is instead recorded as the limit.}
 
 \item{prob_zero}{numeric, between 0 and 1. The probability of
 seeing a non-detection (i.e., a "zero") via the zero-inflated
-mechanism. Defaults to 8%}
+mechanism. Defaults to 0.08.}
 
 \item{X}{optional, a design matrix. By default, this is created
 from the variable_list using \code{expand.grid()}, which

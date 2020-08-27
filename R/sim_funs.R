@@ -106,7 +106,7 @@ sim_eDNA_lm = function(formula, variable_list,
 ##'     greater than this limit is instead recorded as the limit.
 ##' @param prob_zero numeric, between 0 and 1. The probability of
 ##'     seeing a non-detection (i.e., a "zero") via the zero-inflated
-##'     mechanism. Defaults to 8%
+##'     mechanism. Defaults to 0.08.
 ##' @param X optional, a design matrix. By default, this is created
 ##'     from the variable_list using \code{expand.grid()}, which
 ##'     creates a balanced design matrix. However, the user can
