@@ -86,14 +86,6 @@ CQ, or if it increases or decreases as CQ increases.}
 \item{sink_file}{character, a file to write the console output to
 if \code{verbose = FALSE}, by default writes to
 \code{tempfile()}}
-
-\item{n_chain}{integer, the number of chains to use. Please note
-that less than two is not recommended.}
-
-\item{iters}{integer, the number of iterations per chain}
-
-\item{verbose}{logical, when TRUE output from
-\code{rstan::sampling} is written to the console.}
 }
 \value{
 S4 object, with the following slots:

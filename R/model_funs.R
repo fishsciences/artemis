@@ -88,11 +88,6 @@ eDNA_lm = function(formula, data,
 ##'     of a non-detection from a source other than low concentration
 ##'     of eDNA, e.g. a filter failure. Defaults to 8% (0.08), which
 ##'     was the estimated p(zero) from a daily sampling experiment.
-##' @param n_chain integer, the number of chains to use. Please note
-##'     that less than two is not recommended.
-##' @param iters integer, the number of iterations per chain
-##' @param verbose logical, when TRUE output from
-##'     \code{rstan::sampling} is written to the console.
 ##' @param prior_intercept named list such as created by
 ##'     \code{rstanarm::normal}. The list must contain elements named
 ##'     "location" and "scale", which are the location and scale for a

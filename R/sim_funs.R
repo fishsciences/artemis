@@ -104,7 +104,7 @@ sim_eDNA_lm = function(formula, variable_list,
 ##'     greater than this limit is instead recorded as the limit.
 ##' @param prob_zero numeric, between 0 and 1. The probability of
 ##'     seeing a non-detection (i.e., a "zero") via the zero-inflated
-##'     mechanism. Defaults to 8%
+##'     mechanism. Defaults to 0.08.
 ##' @param X optional, a design matrix. By default, this is created
 ##'     from the variable_list using \code{expand.grid()}, which
 ##'     creates a balanced design matrix. However, the user can
@@ -117,17 +117,18 @@ sim_eDNA_lm = function(formula, variable_list,
 ##'     if \code{verbose = FALSE}, by default writes to
 ##'     \code{tempfile()}
 ##' @return S4 object of class "eDNA_simulation_{lm/lmer}" with the
-##'     following slots: \describe{ \item{ln_conc matrix}{the
-##'     simulated log(concentration)} \item{Cq_star matrix}{the
-##'     simulated CQ values, including the measurement error}
-##'     \item{formula}{the formula for the simulation}
-##'     \item{variable_levels}{named list, the variable levels used
-##'     for the simulation} \item{betas}{numeric vector, the betas for
-##'     the simulation} \item{x}{data.frame, the design matrix}
-##'     \item{std_curve_alpha numeric}{the alpha for the std curve
-##'     conversion} \item{std_curve_beta numeric}{the alpha for the
-##'     std curve conversion} \item{upper_Cq}{the upper limit for CQ}
-##'     }
+##'     following slots:
+##' \describe{
+##'   \item{ln_conc matrix}{the simulated log(concentration)}
+##'   \item{Cq_star matrix}{the simulated CQ values, including the measurement error}
+##'   \item{formula}{the formula for the simulation}
+##'   \item{variable_levels}{named list, the variable levels used for the simulation}
+##'   \item{betas}{numeric vector, the betas for the simulation}
+##'   \item{x}{data.frame, the design matrix}
+##'   \item{std_curve_alpha numeric}{the alpha for the std curve conversion}
+##'   \item{std_curve_beta numeric}{the alpha for the std curve conversion}
+##'   \item{upper_Cq}{the upper limit for CQ}
+##' }
 ##' 
 ##' @author Matt Espe
 ##' @examples

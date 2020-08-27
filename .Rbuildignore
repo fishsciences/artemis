@@ -10,3 +10,9 @@ clean.R
 ^docs$
 ^pkgdown$
 ^lib$
+inst/stan_files/eDNA_omni$
+inst/stan_files/eDNA_sim_omni$
+inst/stan_files/*.o$
+inst/stan_files/*.hpp$
+src/stan_files/*.o$
+src/stan_files/*.hpp$
