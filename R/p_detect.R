@@ -124,7 +124,7 @@ prob_detect = function(Cq_hat, Cq_sd, n_rep, p_zero, upper_Cq = 40)
     ## p_zero is also the prob of seeing over upper_Cq
     ## 1 - (pnorm() * (1 - p_zero))
     p_nondetect = 1 - (pnorm(upper_Cq, Cq_hat, Cq_sd) * (1 - p_zero))
-    sapply(seq(n_rep), function(i) 1 - (p_nondetect ^ i))
+    sapply(n_rep, function(i) 1 - (p_nondetect ^ i))
 }
 
 dup_arg_warn = function(arg)

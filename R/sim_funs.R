@@ -27,13 +27,11 @@ sim_eDNA_lm = function(formula, variable_list,
     md = prep_data.sim(ml, std_curve_alpha, std_curve_beta, sigma_Cq, betas,
                        prob_zero, prior_int = normal(), prior_b = normal())
 
-    # if(!verbose) sink(sink_file)
     model = cmdstan_model(system.file("stan_files","eDNA_sim_omni.stan",
                                       package = "artemis"))
     sm = model$sample(data = md, chains = 1L, iter_sampling = n_sim,
                         fixed_param = TRUE, iter_warmup = 0L)
 
-    # if(!verbose) sink()
     sims = read_stan_csv(sm$output_files())
     # hacky
     sims = as(sims, "eDNA_simulation_lm")
