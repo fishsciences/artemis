@@ -37,7 +37,7 @@ test_that("Lmer", {
     skip_on_cran()
     skip_on_travis()
     ans2 = eDNA_lmer(Cq ~ Distance_m + Volume_mL + (1|FilterID), eDNA_data,
-                   std_curve_alpha = 21.2, std_curve_beta = -1.5, verbose = FALSE)
+                   std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
    
     summary(ans2)
@@ -46,8 +46,8 @@ test_that("Lmer", {
     if(FALSE)
         ans2 = eDNA_lmer(Cq ~ Distance_m + Volume_mL + (1|FilterID),
                          eDNA_data,
-                         std_curve_alpha = 21.2, std_curve_beta = -1.5, verbose = FALSE,
-                         cores = floor(parallel::detectCores() / 2), iter = 2000)
+                         std_curve_alpha = 21.2, std_curve_beta = -1.5,
+                         cores = floor(parallel::detectCores() / 2))
     
 })
 
