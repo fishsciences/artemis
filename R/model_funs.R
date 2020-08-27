@@ -5,10 +5,9 @@ eDNA_lm = function(formula, data,
                    std_curve_alpha, std_curve_beta,
                    upper_Cq = 40, QR = TRUE,
                    probability_zero = 0.08,
-                   n_chain = 4L, iters = 1000L, verbose = FALSE,
                    prior_intercept = normal(location = -15, scale = 10),
                    priors = normal(), Cq_error_type = "fixed",
-                   sink_file = tempfile(), ...)
+                   ...)
 {
     # from lm
     mf <- match.call(expand.dots = FALSE)
@@ -26,8 +25,7 @@ eDNA_lm = function(formula, data,
                    prior_int = prior_intercept,
                    prior_b = priors, error_type = Cq_error_type)
     # md$y = ml$y
-    fit = run_model(data = md, n_chain = n_chain, iters = iters,
-                    verbose = verbose, sink_file = sink_file, ...)
+    fit = run_model(data = md, ...)
     fit = load_slots_model(fit)
     fit = as(fit, "eDNA_model_lm")
     
@@ -90,11 +88,6 @@ eDNA_lm = function(formula, data,
 ##'     of a non-detection from a source other than low concentration
 ##'     of eDNA, e.g. a filter failure. Defaults to 8% (0.08), which
 ##'     was the estimated p(zero) from a daily sampling experiment.
-##' @param n_chain integer, the number of chains to use. Please note
-##'     that less than two is not recommended.
-##' @param iters integer, the number of iterations per chain
-##' @param verbose logical, when TRUE output from
-##'     \code{rstan::sampling} is written to the console.
 ##' @param prior_intercept named list such as created by
 ##'     \code{rstanarm::normal}. The list must contain elements named
 ##'     "location" and "scale", which are the location and scale for a
@@ -111,9 +104,6 @@ eDNA_lm = function(formula, data,
 ##' @param Cq_error_type either "fixed" or "varying", specifying if
 ##'     measurement error is assumed to be the same for all values of
 ##'     CQ, or if it increases or decreases as CQ increases.
-##' @param sink_file character, a file to write the console output to
-##'     if \code{verbose = FALSE}, by default writes to
-##'     \code{tempfile()}
 ##' @param ... additional arguments passed to
 ##'     \code{\link[rstan]{sampling}}
 ##' @return S4 object, with the following slots:
@@ -159,11 +149,9 @@ eDNA_lmer = function(formula, data,
                      std_curve_alpha, std_curve_beta,
                      upper_Cq = 40, QR = TRUE,
                      probability_zero = 0.08,
-                     n_chain = 4L, iters = 500L,
-                     verbose = FALSE,
                      prior_intercept = normal(location = -15, scale = 10),
                      priors = normal(), Cq_error_type = "fixed", 
-                     sink_file = tempfile(), ...)
+                     ...)
 {
     # from lm
     mf <- match.call(expand.dots = FALSE)
@@ -182,8 +170,7 @@ eDNA_lmer = function(formula, data,
 
     # md$y = ml$y
 
-    fit = run_model(data = md, n_chain = n_chain, iters = iters,
-                    verbose = verbose, sink_file = sink_file, ...)
+    fit = run_model(data = md, ...)
     fit = load_slots_model(fit)
     
     fit = as(fit, "eDNA_model_lmer")
@@ -197,19 +184,12 @@ run_model = function(model = cmdstan_model(model_file),
                      model_file = system.file("stan_files",
                                               "eDNA_omni.stan",
                                               package = "artemis"),
-                     data, n_chain,
-                     iters, verbose, sink_file, ...)
+                     data, ...)
     
 {
-    # if(!verbose) sink(sink_file)
     
-    m = model$sample(data = data, chains = n_chain,
-                     ##                  iter = iters,
-                     ##                 refresh = ifelse(verbose, 100, -1), show_messages = verbose,
-                     ##                open_progress = FALSE,
-                 ...)
+    m = model$sample(data = data, ...)
     fit = read_stan_csv(m$output_files())
-    # if(!verbose) sink()
     
     fit = as(fit, "eDNA_model")
     return(fit)
