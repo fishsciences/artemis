@@ -82,7 +82,6 @@ For example,
 model_fit = eDNA_lm(Cq ~ Distance_m, 
                     data = eDNA_data,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                    iter_sampling = 500, 
                     seed = 1234, 
                     chains = 1) # we don't recommend sampling just 1 chain; the default is 4
 
