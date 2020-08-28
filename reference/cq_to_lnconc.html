@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Print eDNA simulation — print.eDNA_simulation • artemis</title>
+<title>Convert CQ value to [eDNA] — cq_to_lnconc • artemis</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Print eDNA simulation — print.eDNA_simulation" />
-<meta property="og:description" content="Print eDNA simulation" />
+<meta property="og:title" content="Convert CQ value to [eDNA] — cq_to_lnconc" />
+<meta property="og:description" content="Convenience function to convert from Cq to [eDNA]" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -132,61 +132,40 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Print eDNA simulation</h1>
+    <h1>Convert CQ value to [eDNA]</h1>
     
-    <div class="hidden name"><code>print.eDNA_simulation.Rd</code></div>
+    <div class="hidden name"><code>cq_to_lnconc.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Print eDNA simulation</p>
+    <p>Convenience function to convert from Cq to [eDNA]</p>
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for eDNA_simulation</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(
-  <span class='no'>x</span>,
-  <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='no'>summary</span>,
-  <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"digits"</span>),
-  <span class='kw'>show_variables</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='no'>...</span>
-)</pre>
+    <pre class="usage"><span class='fu'>cq_to_lnconc</span>(<span class='no'>Cq_values</span>, <span class='no'>std_curve_alpha</span>, <span class='no'>std_curve_beta</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>object of class eDNA_simulation</p></td>
+      <th>Cq_values</th>
+      <td><p>numeric vector, value of CQ</p></td>
     </tr>
     <tr>
-      <th>FUN</th>
-      <td><p>a function to use to summarize the results, default is
-<code>summary</code></p></td>
+      <th>std_curve_alpha</th>
+      <td><p>the alpha value for the standard curve</p></td>
     </tr>
     <tr>
-      <th>digits</th>
-      <td><p>number of digits to show</p></td>
-    </tr>
-    <tr>
-      <th>show_variables</th>
-      <td><p>logical, should the variable levels used in
-the simulation be displayed. This is a bit redundent, since
-the variable levels are also displayed in the summary, but
-this can be helpful to check the results.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>additional arguments passed to <code>print</code></p></td>
+      <th>std_curve_beta</th>
+      <td><p>the beta value for the standard curve</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>x</p>
+    <p>numeric vector, [eDNA] values</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Print method for the results of simulations of an eDNA
-experiment. By default, the results are summarized by each
-variable level using <code>summary</code>.</p>
+    <p>Convenience function to convert from Cq to [eDNA]</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

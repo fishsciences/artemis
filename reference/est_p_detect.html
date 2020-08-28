@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">artemis</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.14.0</span>
       </span>
     </div>
 
@@ -148,6 +148,7 @@
   <span class='no'>std_curve_alpha</span>,
   <span class='no'>std_curve_beta</span>,
   <span class='kw'>n_rep</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>12</span>,
+  <span class='kw'>prob_zero</span> <span class='kw'>=</span> <span class='fl'>0.08</span>,
   <span class='kw'>model_fit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>upper_Cq</span> <span class='kw'>=</span> <span class='fl'>40</span>
 )</pre>
@@ -186,6 +187,12 @@ conversion between log(concentration) and CQ</p></td>
       <th>n_rep</th>
       <td><p>the number of replicate measurements at the levels
 specified</p></td>
+    </tr>
+    <tr>
+      <th>prob_zero</th>
+      <td><p>the probability of seeing a non-detection,
+i.e. zero, from a zero-inflated process. Defaults to 8<!-- %, which -->
+is the rate of inflated zeros in a large sampling experiment.</p></td>
     </tr>
     <tr>
       <th>model_fit</th>
@@ -246,18 +253,18 @@ normal distributions is itself a random normal distribution.</p>
 #&gt;         1       100        20 
 #&gt; 
 #&gt;    n_reps     p_detect
-#&gt; 1       1 4.935045e-06
-#&gt; 2       2 9.870066e-06
-#&gt; 3       3 1.480506e-05
-#&gt; 4       4 1.974003e-05
-#&gt; 5       5 2.467498e-05
-#&gt; 6       6 2.960991e-05
-#&gt; 7       7 3.454480e-05
-#&gt; 8       8 3.947968e-05
-#&gt; 9       9 4.441453e-05
-#&gt; 10     10 4.934935e-05
-#&gt; 11     11 5.428416e-05
-#&gt; 12     12 5.921893e-05</div><div class='input'>
+#&gt; 1       1 4.540241e-06
+#&gt; 2       2 9.080462e-06
+#&gt; 3       3 1.362066e-05
+#&gt; 4       4 1.816084e-05
+#&gt; 5       5 2.270100e-05
+#&gt; 6       6 2.724114e-05
+#&gt; 7       7 3.178126e-05
+#&gt; 8       8 3.632135e-05
+#&gt; 9       9 4.086143e-05
+#&gt; 10     10 4.540149e-05
+#&gt; 11     11 4.994152e-05
+#&gt; 12     12 5.448154e-05</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

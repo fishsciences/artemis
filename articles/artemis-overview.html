@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">artemis</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.14.0</span>
       </span>
     </div>
 
@@ -85,7 +85,7 @@
 
       
 
-      </header><script src="artemis-overview_files/header-attrs-2.3/header-attrs.js"></script><script src="artemis-overview_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Getting started with the artemis package</h1>
@@ -118,6 +118,7 @@
 log[eDNA]_{i} = X_{i} \beta\]</span></p>
 <p><br></p>
 <p>where <span class="math inline">\(\beta\)</span> is a vector of effects on <span class="math inline">\(log[eDNA]\)</span>, <span class="math inline">\(X\)</span> is the model matrix of predictors and <span class="math inline">\(\alpha_{std\_curve}\)</span> and <span class="math inline">\(\beta_{std\_curve}\)</span> are fixed values provided by the standard curve.</p>
+<p>Additionally, there is a zero-inflated component in the model. From multiple experiments, it was observed there can be near-zero concentrations of eDNA even in situations where higher concentrations were expected. This was attributed to filter failures. The expected probability of this occuring is user-provided, and allows for “true” zero observations when set to a value greater than 0.</p>
 <p>As detection limits vary with genetic assay, the upper threshold on Cq in the model is adjustable. Any values of <span class="math inline">\(\hat{Cq_i}\)</span> which are greater than the upper limit on <span class="math inline">\(Cq_i\)</span> are recorded as the threshold value. For example, a <span class="math inline">\(\hat{Cq_i}\)</span> value of 42 is recorded as 40 when the upper limit is 40 cycles.</p>
 <p>This model formulation makes several assumptions:</p>
 <ul>
@@ -181,57 +182,46 @@ log[eDNA]_{i} = X_{i} \beta\]</span></p>
 <span class="co">#&gt;         1       100 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;    n_reps  p_detect</span>
-<span class="co">#&gt; 1      12 0.6000732</span>
-<span class="co">#&gt; 2      13 0.6294795</span>
-<span class="co">#&gt; 3      14 0.6567236</span>
-<span class="co">#&gt; 4      15 0.6819645</span>
-<span class="co">#&gt; 5      16 0.7053494</span>
-<span class="co">#&gt; 6      17 0.7270148</span>
-<span class="co">#&gt; 7      18 0.7470872</span>
-<span class="co">#&gt; 8      19 0.7656837</span>
-<span class="co">#&gt; 9      20 0.7829128</span>
-<span class="co">#&gt; 10     21 0.7988751</span>
-<span class="co">#&gt; 11     22 0.8136637</span>
-<span class="co">#&gt; 12     23 0.8273648</span>
-<span class="co">#&gt; 13     24 0.8400586</span>
-<span class="co">#&gt; 14     25 0.8518189</span>
-<span class="co">#&gt; 15     26 0.8627146</span>
-<span class="co">#&gt; 16     27 0.8728091</span>
-<span class="co">#&gt; 17     28 0.8821613</span>
-<span class="co">#&gt; 18     29 0.8908259</span>
-<span class="co">#&gt; 19     30 0.8988534</span></pre></body></html></div>
+<span class="co">#&gt; 1      12 0.5685158</span>
+<span class="co">#&gt; 2      13 0.5977044</span>
+<span class="co">#&gt; 3      14 0.6249184</span>
+<span class="co">#&gt; 4      15 0.6502915</span>
+<span class="co">#&gt; 5      16 0.6739482</span>
+<span class="co">#&gt; 6      17 0.6960046</span>
+<span class="co">#&gt; 7      18 0.7165690</span>
+<span class="co">#&gt; 8      19 0.7357422</span>
+<span class="co">#&gt; 9      20 0.7536184</span>
+<span class="co">#&gt; 10     21 0.7702854</span>
+<span class="co">#&gt; 11     22 0.7858249</span>
+<span class="co">#&gt; 12     23 0.8003132</span>
+<span class="co">#&gt; 13     24 0.8138214</span>
+<span class="co">#&gt; 14     25 0.8264158</span>
+<span class="co">#&gt; 15     26 0.8381582</span>
+<span class="co">#&gt; 16     27 0.8491063</span>
+<span class="co">#&gt; 17     28 0.8593138</span>
+<span class="co">#&gt; 18     29 0.8688308</span>
+<span class="co">#&gt; 19     30 0.8777040</span></pre></body></html></div>
 <p>We can also plot this,</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">p_detect</span>)
-<span class="co">#&gt; Warning: `expand_scale()` is deprecated; use `expansion()` instead.</span>
-
-<span class="co">#&gt; Warning: `expand_scale()` is deprecated; use `expansion()` instead.</span></pre></body></html></div>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">p_detect</span>)</pre></body></html></div>
 <p><img src="artemis-overview_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 <p>Alternatively, we can also use a fit model to estimate the p(detect) for a set of circumstances. Unlike the above, using a fit model allows us to estimate the probability of detection with the uncertainty in our effect size estimates taken into account.</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">model_fit</span> <span class="kw">=</span> <span class="fu"><a href="../reference/eDNA_lmer.html">eDNA_lm</a></span>(<span class="no">Cq</span> ~ <span class="no">Distance</span> + <span class="no">Volume</span> + <span class="no">Distance</span>*<span class="no">Volume</span>,
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">model_fit</span> <span class="kw">=</span> <span class="fu"><a href="../reference/eDNA_lmer.html">eDNA_lm</a></span>(<span class="no">Cq</span> ~ <span class="no">Distance_m</span> + <span class="no">Volume_mL</span>,
                     <span class="kw">data</span> <span class="kw">=</span> <span class="no">eDNA_data</span>,
                     <span class="kw">std_curve_alpha</span> <span class="kw">=</span> <span class="fl">21.2</span>, <span class="kw">std_curve_beta</span> <span class="kw">=</span> -<span class="fl">1.5</span>,
-                    <span class="kw">iter</span> <span class="kw">=</span> <span class="fl">500</span>,
                     <span class="kw">seed</span> <span class="kw">=</span> <span class="fl">1234</span>,
-                    <span class="kw">n_chain</span> <span class="kw">=</span> <span class="fl">1</span>) <span class="co"># set to 1 for vignette; default is 4</span>
-<span class="co">#&gt; Model executable is up to date!</span>
-<span class="co">#&gt; Running MCMC with 1 chain(s) on 1 core(s)...</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Running ./eDNA_omni 'id=1' random 'seed=1234' data \</span>
-<span class="co">#&gt;   'file=/tmp/Rtmp68EJZ6/standata-2e212ab36ece.json' output \</span>
-<span class="co">#&gt;   'file=/tmp/Rtmp68EJZ6/eDNA_omni-202007291523-1-ecab1e.csv' 'method=sample' \</span>
-<span class="co">#&gt;   'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt 'engaged=1'</span>
+                    <span class="kw">chains</span> <span class="kw">=</span> <span class="fl">1</span>)
+<span class="co">#&gt; Compiling Stan program...</span>
+<span class="co">#&gt; Running MCMC with 1 chain...</span>
 <span class="co">#&gt; Chain 1 Rejecting initial value:</span>
 <span class="co">#&gt; Chain 1   Gradient evaluated at the initial value is not finite.</span>
 <span class="co">#&gt; Chain 1   Stan can't start sampling from this initial value.</span>
-<span class="co">#&gt; Chain 1 Gradient evaluation took 9.7e-05 seconds</span>
-<span class="co">#&gt; Chain 1 1000 transitions using 10 leapfrog steps per transition would take 0.97 seconds.</span>
+<span class="co">#&gt; Chain 1 Rejecting initial value:</span>
+<span class="co">#&gt; Chain 1   Gradient evaluated at the initial value is not finite.</span>
+<span class="co">#&gt; Chain 1   Stan can't start sampling from this initial value.</span>
+<span class="co">#&gt; Chain 1 Gradient evaluation took 7.1e-05 seconds</span>
+<span class="co">#&gt; Chain 1 1000 transitions using 10 leapfrog steps per transition would take 0.71 seconds.</span>
 <span class="co">#&gt; Chain 1 Adjust your expectations accordingly!</span>
-<span class="co">#&gt; Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup)</span>
-<span class="co">#&gt; Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:</span>
-<span class="co">#&gt; Chain 1 Exception: normal_lpdf: Scale parameter[1] is 0, but must be &gt; 0! (in '/tmp/Rtmp3jbE5U/model-21e34794dc052.stan', line 230, column 1 to line 233, column 40)</span>
-<span class="co">#&gt; Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,</span>
-<span class="co">#&gt; Chain 1 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.</span>
-<span class="co">#&gt; Chain 1</span>
+<span class="co">#&gt; Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup) </span>
 <span class="co">#&gt; Chain 1 Iteration:  100 / 2000 [  5%]  (Warmup) </span>
 <span class="co">#&gt; Chain 1 Iteration:  200 / 2000 [ 10%]  (Warmup) </span>
 <span class="co">#&gt; Chain 1 Iteration:  300 / 2000 [ 15%]  (Warmup) </span>
@@ -253,88 +243,36 @@ log[eDNA]_{i} = X_{i} \beta\]</span></p>
 <span class="co">#&gt; Chain 1 Iteration: 1800 / 2000 [ 90%]  (Sampling) </span>
 <span class="co">#&gt; Chain 1 Iteration: 1900 / 2000 [ 95%]  (Sampling) </span>
 <span class="co">#&gt; Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 finished in 33.3 seconds.</span>
-<span class="co">#&gt; 243 of 1000 (24.0%) transitions ended with a divergence.</span>
-<span class="co">#&gt; These divergent transitions indicate that HMC is not fully able to explore the posterior distribution.</span>
-<span class="co">#&gt; Try increasing adapt delta closer to 1.</span>
-<span class="co">#&gt; If this doesn't remove all divergences, try to reparameterize the model.</span>
+<span class="co">#&gt; Chain 1 finished in 1.5 seconds.</span>
 
 <span class="co"># Intercept is automatically supplied if in model_fit</span>
-<span class="no">p_detect2</span> <span class="kw">=</span> <span class="fu"><a href="../reference/est_p_detect.html">est_p_detect</a></span>(<span class="kw">variable_levels</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">Distance</span> <span class="kw">=</span> <span class="fl">100</span>,
-                                             <span class="kw">Volume</span> <span class="kw">=</span> <span class="fl">50</span>,
-                                             <span class="kw">DistanceXVolume</span> <span class="kw">=</span> <span class="fl">100</span>*<span class="fl">50</span>
-                                             ),
+<span class="no">p_detect2</span> <span class="kw">=</span> <span class="fu"><a href="../reference/est_p_detect.html">est_p_detect</a></span>(<span class="kw">variable_levels</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">Distance_m</span> <span class="kw">=</span> <span class="fl">100</span>,
+                                             <span class="kw">Volume_mL</span> <span class="kw">=</span> <span class="fl">50</span>),
                         <span class="kw">model_fit</span> <span class="kw">=</span> <span class="no">model_fit</span>,
                         <span class="kw">n_rep</span> <span class="kw">=</span> <span class="fl">1</span>:<span class="fl">12</span>)
 
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">p_detect2</span>)
 <span class="co">#&gt; Variable levels: </span>
-<span class="co">#&gt;        Distance          Volume DistanceXVolume </span>
-<span class="co">#&gt;             100              50            5000 </span>
+<span class="co">#&gt; Distance_m  Volume_mL </span>
+<span class="co">#&gt;        100         50 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;    n_rep      mean 2.5%          50%     97.5%</span>
-<span class="co">#&gt; 1      1 0.2022342    0 0.0008553459 0.9769665</span>
-<span class="co">#&gt; 2      2 0.2576288    0 0.0017099601 0.9994693</span>
-<span class="co">#&gt; 3      3 0.2869434    0 0.0025638431 0.9999878</span>
-<span class="co">#&gt; 4      4 0.3062924    0 0.0034169956 0.9999997</span>
-<span class="co">#&gt; 5      5 0.3204273    0 0.0042694182 1.0000000</span>
-<span class="co">#&gt; 6      6 0.3313783    0 0.0051211115 1.0000000</span>
-<span class="co">#&gt; 7      7 0.3402012    0 0.0059720762 1.0000000</span>
-<span class="co">#&gt; 8      8 0.3475141    0 0.0068223129 1.0000000</span>
-<span class="co">#&gt; 9      9 0.3537083    0 0.0076718221 1.0000000</span>
-<span class="co">#&gt; 10    10 0.3590463    0 0.0085206046 1.0000000</span>
-<span class="co">#&gt; 11    11 0.3637119    0 0.0093686609 1.0000000</span>
-<span class="co">#&gt; 12    12 0.3678384    0 0.0102159917 1.0000000</span></pre></body></html></div>
+<span class="co">#&gt;    n_rep      mean      2.5%       50%     97.5%</span>
+<span class="co">#&gt; 1      1 0.4458686 0.3956856 0.4456501 0.4974372</span>
+<span class="co">#&gt; 2      2 0.6922883 0.6348041 0.6926962 0.7474306</span>
+<span class="co">#&gt; 3      3 0.8287669 0.7793069 0.8296462 0.8730680</span>
+<span class="co">#&gt; 4      4 0.9045143 0.8666320 0.9055644 0.9362087</span>
+<span class="co">#&gt; 5      5 0.9466432 0.9194038 0.9476496 0.9679409</span>
+<span class="co">#&gt; 6      6 0.9701229 0.9512945 0.9709796 0.9838883</span>
+<span class="co">#&gt; 7      7 0.9832359 0.9705666 0.9839125 0.9919028</span>
+<span class="co">#&gt; 8      8 0.9905744 0.9822130 0.9910819 0.9959307</span>
+<span class="co">#&gt; 9      9 0.9946897 0.9892510 0.9950563 0.9979549</span>
+<span class="co">#&gt; 10    10 0.9970021 0.9935042 0.9972594 0.9989722</span>
+<span class="co">#&gt; 11    11 0.9983042 0.9960745 0.9984808 0.9994835</span>
+<span class="co">#&gt; 12    12 0.9990388 0.9976278 0.9991578 0.9997404</span></pre></body></html></div>
 <p>and we can plot the results,</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">p_detect2</span>, <span class="kw">error_width</span> <span class="kw">=</span> <span class="fl">0.1</span>)
-<span class="co">#&gt; Warning: `expand_scale()` is deprecated; use `expansion()` instead.</span>
-
-<span class="co">#&gt; Warning: `expand_scale()` is deprecated; use `expansion()` instead.</span></pre></body></html></div>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">p_detect2</span>, <span class="kw">error_width</span> <span class="kw">=</span> <span class="fl">0.1</span>)</pre></body></html></div>
 <p><img src="artemis-overview_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
-<p>Notice how we get uncertainty intervals when we use a fit model.</p>
-</div>
-<div id="power-and-precision-functions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#power-and-precision-functions" class="anchor"></a>Power and Precision Functions</h2>
-<div id="evaluating-simulated-study-designs-with-the-est_power_-functions" class="section level3">
-<h3 class="hasAnchor">
-<a href="#evaluating-simulated-study-designs-with-the-est_power_-functions" class="anchor"></a>Evaluating Simulated Study Designs with the <code>est_power_*()</code> functions</h3>
-<p>Simulations are helpful for designing new studies. Given a set of assumptions about the effect sizes, we can simulate a full study and evaluate how well we are able to detect eDNA, and/or or whether the proposed design allows us to estimate those effects with precision.</p>
-<p>For example, suppose we wanted to design a study exploring the effects of different distances on the detection of eDNA. From previous studies, we have estimated the effect of distance to be a -0.04 decrease in log[eDNA] per meter distance away from source. If we want to have a sense of how many replicates we need for this study to have at least 80% power (&gt;=80% chance of estimating a beta for distance without including 0 in its CI), we can do this using the <code><a href="../reference/est_power_lmer.html">est_power_lm()</a></code> and specifying a design. To do this, we specify the number of replicate filters as a vector (<code>rep</code>) in the <code>variable_list</code>, along with the rest of our variables and argument values. <em>Note that these functions are not yet parallelized and may take some time to run on your machine</em></p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="../reference/est_power_lmer.html">est_power_lm</a></span>(<span class="no">Cq</span> ~ <span class="fl">1</span> + <span class="no">distance</span>,
-             <span class="kw">variable_list</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">Cq</span> <span class="kw">=</span> <span class="fl">1</span>,
-                                  <span class="kw">distance</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">100</span>,<span class="fl">300</span>),
-                                  <span class="kw">rep</span> <span class="kw">=</span> <span class="fl">1</span>:<span class="fl">3</span>),
-             <span class="kw">betas</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">intercept</span> <span class="kw">=</span> -<span class="fl">10.6</span>, <span class="kw">distance</span> <span class="kw">=</span> -<span class="fl">0.04</span>),
-             <span class="kw">sigma_Cq</span> <span class="kw">=</span> <span class="fl">1</span>,
-             <span class="kw">std_curve_alpha</span> <span class="kw">=</span> <span class="fl">21.2</span>, <span class="kw">std_curve_beta</span> <span class="kw">=</span> -<span class="fl">1.5</span>,
-             <span class="kw">type</span> <span class="kw">=</span> <span class="st">"exclude_zero"</span>)
-
-<span class="co">#&gt; (Intercept)    distance </span>
-<span class="co">#&gt;           1           0 </span></pre></body></html></div>
-<p>The <code>distance</code> result indicates that we don’t have a sufficient number of replicates to detect the effect of distance here. We could keep trying different number of replicates until we get a power number we like. However, it is easier to use the function<code><a href="../reference/est_power_range_lmer.html">est_power_range_lm()</a></code>, which will automate this process for us. The call is similar to the one above, but instead of specifying the number of replicates in the <code>variable_list</code>, we provide a <code>rep_range</code>, which is <code><a href="https://rdrr.io/r/base/seq.html">seq(2,20,2)</a></code> (every 2 from 2 to 20) by default. It will stop running once the specified power level is reached. Warning, this is quite CPU intensive, so for this demonstation, we will be lowering the <code>rep_range</code> and the number of iterations for each case:</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">1234</span>)
-<span class="no">dist_power_range</span> <span class="kw">=</span> <span class="fu"><a href="../reference/est_power_range_lmer.html">est_power_range_lm</a></span>(<span class="no">Cq</span> ~ <span class="fl">1</span> + <span class="no">distance</span>,
-                                <span class="kw">variable_list</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">Cq</span> <span class="kw">=</span> <span class="fl">1</span>,
-                                                     <span class="kw">distance</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">100</span>,<span class="fl">300</span>)),
-                                <span class="kw">betas</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">intercept</span> <span class="kw">=</span> -<span class="fl">10.6</span>, <span class="kw">distance</span> <span class="kw">=</span> -<span class="fl">0.04</span>),
-                                <span class="kw">sigma_Cq</span> <span class="kw">=</span> <span class="fl">1</span>,
-                                <span class="kw">std_curve_alpha</span> <span class="kw">=</span> <span class="fl">21.2</span>, <span class="kw">std_curve_beta</span> <span class="kw">=</span> -<span class="fl">1.5</span>,
-                                <span class="kw">type</span> <span class="kw">=</span> <span class="st">"exclude_zero"</span>,
-                                <span class="kw">rep_range</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">5</span>,<span class="fl">10</span>))
-
-<span class="no">dist_power_range</span>
-
-<span class="co">#&gt; $`n_rep: 5`</span>
-<span class="co">#&gt; (Intercept)    distance </span>
-<span class="co">#&gt;           1           0 </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $`n_rep: 10`</span>
-<span class="co">#&gt; (Intercept)    distance </span>
-<span class="co">#&gt;           1           1 </span></pre></body></html></div>
-<p>For this study, it looks like we will need greater than 5 replicates (but perhaps less than 10) to have our desired 80% power.</p>
 <p><br><br> — <br><br></p>
-</div>
 </div>
   </div>
 
