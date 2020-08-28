@@ -85,7 +85,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="artemis-overview_files/header-attrs-2.3/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Getting started with the artemis package</h1>
@@ -211,15 +211,20 @@ log[eDNA]_{i} = X_{i} \beta\]</span></p>
                     <span class="kw">seed</span> <span class="kw">=</span> <span class="fl">1234</span>,
                     <span class="kw">chains</span> <span class="kw">=</span> <span class="fl">1</span>)
 <span class="co">#&gt; Compiling Stan program...</span>
-<span class="co">#&gt; Running MCMC with 1 chain...</span>
+<span class="co">#&gt; Running MCMC with 1 chain(s) on 1 core(s)...</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Running ./eDNA_omni 'id=1' random 'seed=1234' data \</span>
+<span class="co">#&gt;   'file=/tmp/Rtmpk2I1Lv/standata-1e3d79918599.json' output \</span>
+<span class="co">#&gt;   'file=/tmp/Rtmpk2I1Lv/eDNA_omni-202008281307-1-f1bb3d.csv' 'method=sample' \</span>
+<span class="co">#&gt;   'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt 'engaged=1'</span>
 <span class="co">#&gt; Chain 1 Rejecting initial value:</span>
 <span class="co">#&gt; Chain 1   Gradient evaluated at the initial value is not finite.</span>
 <span class="co">#&gt; Chain 1   Stan can't start sampling from this initial value.</span>
 <span class="co">#&gt; Chain 1 Rejecting initial value:</span>
 <span class="co">#&gt; Chain 1   Gradient evaluated at the initial value is not finite.</span>
 <span class="co">#&gt; Chain 1   Stan can't start sampling from this initial value.</span>
-<span class="co">#&gt; Chain 1 Gradient evaluation took 7.1e-05 seconds</span>
-<span class="co">#&gt; Chain 1 1000 transitions using 10 leapfrog steps per transition would take 0.71 seconds.</span>
+<span class="co">#&gt; Chain 1 Gradient evaluation took 0.000131 seconds</span>
+<span class="co">#&gt; Chain 1 1000 transitions using 10 leapfrog steps per transition would take 1.31 seconds.</span>
 <span class="co">#&gt; Chain 1 Adjust your expectations accordingly!</span>
 <span class="co">#&gt; Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup) </span>
 <span class="co">#&gt; Chain 1 Iteration:  100 / 2000 [  5%]  (Warmup) </span>
@@ -243,7 +248,7 @@ log[eDNA]_{i} = X_{i} \beta\]</span></p>
 <span class="co">#&gt; Chain 1 Iteration: 1800 / 2000 [ 90%]  (Sampling) </span>
 <span class="co">#&gt; Chain 1 Iteration: 1900 / 2000 [ 95%]  (Sampling) </span>
 <span class="co">#&gt; Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 finished in 1.5 seconds.</span>
+<span class="co">#&gt; Chain 1 finished in 1.7 seconds.</span>
 
 <span class="co"># Intercept is automatically supplied if in model_fit</span>
 <span class="no">p_detect2</span> <span class="kw">=</span> <span class="fu"><a href="../reference/est_p_detect.html">est_p_detect</a></span>(<span class="kw">variable_levels</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">Distance_m</span> <span class="kw">=</span> <span class="fl">100</span>,
@@ -257,18 +262,18 @@ log[eDNA]_{i} = X_{i} \beta\]</span></p>
 <span class="co">#&gt;        100         50 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;    n_rep      mean      2.5%       50%     97.5%</span>
-<span class="co">#&gt; 1      1 0.4458686 0.3956856 0.4456501 0.4974372</span>
-<span class="co">#&gt; 2      2 0.6922883 0.6348041 0.6926962 0.7474306</span>
-<span class="co">#&gt; 3      3 0.8287669 0.7793069 0.8296462 0.8730680</span>
-<span class="co">#&gt; 4      4 0.9045143 0.8666320 0.9055644 0.9362087</span>
-<span class="co">#&gt; 5      5 0.9466432 0.9194038 0.9476496 0.9679409</span>
-<span class="co">#&gt; 6      6 0.9701229 0.9512945 0.9709796 0.9838883</span>
-<span class="co">#&gt; 7      7 0.9832359 0.9705666 0.9839125 0.9919028</span>
-<span class="co">#&gt; 8      8 0.9905744 0.9822130 0.9910819 0.9959307</span>
-<span class="co">#&gt; 9      9 0.9946897 0.9892510 0.9950563 0.9979549</span>
-<span class="co">#&gt; 10    10 0.9970021 0.9935042 0.9972594 0.9989722</span>
-<span class="co">#&gt; 11    11 0.9983042 0.9960745 0.9984808 0.9994835</span>
-<span class="co">#&gt; 12    12 0.9990388 0.9976278 0.9991578 0.9997404</span></pre></body></html></div>
+<span class="co">#&gt; 1      1 0.4466463 0.3990468 0.4459943 0.4956549</span>
+<span class="co">#&gt; 2      2 0.6931703 0.6388552 0.6930776 0.7456360</span>
+<span class="co">#&gt; 3      3 0.8295188 0.7829688 0.8299632 0.8717128</span>
+<span class="co">#&gt; 4      4 0.9050855 0.8695744 0.9057987 0.9352990</span>
+<span class="co">#&gt; 5      5 0.9470509 0.9216203 0.9478119 0.9673684</span>
+<span class="co">#&gt; 6      6 0.9704031 0.9528974 0.9710875 0.9835424</span>
+<span class="co">#&gt; 7      7 0.9834236 0.9716935 0.9839823 0.9916997</span>
+<span class="co">#&gt; 8      8 0.9906978 0.9829891 0.9911261 0.9958138</span>
+<span class="co">#&gt; 9      9 0.9947698 0.9897773 0.9950838 0.9978887</span>
+<span class="co">#&gt; 10    10 0.9970536 0.9938566 0.9972764 0.9989352</span>
+<span class="co">#&gt; 11    11 0.9983370 0.9963081 0.9984911 0.9994630</span>
+<span class="co">#&gt; 12    12 0.9990596 0.9977813 0.9991641 0.9997291</span></pre></body></html></div>
 <p>and we can plot the results,</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">p_detect2</span>, <span class="kw">error_width</span> <span class="kw">=</span> <span class="fl">0.1</span>)</pre></body></html></div>
 <p><img src="artemis-overview_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>

@@ -85,7 +85,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="simulation_files/header-attrs-2.3/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Simulating eDNA Data with <code>artemis</code>
@@ -139,10 +139,15 @@
                   <span class="kw">std_curve_alpha</span> <span class="kw">=</span> <span class="fl">21.2</span>,
                   <span class="kw">std_curve_beta</span> <span class="kw">=</span> -<span class="fl">1.5</span>)
 <span class="co">#&gt; Compiling Stan program...</span>
-<span class="co">#&gt; Running MCMC with 1 chain...</span>
+<span class="co">#&gt; Running MCMC with 1 chain(s) on 1 core(s)...</span>
 <span class="co">#&gt; </span>
+<span class="co">#&gt; Running ./eDNA_sim_omni 'id=1' random 'seed=1229276239' data \</span>
+<span class="co">#&gt;   'file=/tmp/RtmpLJSIRS/standata-1ee055cd16a3.json' output \</span>
+<span class="co">#&gt;   'file=/tmp/RtmpLJSIRS/eDNA_sim_omni-202008281308-1-f6972d.csv' \</span>
+<span class="co">#&gt;   'method=sample' 'num_samples=1' 'num_warmup=0' 'save_warmup=0' \</span>
+<span class="co">#&gt;   'algorithm=fixed_param' adapt 'engaged=1'</span>
 <span class="co">#&gt; Chain 1 Iteration: 1 / 1 [100%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 finished in 0.3 seconds.</span></pre></body></html></div>
+<span class="co">#&gt; Chain 1 finished in 0.2 seconds.</span></pre></body></html></div>
 <p>The returned object from the <code>sim_eDNA_*</code> functions is a list containing the latent variable <code>ln_conc</code>, the equivalent Cq value before truncation and measurement error <code>Cq_hat</code>, and the estimated Cq value following the truncation and measurement error <code>Cq_star</code>:</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="no">ans</span>, <span class="kw">max.level</span> <span class="kw">=</span> <span class="fl">3</span>)
 <span class="co">#&gt; Formal class 'eDNA_simulation' [package "artemis"] with 9 slots</span>
@@ -240,8 +245,13 @@
                      <span class="kw">std_curve_alpha</span> <span class="kw">=</span> <span class="fl">21.2</span>,
                      <span class="kw">std_curve_beta</span> <span class="kw">=</span> -<span class="fl">1.5</span>)
 <span class="co">#&gt; Model executable is up to date!</span>
-<span class="co">#&gt; Running MCMC with 1 chain...</span>
+<span class="co">#&gt; Running MCMC with 1 chain(s) on 1 core(s)...</span>
 <span class="co">#&gt; </span>
+<span class="co">#&gt; Running ./eDNA_sim_omni 'id=1' random 'seed=1416331395' data \</span>
+<span class="co">#&gt;   'file=/tmp/RtmpLJSIRS/standata-1ee07c11dc63.json' output \</span>
+<span class="co">#&gt;   'file=/tmp/RtmpLJSIRS/eDNA_sim_omni-202008281308-1-3b0d4f.csv' \</span>
+<span class="co">#&gt;   'method=sample' 'num_samples=1' 'num_warmup=0' 'save_warmup=0' \</span>
+<span class="co">#&gt;   'algorithm=fixed_param' adapt 'engaged=1'</span>
 <span class="co">#&gt; Chain 1 Iteration: 1 / 1 [100%]  (Sampling) </span>
 <span class="co">#&gt; Chain 1 finished in 0.1 seconds.</span></pre></body></html></div>
 <p>When we are simulating data with random effects, we must provide the standard deviation of the random effects (<code>sigma_rand</code>, a vector containing one value for each random effect <code>beta</code>), in addition to the information for the fixed effects.</p>

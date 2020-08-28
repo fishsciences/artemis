@@ -85,7 +85,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="modeling_files/header-attrs-2.3/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Modeling eDNA qPCR Data with <code>artemis</code>
@@ -145,15 +145,17 @@
                     <span class="kw">data</span> <span class="kw">=</span> <span class="no">eDNA_data</span>,
                     <span class="kw">std_curve_alpha</span> <span class="kw">=</span> <span class="fl">21.2</span>, <span class="kw">std_curve_beta</span> <span class="kw">=</span> -<span class="fl">1.5</span>)
 <span class="co">#&gt; Model executable is up to date!</span>
-<span class="co">#&gt; Running MCMC with 4 sequential chains...</span>
+<span class="co">#&gt; Running MCMC with 4 chain(s) on 1 core(s)...</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Running ./eDNA_omni 'id=1' random 'seed=1189497664' data \</span>
+<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/standata-1e8e134ba32b.json' output \</span>
+<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/eDNA_omni-202008281307-1-be9212.csv' 'method=sample' \</span>
+<span class="co">#&gt;   'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt 'engaged=1'</span>
 <span class="co">#&gt; Chain 1 Rejecting initial value:</span>
 <span class="co">#&gt; Chain 1   Gradient evaluated at the initial value is not finite.</span>
 <span class="co">#&gt; Chain 1   Stan can't start sampling from this initial value.</span>
-<span class="co">#&gt; Chain 1 Rejecting initial value:</span>
-<span class="co">#&gt; Chain 1   Gradient evaluated at the initial value is not finite.</span>
-<span class="co">#&gt; Chain 1   Stan can't start sampling from this initial value.</span>
-<span class="co">#&gt; Chain 1 Gradient evaluation took 6.5e-05 seconds</span>
-<span class="co">#&gt; Chain 1 1000 transitions using 10 leapfrog steps per transition would take 0.65 seconds.</span>
+<span class="co">#&gt; Chain 1 Gradient evaluation took 9.5e-05 seconds</span>
+<span class="co">#&gt; Chain 1 1000 transitions using 10 leapfrog steps per transition would take 0.95 seconds.</span>
 <span class="co">#&gt; Chain 1 Adjust your expectations accordingly!</span>
 <span class="co">#&gt; Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup) </span>
 <span class="co">#&gt; Chain 1 Iteration:  100 / 2000 [  5%]  (Warmup) </span>
@@ -177,7 +179,11 @@
 <span class="co">#&gt; Chain 1 Iteration: 1800 / 2000 [ 90%]  (Sampling) </span>
 <span class="co">#&gt; Chain 1 Iteration: 1900 / 2000 [ 95%]  (Sampling) </span>
 <span class="co">#&gt; Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 finished in 1.2 seconds.</span>
+<span class="co">#&gt; Chain 1 finished in 1.4 seconds.</span>
+<span class="co">#&gt; Running ./eDNA_omni 'id=2' random 'seed=763280937' data \</span>
+<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/standata-1e8e134ba32b.json' output \</span>
+<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/eDNA_omni-202008281307-2-be9212.csv' 'method=sample' \</span>
+<span class="co">#&gt;   'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt 'engaged=1'</span>
 <span class="co">#&gt; Chain 2 Rejecting initial value:</span>
 <span class="co">#&gt; Chain 2   Gradient evaluated at the initial value is not finite.</span>
 <span class="co">#&gt; Chain 2   Stan can't start sampling from this initial value.</span>
@@ -187,8 +193,17 @@
 <span class="co">#&gt; Chain 2 Rejecting initial value:</span>
 <span class="co">#&gt; Chain 2   Gradient evaluated at the initial value is not finite.</span>
 <span class="co">#&gt; Chain 2   Stan can't start sampling from this initial value.</span>
-<span class="co">#&gt; Chain 2 Gradient evaluation took 6.9e-05 seconds</span>
-<span class="co">#&gt; Chain 2 1000 transitions using 10 leapfrog steps per transition would take 0.69 seconds.</span>
+<span class="co">#&gt; Chain 2 Rejecting initial value:</span>
+<span class="co">#&gt; Chain 2   Gradient evaluated at the initial value is not finite.</span>
+<span class="co">#&gt; Chain 2   Stan can't start sampling from this initial value.</span>
+<span class="co">#&gt; Chain 2 Rejecting initial value:</span>
+<span class="co">#&gt; Chain 2   Gradient evaluated at the initial value is not finite.</span>
+<span class="co">#&gt; Chain 2   Stan can't start sampling from this initial value.</span>
+<span class="co">#&gt; Chain 2 Rejecting initial value:</span>
+<span class="co">#&gt; Chain 2   Gradient evaluated at the initial value is not finite.</span>
+<span class="co">#&gt; Chain 2   Stan can't start sampling from this initial value.</span>
+<span class="co">#&gt; Chain 2 Gradient evaluation took 9.4e-05 seconds</span>
+<span class="co">#&gt; Chain 2 1000 transitions using 10 leapfrog steps per transition would take 0.94 seconds.</span>
 <span class="co">#&gt; Chain 2 Adjust your expectations accordingly!</span>
 <span class="co">#&gt; Chain 2 Iteration:    1 / 2000 [  0%]  (Warmup) </span>
 <span class="co">#&gt; Chain 2 Iteration:  100 / 2000 [  5%]  (Warmup) </span>
@@ -212,16 +227,11 @@
 <span class="co">#&gt; Chain 2 Iteration: 1800 / 2000 [ 90%]  (Sampling) </span>
 <span class="co">#&gt; Chain 2 Iteration: 1900 / 2000 [ 95%]  (Sampling) </span>
 <span class="co">#&gt; Chain 2 Iteration: 2000 / 2000 [100%]  (Sampling) </span>
-<span class="co">#&gt; Chain 2 finished in 1.2 seconds.</span>
-<span class="co">#&gt; Chain 3 Rejecting initial value:</span>
-<span class="co">#&gt; Chain 3   Gradient evaluated at the initial value is not finite.</span>
-<span class="co">#&gt; Chain 3   Stan can't start sampling from this initial value.</span>
-<span class="co">#&gt; Chain 3 Rejecting initial value:</span>
-<span class="co">#&gt; Chain 3   Gradient evaluated at the initial value is not finite.</span>
-<span class="co">#&gt; Chain 3   Stan can't start sampling from this initial value.</span>
-<span class="co">#&gt; Chain 3 Gradient evaluation took 7e-05 seconds</span>
-<span class="co">#&gt; Chain 3 1000 transitions using 10 leapfrog steps per transition would take 0.7 seconds.</span>
-<span class="co">#&gt; Chain 3 Adjust your expectations accordingly!</span>
+<span class="co">#&gt; Chain 2 finished in 1.6 seconds.</span>
+<span class="co">#&gt; Running ./eDNA_omni 'id=3' random 'seed=71631794' data \</span>
+<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/standata-1e8e134ba32b.json' output \</span>
+<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/eDNA_omni-202008281307-3-be9212.csv' 'method=sample' \</span>
+<span class="co">#&gt;   'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt 'engaged=1'</span>
 <span class="co">#&gt; Chain 3 Iteration:    1 / 2000 [  0%]  (Warmup) </span>
 <span class="co">#&gt; Chain 3 Iteration:  100 / 2000 [  5%]  (Warmup) </span>
 <span class="co">#&gt; Chain 3 Iteration:  200 / 2000 [ 10%]  (Warmup) </span>
@@ -244,7 +254,11 @@
 <span class="co">#&gt; Chain 3 Iteration: 1800 / 2000 [ 90%]  (Sampling) </span>
 <span class="co">#&gt; Chain 3 Iteration: 1900 / 2000 [ 95%]  (Sampling) </span>
 <span class="co">#&gt; Chain 3 Iteration: 2000 / 2000 [100%]  (Sampling) </span>
-<span class="co">#&gt; Chain 3 finished in 1.3 seconds.</span>
+<span class="co">#&gt; Chain 3 finished in 1.4 seconds.</span>
+<span class="co">#&gt; Running ./eDNA_omni 'id=4' random 'seed=1485362050' data \</span>
+<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/standata-1e8e134ba32b.json' output \</span>
+<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/eDNA_omni-202008281307-4-be9212.csv' 'method=sample' \</span>
+<span class="co">#&gt;   'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt 'engaged=1'</span>
 <span class="co">#&gt; Chain 4 Iteration:    1 / 2000 [  0%]  (Warmup) </span>
 <span class="co">#&gt; Chain 4 Iteration:  100 / 2000 [  5%]  (Warmup) </span>
 <span class="co">#&gt; Chain 4 Iteration:  200 / 2000 [ 10%]  (Warmup) </span>
@@ -267,18 +281,17 @@
 <span class="co">#&gt; Chain 4 Iteration: 1800 / 2000 [ 90%]  (Sampling) </span>
 <span class="co">#&gt; Chain 4 Iteration: 1900 / 2000 [ 95%]  (Sampling) </span>
 <span class="co">#&gt; Chain 4 Iteration: 2000 / 2000 [100%]  (Sampling) </span>
-<span class="co">#&gt; Chain 4 finished in 1.3 seconds.</span>
+<span class="co">#&gt; Chain 4 finished in 1.4 seconds.</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; All 4 chains finished successfully.</span>
-<span class="co">#&gt; Mean chain execution time: 1.2 seconds.</span>
-<span class="co">#&gt; Total execution time: 5.0 seconds.</span></pre></body></html></div>
+<span class="co">#&gt; Mean chain execution time: 1.5 seconds.</span>
+<span class="co">#&gt; Total execution time: 5.9 seconds.</span></pre></body></html></div>
 <p><br></p>
 <p>The model functions, similar to <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> in base R, will automatically add an intercept term. You can explicitly omit the intercept if you have a good reason for doing so. Full control of the MCMC algorithm can be accomplished by adding these control arguments to the end of the <code>eDNA_lm*()</code> call, which then passes them on to <code>cmdstanr::model$sample()</code>. <em>Note: the arguments for the model follow the naming conventions for <code>cmdstan</code>, which differ from those used by <code>rstan</code>. Documentation of these arguments can be found <a href="https://mc-stan.org/cmdstanr/reference/model-method-sample.html">here</a></em></p>
 <p>For example,</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">model_fit</span> <span class="kw">=</span> <span class="fu"><a href="../reference/eDNA_lmer.html">eDNA_lm</a></span>(<span class="no">Cq</span> ~ <span class="no">Distance_m</span>,
                     <span class="kw">data</span> <span class="kw">=</span> <span class="no">eDNA_data</span>,
                     <span class="kw">std_curve_alpha</span> <span class="kw">=</span> <span class="fl">21.2</span>, <span class="kw">std_curve_beta</span> <span class="kw">=</span> -<span class="fl">1.5</span>,
-                    <span class="kw">iter_sampling</span> <span class="kw">=</span> <span class="fl">500</span>,
                     <span class="kw">seed</span> <span class="kw">=</span> <span class="fl">1234</span>,
                     <span class="kw">chains</span> <span class="kw">=</span> <span class="fl">1</span>) <span class="co"># we don't recommend sampling just 1 chain; the default is 4</span></pre></body></html></div>
 <p><br></p>
@@ -311,12 +324,18 @@
                        <span class="kw">iter_sampling</span> <span class="kw">=</span> <span class="fl">1000</span>,
                        <span class="kw">seed</span> <span class="kw">=</span> <span class="fl">1234</span>)
 <span class="co">#&gt; Model executable is up to date!</span>
-<span class="co">#&gt; Running MCMC with 4 sequential chains...</span>
+<span class="co">#&gt; Running MCMC with 4 chain(s) on 1 core(s)...</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Running ./eDNA_omni 'id=1' random 'seed=1234' data \</span>
+<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/standata-1e8e494d9611.json' output \</span>
+<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/eDNA_omni-202008281307-1-eab3d8.csv' 'method=sample' \</span>
+<span class="co">#&gt;   'num_samples=1000' 'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt \</span>
+<span class="co">#&gt;   'engaged=1'</span>
 <span class="co">#&gt; Chain 1 Rejecting initial value:</span>
 <span class="co">#&gt; Chain 1   Gradient evaluated at the initial value is not finite.</span>
 <span class="co">#&gt; Chain 1   Stan can't start sampling from this initial value.</span>
-<span class="co">#&gt; Chain 1 Gradient evaluation took 9.7e-05 seconds</span>
-<span class="co">#&gt; Chain 1 1000 transitions using 10 leapfrog steps per transition would take 0.97 seconds.</span>
+<span class="co">#&gt; Chain 1 Gradient evaluation took 0.000153 seconds</span>
+<span class="co">#&gt; Chain 1 1000 transitions using 10 leapfrog steps per transition would take 1.53 seconds.</span>
 <span class="co">#&gt; Chain 1 Adjust your expectations accordingly!</span>
 <span class="co">#&gt; Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup) </span>
 <span class="co">#&gt; Chain 1 Iteration:  100 / 2000 [  5%]  (Warmup) </span>
@@ -340,7 +359,12 @@
 <span class="co">#&gt; Chain 1 Iteration: 1800 / 2000 [ 90%]  (Sampling) </span>
 <span class="co">#&gt; Chain 1 Iteration: 1900 / 2000 [ 95%]  (Sampling) </span>
 <span class="co">#&gt; Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 finished in 2.6 seconds.</span>
+<span class="co">#&gt; Chain 1 finished in 3.8 seconds.</span>
+<span class="co">#&gt; Running ./eDNA_omni 'id=2' random 'seed=1235' data \</span>
+<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/standata-1e8e494d9611.json' output \</span>
+<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/eDNA_omni-202008281307-2-eab3d8.csv' 'method=sample' \</span>
+<span class="co">#&gt;   'num_samples=1000' 'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt \</span>
+<span class="co">#&gt;   'engaged=1'</span>
 <span class="co">#&gt; Chain 2 Rejecting initial value:</span>
 <span class="co">#&gt; Chain 2   Gradient evaluated at the initial value is not finite.</span>
 <span class="co">#&gt; Chain 2   Stan can't start sampling from this initial value.</span>
@@ -350,8 +374,8 @@
 <span class="co">#&gt; Chain 2 Rejecting initial value:</span>
 <span class="co">#&gt; Chain 2   Gradient evaluated at the initial value is not finite.</span>
 <span class="co">#&gt; Chain 2   Stan can't start sampling from this initial value.</span>
-<span class="co">#&gt; Chain 2 Gradient evaluation took 0.000108 seconds</span>
-<span class="co">#&gt; Chain 2 1000 transitions using 10 leapfrog steps per transition would take 1.08 seconds.</span>
+<span class="co">#&gt; Chain 2 Gradient evaluation took 0.00027 seconds</span>
+<span class="co">#&gt; Chain 2 1000 transitions using 10 leapfrog steps per transition would take 2.7 seconds.</span>
 <span class="co">#&gt; Chain 2 Adjust your expectations accordingly!</span>
 <span class="co">#&gt; Chain 2 Iteration:    1 / 2000 [  0%]  (Warmup) </span>
 <span class="co">#&gt; Chain 2 Iteration:  100 / 2000 [  5%]  (Warmup) </span>
@@ -375,7 +399,12 @@
 <span class="co">#&gt; Chain 2 Iteration: 1800 / 2000 [ 90%]  (Sampling) </span>
 <span class="co">#&gt; Chain 2 Iteration: 1900 / 2000 [ 95%]  (Sampling) </span>
 <span class="co">#&gt; Chain 2 Iteration: 2000 / 2000 [100%]  (Sampling) </span>
-<span class="co">#&gt; Chain 2 finished in 3.0 seconds.</span>
+<span class="co">#&gt; Chain 2 finished in 3.9 seconds.</span>
+<span class="co">#&gt; Running ./eDNA_omni 'id=3' random 'seed=1236' data \</span>
+<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/standata-1e8e494d9611.json' output \</span>
+<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/eDNA_omni-202008281307-3-eab3d8.csv' 'method=sample' \</span>
+<span class="co">#&gt;   'num_samples=1000' 'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt \</span>
+<span class="co">#&gt;   'engaged=1'</span>
 <span class="co">#&gt; Chain 3 Rejecting initial value:</span>
 <span class="co">#&gt; Chain 3   Gradient evaluated at the initial value is not finite.</span>
 <span class="co">#&gt; Chain 3   Stan can't start sampling from this initial value.</span>
@@ -385,8 +414,8 @@
 <span class="co">#&gt; Chain 3 Rejecting initial value:</span>
 <span class="co">#&gt; Chain 3   Gradient evaluated at the initial value is not finite.</span>
 <span class="co">#&gt; Chain 3   Stan can't start sampling from this initial value.</span>
-<span class="co">#&gt; Chain 3 Gradient evaluation took 0.000136 seconds</span>
-<span class="co">#&gt; Chain 3 1000 transitions using 10 leapfrog steps per transition would take 1.36 seconds.</span>
+<span class="co">#&gt; Chain 3 Gradient evaluation took 0.000343 seconds</span>
+<span class="co">#&gt; Chain 3 1000 transitions using 10 leapfrog steps per transition would take 3.43 seconds.</span>
 <span class="co">#&gt; Chain 3 Adjust your expectations accordingly!</span>
 <span class="co">#&gt; Chain 3 Iteration:    1 / 2000 [  0%]  (Warmup) </span>
 <span class="co">#&gt; Chain 3 Iteration:  100 / 2000 [  5%]  (Warmup) </span>
@@ -410,7 +439,12 @@
 <span class="co">#&gt; Chain 3 Iteration: 1800 / 2000 [ 90%]  (Sampling) </span>
 <span class="co">#&gt; Chain 3 Iteration: 1900 / 2000 [ 95%]  (Sampling) </span>
 <span class="co">#&gt; Chain 3 Iteration: 2000 / 2000 [100%]  (Sampling) </span>
-<span class="co">#&gt; Chain 3 finished in 2.8 seconds.</span>
+<span class="co">#&gt; Chain 3 finished in 4.0 seconds.</span>
+<span class="co">#&gt; Running ./eDNA_omni 'id=4' random 'seed=1237' data \</span>
+<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/standata-1e8e494d9611.json' output \</span>
+<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/eDNA_omni-202008281307-4-eab3d8.csv' 'method=sample' \</span>
+<span class="co">#&gt;   'num_samples=1000' 'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt \</span>
+<span class="co">#&gt;   'engaged=1'</span>
 <span class="co">#&gt; Chain 4 Iteration:    1 / 2000 [  0%]  (Warmup) </span>
 <span class="co">#&gt; Chain 4 Iteration:  100 / 2000 [  5%]  (Warmup) </span>
 <span class="co">#&gt; Chain 4 Iteration:  200 / 2000 [ 10%]  (Warmup) </span>
@@ -433,18 +467,15 @@
 <span class="co">#&gt; Chain 4 Iteration: 1800 / 2000 [ 90%]  (Sampling) </span>
 <span class="co">#&gt; Chain 4 Iteration: 1900 / 2000 [ 95%]  (Sampling) </span>
 <span class="co">#&gt; Chain 4 Iteration: 2000 / 2000 [100%]  (Sampling) </span>
-<span class="co">#&gt; Chain 4 finished in 2.5 seconds.</span>
+<span class="co">#&gt; Chain 4 finished in 3.5 seconds.</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; All 4 chains finished successfully.</span>
-<span class="co">#&gt; Mean chain execution time: 2.7 seconds.</span>
-<span class="co">#&gt; Total execution time: 11.0 seconds.</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Warning: 13 of 4000 (0.0%) transitions ended with a divergence.</span>
-<span class="co">#&gt; This may indicate insufficient exploration of the posterior distribution.</span>
-<span class="co">#&gt; Possible remedies include: </span>
-<span class="co">#&gt;   * Increasing adapt_delta closer to 1 (default is 0.8) </span>
-<span class="co">#&gt;   * Reparameterizing the model (e.g. using a non-centered parameterization)</span>
-<span class="co">#&gt;   * Using informative or weakly informative prior distributions</span></pre></body></html></div>
+<span class="co">#&gt; Mean chain execution time: 3.8 seconds.</span>
+<span class="co">#&gt; Total execution time: 15.2 seconds.</span>
+<span class="co">#&gt; 5 of 4000 (0.0%) transitions ended with a divergence.</span>
+<span class="co">#&gt; These divergent transitions indicate that HMC is not fully able to explore the posterior distribution.</span>
+<span class="co">#&gt; Try increasing adapt delta closer to 1.</span>
+<span class="co">#&gt; If this doesn't remove all divergences, try to reparameterize the model.</span></pre></body></html></div>
 </div>
 <div id="summarizing-and-plotting-model-output" class="section level1">
 <h1 class="hasAnchor">
@@ -452,9 +483,9 @@
 <p>As with the simulation objects, the model results can be summarized or plotted with default methods using <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> and <code><a href="https://rdrr.io/r/base/plot.html">plot()</a></code>, or converted to a <code>data.frame</code> object for further manipulation.</p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">model_fit</span>)
 <span class="co">#&gt;                      Mean          2.5%           50%         97.5%</span>
-<span class="co">#&gt; (Intercept) -11.801264375 -12.226312500 -11.800400000 -11.376492500</span>
-<span class="co">#&gt; Distance_m   -0.004421304  -0.005953868  -0.004402175  -0.002931929</span>
-<span class="co">#&gt; Cq_sigma      6.106387198   5.627804500   6.098990000   6.645599250</span>
+<span class="co">#&gt; (Intercept) -11.808434250 -12.240312500 -11.808250000 -11.382280000</span>
+<span class="co">#&gt; Distance_m   -0.004414149  -0.006042215  -0.004394445  -0.002902262</span>
+<span class="co">#&gt; Cq_sigma      6.103136875   5.616327500   6.098335000   6.632476500</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">model_fit</span>, <span class="kw">pars</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"intercept"</span>, <span class="st">"betas"</span>))
 <span class="co">#&gt; ci_level: 0.8 (80% intervals)</span>
