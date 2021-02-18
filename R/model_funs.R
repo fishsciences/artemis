@@ -8,27 +8,14 @@ eDNA_lm = function(formula, data,
                    priors = normal(), Cq_error_type = "fixed",
                    ...)
 {
-    # from lm
-    mf <- match.call(expand.dots = FALSE)
-    m <- match(c("formula", "data"), names(mf), 0L)
-    mf <- mf[c(1L, m)]
-
-    mf[[1]] = quote(artemis:::gen_model_list_lm)
-
-    ml = eval(mf, parent.frame(1L))
-    # ml = gen_model_list_lm(formula, data)
-       
-    # This works because Stan ignores extra input data
-    md = prep_data.lm(ml, std_curve_alpha, std_curve_beta,
-                   Cq_upper = upper_Cq,
-                   prior_int = prior_intercept,
-                   prior_b = priors, error_type = Cq_error_type)
-    # md$y = ml$y
-    fit = run_model(model_name = "eDNA_lm.stan", data = md, ...)
-    fit = load_slots_model(fit)
-    fit = as(fit, "eDNA_model_lm")
-    
-    return(fit)
+    eDNA_lm_shared(model_type = "lm",
+                          formula, data, 
+                          std_curve_alpha, std_curve_beta,
+                          upper_Cq,
+                          probability_zero = 0,
+                          prior_intercept,
+                          priors, Cq_error_type,
+                   ...)
 }
 
 ##' Fit eDNA model
@@ -227,6 +214,7 @@ eDNA_zinf_lm = function(formula, data,
                           ...)
 }
 
+# houses most lm() code, which is similar between the lm and zero-inflated
 eDNA_lm_shared = function(model_type,
                           formula, data, 
                           std_curve_alpha, std_curve_beta,
