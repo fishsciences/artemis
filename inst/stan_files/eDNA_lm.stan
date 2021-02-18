@@ -17,15 +17,20 @@ data {
   vector[K] prior_mu;
   vector<lower=0>[K] prior_sd;  
 
+  // for intercept-less models
+  int<lower=0,upper=1> has_inter;
 }
+
 parameters {
-  real intercept;
+  real intercept[has_inter ? 1 : 0];
   vector[K] betas;
   real<lower=0> sigma_Cq;
 }
+
 model {
   /* vector[N_obs] mu_obs = intercept + X_obs * betas; */
-  vector[N_cens] mu_cens = intercept + X_cens * betas;
+  vector[N_cens] mu_cens = X_cens * betas +
+	(has_inter ? intercept[1] : 0.0);
 
   // priors
   intercept ~ normal(prior_int_mu, prior_int_sd);
@@ -33,8 +38,21 @@ model {
   for(k in 1:K)
 	betas[k] ~ normal(prior_mu[k], prior_sd[k]);
 
-  sigma_Cq ~ std_normal();
+  sigma_Cq ~ normal(0, 1);
   
-  y_obs ~ normal_id_glm(X_obs, intercept, betas, sigma_Cq);
+  y_obs ~ normal_id_glm(X_obs, has_inter ? intercept[1] : 0.0, betas, sigma_Cq);
   target += normal_lcdf(L | mu_cens, sigma_Cq);
+}
+
+generated quantities{
+  vector[N_obs + N_cens] log_lik;
+
+  for(n in 1:N_obs){
+	log_lik[n] = normal_lpdf(y_obs[n] | (has_inter ? intercept[1] : 0.0) +
+							 X_obs[n] * betas, sigma_Cq);
+  }
+  for(n in 1:N_cens){
+	log_lik[n+N_obs] = normal_lcdf(L | (has_inter ? intercept[1] : 0) +
+								   X_cens[n] * betas, sigma_Cq);
+  }
 }
