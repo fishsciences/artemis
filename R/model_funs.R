@@ -20,7 +20,7 @@ eDNA_lm = function(formula, data,
     # ml = gen_model_list_lm(formula, data)
        
     # This works because Stan ignores extra input data
-    md = prep_data.model(ml, std_curve_alpha, std_curve_beta,
+    md = prep_data.lm(ml, std_curve_alpha, std_curve_beta,
                    Cq_upper = upper_Cq, qr = QR, prob_zero = probability_zero,
                    prior_int = prior_intercept,
                    prior_b = priors, error_type = Cq_error_type)
@@ -182,7 +182,7 @@ eDNA_lmer = function(formula, data,
 
 run_model = function(model = cmdstan_model(model_file),
                      model_file = system.file("stan_files",
-                                              "eDNA_omni.stan",
+                                              "eDNA_lm.stan",
                                               package = "artemis"),
                      data, ...)
     

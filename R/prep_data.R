@@ -171,3 +171,52 @@ prep_priors = function(prior, x, y)
     
     return(prior)
 }
+
+
+prep_data.lm = function(mod_list,
+                        alpha, beta,
+                        Cq_sd, betas, prob_zero,
+                        qr,
+                        Cq_upper = 40, rand_sd = double(0),
+                        prior_int, prior_b, error_type = "fixed")
+{
+    has_inter = has_intercept(mod_list$x)
+    x = remove_intercept(mod_list$x)
+    i = mod_list$y < Cq_upper
+    
+    n_vars = if(is.null(ncol(x))) 0 else ncol(x)
+    priors = prep_priors(prior_b, x, mod_list$y)
+
+    # Convert to ln[eDNA] here to avoid thinking too hard in the model
+    ln_eDNA = (mod_list$y[i] - alpha) / beta
+    lower_bound = (Cq_upper - alpha) / beta
+    
+    model_data = list(y_obs = ln_eDNA,
+                      N_obs = sum(i),
+                      N_cens = sum(!i),
+                      K = n_vars,
+                      X_obs = as.matrix(x[i, , drop = FALSE],),
+                      X_cens = as.matrix(x[!i, , drop = FALSE],),
+                      L = lower_bound,
+                      p_zero = prob_zero,
+                      rand_sigma = as.array(rand_sd),
+                      prior_mu = priors$location,
+                      prior_sd = priors$scale,
+                      has_inter = has_inter,
+                      X = x,
+                      use_qr = as.integer(qr))
+    ## avoid #837 in rstan
+    if(typeof(model_data$X) == "logical" && ncol(model_data$X) == 0)
+        storage.mode(model_data$X) = "numeric"
+    
+    model_data$prior_int_mu = prior_int$location
+    model_data$prior_int_sd = prior_int$scale
+
+    model_data$sd_vary = switch(error_type,
+                                "fixed" = 0L,
+                                "varying" = 1L,
+                                stop("CQ Error type must be either 'fixed' or 'varying'"))
+    model_data$center_Cq = 30 ## for testing
+   
+    return(model_data)
+}

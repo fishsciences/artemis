@@ -71,7 +71,8 @@ summary.eDNA_model = function(object, probs = c(0.025, 0.5, 0.975), ...)
     }
     
     if(length(object@intercept)){
-        res = cbind(summarize_par(object@intercept, probs), res)
+        res = cbind(c(mean = mean(object@intercept),
+                    quantile(object@intercept, probs)), res)
         nms = c("(Intercept)", nms)
     }
 
