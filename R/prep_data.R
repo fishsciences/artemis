@@ -175,9 +175,8 @@ prep_priors = function(prior, x, y)
 
 prep_data.lm = function(mod_list,
                         alpha, beta,
-                        Cq_sd, betas, prob_zero,
-                        qr,
-                        Cq_upper = 40, rand_sd = double(0),
+                        Cq_sd, betas, prob_zero = 0,
+                        Cq_upper = 40,
                         prior_int, prior_b, error_type = "fixed")
 {
     has_inter = has_intercept(mod_list$x)
@@ -199,12 +198,11 @@ prep_data.lm = function(mod_list,
                       X_cens = as.matrix(x[!i, , drop = FALSE],),
                       L = lower_bound,
                       p_zero = prob_zero,
-                      rand_sigma = as.array(rand_sd),
                       prior_mu = priors$location,
                       prior_sd = priors$scale,
                       has_inter = has_inter,
-                      X = x,
-                      use_qr = as.integer(qr))
+                      X = x)
+    
     ## avoid #837 in rstan
     if(typeof(model_data$X) == "logical" && ncol(model_data$X) == 0)
         storage.mode(model_data$X) = "numeric"

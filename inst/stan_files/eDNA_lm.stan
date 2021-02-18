@@ -1,3 +1,7 @@
+/*
+  New, simplified model
+ */
+
 data {
   int<lower=0> N_obs;
   int<lower=0> N_cens;
@@ -9,7 +13,10 @@ data {
 
   // prior parameters - user provided
   real prior_int_mu;
-  real prior_int_sd;
+  real<lower=0> prior_int_sd;
+  vector[K] prior_mu;
+  vector<lower=0>[K] prior_sd;  
+
 }
 parameters {
   real intercept;
@@ -22,7 +29,10 @@ model {
 
   // priors
   intercept ~ normal(prior_int_mu, prior_int_sd);
-  betas ~ normal(0, 10);
+
+  for(k in 1:K)
+	betas[k] ~ normal(prior_mu[k], prior_sd[k]);
+
   sigma_Cq ~ std_normal();
   
   y_obs ~ normal_id_glm(X_obs, intercept, betas, sigma_Cq);
