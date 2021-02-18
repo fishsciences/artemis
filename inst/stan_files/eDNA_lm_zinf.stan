@@ -37,7 +37,7 @@ model {
   for(k in 1:K)
 	betas[k] ~ normal(prior_mu[k], prior_sd[k]);
 
-  sigma_Cq ~ std_normal();
+  sigma_Cq ~ normal(0, 1);
   
   y_obs ~ normal_id_glm(X_obs, intercept, betas, sigma_Cq);
   // zero-inflated
@@ -47,3 +47,20 @@ model {
 						  bernoulli_lpmf(0 | p_zero) +
 						  normal_lcdf(L | mu_cens[n], sigma_Cq));
 }
+
+generated quantities{
+  vector[N_obs + N_cens] log_lik;
+
+  for(n in 1:N_obs){
+	log_lik[n] = normal_lpdf(y_obs[n] | intercept + X_obs[n] * betas, sigma_Cq);
+  }
+  
+  for(n in 1:N_cens){
+	log_lik[n+N_obs] = log_sum_exp(bernoulli_lpmf(1 | p_zero),
+								   bernoulli_lpmf(0 | p_zero) +
+								   normal_lcdf(L | intercept + X_cens[n] * betas,
+											   sigma_Cq));
+	
+  }
+}
+
