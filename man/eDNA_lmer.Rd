@@ -3,6 +3,7 @@
 \name{eDNA_lm}
 \alias{eDNA_lm}
 \alias{eDNA_lmer}
+\alias{eDNA_zinf_lm}
 \title{Fit eDNA Model}
 \usage{
 eDNA_lm(
@@ -11,8 +12,6 @@ eDNA_lm(
   std_curve_alpha,
   std_curve_beta,
   upper_Cq = 40,
-  QR = TRUE,
-  probability_zero = 0.08,
   prior_intercept = normal(location = -15, scale = 10),
   priors = normal(),
   Cq_error_type = "fixed",
@@ -26,10 +25,23 @@ eDNA_lmer(
   std_curve_beta,
   upper_Cq = 40,
   QR = TRUE,
+  prior_intercept = normal(location = -15, scale = 10),
+  priors = normal(),
+  Cq_error_type = "fixed",
+  ...
+)
+
+eDNA_zinf_lm(
+  formula,
+  data,
+  std_curve_alpha,
+  std_curve_beta,
+  upper_Cq = 40,
   probability_zero = 0.08,
   prior_intercept = normal(location = -15, scale = 10),
   priors = normal(),
   Cq_error_type = "fixed",
+  model_type,
   ...
 )
 }
@@ -48,17 +60,6 @@ converting between log(eDNA concentration) and CQ value}
 \item{upper_Cq}{numeric, the upper limit on CQ detection. Any
 value of log(concentration) which would result in a value
 greater than this limit is instead recorded as the limit.}
-
-\item{QR}{logical, use the QR decomposition. Typically more
-efficient when informative priors are not used. When TRUE, the
-priors are ignored and a standard normal prior is used on
-theta, the parameters estimates on the QR decomposed model
-matrix.}
-
-\item{probability_zero}{numeric, between 0 and 1. The probability
-of a non-detection from a source other than low concentration
-of eDNA, e.g. a filter failure. Defaults to 8% (0.08), which
-was the estimated p(zero) from a daily sampling experiment.}
 
 \item{prior_intercept}{named list such as created by
 \code{rstanarm::normal}. The list must contain elements named
@@ -81,6 +82,17 @@ CQ, or if it increases or decreases as CQ increases.}
 
 \item{...}{additional arguments passed to
 \code{\link[rstan]{sampling}}}
+
+\item{QR}{logical, use the QR decomposition. Typically more
+efficient when informative priors are not used. When TRUE, the
+priors are ignored and a standard normal prior is used on
+theta, the parameters estimates on the QR decomposed model
+matrix.}
+
+\item{probability_zero}{numeric, between 0 and 1. The probability
+of a non-detection from a source other than low concentration
+of eDNA, e.g. a filter failure. Defaults to 8% (0.08), which
+was the estimated p(zero) from a daily sampling experiment.}
 }
 \value{
 S4 object, with the following slots:
@@ -147,12 +159,12 @@ have issues, additional control arguments can be passed to
 \dontrun{
 
 ## Fixed effect model
-ans = eDNA_lm(Cq ~ Distance, eDNA_data,
+ans = eDNA_lm(Cq ~ Distance_m, eDNA_data,
               std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
 ## Mixed-effect model
 ## This takes a while to run
-ans2 = eDNA_lmer(Cq ~ Distance + (1|SampleID), eDNA_data,
+ans2 = eDNA_lmer(Cq ~ Distance_m + (1|SampleID), eDNA_data,
                  std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
 }
