@@ -9,6 +9,12 @@ m
 loo(m)
 ranef(m)
 
+# slope
+m0 = eDNA_lmer(Cq ~ Distance_m + (1 + Distance_m|FilterID), cvp02, 21, -1.5)
+m
+loo(m)
+ranef(m)
+
 # only intercept
 m1a = eDNA_lmer(Cq ~ 1 + (1|FilterID), cvp02, 21, -1.5)
 m1a
@@ -16,7 +22,7 @@ loo(m1a)
 ranef(m1a)
 
 # no intercept
-m1b = eDNA_lm(Cq ~ -1 + Distance_m, cvp02, 21, -1.5)
+m1b = eDNA_lmer(Cq ~ -1 + Distance_m + (1|FilterID), cvp02, 21, -1.5)
 m1b
 loo(m1b)
 
