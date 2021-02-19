@@ -133,7 +133,7 @@ eDNA_lm = function(formula, data,
 ##' @export
 eDNA_lmer = function(formula, data, 
                      std_curve_alpha, std_curve_beta,
-                     upper_Cq = 40, QR = TRUE,
+                     upper_Cq = 40, 
                      prior_intercept = normal(location = -15, scale = 10),
                      priors = normal(), Cq_error_type = "fixed", 
                      ...)
@@ -148,14 +148,14 @@ eDNA_lmer = function(formula, data,
     
     # ml = gen_model_list_lmer(formula, data)
     
-    md = prep_data.model(ml, std_curve_alpha, std_curve_beta,
-                   Cq_upper = upper_Cq, qr = QR, 
+    md = prep_data.lmer(ml, std_curve_alpha, std_curve_beta,
+                   Cq_upper = upper_Cq, 
                    prior_int = prior_intercept,
                    prior_b = priors, error_type = Cq_error_type)
 
     # md$y = ml$y
 
-    fit = run_model(model_name = "eDNA_omni.stan", data = md, ...)
+    fit = run_model(model_name = "eDNA_lmer.stan", data = md, ...)
     fit = load_slots_model(fit)
     
     fit = as(fit, "eDNA_model_lmer")
