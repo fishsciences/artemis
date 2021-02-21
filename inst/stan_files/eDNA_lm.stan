@@ -9,7 +9,7 @@ data {
   matrix[N_obs, K] X_obs;
   matrix[N_cens, K] X_cens;
   vector[N_obs] y_obs; // ln[eDNA]
-  real<upper=min(y_obs)> L; // lower bound on ln[eDNA]
+  vector<upper=min(y_obs)>[N_cens] L; // lower bound on ln[eDNA]
 
   // prior parameters - user provided
   real prior_int_mu;
@@ -52,7 +52,7 @@ generated quantities{
 							 X_obs[n] * betas, sigma_Cq);
   }
   for(n in 1:N_cens){
-	log_lik[n+N_obs] = normal_lcdf(L | (has_inter ? intercept[1] : 0) +
+	log_lik[n+N_obs] = normal_lcdf(L[n] | (has_inter ? intercept[1] : 0) +
 								   X_cens[n] * betas, sigma_Cq);
   }
 }

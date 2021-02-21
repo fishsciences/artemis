@@ -144,16 +144,21 @@ prep_data.lm = function(mod_list,
     priors = prep_priors(prior_b, x, mod_list$y)
 
     # Convert to ln[eDNA] here to avoid thinking too hard in the model
-    ln_eDNA = (mod_list$y[i] - alpha) / beta
+    ln_eDNA = (mod_list$y - alpha) / beta
+
     lower_bound = (Cq_upper - alpha) / beta
+
+    # to deal with multiple std curves, we need expand the lower bound
+    # to length N
+    if(length(lower_bound) == 1) rep(lower_bound, length(ln_eDNA))
     
-    model_data = list(y_obs = ln_eDNA,
+    model_data = list(y_obs = ln_eDNA[i],
                       N_obs = sum(i),
                       N_cens = sum(!i),
                       K = n_vars,
                       X_obs = as.matrix(x[i, , drop = FALSE],),
                       X_cens = as.matrix(x[!i, , drop = FALSE],),
-                      L = lower_bound,
+                      L = lower_bound[!i],
                       p_zero = prob_zero,
                       prior_mu = priors$location,
                       prior_sd = priors$scale,
