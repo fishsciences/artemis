@@ -1,3 +1,4 @@
+if(FALSE){
 library(artemis)
 library(elaphos)
 
@@ -55,3 +56,4 @@ m5b = artemis:::eDNA_zinf_lm(Cq ~ -1 + Distance_m, cvp02, 21, -1.5,
 m5b
 loo(m5b)
 
+}
