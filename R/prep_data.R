@@ -9,7 +9,7 @@ prep_data.lmer = function(mod_list,
                           Cq_upper = 40, rand_sd = double(0),
                           prior_int, prior_b, error_type = "fixed")
 {
-    
+    # This gets most of the data in there
     model_data = prep_data.lm(mod_list, alpha, beta, Cq_sd, betas,
                              prob_zero, Cq_upper, prior_int, prior_b,
                              error_type)
@@ -26,7 +26,7 @@ prep_data.lmer = function(mod_list,
     return(model_data)
 }
 
-
+# This needs to be updated maybe?
 prep_data.sim = function(mod_list,
                      alpha, beta,
                      Cq_sd, betas, p_zero,
