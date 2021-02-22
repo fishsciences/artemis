@@ -141,10 +141,10 @@ prep_data.lm = function(mod_list,
     i = mod_list$y < Cq_upper
     
     n_vars = if(is.null(ncol(x))) 0 else ncol(x)
-    priors = prep_priors(prior_b, x, mod_list$y)
-
+    
     # Convert to ln[eDNA] here to avoid thinking too hard in the model
     ln_eDNA = (mod_list$y - alpha) / beta
+    priors = prep_priors(prior_b, x, ln_eDNA)
 
     lower_bound = (Cq_upper - alpha) / beta
 
