@@ -150,7 +150,7 @@ prep_data.lm = function(mod_list,
 
     # to deal with multiple std curves, we need expand the lower bound
     # to length N
-    if(length(lower_bound) == 1) rep(lower_bound, length(ln_eDNA))
+    if(length(lower_bound) == 1) lower_bound = rep(lower_bound, length(ln_eDNA))
     
     model_data = list(y_obs = ln_eDNA[i],
                       N_obs = sum(i),
