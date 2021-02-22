@@ -9,8 +9,8 @@ test_that("Multi-curves: model", {
     expect_is(ans, "eDNA_model")
 
     ans = eDNA_lm(Cq ~ Distance_m, eDNA_data,
-                  std_curve_alpha = rnorm(n, 21.2, 0.25) ,
-                  std_curve_beta = rnorm(n, -1.5, 0.25))
+                  std_curve_alpha = rnorm(n, 21.2, 0.025) ,
+                  std_curve_beta = rnorm(n, -1.5, 0.025))
     
     expect_is(ans, "eDNA_model")
 })
