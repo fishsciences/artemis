@@ -204,7 +204,7 @@ eDNA_zinf_lm = function(formula, data,
                         ...)
 {
     # from lm
-    eDNA_lm_shared(model_type = "zero_inf",
+    eDNA_lm_shared(model_type = "zero_inf_lm",
                           formula, data, 
                           std_curve_alpha, std_curve_beta,
                           upper_Cq,
@@ -212,6 +212,27 @@ eDNA_zinf_lm = function(formula, data,
                           prior_intercept,
                           priors, Cq_error_type,
                           ...)
+}
+##' @rdname eDNA_lmer
+##' @export
+eDNA_zinf_lmer = function(formula, data, 
+                          std_curve_alpha, std_curve_beta,
+                          upper_Cq = 40,
+                          probability_zero = 0.08,
+                          prior_intercept = normal(location = -15, scale = 10),
+                          priors = normal(), Cq_error_type = "fixed",
+                          model_type,
+                          ...)
+{
+    # from lm
+    eDNA_lm_shared(model_type = "zero_inf_lmer",
+                   formula, data, 
+                   std_curve_alpha, std_curve_beta,
+                   upper_Cq,
+                   probability_zero,
+                   prior_intercept,
+                   priors, Cq_error_type,
+                   ...)
 }
 
 # houses most lm() code, which is similar between the lm and zero-inflated
@@ -226,7 +247,9 @@ eDNA_lm_shared = function(model_type,
 {
     mn = switch(model_type,
                 lm = "eDNA_lm.stan",
-                zero_inf = "eDNA_lm_zinf.stan",
+                lmer = "eDNA_lmer.stan",
+                zero_inf_lm = "eDNA_lm_zinf.stan",
+                zero_inf_lmer = "eDNA_lmer_zinf.stan",
                 stop("Unknown model type"))
     # from lm
     mf <- match.call(expand.dots = FALSE)
