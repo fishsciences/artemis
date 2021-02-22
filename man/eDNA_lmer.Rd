@@ -4,6 +4,7 @@
 \alias{eDNA_lm}
 \alias{eDNA_lmer}
 \alias{eDNA_zinf_lm}
+\alias{eDNA_zinf_lmer}
 \title{Fit eDNA Model}
 \usage{
 eDNA_lm(
@@ -24,7 +25,6 @@ eDNA_lmer(
   std_curve_alpha,
   std_curve_beta,
   upper_Cq = 40,
-  QR = TRUE,
   prior_intercept = normal(location = -15, scale = 10),
   priors = normal(),
   Cq_error_type = "fixed",
@@ -32,6 +32,20 @@ eDNA_lmer(
 )
 
 eDNA_zinf_lm(
+  formula,
+  data,
+  std_curve_alpha,
+  std_curve_beta,
+  upper_Cq = 40,
+  probability_zero = 0.08,
+  prior_intercept = normal(location = -15, scale = 10),
+  priors = normal(),
+  Cq_error_type = "fixed",
+  model_type,
+  ...
+)
+
+eDNA_zinf_lmer(
   formula,
   data,
   std_curve_alpha,
@@ -83,16 +97,16 @@ CQ, or if it increases or decreases as CQ increases.}
 \item{...}{additional arguments passed to
 \code{\link[rstan]{sampling}}}
 
+\item{probability_zero}{numeric, between 0 and 1. The probability
+of a non-detection from a source other than low concentration
+of eDNA, e.g. a filter failure. Defaults to 8% (0.08), which
+was the estimated p(zero) from a daily sampling experiment.}
+
 \item{QR}{logical, use the QR decomposition. Typically more
 efficient when informative priors are not used. When TRUE, the
 priors are ignored and a standard normal prior is used on
 theta, the parameters estimates on the QR decomposed model
 matrix.}
-
-\item{probability_zero}{numeric, between 0 and 1. The probability
-of a non-detection from a source other than low concentration
-of eDNA, e.g. a filter failure. Defaults to 8% (0.08), which
-was the estimated p(zero) from a daily sampling experiment.}
 }
 \value{
 S4 object, with the following slots:
