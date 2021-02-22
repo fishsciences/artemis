@@ -9,7 +9,9 @@
 ##' @return NULL
 ##' @author Matt Espe
 ##' @export
-compile_models = function(model_names = c("eDNA_omni.stan", "eDNA_sim_omni.stan"),
+compile_models = function(model_names = c("eDNA_lm.stan","eDNA_lmer.stan",
+                                          "eDNA_lm_zinf.stan", "eDNA_lmer_zinf.stan",
+                                          "eDNA_sim_omni.stan"),
                           models = system.file("stan_files", model_names,
                                                package = "artemis"),
                           rewrite = TRUE, ...)
