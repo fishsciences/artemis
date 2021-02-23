@@ -7,6 +7,15 @@ WARNING: Any versions here are still under active developement, and
 will change in ways that will likely break your existing code. Until
 formal release v1.0.0, do not expect stability!
 
+## v0.16.0
+
+Changed model and functions to apply the measurement error on ln(eDNA)
+rather than on Cq. This is because when there are multiple standard
+curves in use, effectively there will also be multiple sigma_Cqs. This
+is atypical for a regression model, where the residual error is
+assumed to be I.I.D. Changing the error to apply to the ln(eDNA)
+avoids this, as the observations are on the same scale.
+
 ## v0.15.0
 
 Refactored the model code to make increase clarity and

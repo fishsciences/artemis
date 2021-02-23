@@ -100,8 +100,8 @@ eDNA_lm = function(formula, data,
 ##'     posterior prediction for the observed response}
 ##'   \item{betas}{array, the posterior estimates for the betas for
 ##'     the linear model}
-##'   \item{sigma_Cq}{array, the posterior
-##'     estimates for the measurement error of CQ}
+##'   \item{sigma_ln_eDNA}{array, the posterior
+##'     estimates for the measurement error of ln_eDNA}
 ##'   \item{formula}{formula, the original formula used in the
 ##'     model}
 ##'   \item{x}{data.frame, the model matrix used in the

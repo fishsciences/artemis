@@ -24,7 +24,7 @@ data {
 parameters {
   real intercept[has_inter ? 1 : 0];
   vector[K] betas;
-  real<lower=0> sigma_Cq;
+  real<lower=0> sigma_ln_eDNA;
 }
 
 model {
@@ -38,10 +38,10 @@ model {
   for(k in 1:K)
 	betas[k] ~ normal(prior_mu[k], prior_sd[k]);
 
-  sigma_Cq ~ normal(0, 1);
+  sigma_ln_eDNA ~ normal(0, 1);
   
-  y_obs ~ normal_id_glm(X_obs, has_inter ? intercept[1] : 0.0, betas, sigma_Cq);
-  target += normal_lcdf(L | mu_cens, sigma_Cq);
+  y_obs ~ normal_id_glm(X_obs, has_inter ? intercept[1] : 0.0, betas, sigma_ln_eDNA);
+  target += normal_lcdf(L | mu_cens, sigma_ln_eDNA);
 }
 
 generated quantities{
@@ -49,10 +49,10 @@ generated quantities{
 
   for(n in 1:N_obs){
 	log_lik[n] = normal_lpdf(y_obs[n] | (has_inter ? intercept[1] : 0.0) +
-							 X_obs[n] * betas, sigma_Cq);
+							 X_obs[n] * betas, sigma_ln_eDNA);
   }
   for(n in 1:N_cens){
 	log_lik[n+N_obs] = normal_lcdf(L[n] | (has_inter ? intercept[1] : 0) +
-								   X_cens[n] * betas, sigma_Cq);
+								   X_cens[n] * betas, sigma_ln_eDNA);
   }
 }

@@ -27,7 +27,7 @@ data {
 parameters {
   real intercept[has_inter ? 1 : 0];
   vector[K] betas;
-  real<lower=0> sigma_Cq;
+  real<lower=0> sigma_ln_eDNA;
   real<lower=0, upper=1> p_zero;
 }
 
@@ -42,15 +42,15 @@ model {
   for(k in 1:K)
 	betas[k] ~ normal(prior_mu[k], prior_sd[k]);
 
-  sigma_Cq ~ normal(0, 1);
+  sigma_ln_eDNA ~ normal(0, 1);
   
-  y_obs ~ normal_id_glm(X_obs, has_inter ? intercept[1] : 0.0, betas, sigma_Cq);
+  y_obs ~ normal_id_glm(X_obs, has_inter ? intercept[1] : 0.0, betas, sigma_ln_eDNA);
   // zero-inflated
   target += N_obs * bernoulli_lpmf(0 | p_zero);
   for(n in 1:N_cens)
 	target += log_sum_exp(bernoulli_lpmf(1 | p_zero),
 						  bernoulli_lpmf(0 | p_zero) +
-						  normal_lcdf(L | mu_cens[n], sigma_Cq));
+						  normal_lcdf(L | mu_cens[n], sigma_ln_eDNA));
 }
 
 generated quantities{
@@ -58,7 +58,7 @@ generated quantities{
 
   for(n in 1:N_obs){
 	log_lik[n] = normal_lpdf(y_obs[n] | (has_inter ? intercept[1] : 0.0) +
-							 X_obs[n] * betas, sigma_Cq);
+							 X_obs[n] * betas, sigma_ln_eDNA);
   }
   
   for(n in 1:N_cens){
@@ -66,7 +66,7 @@ generated quantities{
 								   bernoulli_lpmf(0 | p_zero) +
 								   normal_lcdf(L | (has_inter ? intercept[1] : 0) +
 											   X_cens[n] * betas,
-											   sigma_Cq));
+											   sigma_ln_eDNA));
 	
   }
 }

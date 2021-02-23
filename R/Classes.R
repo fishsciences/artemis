@@ -103,7 +103,7 @@ p_detect = function(y, thresh)
 ##' @slot ln_conc matrix, the estimated latent variable, log(eDNA concentration)
 ##' @slot Cq_star matrix, the predicted CQ value for each obs
 ##' @slot betas matrix, the posterior estimate for each beta in the model
-##' @slot sigma_Cq the estimated measurement error on CQ
+##' @slot sigma_ln_eDNA the estimated measurement error on ln_eDNA
 ##' @slot formula the formula used to fit the model
 ##' @slot x the model.matrix used to fit the model
 ##' @slot std_curve_alpha the alpha for the std. curve conversion formual used
@@ -115,7 +115,8 @@ p_detect = function(y, thresh)
 setClass("eDNA_model",
          slots = c(ln_conc = "matrix", Cq_star = "matrix",
                    intercept = "array",
-                   betas = "array", sigma_Cq = "array",
+                   betas = "array",
+                   sigma_ln_eDNA = "array", 
                    formula = "formula", x = "data.frame",
                    std_curve_alpha = "numeric", std_curve_beta = "numeric",
                    upper_Cq = "numeric",
@@ -145,8 +146,8 @@ setAs("stanfit", "eDNA_model",
           new("eDNA_model",
               intercept = intercept,
               betas = betas,
-              sigma_Cq = tmp$sigma_Cq,
+              sigma_ln_eDNA = tmp$sigma_ln_eDNA,
               stanfit = from)
-       
+     
       })
 

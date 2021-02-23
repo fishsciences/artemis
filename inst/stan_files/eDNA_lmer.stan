@@ -33,7 +33,7 @@ parameters {
   vector[K] betas;
   vector[K_r] rand_betas;
   vector<lower=0>[N_grp] rand_sigma;
-  real<lower=0> sigma_Cq;
+  real<lower=0> sigma_ln_eDNA;
 }
 
 model {
@@ -52,13 +52,13 @@ model {
   for(k in 1:K_r)
 	rand_betas[k] ~ normal(0, rand_sigma[group[k]]);
   
-  sigma_Cq ~ normal(0, 1);
+  sigma_ln_eDNA ~ normal(0, 1);
   
   y_obs ~ normal_id_glm(append_col(X_obs, X_obs_r),
 						has_inter ? intercept[1] : 0.0,
 						append_row(betas, rand_betas),
-						sigma_Cq);
-  target += normal_lcdf(L | mu_cens, sigma_Cq);
+						sigma_ln_eDNA);
+  target += normal_lcdf(L | mu_cens, sigma_ln_eDNA);
 }
 
 generated quantities{
@@ -71,11 +71,11 @@ generated quantities{
   for(n in 1:N_obs){
 	
 	log_lik[n] = normal_lpdf(y_obs[n] | (has_inter ? intercept[1] : 0.0) +
-							 X_obs_tmp[n] * betas_tmp, sigma_Cq);
+							 X_obs_tmp[n] * betas_tmp, sigma_ln_eDNA);
   }
   for(n in 1:N_cens){
 	log_lik[n+N_obs] = normal_lcdf(L[n] | (has_inter ? intercept[1] : 0) +
-								   X_cens_tmp[n] * betas_tmp, sigma_Cq);
+								   X_cens_tmp[n] * betas_tmp, sigma_ln_eDNA);
   }
   }
 }
