@@ -10,6 +10,10 @@
 ^docs$
 ^pkgdown$
 ^lib$
+inst/stan_files/eDNA_lm$
+inst/stan_files/eDNA_lmer$
+inst/stan_files/eDNA_lm_zinf$
+inst/stan_files/eDNA_lmer_zinf$
 inst/stan_files/eDNA_omni$
 inst/stan_files/eDNA_sim_omni$
 inst/stan_files/*.o$
