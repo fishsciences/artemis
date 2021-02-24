@@ -93,8 +93,8 @@ est_p_detect = function(variable_levels,
         ln_conc_hat = variable_levels %*% betas
     } else {
         # model_fit provided
-        if(!missing(Cq_sd)){
-            dup_arg_warn("Cq_sd")
+        if(!missing(ln_eDNA_sd)){
+            dup_arg_warn("ln_eDNA_sd")
         } else {
             Cq_sd = model_fit@sigma_Cq
         }
