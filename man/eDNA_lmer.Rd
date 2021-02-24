@@ -15,7 +15,6 @@ eDNA_lm(
   upper_Cq = 40,
   prior_intercept = normal(location = -15, scale = 10),
   priors = normal(),
-  Cq_error_type = "fixed",
   ...
 )
 
@@ -27,7 +26,7 @@ eDNA_lmer(
   upper_Cq = 40,
   prior_intercept = normal(location = -15, scale = 10),
   priors = normal(),
-  Cq_error_type = "fixed",
+  prior_random_variance = exponential(),
   ...
 )
 
@@ -40,8 +39,6 @@ eDNA_zinf_lm(
   probability_zero = 0.08,
   prior_intercept = normal(location = -15, scale = 10),
   priors = normal(),
-  Cq_error_type = "fixed",
-  model_type,
   ...
 )
 
@@ -54,8 +51,7 @@ eDNA_zinf_lmer(
   probability_zero = 0.08,
   prior_intercept = normal(location = -15, scale = 10),
   priors = normal(),
-  Cq_error_type = "fixed",
-  model_type,
+  prior_random_variance = exponential(),
   ...
 )
 }
@@ -90,10 +86,6 @@ beta. If \code{autoscale = TRUE}, the scale of the priors is
 scaled by the sd of the predictors similar to rstanarm handles
 them.}
 
-\item{Cq_error_type}{either "fixed" or "varying", specifying if
-measurement error is assumed to be the same for all values of
-CQ, or if it increases or decreases as CQ increases.}
-
 \item{...}{additional arguments passed to
 \code{\link[rstan]{sampling}}}
 
@@ -107,6 +99,10 @@ efficient when informative priors are not used. When TRUE, the
 priors are ignored and a standard normal prior is used on
 theta, the parameters estimates on the QR decomposed model
 matrix.}
+
+\item{Cq_error_type}{either "fixed" or "varying", specifying if
+measurement error is assumed to be the same for all values of
+CQ, or if it increases or decreases as CQ increases.}
 }
 \value{
 S4 object, with the following slots:
@@ -117,8 +113,8 @@ S4 object, with the following slots:
     posterior prediction for the observed response}
   \item{betas}{array, the posterior estimates for the betas for
     the linear model}
-  \item{sigma_Cq}{array, the posterior
-    estimates for the measurement error of CQ}
+  \item{sigma_ln_eDNA}{array, the posterior
+    estimates for the measurement error of ln_eDNA}
   \item{formula}{formula, the original formula used in the
     model}
   \item{x}{data.frame, the model matrix used in the
