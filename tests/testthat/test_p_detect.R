@@ -8,7 +8,7 @@ test_that("Duplicate arg warnings", {
 
     expect_warning(est_p_detect(variable_levels = c(Distance_m = 1000),
                             model_fit = model_fit, 
-                            Cq_sd = 1, 
+                            ln_eDNA_sd = 1, 
                             std_curve_alpha = 21.2, std_curve_beta = -1.5,
                             n_rep = 12:30))
 
