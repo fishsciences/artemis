@@ -32,6 +32,6 @@ test_that("Zero-inflated", {
     est_p_detect(variable_levels = c(Distance_m = 100),
                  model_fit = model_fit, 
                  std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                 n_rep = 12:30)
+                 n_rep = 1:3)
 
 })

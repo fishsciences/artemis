@@ -96,7 +96,7 @@ est_p_detect = function(variable_levels,
         if(!missing(ln_eDNA_sd)){
             dup_arg_warn("ln_eDNA_sd")
         } else {
-            Cq_sd = model_fit@sigma_Cq
+            ln_eDNA_sd = model_fit@sigma_ln_eDNA
         }
         if(missing(std_curve_alpha) && missing(std_curve_beta)){
             std_curve_alpha = unique(model_fit@std_curve_alpha)
