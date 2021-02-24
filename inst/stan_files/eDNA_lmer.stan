@@ -23,7 +23,8 @@ data {
   real<lower=0> prior_int_sd;
   vector[K] prior_mu;
   vector<lower=0>[K] prior_sd;  
-
+  real rand_sd;
+  
   // for intercept-less models
   int<lower=0,upper=1> has_inter;
 }
@@ -44,7 +45,7 @@ model {
 
   // priors
   intercept ~ normal(prior_int_mu, prior_int_sd);
-  rand_sigma ~ exponential(1);
+  rand_sigma ~ exponential(rand_sd);
   
   for(k in 1:K)
 	betas[k] ~ normal(prior_mu[k], prior_sd[k]);

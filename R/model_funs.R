@@ -5,16 +5,16 @@ eDNA_lm = function(formula, data,
                    std_curve_alpha, std_curve_beta,
                    upper_Cq = 40, 
                    prior_intercept = normal(location = -15, scale = 10),
-                   priors = normal(), Cq_error_type = "fixed",
+                   priors = normal(),
                    ...)
 {
     eDNA_lm_shared(model_type = "lm",
-                          formula, data, 
-                          std_curve_alpha, std_curve_beta,
-                          upper_Cq,
-                          probability_zero = 0,
-                          prior_intercept,
-                          priors, Cq_error_type,
+                   formula, data, 
+                   std_curve_alpha, std_curve_beta,
+                   upper_Cq,
+                   probability_zero = 0,
+                   prior_intercept,
+                   priors, 
                    ...)
 }
 
@@ -135,34 +135,19 @@ eDNA_lmer = function(formula, data,
                      std_curve_alpha, std_curve_beta,
                      upper_Cq = 40, 
                      prior_intercept = normal(location = -15, scale = 10),
-                     priors = normal(), Cq_error_type = "fixed", 
+                     priors = normal(),
+                     prior_random_variance = exponential(), 
                      ...)
 {
-    # from lm
-    mf <- match.call(expand.dots = FALSE)
-    m <- match(c("formula", "data"), names(mf), 0L)
-    mf <- mf[c(1L, m)]
-
-    mf[[1]] = quote(artemis:::gen_model_list_lmer)
-    ml = eval(mf, parent.frame(1L))
-    
-    # ml = gen_model_list_lmer(formula, data)
-    
-    md = prep_data.lmer(ml, std_curve_alpha, std_curve_beta,
-                   Cq_upper = upper_Cq, 
-                   prior_int = prior_intercept,
-                   prior_b = priors, error_type = Cq_error_type)
-
-    # md$y = ml$y
-
-    fit = run_model(model_name = "eDNA_lmer.stan", data = md, ...)
-    fit = load_slots_model(fit)
-    
-    fit = as(fit, "eDNA_model_lmer")
-    fit@random_x = as.data.frame(md$rand_x)
-    fit@random_sd = extract(fit@stanfit, "rand_sigma")$rand_sigma
-    
-    return(fit)
+    eDNA_lm_shared(model_type = "lmer",
+                   formula, data, 
+                   std_curve_alpha, std_curve_beta,
+                   upper_Cq,
+                   probability_zero = 0,
+                   prior_intercept,
+                   priors,
+                   prior_random_variance,
+                   ...)
 }
 
 run_model = function(model_name = "eDNA_lm.stan",
@@ -199,8 +184,7 @@ eDNA_zinf_lm = function(formula, data,
                         upper_Cq = 40,
                         probability_zero = 0.08,
                         prior_intercept = normal(location = -15, scale = 10),
-                        priors = normal(), Cq_error_type = "fixed",
-                        model_type,
+                        priors = normal(), 
                         ...)
 {
     # from lm
@@ -210,7 +194,7 @@ eDNA_zinf_lm = function(formula, data,
                           upper_Cq,
                           probability_zero,
                           prior_intercept,
-                          priors, Cq_error_type,
+                          priors, 
                           ...)
 }
 ##' @rdname eDNA_lmer
@@ -220,8 +204,8 @@ eDNA_zinf_lmer = function(formula, data,
                           upper_Cq = 40,
                           probability_zero = 0.08,
                           prior_intercept = normal(location = -15, scale = 10),
-                          priors = normal(), Cq_error_type = "fixed",
-                          model_type,
+                          priors = normal(),
+                          prior_random_variance = exponential(),
                           ...)
 {
     # from lm
@@ -231,45 +215,68 @@ eDNA_zinf_lmer = function(formula, data,
                    upper_Cq,
                    probability_zero,
                    prior_intercept,
-                   priors, Cq_error_type,
+                   priors,
+                   prior_random_variance,
                    ...)
 }
 
-# houses most lm() code, which is similar between the lm and zero-inflated
-eDNA_lm_shared = function(model_type,
+# houses most lm() code, which is similar between the lm, lmer, and
+# zero-inflated
+eDNA_lm_shared = function(model_type, 
                           formula, data, 
                           std_curve_alpha, std_curve_beta,
                           upper_Cq = 40,
                           probability_zero = 0.08,
                           prior_intercept = normal(location = -15, scale = 10),
-                          priors = normal(), Cq_error_type = "fixed",
+                          priors = normal(), 
+                          prior_random_variance = exponential(),
                           ...)
 {
-    mn = switch(model_type,
-                lm = "eDNA_lm.stan",
-                lmer = "eDNA_lmer.stan",
-                zero_inf_lm = "eDNA_lm_zinf.stan",
-                zero_inf_lmer = "eDNA_lmer_zinf.stan",
-                stop("Unknown model type"))
+    md_pars = get_mod_funs(model_type)
+    
     # from lm
     mf <- match.call(expand.dots = FALSE)
     m <- match(c("formula", "data"), names(mf), 0L)
     mf <- mf[c(1L, m)]
 
-    mf[[1]] = quote(artemis:::gen_model_list_lm)
+    mf[[1]] = md_pars$gen_fun
 
     ml = eval(mf, parent.frame(1L))
        
     # This works because Stan ignores extra input data
-    md = prep_data.lm(ml, std_curve_alpha, std_curve_beta,
-                   Cq_upper = upper_Cq, prob_zero = probability_zero,
-                   prior_int = prior_intercept,
-                   prior_b = priors, error_type = Cq_error_type)
+    md = md_pars$prep_fun(ml, std_curve_alpha, std_curve_beta,
+                          Cq_upper = upper_Cq, prob_zero = probability_zero,
+                          prior_int = prior_intercept,
+                          prior_b = priors, rand_sd = prior_random_variance)
     # md$y = ml$y
-    fit = run_model(model_name = mn,
+    fit = run_model(model_name = md_pars$mn,
                     data = md, ...)
     fit = load_slots_model(fit)
     fit = as(fit, "eDNA_model_lm")
     
     return(fit)
+}
+
+# Put this here to allow us to easily swap out pieces later
+get_mod_funs = function(model_type)
+{
+    list(
+    mn = switch(model_type,
+                lm = "eDNA_lm.stan",
+                lmer = "eDNA_lmer.stan",
+                zero_inf_lm = "eDNA_lm_zinf.stan",
+                zero_inf_lmer = "eDNA_lmer_zinf.stan",
+                stop("Unknown model type")),
+    
+    gen_fun = switch(model_type,
+                     lm = quote(artemis:::gen_model_list_lm),
+                     lmer = quote(artemis:::gen_model_list_lmer),
+                     zero_inf_lm = quote(artemis:::gen_model_list_lm),
+                     zero_inf_lmer = quote(artemis:::gen_model_list_lmer)),
+    
+    prep_fun = switch(model_type,
+                      lm = prep_data.lm,
+                      lmer = prep_data.lmer,
+                      zero_inf_lm = prep_data.lm, 
+                      zero_inf_lmer = prep_data.lmer))
 }

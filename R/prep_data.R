@@ -5,14 +5,14 @@
 
 prep_data.lmer = function(mod_list,
                           alpha, beta,
-                          Cq_sd, betas, prob_zero = 0,
-                          Cq_upper = 40, rand_sd = double(0),
-                          prior_int, prior_b, error_type = "fixed")
+                          prob_zero = 0,
+                          Cq_upper,
+                          prior_int, prior_b,
+                          rand_sd)
 {
     # This gets most of the data in there
-    model_data = prep_data.lm(mod_list, alpha, beta, Cq_sd, betas,
-                             prob_zero, Cq_upper, prior_int, prior_b,
-                             error_type)
+    model_data = prep_data.lm(mod_list, alpha, beta, 
+                             prob_zero, Cq_upper, prior_int, prior_b)
     i = mod_list$y < Cq_upper
 
     model_data$X_obs_r = mod_list$rand_x[i,]
@@ -21,8 +21,9 @@ prep_data.lmer = function(mod_list,
     model_data$K_r = mod_list$n_rand
     model_data$group = mod_list$groups
     model_data$N_grp = mod_list$n_grp
-    model_data$rand_sigma = as.array(rand_sd)
-    
+    if(rand_sd$dist != "exponential")
+        stop("Only exponential priors on random effect variance supported at this time")
+    model_data$rand_sd = rand_sd$scale^-1    
     return(model_data)
 }
 
@@ -132,9 +133,11 @@ prep_priors = function(prior, x, y)
 
 prep_data.lm = function(mod_list,
                         alpha, beta,
-                        Cq_sd, betas, prob_zero = 0,
-                        Cq_upper = 40,
-                        prior_int, prior_b, error_type = "fixed")
+                        prob_zero = 0,
+                        Cq_upper,
+                        prior_int, prior_b,
+                        rand_sd = 0) # ignored for lm
+
 {
     has_inter = has_intercept(mod_list$x)
     x = remove_intercept(mod_list$x)
@@ -172,10 +175,6 @@ prep_data.lm = function(mod_list,
     model_data$prior_int_mu = prior_int$location
     model_data$prior_int_sd = prior_int$scale
 
-    model_data$sd_vary = switch(error_type,
-                                "fixed" = 0L,
-                                "varying" = 1L,
-                                stop("CQ Error type must be either 'fixed' or 'varying'"))
     model_data$center_Cq = 30 ## for testing
    
     return(model_data)
