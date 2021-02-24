@@ -44,7 +44,7 @@ model {
 
   // priors
   intercept ~ normal(prior_int_mu, prior_int_sd);
-  rand_sigma ~ normal(0, 1);
+  rand_sigma ~ exponential(1);
   
   for(k in 1:K)
 	betas[k] ~ normal(prior_mu[k], prior_sd[k]);
@@ -52,7 +52,7 @@ model {
   for(k in 1:K_r)
 	rand_betas[k] ~ normal(0, rand_sigma[group[k]]);
   
-  sigma_ln_eDNA ~ normal(0, 1);
+  sigma_ln_eDNA ~ exponential(1);
   
   y_obs ~ normal_id_glm(append_col(X_obs, X_obs_r),
 						has_inter ? intercept[1] : 0.0,
