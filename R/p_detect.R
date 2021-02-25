@@ -122,11 +122,11 @@ est_p_detect = function(variable_levels,
 
 prob_detect_ln = function(ln_conc_hat, ln_sd, n_rep, p_zero, lwb)
 {
-    ## pnorm() is the prob of seeing value over lower_bound (lwb),
-    # i.e. detection, 1-pnorm() is below bound
-    ## p_zero is also the prob of seeing over upper_Cq
-    ## 1 - (pnorm() * (1 - p_zero))
-    p_nondetect = (1 - pnorm(lwb, ln_conc_hat, ln_sd)) * p_zero
+    # This is a mixture of non-detections from the value with
+    # measurement error landing below the threshold of detection and
+    # the probability of a zero from e.g. filter failure
+    p_nondetect = (pnorm(lwb, ln_conc_hat, ln_sd) *
+                   (1 - p_zero)) + p_zero
     sapply(n_rep, function(i) 1 - (p_nondetect ^ i))
 }
 
