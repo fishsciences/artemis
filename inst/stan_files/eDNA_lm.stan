@@ -9,7 +9,7 @@ data {
   matrix[N_obs, K] X_obs;
   matrix[N_cens, K] X_cens;
   vector[N_obs] y_obs; // ln[eDNA]
-  vector<upper=min(y_obs)>[N_cens] L; // lower bound on ln[eDNA]
+  vector[N_cens] L; // lower bound on ln[eDNA]
 
   // prior parameters - user provided
   real prior_int_mu;

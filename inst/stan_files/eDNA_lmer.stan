@@ -9,7 +9,7 @@ data {
   matrix[N_obs, K] X_obs;
   matrix[N_cens, K] X_cens;
   vector[N_obs] y_obs; // ln[eDNA]
-  vector<upper=min(y_obs)>[N_cens] L; // lower bound on ln[eDNA]
+  vector[N_cens] L; // lower bound on ln[eDNA]
   //#include lm_data.stan // Play with this later
   // Random effects
   int<lower=0> K_r;

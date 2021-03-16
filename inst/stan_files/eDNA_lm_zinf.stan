@@ -11,7 +11,7 @@ data {
   matrix[N_obs, K] X_obs;
   matrix[N_cens, K] X_cens;
   vector[N_obs] y_obs; // ln[eDNA]
-  real<upper=min(y_obs)> L; // lower bound on ln[eDNA]
+  vector[N_cens] L; // lower bound on ln[eDNA]
 
   // prior parameters - user provided
   real prior_int_mu;
@@ -50,7 +50,7 @@ model {
   for(n in 1:N_cens)
 	target += log_sum_exp(bernoulli_lpmf(1 | p_zero),
 						  bernoulli_lpmf(0 | p_zero) +
-						  normal_lcdf(L | mu_cens[n], sigma_ln_eDNA));
+						  normal_lcdf(L[n] | mu_cens[n], sigma_ln_eDNA));
 }
 
 generated quantities{
@@ -64,7 +64,7 @@ generated quantities{
   for(n in 1:N_cens){
 	log_lik[n+N_obs] = log_sum_exp(bernoulli_lpmf(1 | p_zero),
 								   bernoulli_lpmf(0 | p_zero) +
-								   normal_lcdf(L | (has_inter ? intercept[1] : 0) +
+								   normal_lcdf(L[n] | (has_inter ? intercept[1] : 0) +
 											   X_cens[n] * betas,
 											   sigma_ln_eDNA));
 	
