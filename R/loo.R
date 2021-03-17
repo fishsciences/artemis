@@ -1,7 +1,3 @@
-##' @rdname loo.eDNA_model
-##' @export
-loo = function(x, ...)
-    UseMethod("loo")
 
 ##' A 'loo' method for eDNA_model objects, which is simply a wrapper
 ##' around \code{loo(extract_log_lik(x))}
