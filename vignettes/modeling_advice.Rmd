@@ -2,7 +2,7 @@
 title: "Modeling Advice"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Modeling eDNA qPCR Data with `artemis`}
+  %\VignetteIndexEntry{Modeling Advice}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 

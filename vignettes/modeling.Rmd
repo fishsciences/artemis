@@ -55,7 +55,7 @@ Note that there are no variable levels with missing or `NA` values - Stan models
 
 To fit a fixed effects model to the sample `eDNA_data` where `Distance_m` is the only predictor, we give the function a model formula and the input data listed above:
 
-```{r warning = FALSE, eval=TRUE}
+```{r warning = FALSE, eval=FALSE}
 
 model_fit = eDNA_lm(Cq ~ Distance_m, 
                     data = eDNA_data,
@@ -111,7 +111,7 @@ model_fit = eDNA_lm(Cq ~ Distance_m,
 
 To fit a model with one or more random effect(s), use the `eDNA_lmer()` function. Random effects are specified using the same syntax as the `lme4` package, e.g. `(1|random effect)`:
 
-```{r warning = FALSE, eval=TRUE}
+```{r warning = FALSE, eval=FALSE}
 d = eDNA_data # create a copy to modify 
 d$Year = factor(sample(2018:2020, size = nrow(d), replace = TRUE)) # create a random variable
 
@@ -128,7 +128,7 @@ model_fit2 = eDNA_lmer(Cq ~ Distance_m + Volume_mL + (1|Year),
 As with the simulation objects, the model results can be summarized or plotted with default methods using
 `summary()` and `plot()`, or converted to a `data.frame` object for further manipulation.
 
-```{r, eval=TRUE}
+```{r, eval=FALSE}
 summary(model_fit)
 
 plot(model_fit, pars = c("intercept", "betas"))

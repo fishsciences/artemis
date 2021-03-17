@@ -172,7 +172,7 @@ Often purpose of an eDNA sampling study is to inform a field sampling protocol. 
 p_detect = est_p_detect(variable_levels = c(Intercept = 1, 
                                             Distance = 100),
                         betas = c(Intercept = -10.5, Distance = -0.03),
-                        Cq_sd = 1, 
+                        ln_eDNA_sd = 1, 
                         std_curve_alpha = 21.2, std_curve_beta = -1.5,
                         n_rep = 12:30)
 p_detect
@@ -191,7 +191,7 @@ for a set of circumstances. Unlike the above, using a fit model allows
 us to estimate the probability of detection with the uncertainty in
 our effect size estimates taken into account.
 
-```{r, eval=TRUE, fig = TRUE}
+```{r, eval=FALSE, fig = TRUE}
 model_fit = eDNA_lm(Cq ~ Distance_m + Volume_mL, 
                     data = eDNA_data,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5,
@@ -210,7 +210,7 @@ print(p_detect2)
 
 and we can plot the results,
 
-```{r, fig = TRUE, eval = TRUE}
+```{r, fig = TRUE, eval = FALSE}
 plot(p_detect2, error_width = 0.1)
 ```
 
