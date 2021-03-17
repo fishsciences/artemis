@@ -18,7 +18,7 @@ test_that("Multiple var levels", {
     expect_error(est_p_detect(variable_levels = data.frame(Intercept = 1, 
                                                            Distance_m = c(10, 1000)),
                               betas = c(Intercept = -12, Distance_m = -0.0001),
-                              Cq_sd = 1, 
+                              ln_eDNA_sd = 1, 
                               std_curve_alpha = 21.2, std_curve_beta = -1.5,
                               n_rep = 12:30))
 

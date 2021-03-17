@@ -65,11 +65,6 @@ eDNA_lm = function(formula, data,
 ##' @param upper_Cq numeric, the upper limit on CQ detection. Any
 ##'     value of log(concentration) which would result in a value
 ##'     greater than this limit is instead recorded as the limit.
-##' @param QR logical, use the QR decomposition. Typically more
-##'     efficient when informative priors are not used. When TRUE, the
-##'     priors are ignored and a standard normal prior is used on
-##'     theta, the parameters estimates on the QR decomposed model
-##'     matrix.
 ##' @param probability_zero numeric, between 0 and 1. The probability
 ##'     of a non-detection from a source other than low concentration
 ##'     of eDNA, e.g. a filter failure. Defaults to 8% (0.08), which
@@ -79,6 +74,8 @@ eDNA_lm = function(formula, data,
 ##'     "location" and "scale", which are the location and scale for a
 ##'     normal prior over the intercept. Ignored when the intercept is
 ##'     omitted in the model formula.
+##' @param prior_random_variance the prior on variance of the random
+##'     effects. Defaults to exponential distribution with rate 1.
 ##' @param priors named list such as created by
 ##'     \code{rstanarm::normal}. The list must contain elements named
 ##'     "location" and "scale", which are the location and scale for a
@@ -87,32 +84,21 @@ eDNA_lm = function(formula, data,
 ##'     beta. If \code{autoscale = TRUE}, the scale of the priors is
 ##'     scaled by the sd of the predictors similar to rstanarm handles
 ##'     them.
-##' @param Cq_error_type either "fixed" or "varying", specifying if
-##'     measurement error is assumed to be the same for all values of
-##'     CQ, or if it increases or decreases as CQ increases.
 ##' @param ... additional arguments passed to
 ##'     \code{\link[rstan]{sampling}}
-##' @return S4 object, with the following slots:
-##' \describe{
-##'   \item{ln_conc}{matrix, the posterior samples for the latent
-##'     variable, eDNA concentration}
-##'   \item{Cq_star}{matrix, the
+##' @return S4 object, with the following slots: \describe{
+##'     \item{ln_conc}{matrix, the posterior samples for the latent
+##'     variable, eDNA concentration} \item{Cq_star}{matrix, the
 ##'     posterior prediction for the observed response}
-##'   \item{betas}{array, the posterior estimates for the betas for
-##'     the linear model}
-##'   \item{sigma_ln_eDNA}{array, the posterior
+##'     \item{betas}{array, the posterior estimates for the betas for
+##'     the linear model} \item{sigma_ln_eDNA}{array, the posterior
 ##'     estimates for the measurement error of ln_eDNA}
-##'   \item{formula}{formula, the original formula used in the
-##'     model}
-##'   \item{x}{data.frame, the model matrix used in the
-##'     model}
-##'   \item{std_curve_alpha}{numeric, the std. curve value
-##'     used}
-##'   \item{std_curve_beta}{numeric, the std. curve value
-##'     used}
-##'   \item{upper_Cq}{numeric, the upper limit for observed CQ
-##'     used}
-##'   \item{stanfit}{stanfit, the original results from
+##'     \item{formula}{formula, the original formula used in the
+##'     model} \item{x}{data.frame, the model matrix used in the
+##'     model} \item{std_curve_alpha}{numeric, the std. curve value
+##'     used} \item{std_curve_beta}{numeric, the std. curve value
+##'     used} \item{upper_Cq}{numeric, the upper limit for observed CQ
+##'     used} \item{stanfit}{stanfit, the original results from
 ##'     \code{rstan::sampling}} }
 ##' @author Matt Espe
 ##'
@@ -252,7 +238,7 @@ eDNA_lm_shared = function(model_type,
     fit = run_model(model_name = md_pars$mn,
                     data = md, ...)
     fit = load_slots_model(fit)
-    fit = as(fit, "eDNA_model_lm")
+    fit = as(fit, md_pars$model_class)
     
     return(fit)
 }
@@ -278,5 +264,13 @@ get_mod_funs = function(model_type)
                       lm = prep_data.lm,
                       lmer = prep_data.lmer,
                       zero_inf_lm = prep_data.lm, 
-                      zero_inf_lmer = prep_data.lmer))
+                      zero_inf_lmer = prep_data.lmer),
+
+
+    model_class = switch(model_type,
+                      lm = "eDNA_model_lm",
+                      lmer = "eDNA_model_lmer",
+                      zero_inf_lm = "eDNA_model_zip", 
+                      zero_inf_lmer = "eDNA_model_ziper")
+    )
 }

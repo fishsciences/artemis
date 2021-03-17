@@ -66,7 +66,7 @@
 ##'
 ##' est_p_detect(variable_levels = c(Intercept = 1, Distance = 100, Volume = 20),
 ##'              betas = c(Intercept = -10.5, Distance = -0.05, Volume = 0.001),
-##'              Cq_sd = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5,
+##'              ln_eDNA_sd = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5,
 ##'              n_rep = 1:12)
 ##'
 ##' @export

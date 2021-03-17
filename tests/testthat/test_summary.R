@@ -55,7 +55,7 @@ test_that("Summary methods: p-detect", {
     p_detect = est_p_detect(variable_levels = c(Intercept = 1, 
                                                 Distance_m = 1000),
                             betas = c(Intercept = -12, Distance_m = -0.0001),
-                            Cq_sd = 1, 
+                            ln_eDNA_sd = 1, 
                             std_curve_alpha = 21.2, std_curve_beta = -1.5,
                             n_rep = 12:30)
     expect_is(summary(p_detect), "data.frame")
