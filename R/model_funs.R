@@ -144,17 +144,12 @@ eDNA_lmer = function(formula, data,
                    ...)
 }
 
-run_model = function(model_name = "eDNA_lm.stan",
-                     model = cmdstan_model(model_file),
-                     model_file = system.file("stan_files",
-                                              model_name,
-                                              package = "artemis"),
+run_model = function(model,
                      data, ...)
     
 {
     ### XXXX FIX THIS!!! ####
-    m = sampling(data = data, ...)
-    fit = read_stan_csv(m$output_files())
+    fit = sampling(model, data = data, ...)
     
     fit = as(fit, "eDNA_model")
     return(fit)
@@ -243,7 +238,7 @@ eDNA_lm_shared = function(model_type,
                           prior_int = prior_intercept,
                           prior_b = priors, rand_sd = prior_random_variance)
     # md$y = ml$y
-    fit = run_model(model_name = md_pars$mn,
+    fit = run_model(model = md_pars$mod,
                     data = md, ...)
     fit = load_slots_model(fit)
     fit = as(fit, md_pars$model_class)
@@ -255,6 +250,13 @@ eDNA_lm_shared = function(model_type,
 get_mod_funs = function(model_type)
 {
     list(
+        mod = with(stanmodels, switch(model_type,
+                lm = eDNA_lm,
+                lmer = eDNA_lmer,
+                zero_inf_lm = eDNA_lm_zinf,
+                zero_inf_lmer = eDNA_lmer_zinf,
+                stop("Unknown model type"))),
+    
     mn = switch(model_type,
                 lm = "eDNA_lm.stan",
                 lmer = "eDNA_lmer.stan",

@@ -169,8 +169,10 @@ prep_data.lm = function(mod_list,
                       X = x)
     
     ## avoid #837 in rstan
-    if(typeof(model_data$X) == "logical" && ncol(model_data$X) == 0)
-        storage.mode(model_data$X) = "numeric"
+    if(typeof(model_data$X_obs) == "logical" && ncol(model_data$X_obs) == 0)
+        storage.mode(model_data$X_obs) = "numeric"
+    if(typeof(model_data$X_cens) == "logical" && ncol(model_data$X_cens) == 0)
+        storage.mode(model_data$X_cens) = "numeric"
     
     model_data$prior_int_mu = prior_int$location
     model_data$prior_int_sd = prior_int$scale
