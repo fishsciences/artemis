@@ -111,9 +111,11 @@ plot.eDNA_p_detect = function(x, y, probs = c(0.025, 0.975),
             geom_point(size = point_size) 
     }
         p + ylab("p(detect)") + xlab("N replicates") +
-            scale_x_continuous(breaks = break_fun(as.integer(reps) , n = n_breaks),
-                expand = expand_scale(mult = 0.015)) +
-            scale_y_continuous(limits = ylim, expand = expand_scale(add = 0.01)) +
+            scale_x_continuous(breaks = break_fun(as.integer(reps) , 
+                                                  n = n_breaks),
+                               expand = expansion(mult = 0.015)) +
+            scale_y_continuous(limits = ylim, 
+                               expand = expansion(add = 0.01)) +
             theme_bw()
 }
 

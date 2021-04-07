@@ -15,23 +15,29 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -39,12 +45,11 @@
 
 
 
+
 <meta property="og:title" content="Fit eDNA Model — eDNA_lm" />
-
 <meta property="og:description" content="Fit eDNA model" />
-
 <meta property="og:image" content="/logo.png" />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -61,7 +66,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -75,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">artemis</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.14.0</span>
       </span>
     </div>
 
@@ -112,7 +117,6 @@
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -134,19 +138,37 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Fit eDNA model</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>eDNA_lm</span>(<span class='no'>formula</span>, <span class='no'>data</span>, <span class='no'>std_curve_alpha</span>, <span class='no'>std_curve_beta</span>, <span class='kw'>upper_Cq</span> <span class='kw'>=</span> <span class='fl'>40</span>,
-  <span class='kw'>n_chain</span> <span class='kw'>=</span> <span class='fl'>4L</span>, <span class='kw'>iters</span> <span class='kw'>=</span> <span class='fl'>1000L</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>sink_file</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span>(), <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>eDNA_lm</span>(
+  <span class='no'>formula</span>,
+  <span class='no'>data</span>,
+  <span class='no'>std_curve_alpha</span>,
+  <span class='no'>std_curve_beta</span>,
+  <span class='kw'>upper_Cq</span> <span class='kw'>=</span> <span class='fl'>40</span>,
+  <span class='kw'>QR</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>probability_zero</span> <span class='kw'>=</span> <span class='fl'>0.08</span>,
+  <span class='kw'>prior_intercept</span> <span class='kw'>=</span> <span class='fu'><a href='normal.html'>normal</a></span>(<span class='kw'>location</span> <span class='kw'>=</span> -<span class='fl'>15</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>10</span>),
+  <span class='kw'>priors</span> <span class='kw'>=</span> <span class='fu'><a href='normal.html'>normal</a></span>(),
+  <span class='kw'>Cq_error_type</span> <span class='kw'>=</span> <span class='st'>"fixed"</span>,
+  <span class='no'>...</span>
+)
 
-<span class='fu'>eDNA_lmer</span>(<span class='no'>formula</span>, <span class='no'>data</span>, <span class='no'>std_curve_alpha</span>, <span class='no'>std_curve_beta</span>, <span class='kw'>upper_Cq</span> <span class='kw'>=</span> <span class='fl'>40</span>,
-  <span class='kw'>n_chain</span> <span class='kw'>=</span> <span class='fl'>4L</span>, <span class='kw'>iters</span> <span class='kw'>=</span> <span class='fl'>500L</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>sink_file</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span>(), <span class='no'>...</span>)</pre>
-    
+<span class='fu'>eDNA_lmer</span>(
+  <span class='no'>formula</span>,
+  <span class='no'>data</span>,
+  <span class='no'>std_curve_alpha</span>,
+  <span class='no'>std_curve_beta</span>,
+  <span class='kw'>upper_Cq</span> <span class='kw'>=</span> <span class='fl'>40</span>,
+  <span class='kw'>QR</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>probability_zero</span> <span class='kw'>=</span> <span class='fl'>0.08</span>,
+  <span class='kw'>prior_intercept</span> <span class='kw'>=</span> <span class='fu'><a href='normal.html'>normal</a></span>(<span class='kw'>location</span> <span class='kw'>=</span> -<span class='fl'>15</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>10</span>),
+  <span class='kw'>priors</span> <span class='kw'>=</span> <span class='fu'><a href='normal.html'>normal</a></span>(),
+  <span class='kw'>Cq_error_type</span> <span class='kw'>=</span> <span class='st'>"fixed"</span>,
+  <span class='no'>...</span>
+)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -176,51 +198,77 @@ value of log(concentration) which would result in a value
 greater than this limit is instead recorded as the limit.</p></td>
     </tr>
     <tr>
-      <th>n_chain</th>
-      <td><p>integer, the number of chains to use. Please note
-that less than two is not recommended.</p></td>
+      <th>QR</th>
+      <td><p>logical, use the QR decomposition. Typically more
+efficient when informative priors are not used. When TRUE, the
+priors are ignored and a standard normal prior is used on
+theta, the parameters estimates on the QR decomposed model
+matrix.</p></td>
     </tr>
     <tr>
-      <th>iters</th>
-      <td><p>integer, the number of iterations per chain</p></td>
+      <th>probability_zero</th>
+      <td><p>numeric, between 0 and 1. The probability
+of a non-detection from a source other than low concentration
+of eDNA, e.g. a filter failure. Defaults to 8<!-- % (0.08), which -->
+was the estimated p(zero) from a daily sampling experiment.</p></td>
     </tr>
     <tr>
-      <th>verbose</th>
-      <td><p>logical, when TRUE output from
-<code><a href='https://rdrr.io/pkg/rstan/man/stanmodel-method-sampling.html'>rstan::sampling</a></code> is written to the console.</p></td>
+      <th>prior_intercept</th>
+      <td><p>named list such as created by
+<code><a href='https://mc-stan.org/rstanarm/reference/priors.html'>rstanarm::normal</a></code>. The list must contain elements named
+"location" and "scale", which are the location and scale for a
+normal prior over the intercept. Ignored when the intercept is
+omitted in the model formula.</p></td>
     </tr>
     <tr>
-      <th>sink_file</th>
-      <td><p>character, a file to write the console output to
-if <code>verbose = FALSE</code>, by default writes to
-<code><a href='https://rdrr.io/r/base/tempfile.html'>tempfile()</a></code></p></td>
+      <th>priors</th>
+      <td><p>named list such as created by
+<code><a href='https://mc-stan.org/rstanarm/reference/priors.html'>rstanarm::normal</a></code>. The list must contain elements named
+"location" and "scale", which are the location and scale for a
+normal prior over the betas, and "autoscale". If a single
+value is provided, this value will be repeated for each
+beta. If <code>autoscale = TRUE</code>, the scale of the priors is
+scaled by the sd of the predictors similar to rstanarm handles
+them.</p></td>
+    </tr>
+    <tr>
+      <th>Cq_error_type</th>
+      <td><p>either "fixed" or "varying", specifying if
+measurement error is assumed to be the same for all values of
+CQ, or if it increases or decreases as CQ increases.</p></td>
     </tr>
     <tr>
       <th>...</th>
       <td><p>additional arguments passed to
-<code><a href='https://rdrr.io/pkg/rstan/man/stanmodel-method-sampling.html'>sampling</a></code></p></td>
+<code><a href='https://mc-stan.org/rstan/reference/stanmodel-method-sampling.html'>sampling</a></code></p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>S4 object, with the following slots:</p><dl class='dl-horizontal'>
-    <dt>ln_conc</dt><dd><p>matrix, the posterior samples for the latent
-    variable, eDNA concentration</p></dd> <dt>Cq_star</dt><dd><p>matrix, the
+    <p>S4 object, with the following slots:</p><dl'>
+  <dt>ln_conc</dt><dd><p>matrix, the posterior samples for the latent
+    variable, eDNA concentration</p></dd>
+  <dt>Cq_star</dt><dd><p>matrix, the
     posterior prediction for the observed response</p></dd>
-    <dt>betas</dt><dd><p>array, the posterior estimates for the betas for
-    the linear model</p></dd> <dt>sigma_Cq</dt><dd><p>array, the posterior
+  <dt>betas</dt><dd><p>array, the posterior estimates for the betas for
+    the linear model</p></dd>
+  <dt>sigma_Cq</dt><dd><p>array, the posterior
     estimates for the measurement error of CQ</p></dd>
-    <dt>formula</dt><dd><p>formula, the original formula used in the
-    model</p></dd> <dt>x</dt><dd><p>data.frame, the model matrix used in the
-    model</p></dd> <dt>std_curve_alpha</dt><dd><p>numeric, the std. curve value
-    used</p></dd> <dt>std_curve_beta</dt><dd><p>numeric, the std. curve value
-    used</p></dd> <dt>upper_Cq</dt><dd><p>numeric, the upper limit for observed CQ
-    used</p></dd> <dt>stanfit</dt><dd><p>stanfit, the original results from
-    <code><a href='https://rdrr.io/pkg/rstan/man/stanmodel-method-sampling.html'>rstan::sampling</a></code></p></dd> 
+  <dt>formula</dt><dd><p>formula, the original formula used in the
+    model</p></dd>
+  <dt>x</dt><dd><p>data.frame, the model matrix used in the
+    model</p></dd>
+  <dt>std_curve_alpha</dt><dd><p>numeric, the std. curve value
+    used</p></dd>
+  <dt>std_curve_beta</dt><dd><p>numeric, the std. curve value
+    used</p></dd>
+  <dt>upper_Cq</dt><dd><p>numeric, the upper limit for observed CQ
+    used</p></dd>
+  <dt>stanfit</dt><dd><p>stanfit, the original results from
+    <code><a href='https://mc-stan.org/rstan/reference/stanmodel-method-sampling.html'>rstan::sampling</a></code></p></dd> 
 </dl>
 
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>These functions fit a Bayesian latent variable model to data
@@ -233,12 +281,11 @@ artemis package.</p>
 <code>eDNA_lm</code> and <code>eDNA_lmer</code>. <code>eDNA_lm</code> is for fitting
 a fixed effects model, while <code>eDNA_lmer</code> is for fitting a
 mixed or random effects model. Both models are fit using the
-<code><a href='https://rdrr.io/pkg/rstan/man/stanmodel-method-sampling.html'>rstan::sampling</a></code> function, which uses a Hamiltonian Monte
+<code><a href='https://mc-stan.org/rstan/reference/stanmodel-method-sampling.html'>rstan::sampling</a></code> function, which uses a Hamiltonian Monte
 Carlo algorithm to estimate parameters for the model. Users are
 encouraged to refer to the documentation for Stan and RStan at
 <a href='https://mc-stan.org/users/documentation/'>https://mc-stan.org/users/documentation/</a> for details about
 how models are fit.</p>
-    
     <h2 class="hasAnchor" id="diagnosing-warning-and-error-messages"><a class="anchor" href="#diagnosing-warning-and-error-messages"></a>Diagnosing warning and error messages</h2>
 
     
@@ -254,39 +301,26 @@ specifying <code>iters</code> to be a larger value. This should be the
 first action attempted, as increasing the <code>iters</code> increases
 both the warm-up and sampling iterations. If users continue to
 have issues, additional control arguments can be passed to
-<code><a href='https://rdrr.io/pkg/rstan/man/stanmodel-method-sampling.html'>rstan::sampling</a></code> via the <code>...</code> argument.</p>
-    
+<code><a href='https://mc-stan.org/rstan/reference/stanmodel-method-sampling.html'>rstan::sampling</a></code> via the <code>...</code> argument.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+
 <span class='co'>## Fixed effect model</span>
 <span class='no'>ans</span> <span class='kw'>=</span> <span class='fu'>eDNA_lm</span>(<span class='no'>Cq</span> ~ <span class='no'>Distance</span>, <span class='no'>eDNA_data</span>,
               <span class='kw'>std_curve_alpha</span> <span class='kw'>=</span> <span class='fl'>21.2</span>, <span class='kw'>std_curve_beta</span> <span class='kw'>=</span> -<span class='fl'>1.5</span>)
 
 <span class='co'>## Mixed-effect model</span>
 <span class='co'>## This takes a while to run</span>
-<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='no'>ans2</span> <span class='kw'>=</span> <span class='fu'>eDNA_lmer</span>(<span class='no'>Cq</span> ~ <span class='no'>Distance</span> + (<span class='fl'>1</span><span class='kw'>|</span><span class='no'>SampleID</span>), <span class='no'>eDNA_data</span>,
                  <span class='kw'>std_curve_alpha</span> <span class='kw'>=</span> <span class='fl'>21.2</span>, <span class='kw'>std_curve_beta</span> <span class='kw'>=</span> -<span class='fl'>1.5</span>)
 
 }</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-
-      <li><a href="#diagnosing-warning-and-error-messages">Diagnosing warning and error messages</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Matt Espe</p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -297,7 +331,7 @@ have issues, additional control arguments can be passed to
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

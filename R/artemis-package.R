@@ -15,16 +15,15 @@
 #' @docType package
 #' @name artemis-package
 #' @aliases artemis
-#' @useDynLib artemis, .registration = TRUE
 #' @import methods
-#' @import Rcpp
-#' @import rstantools
 #' @import ggplot2
+#' @import rstan
+#' @import loo
 #' @importFrom stats model.matrix model.response model.frame pnorm quantile rnorm terms sd
 #' @importFrom graphics lines segments plot
-#' @importFrom rstan sampling extract plot
 #' @importFrom lme4 lFormula ranef
 #' @importFrom loo loo waic extract_log_lik
+#' @importFrom rstantools posterior_interval
 #' @importFrom utils head
 #' @references 
 #' Stan Development Team (2018). RStan: the R interface to Stan. R package version 2.18.2. http://mc-stan.org

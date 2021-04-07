@@ -30,9 +30,10 @@ predict.eDNA_model = function(object, newdata = NULL, include_sigma = FALSE,
 
     
     if(!is.null(newdata)){
-        if(ncol(newdata) != ncol(object@betas))
-            stop("Please provide the same number of predictors as the original data, including the intercept")
-        X = newdata
+        
+        ## if(ncol(newdata) != ncol(object@betas))
+            ## stop("Please provide the same number of predictors as the original data, including the intercept")
+        X = form_newdata(object, newdata)
     } else {
         X = object@x
     }
@@ -41,8 +42,9 @@ predict.eDNA_model = function(object, newdata = NULL, include_sigma = FALSE,
     ln_conc = apply(object@betas, 1, function(x) (as.matrix(X) %*% x)) + inter
     Cq_hat = object@std_curve_alpha + object@std_curve_beta * ln_conc
     if(include_sigma) {
-        Cq_star = sapply(seq(ncol(Cq_hat)), function(i)
-            Cq_hat[,i] + rnorm(nrow(Cq_hat)) * object@sigma_Cq[i])
+        
+        ln_conc_tmp = ln_conc + rnorm(nrow(ln_conc), 0, object@sigma_ln_eDNA)
+        Cq_star = object@std_curve_alpha + object@std_curve_beta * ln_conc_tmp
         Cq_star[Cq_star > object@upper_Cq] = object@upper_Cq
     } else {
         Cq_star = NULL
@@ -71,4 +73,19 @@ predict.eDNA_model_lmer = function(object, newdata = NULL,
     ## Do something with the random effects here
     
     return(ans)
+}
+
+form_newdata = function(object, newdata)
+{
+    fm = object@formula
+    # remove response
+    fm = fm[-2]
+    # remove random effects
+    fm = fm[!is_rand_eff(fm)]
+    model.frame(fm, newdata)
+}
+
+is_rand_eff = function(fm)
+{
+    sapply(fm, function(x) any(grep("\\|", as.character(x))))
 }

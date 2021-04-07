@@ -24,8 +24,6 @@ install:
 
 before_script:
 - Rscript -e "install.packages(c('lme4', 'ggplot2', 'rstan', 'loo', 'rstantools','devtools', 'rmarkdown'))"
-- Rscript -e "devtools::install_github('stan-dev/cmdstanr')"
-- Rscript -e "cmdstanr::install_cmdstan()"
 
 warnings_are_errors: false	
 

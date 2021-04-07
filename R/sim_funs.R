@@ -26,11 +26,21 @@ sim_eDNA_lm = function(formula, variable_list,
 
     md = prep_data.sim(ml, std_curve_alpha, std_curve_beta, sigma_Cq, betas,
                        prob_zero, prior_int = normal(), prior_b = normal())
+<<<<<<< HEAD
 
     sims = sampling(stanmodels$eDNA_sim_omni, data = md, chains = 1L,
                     algorithm = "Fixed_param", iter = n_sim, warmup = 0L,
                     refresh = ifelse(verbose, 100, -1), show_messages = verbose,
                     open_progress = FALSE)
+=======
+
+    model = cmdstan_model(system.file("stan_files","eDNA_sim_omni.stan",
+                                      package = "artemis"))
+    sm = model$sample(data = md, chains = 1L, iter_sampling = n_sim,
+                        fixed_param = TRUE, iter_warmup = 0L)
+
+    sims = read_stan_csv(sm$output_files())
+>>>>>>> main
     # hacky
     sims = as(sims, "eDNA_simulation_lm")
     sims = load_slots(sims)
@@ -119,16 +129,22 @@ sim_eDNA_lm = function(formula, variable_list,
 ##' @return S4 object of class "eDNA_simulation_{lm/lmer}" with the
 ##'     following slots:
 ##' \describe{
-##'   \item{ln_conc matrix}{the simulated log(concentration)}
-##'   \item{Cq_star matrix}{the simulated CQ values, including the measurement error}
-##'   \item{formula}{the formula for the simulation}
-##'   \item{variable_levels}{named list, the variable levels used for the simulation}
-##'   \item{betas}{numeric vector, the betas for the simulation}
-##'   \item{x}{data.frame, the design matrix}
-##'   \item{std_curve_alpha numeric}{the alpha for the std curve conversion}
-##'   \item{std_curve_beta numeric}{the alpha for the std curve conversion}
-##'   \item{upper_Cq}{the upper limit for CQ}
-##' }
+##' \item{ln_conc matrix}{the
+##'     simulated log(concentration)}
+##' \item{Cq_star matrix}{the
+##'     simulated CQ values, including the measurement error}
+##' \item{formula}{the formula for the simulation}
+##' \item{variable_levels}{named list, the variable levels used
+##'     for the simulation}
+##' \item{betas}{numeric vector, the betas for
+##'     the simulation}
+##' \item{x}{data.frame, the design matrix}
+##' \item{std_curve_alpha numeric}{the alpha for the std curve
+##'     conversion}
+##' \item{std_curve_beta numeric}{the alpha for the
+##'     std curve conversion}
+##' \item{upper_Cq}{the upper limit for CQ}
+##'     }
 ##' 
 ##' @author Matt Espe
 ##' @examples

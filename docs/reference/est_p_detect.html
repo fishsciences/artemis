@@ -15,23 +15,29 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -39,12 +45,11 @@
 
 
 
+
 <meta property="og:title" content="Estimate the probability of detection — est_p_detect" />
-
 <meta property="og:description" content="Estimate the probability of detection" />
-
 <meta property="og:image" content="/logo.png" />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -61,7 +66,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -75,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">artemis</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.14.0</span>
       </span>
     </div>
 
@@ -112,7 +117,6 @@
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -134,14 +138,21 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Estimate the probability of detection</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>est_p_detect</span>(<span class='no'>variable_levels</span>, <span class='no'>betas</span>, <span class='no'>Cq_sd</span>, <span class='no'>std_curve_alpha</span>,
-  <span class='no'>std_curve_beta</span>, <span class='kw'>n_rep</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>12</span>, <span class='kw'>model_fit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>upper_Cq</span> <span class='kw'>=</span> <span class='fl'>40</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>est_p_detect</span>(
+  <span class='no'>variable_levels</span>,
+  <span class='no'>betas</span>,
+  <span class='no'>Cq_sd</span>,
+  <span class='no'>std_curve_alpha</span>,
+  <span class='no'>std_curve_beta</span>,
+  <span class='kw'>n_rep</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>12</span>,
+  <span class='kw'>prob_zero</span> <span class='kw'>=</span> <span class='fl'>0.08</span>,
+  <span class='kw'>model_fit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>upper_Cq</span> <span class='kw'>=</span> <span class='fl'>40</span>
+)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -158,7 +169,9 @@ variable level</p></td>
     </tr>
     <tr>
       <th>Cq_sd</th>
-      <td><p>numeric, the measurement error on CQ</p></td>
+      <td><p>numeric, the measurement error on CQ. If a model_fit
+is provided and this is missing, the estimated sd(CQ) from the
+model will be used.</p></td>
     </tr>
     <tr>
       <th>std_curve_alpha</th>
@@ -176,6 +189,12 @@ conversion between log(concentration) and CQ</p></td>
 specified</p></td>
     </tr>
     <tr>
+      <th>prob_zero</th>
+      <td><p>the probability of seeing a non-detection,
+i.e. zero, from a zero-inflated process. Defaults to 8<!-- %, which -->
+is the rate of inflated zeros in a large sampling experiment.</p></td>
+    </tr>
+    <tr>
       <th>model_fit</th>
       <td><p>optional, a model fit from <code>eDNA_lm</code> or
 <code>eDNA_lmer</code>.  If this is provided, an estimate derived
@@ -186,12 +205,11 @@ from the posterior estimates of beta is calculated.</p></td>
       <td><p>the upper limit on detection</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>object of class "eDNA_p_detect" with the estimates of the
     probability of detection for the variable levels provided.</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>This function estimates the probability of getting a positive
@@ -207,7 +225,6 @@ attempts. The probability calculated is the probability of getting
 at least one positive detection. For details on the underlying
 model and assumptions for this calculation, please refer to the
 package vignette.</p>
-    
     <h2 class="hasAnchor" id="notes-on-random-effects"><a class="anchor" href="#notes-on-random-effects"></a>Notes on random effects</h2>
 
     
@@ -225,7 +242,6 @@ the standard deviation of the random effect to the
 <code>Cq_sd</code>. This takes advantage of the fact that random effects
 are just another source of variation, and that sum of random
 normal distributions is itself a random normal distribution.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
@@ -237,36 +253,24 @@ normal distributions is itself a random normal distribution.</p>
 #&gt;         1       100        20 
 #&gt; 
 #&gt;    n_reps     p_detect
-#&gt; 1       1 4.935045e-06
-#&gt; 2       2 9.870066e-06
-#&gt; 3       3 1.480506e-05
-#&gt; 4       4 1.974003e-05
-#&gt; 5       5 2.467498e-05
-#&gt; 6       6 2.960991e-05
-#&gt; 7       7 3.454480e-05
-#&gt; 8       8 3.947968e-05
-#&gt; 9       9 4.441453e-05
-#&gt; 10     10 4.934935e-05
-#&gt; 11     11 5.428416e-05
-#&gt; 12     12 5.921893e-05</div><div class='input'>
+#&gt; 1       1 4.540241e-06
+#&gt; 2       2 9.080462e-06
+#&gt; 3       3 1.362066e-05
+#&gt; 4       4 1.816084e-05
+#&gt; 5       5 2.270100e-05
+#&gt; 6       6 2.724114e-05
+#&gt; 7       7 3.178126e-05
+#&gt; 8       8 3.632135e-05
+#&gt; 9       9 4.086143e-05
+#&gt; 10     10 4.540149e-05
+#&gt; 11     11 4.994152e-05
+#&gt; 12     12 5.448154e-05</div><div class='input'>
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-
-      <li><a href="#notes-on-random-effects">Notes on random effects</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Matt Espe</p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -277,7 +281,7 @@ normal distributions is itself a random normal distribution.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

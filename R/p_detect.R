@@ -41,9 +41,9 @@
 ##'     detection.
 ##' @param betas numeric vector, the effect sizes for each of the
 ##'     variable level
-##' @param Cq_sd numeric, the measurement error on CQ. If a model_fit
-##'     is provided and this is missing, the estimated sd(CQ) from the
-##'     model will be used.
+##' @param ln_eDNA_sd the measurement error on ln[eDNA]. If a
+##'     model_fit is provided and this is missing, the estimated
+##'     sd(ln_eDNA) from the model will be used.
 ##' @param std_curve_alpha the alpha for the std. curve formula for
 ##'     conversion between log(concentration) and CQ
 ##' @param std_curve_beta the alpha for the std. curve formula for
@@ -56,7 +56,8 @@
 ##' @param model_fit optional, a model fit from \code{eDNA_lm} or
 ##'     \code{eDNA_lmer}.  If this is provided, an estimate derived
 ##'     from the posterior estimates of beta is calculated.
-##' @param upper_Cq the upper limit on detection
+##' @param upper_Cq the upper limit on detection. Converted to the
+##'     lower_bound of detection internally
 ##' @return object of class "eDNA_p_detect" with the estimates of the
 ##'     probability of detection for the variable levels provided.
 ##' @author Matt Espe
@@ -65,13 +66,13 @@
 ##'
 ##' est_p_detect(variable_levels = c(Intercept = 1, Distance = 100, Volume = 20),
 ##'              betas = c(Intercept = -10.5, Distance = -0.05, Volume = 0.001),
-##'              Cq_sd = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5,
+##'              ln_eDNA_sd = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5,
 ##'              n_rep = 1:12)
 ##'
 ##' @export
 est_p_detect = function(variable_levels,
                         betas, 
-                        Cq_sd,
+                        ln_eDNA_sd,
                         std_curve_alpha, std_curve_beta,
                         n_rep = 1:12,
                         prob_zero = 0.08, 
@@ -92,10 +93,10 @@ est_p_detect = function(variable_levels,
         ln_conc_hat = variable_levels %*% betas
     } else {
         # model_fit provided
-        if(!missing(Cq_sd)){
-            dup_arg_warn("Cq_sd")
+        if(!missing(ln_eDNA_sd)){
+            dup_arg_warn("ln_eDNA_sd")
         } else {
-            Cq_sd = model_fit@sigma_Cq
+            ln_eDNA_sd = model_fit@sigma_ln_eDNA
         }
         if(missing(std_curve_alpha) && missing(std_curve_beta)){
             std_curve_alpha = unique(model_fit@std_curve_alpha)
@@ -108,14 +109,25 @@ est_p_detect = function(variable_levels,
         inter = if(length(model_fit@intercept)) as.vector(model_fit@intercept) else 0
         ln_conc_hat = apply(model_fit@betas, 1, function(y) variable_levels %*% y) + inter
     }
-    
+
+    lower_bound = (upper_Cq - std_curve_alpha) / std_curve_beta
     Cq_hat = ln_conc_hat * std_curve_beta + std_curve_alpha
-    ans = prob_detect(Cq_hat, Cq_sd, n_rep, prob_zero, upper_Cq)
+    ans = prob_detect_ln(ln_conc_hat, ln_eDNA_sd, n_rep, prob_zero, lower_bound)
 
     structure(ans,
               variable_levels = variable_levels,
               reps = n_rep,
               class = c("eDNA_p_detect", class(ans)))
+}
+
+prob_detect_ln = function(ln_conc_hat, ln_sd, n_rep, p_zero, lwb)
+{
+    # This is a mixture of non-detections from the value with
+    # measurement error landing below the threshold of detection and
+    # the probability of a zero from e.g. filter failure
+    p_nondetect = (pnorm(lwb, ln_conc_hat, ln_sd) *
+                   (1 - p_zero)) + p_zero
+    sapply(n_rep, function(i) 1 - (p_nondetect ^ i))
 }
 
 prob_detect = function(Cq_hat, Cq_sd, n_rep, p_zero, upper_Cq = 40)

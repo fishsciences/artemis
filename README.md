@@ -6,11 +6,10 @@
 #### 
 
 <!-- badges: start -->
-[![Travis build status](https://travis-ci.org/fishsciences/artemis.svg?branch=master)](https://travis-ci.org/fishsciences/artemis)
-[![Codecov test coverage](https://codecov.io/gh/fishsciences/artemis/branch/master/graph/badge.svg)](https://codecov.io/gh/fishsciences/artemis?branch=master)
+[![Travis build status](https://travis-ci.org/fishsciences/artemis.svg?branch=main)](https://travis-ci.org/fishsciences/artemis)
+[![Codecov test coverage](https://codecov.io/gh/fishsciences/artemis/branch/main/graph/badge.svg)](https://codecov.io/gh/fishsciences/artemis?branch=main)
 
 <!-- badges: end -->
-
 
 The `artemis` package was created to aid in the design and analysis of
 eDNA survey studies by offering a custom suite of models for eDNA
@@ -24,6 +23,12 @@ latent-variable, truncated data models which are fit using
 binaries available from the [releases
 page](https://github.com/fishsciences/artemis/releases), with more detailed installation instructions found [here](https://fishsciences.github.io/artemis/articles/artemis-installation-guide.html).
 
+To install from github using devtools:
+
+```
+devtools::install_github("fishsciences/artemis", ref = "main")
+```
+
 ## Basic use
 
 Please refer to the [Getting Started with the `artemis` package](https://fishsciences.github.io/artemis/articles/artemis-overview.html) vignette, which covers most of the functionality of artemis.
@@ -35,13 +40,4 @@ Additional vignettes are forthcoming!
 
 Please report all bugs via an issue at the package
 [repo](https://github.com/fishsciences/artemis/issues).
-
-## cmdstanr backend: experimental
-
-If you would prefer to use cmdstan as the backend for fitting the
-models, there is an experimental branch, cmdstan. Using cmdstan as the
-backend reduces the overhead in R associated with fitting the model,
-and allows for more robust parallelization of chains.
-
-However, this branch is experimental, so use at your own risk.
 

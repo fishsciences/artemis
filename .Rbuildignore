@@ -1,9 +1,9 @@
 ^doc$
 ^Meta$
-clean.R
+^clean.R$
 ^\.travis\.yml$
 ^codecov\.yml$
-.covrignore
+^.covrignore$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^_pkgdown\.yml$

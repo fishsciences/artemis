@@ -2,17 +2,22 @@
 % Please edit documentation in R/priors.R
 \name{normal}
 \alias{normal}
-\title{Normal prior distribution}
+\alias{exponential}
+\title{Prior distributions}
 \usage{
 normal(location = 0, scale = 1, autoscale = TRUE)
+
+exponential(rate = 1, autoscale = FALSE)
 }
 \arguments{
-\item{location}{numeric, the mean of the normal distribution}
+\item{location}{numeric, the mean of the  distribution}
 
-\item{scale}{numeric, the sd of the normal distribution}
+\item{scale}{numeric, the sd/scale of the  distribution}
 
 \item{autoscale}{logical, whether the priors should be scaled. See
 \code{?rstanarm::priors} for details on the scaling.}
+
+\item{rate}{numeric, the rate of the exponential distribution}
 }
 \value{
 named list
@@ -23,6 +28,8 @@ Normal prior distribution
 \details{
 Parameters for the normal distribution, to be used for setting
 priors on model estimates.
+
+These are styled after the distributions in rstanarm.
 }
 \author{
 Matt Espe

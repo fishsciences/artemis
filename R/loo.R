@@ -1,7 +1,3 @@
-##' @rdname loo.eDNA_model
-##' @export
-loo = function(x, ...)
-    UseMethod("loo")
 
 ##' A 'loo' method for eDNA_model objects, which is simply a wrapper
 ##' around \code{loo(extract_log_lik(x))}
@@ -14,10 +10,8 @@ loo = function(x, ...)
 ##' @author Matt Espe
 ##' @export
 loo.eDNA_model = function(x, ...) {
-    ## Need this because rstan also has a loo method which is getting
-    ## picked up first - not sure why the method dispatch is not working
-    loo::loo(extract_log_lik(x@stanfit), ...)
-}
+              loo(extract_log_lik(x@stanfit), ...)
+          }
 
 
 ##' A 'waic' method for eDNA_model objects, which is simply a wrapper

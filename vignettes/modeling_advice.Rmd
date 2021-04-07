@@ -1,0 +1,24 @@
+---
+title: "Modeling Advice"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Modeling Advice}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+This is a collection of advice for modeling eDNA data with the
+`artemis` package.
+
+1. Center and scale your predictor values: `artemis` uses MCMC to
+   estimate values, and this will be more efficient if the predictor
+   values are not on vastly different scales. In general, the MCMC
+   will be the most efficient when the predictors are roughly centered
+   at 0, and have sd of 1.
+   
+2. Use priors: The default priors in `artemis` follow the conventions
+   of the `rstanarm` package, and are weakly informative. When the
+   data do not strongly inform the parameter estimates, the model fit
+   can be improved by specifying stronger priors. 

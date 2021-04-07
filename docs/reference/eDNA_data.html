@@ -15,23 +15,29 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -39,12 +45,11 @@
 
 
 
+
 <meta property="og:title" content="eDNA_data — eDNA_data" />
-
-<meta property="og:description" content="A subset of the data collected in Delta Smelt eDNA live car experiments in the Sacramento River Delta." />
-
+<meta property="og:description" content="Data from Delta Smelt eDNA experiments, collected at the Central Valley Project facility in California." />
 <meta property="og:image" content="/logo.png" />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -61,7 +66,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -75,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">artemis</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.14.0</span>
       </span>
     </div>
 
@@ -112,7 +117,6 @@
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -134,41 +138,35 @@
     </div>
 
     <div class="ref-description">
-    
-    <p>A subset of the data collected in Delta Smelt eDNA live car experiments in the Sacramento River Delta.</p>
-    
+    <p>Data from Delta Smelt eDNA experiments, collected at the Central Valley Project facility in California.</p>
     </div>
 
     <pre class="usage"><span class='no'>eDNA_data</span></pre>
-        
+
+
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A data frame of 732 observations and 7 variables associated with individaul eDNA samples.</p><dl class='dl-horizontal'>
+    <p>A data frame of 624 observations and 7 variables associated with individual qPCR replicates within filters.</p><dl'>
    <dt>Date</dt><dd><p>Date of sample, yyyy-mm-dd</p></dd>
-   <dt>SampleID</dt><dd><p>Represents a single Sterivex filter, associated with 8-12 extractions (technical replicates)</p></dd>
+   <dt>FilterID</dt><dd><p>Represents a single Sterivex filter.  Each unique FilterID is associated with 3 qPCR reactions (technical replicates)</p></dd>
    <dt>TechnicalRep</dt><dd><p>Index of technical replicate from a given SampleID.</p></dd>
-   <dt>FilterNumber</dt><dd><p>Index (from 1-15) of filters associated with a particular volume/distance combination.  For example, on 2019-01-24, fifteen replicate filters were taken at 50mL, 0m from source, while only 5 replicate filters are associated with this volume/distance combo on 2019-03-21.</p></dd>
-   <dt>Distance</dt><dd><p>Distance (in meters) from the 'source' of eDNA, which was a small underwater enclosure containing 22.5 deceased individual (hatchery-origin) Delta Smelt.</p></dd>
-   <dt>Volume</dt><dd><p>Volume (in milliliters) of water pulled through the Sterivex filter in the sample.</p></dd>
-   <dt>Cq</dt><dd><p>Quantification cycle of qPCR - lower values represent higher concentration of eDNA.  Cq == 40.0 indicates no eDNA present (the cutoff value for amplification cycles during qPCR).</p></dd>
+   <dt>Cq</dt><dd><p>Quantification cycle of qPCR.  For this assay, the limit of detection was set at 40.0</p></dd>
+   <dt>Distance_m</dt><dd><p>Distance (in meters) from the 'source' of eDNA, which was a small underwater enclosure containing 22.5 deceased individual (hatchery-origin) Delta Smelt.</p></dd>
+   <dt>Volume_mL</dt><dd><p>Volume (in milliliters) of water pulled through the Sterivex filter in the sample.</p></dd>
+   <dt>N_fish</dt><dd><p>The number of individual Delta Smelt carcasses present in the submerged cage.</p></dd>
    
 </dl>
-    
+
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This sample dataset is designed to be representative of the type of data collected in a semi-controlled eDNA survey study.  The data consists of 732 technical replicates extracted from samples filtered at different volumes and taken at different distances from the 'source' of eDNA, which was a small underwater enclosure ("live car") containing 22.5 deceased individual (hatchery-origin) Delta Smelt.  All samples were filtered from water at the surface (depth &lt; 1.0m).</p>
-    
+    <p>This sample dataset is designed to be representative of the type of data collected in a semi-controlled eDNA survey study.  The data consists of 624 technical replicates extracted from samples filtered at different volumes and taken at different distances from the 'source' of eDNA, which was a small underwater enclosure containing varying numbers of dead individual (hatchery-origin) Delta Smelt.  All samples were filtered from water flowing unidirectionally at the surface (depth &lt; 1.0m).</p>
+<p>The standard curve equation associated with this data is: Cq_star = -1.529*ln[eDNA concentration] + 21.168, where Cq_star is the Cq value estimated by the standard curve for the assay.</p>
 
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      
-      <li><a href="#format">Format</a></li>
-
-      <li><a href="#details">Details</a></li>
-          </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -179,7 +177,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

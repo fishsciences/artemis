@@ -15,23 +15,29 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -39,12 +45,11 @@
 
 
 
+
 <meta property="og:title" content="Simulate eDNA data — sim_eDNA_lm" />
-
 <meta property="og:description" content="Simulate eDNA data" />
-
 <meta property="og:image" content="/logo.png" />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -61,7 +66,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -75,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">artemis</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.14.0</span>
       </span>
     </div>
 
@@ -112,7 +117,6 @@
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -134,39 +138,62 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Simulate eDNA data</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>sim_eDNA_lm</span>(<span class='no'>formula</span>, <span class='no'>variable_list</span>, <span class='no'>betas</span>, <span class='no'>sigma_Cq</span>, <span class='no'>std_curve_alpha</span>,
-  <span class='no'>std_curve_beta</span>, <span class='kw'>n_sim</span> <span class='kw'>=</span> <span class='fl'>1L</span>, <span class='kw'>upper_Cq</span> <span class='kw'>=</span> <span class='fl'>40</span>,
-  <span class='kw'>X</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span>(<span class='no'>variable_list</span>), <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>sink_file</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span>())
+    <pre class="usage"><span class='fu'>sim_eDNA_lm</span>(
+  <span class='no'>formula</span>,
+  <span class='no'>variable_list</span>,
+  <span class='no'>betas</span>,
+  <span class='no'>sigma_Cq</span>,
+  <span class='no'>std_curve_alpha</span>,
+  <span class='no'>std_curve_beta</span>,
+  <span class='kw'>n_sim</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
+  <span class='kw'>upper_Cq</span> <span class='kw'>=</span> <span class='fl'>40</span>,
+  <span class='kw'>prob_zero</span> <span class='kw'>=</span> <span class='fl'>0.08</span>,
+  <span class='kw'>X</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span>(<span class='no'>variable_list</span>),
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>sink_file</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span>()
+)
 
-<span class='fu'>sim_eDNA_lmer</span>(<span class='no'>formula</span>, <span class='no'>variable_list</span>, <span class='no'>betas</span>, <span class='no'>sigma_Cq</span>, <span class='no'>sigma_rand</span>,
-  <span class='no'>std_curve_alpha</span>, <span class='no'>std_curve_beta</span>, <span class='kw'>n_sim</span> <span class='kw'>=</span> <span class='fl'>1L</span>, <span class='kw'>upper_Cq</span> <span class='kw'>=</span> <span class='fl'>40</span>,
-  <span class='kw'>X</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span>(<span class='no'>variable_list</span>), <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>sink_file</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span>())</pre>
-    
+<span class='fu'>sim_eDNA_lmer</span>(
+  <span class='no'>formula</span>,
+  <span class='no'>variable_list</span>,
+  <span class='no'>betas</span>,
+  <span class='no'>sigma_Cq</span>,
+  <span class='no'>sigma_rand</span>,
+  <span class='no'>std_curve_alpha</span>,
+  <span class='no'>std_curve_beta</span>,
+  <span class='kw'>n_sim</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
+  <span class='kw'>upper_Cq</span> <span class='kw'>=</span> <span class='fl'>40</span>,
+  <span class='kw'>prob_zero</span> <span class='kw'>=</span> <span class='fl'>0.08</span>,
+  <span class='kw'>X</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span>(<span class='no'>variable_list</span>),
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>sink_file</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span>()
+)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>formula</th>
-      <td><p>a model formula, e.g. <code>y ~ x1 + x2</code>. For <code>sim_eDNA_lmer</code>,
-random intercepts can also be provided, e.g. <code> ( 1 | rep ) </code>.</p></td>
+      <td><p>a model formula, e.g. <code>y ~ x1 + x2</code>. For
+<code>sim_eDNA_lmer</code>, random intercepts can also be provided,
+e.g. <code> ( 1 | rep ) </code>.</p></td>
     </tr>
     <tr>
       <th>variable_list</th>
-      <td><p>a named list, with the levels that each variable can take.
-Please note that the variables listed in the formula, including the
-response variable, must be present in the variable_list or in the X design matrix.
-Extra variables, i.e. variables which do not occur in the formula, are ignored.</p></td>
+      <td><p>a named list, with the levels that each
+variable can take.  Please note that the variables listed in
+the formula, including the response variable, must be present
+in the variable_list or in the X design matrix.  Extra
+variables, i.e. variables which do not occur in the formula,
+are ignored.</p></td>
     </tr>
     <tr>
       <th>betas</th>
-      <td><p>numeric vector, the beta for each variable in the design matrix</p></td>
+      <td><p>numeric vector, the beta for each variable in the
+design matrix</p></td>
     </tr>
     <tr>
       <th>sigma_Cq</th>
@@ -174,13 +201,13 @@ Extra variables, i.e. variables which do not occur in the formula, are ignored.<
     </tr>
     <tr>
       <th>std_curve_alpha</th>
-      <td><p>the alpha value for the formula for converting between
-log(eDNA concentration) and CQ value</p></td>
+      <td><p>the alpha value for the formula for
+converting between log(eDNA concentration) and CQ value</p></td>
     </tr>
     <tr>
       <th>std_curve_beta</th>
-      <td><p>the beta value for the formula for converting between
-log(eDNA concentration) and CQ value</p></td>
+      <td><p>the beta value for the formula for
+converting between log(eDNA concentration) and CQ value</p></td>
     </tr>
     <tr>
       <th>n_sim</th>
@@ -188,22 +215,29 @@ log(eDNA concentration) and CQ value</p></td>
     </tr>
     <tr>
       <th>upper_Cq</th>
-      <td><p>numeric, the upper limit on CQ detection. Any value of
-log(concentration) which would result in a value greater than this limit is
-instead recorded as the limit.</p></td>
+      <td><p>numeric, the upper limit on CQ detection. Any
+value of log(concentration) which would result in a value
+greater than this limit is instead recorded as the limit.</p></td>
+    </tr>
+    <tr>
+      <th>prob_zero</th>
+      <td><p>numeric, between 0 and 1. The probability of
+seeing a non-detection (i.e., a "zero") via the zero-inflated
+mechanism. Defaults to 0.08.</p></td>
     </tr>
     <tr>
       <th>X</th>
       <td><p>optional, a design matrix. By default, this is created
-from the variable_list using <code><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid()</a></code>, which creates
-a balanced design matrix. However, the user can provide their own <code>X</code>
-as well, in which case the variable_list is ignored. This allows users to
-provide an unbalanced design matrix.</p></td>
+from the variable_list using <code><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid()</a></code>, which
+creates a balanced design matrix. However, the user can
+provide their own <code>X</code> as well, in which case the
+variable_list is ignored. This allows users to provide an
+unbalanced design matrix.</p></td>
     </tr>
     <tr>
       <th>verbose</th>
-      <td><p>logical, when TRUE output from <code><a href='https://rdrr.io/pkg/rstan/man/stanmodel-method-sampling.html'>rstan::sampling</a></code> is written
-to the console.</p></td>
+      <td><p>logical, when TRUE output from
+<code><a href='https://mc-stan.org/rstan/reference/stanmodel-method-sampling.html'>rstan::sampling</a></code> is written to the console.</p></td>
     </tr>
     <tr>
       <th>sink_file</th>
@@ -213,27 +247,28 @@ if <code>verbose = FALSE</code>, by default writes to
     </tr>
     <tr>
       <th>sigma_rand</th>
-      <td><p>numeric vector, the stdev for the random effects. There must be
-one sigma per random effect specified</p></td>
+      <td><p>numeric vector, the stdev for the random
+effects. There must be one sigma per random effect specified</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>S4 object of class "eDNA_simulation_lm/lmer" with the following slots:</p><dl class='dl-horizontal'>
-  <dt>ln_conc matrix</dt><dd><p>the simulated log(concentration)</p></dd>
-  <dt>Cq_star matrix</dt><dd><p>the simulated CQ values, including the measurement error</p></dd>
-  <dt>formula</dt><dd><p>the formula for the simulation</p></dd>
-  <dt>variable_levels</dt><dd><p>named list, the variable levels used for the simulation</p></dd>
-  <dt>betas</dt><dd><p>numeric vector, the betas for the simulation</p></dd>
-  <dt>x</dt><dd><p>data.frame, the design matrix</p></dd>
-  <dt>std_curve_alpha numeric</dt><dd><p>the alpha for the std curve conversion</p></dd>
-  <dt>std_curve_beta numeric</dt><dd><p>the alpha for the std curve conversion</p></dd>
-  <dt>upper_Cq</dt><dd><p>the upper limit for CQ</p></dd>
-
+    <p>S4 object of class "eDNA_simulation_lm/lmer" with the
+    following slots:</p><dl'>
+<dt>ln_conc matrix</dt><dd><p>the
+    simulated log(concentration)</p></dd> <dt>Cq_star matrix</dt><dd><p>the
+    simulated CQ values, including the measurement error</p></dd>
+    <dt>formula</dt><dd><p>the formula for the simulation</p></dd>
+    <dt>variable_levels</dt><dd><p>named list, the variable levels used
+    for the simulation</p></dd> <dt>betas</dt><dd><p>numeric vector, the betas for
+    the simulation</p></dd> <dt>x</dt><dd><p>data.frame, the design matrix</p></dd>
+    <dt>std_curve_alpha numeric</dt><dd><p>the alpha for the std curve
+    conversion</p></dd> <dt>std_curve_beta numeric</dt><dd><p>the alpha for the
+    std curve conversion</p></dd> <dt>upper_Cq</dt><dd><p>the upper limit for CQ</p></dd>
+    
 </dl>
 
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>These functions allow for computationally efficient simulation of
@@ -246,7 +281,6 @@ vignette.</p>
 written in Stan and are compiled to provide speed. This also
 allows the simulation functions and the modeling functions to
 reflect the same process at the code level.</p>
-    
     <h2 class="hasAnchor" id="diagnosing-unrealistic-simulations"><a class="anchor" href="#diagnosing-unrealistic-simulations"></a>Diagnosing "unrealistic" simulations</h2>
 
     
@@ -271,10 +305,11 @@ important that you use the same conversion between Cq values and
 log[eDNA concentration] as the comparison data.</p></li>
 </ol>
 
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>## Includes extra variables</span>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+
+<span class='co'>## Includes extra variables</span>
 <span class='no'>vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>Intercept</span> <span class='kw'>=</span> -<span class='fl'>10.6</span>,
             <span class='kw'>distance</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>15</span>, <span class='fl'>50</span>),
             <span class='kw'>volume</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>25</span>, <span class='fl'>50</span>),
@@ -289,41 +324,17 @@ log[eDNA concentration] as the comparison data.</p></li>
                       <span class='kw'>sigma_Cq</span> <span class='kw'>=</span> <span class='fl'>1e-5</span>,
                       <span class='kw'>std_curve_alpha</span> <span class='kw'>=</span> <span class='fl'>21.2</span>, <span class='kw'>std_curve_beta</span> <span class='kw'>=</span> -<span class='fl'>1.5</span>)
 
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>ans</span>)</div><div class='output co'>#&gt; 
-#&gt; formula: Cq ~ 1
-#&gt; &lt;environment: 0x7fca970049a8&gt;
-#&gt; 
-#&gt; Standard curve parameters: Cq = alpha + beta * log(concentration)
-#&gt; 	Standard curve alpha =  21.2 
-#&gt; 	Standard curve beta =  -1.5 
-#&gt; 
-#&gt;  ln concentration: 
-#&gt;     variable level 2.5% 50% 97.5% mean p_detect
-#&gt;  (Intercept)     1  -15 -15   -15  -15       NA
-#&gt; 
-#&gt;  simulated Cq: 
-#&gt;     variable level 2.5% 50% 97.5% mean p_detect
-#&gt;  (Intercept)     1   40  40    40   40        0</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>ans</span>)
+
 <span class='no'>ans</span> <span class='kw'>=</span> <span class='fu'>sim_eDNA_lm</span>(<span class='no'>Cq</span> ~ <span class='no'>distance</span> + <span class='no'>volume</span>, <span class='no'>vars</span>,
                   <span class='kw'>betas</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>intercept</span> <span class='kw'>=</span> -<span class='fl'>10.6</span>, <span class='kw'>distance</span> <span class='kw'>=</span> -<span class='fl'>0.05</span>, <span class='kw'>volume</span> <span class='kw'>=</span> <span class='fl'>0.1</span>),
-                  <span class='kw'>sigma_Cq</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>std_curve_alpha</span> <span class='kw'>=</span> <span class='fl'>21.2</span>, <span class='kw'>std_curve_beta</span> <span class='kw'>=</span> -<span class='fl'>1.5</span>)</div></pre>
+                  <span class='kw'>sigma_Cq</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>std_curve_alpha</span> <span class='kw'>=</span> <span class='fl'>21.2</span>, <span class='kw'>std_curve_beta</span> <span class='kw'>=</span> -<span class='fl'>1.5</span>)
+}</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-
-      <li><a href="#diagnosing-unrealistic-simulations">Diagnosing "unrealistic" simulations</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Matt Espe</p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -334,7 +345,7 @@ log[eDNA concentration] as the comparison data.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

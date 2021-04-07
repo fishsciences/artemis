@@ -18,7 +18,7 @@ An S4 object holding the results of a model fit by \code{eDNA_lm*}
 
 \item{\code{betas}}{matrix, the posterior estimate for each beta in the model}
 
-\item{\code{sigma_Cq}}{the estimated measurement error on CQ}
+\item{\code{sigma_ln_eDNA}}{the estimated measurement error on ln_eDNA}
 
 \item{\code{formula}}{the formula used to fit the model}
 

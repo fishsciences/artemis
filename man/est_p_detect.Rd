@@ -7,7 +7,7 @@
 est_p_detect(
   variable_levels,
   betas,
-  Cq_sd,
+  ln_eDNA_sd,
   std_curve_alpha,
   std_curve_beta,
   n_rep = 1:12,
@@ -24,9 +24,9 @@ detection.}
 \item{betas}{numeric vector, the effect sizes for each of the
 variable level}
 
-\item{Cq_sd}{numeric, the measurement error on CQ. If a model_fit
-is provided and this is missing, the estimated sd(CQ) from the
-model will be used.}
+\item{ln_eDNA_sd}{the measurement error on ln[eDNA]. If a
+model_fit is provided and this is missing, the estimated
+sd(ln_eDNA) from the model will be used.}
 
 \item{std_curve_alpha}{the alpha for the std. curve formula for
 conversion between log(concentration) and CQ}
@@ -45,7 +45,8 @@ is the rate of inflated zeros in a large sampling experiment.}
 \code{eDNA_lmer}.  If this is provided, an estimate derived
 from the posterior estimates of beta is calculated.}
 
-\item{upper_Cq}{the upper limit on detection}
+\item{upper_Cq}{the upper limit on detection. Converted to the
+lower_bound of detection internally}
 }
 \value{
 object of class "eDNA_p_detect" with the estimates of the
@@ -91,7 +92,7 @@ normal distributions is itself a random normal distribution.
 
 est_p_detect(variable_levels = c(Intercept = 1, Distance = 100, Volume = 20),
              betas = c(Intercept = -10.5, Distance = -0.05, Volume = 0.001),
-             Cq_sd = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5,
+             ln_eDNA_sd = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5,
              n_rep = 1:12)
 
 }
