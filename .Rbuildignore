@@ -10,9 +10,8 @@
 ^docs$
 ^pkgdown$
 ^lib$
-inst/stan_files/eDNA_omni$
-inst/stan_files/eDNA_sim_omni$
-inst/stan_files/*.o$
-inst/stan_files/*.hpp$
-src/stan_files/*.o$
-src/stan_files/*.hpp$
+inst/stan/eDNA_omni$
+inst/stan/eDNA_sim_omni$
+inst/stan/*.o$
+inst/stan/*.hpp$
+src/*.*
