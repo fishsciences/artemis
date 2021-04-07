@@ -14,17 +14,6 @@ betas = c(distance = -0.002, volume = 0.01, biomass = 1, alive = 1)
 test_that("P-detect: basic tests", {
     expect_error(est_p_detect(variable_levels = c(intecept = 1, Distance_m = 500),
                               betas = c(intercept = -10.6, Distance_m = -0.005, Volume_mL = 0.01),
-<<<<<<< HEAD
-                              Cq_sd = 1, n_rep = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5))
-    
-    expect_error(est_p_detect(variable_levels = c(intecept = 1, Distance_m = 500, Volume_mL = 50),
-                 betas = c(intercept = -10.6, Distance_m = -0.005),
-                 Cq_sd = 1, n_rep = 6, std_curve_alpha = 21.2, std_curve_beta = -1.5))
-
-    res = est_p_detect(variable_levels = c(intecept = 1, Distance_m = 300, Volume_mL = 0),
-                 betas = c(intercept = -10.6, Distance_m = -0.5, Volume_mL = -0.1),
-                 Cq_sd = 1, n_rep = 3, std_curve_alpha = 21.2, std_curve_beta = -1.5)
-=======
                               ln_eDNA_sd = 1, 
                               n_rep = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5))
     
@@ -37,7 +26,6 @@ test_that("P-detect: basic tests", {
                  betas = c(intercept = -10.6, Distance_m = -0.5, Volume_mL = -0.1),
                  ln_eDNA_sd = 1, 
                  n_rep = 3, std_curve_alpha = 21.2, std_curve_beta = -1.5)
->>>>>>> main
 
     
     ans = eDNA_lm(Cq ~ Distance_m, eDNA_data,

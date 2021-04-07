@@ -3,35 +3,6 @@
 ##' @export
 eDNA_lm = function(formula, data, 
                    std_curve_alpha, std_curve_beta,
-<<<<<<< HEAD
-                   upper_Cq = 40, QR = TRUE,
-                   probability_zero = 0.08,
-                   prior_intercept = normal(location = -15, scale = 10),
-                   priors = normal(), Cq_error_type = "fixed",
-                   ...)
-{
-    # from lm
-    mf <- match.call(expand.dots = FALSE)
-    m <- match(c("formula", "data"), names(mf), 0L)
-    mf <- mf[c(1L, m)]
-
-    mf[[1]] = quote(artemis:::gen_model_list_lm)
-
-    ml = eval(mf, parent.frame(1L))
-    # ml = gen_model_list_lm(formula, data)
-       
-    # This works because Stan ignores extra input data
-    md = prep_data.model(ml, std_curve_alpha, std_curve_beta,
-                   Cq_upper = upper_Cq, qr = QR, prob_zero = probability_zero,
-                   prior_int = prior_intercept,
-                   prior_b = priors, error_type = Cq_error_type)
-    # md$y = ml$y
-    fit = run_model(d = md, ...)
-    fit = load_slots_model(fit)
-    fit = as(fit, "eDNA_model_lm")
-    
-    return(fit)
-=======
                    upper_Cq = 40, 
                    prior_intercept = normal(location = -15, scale = 10),
                    priors = normal(),
@@ -45,7 +16,6 @@ eDNA_lm = function(formula, data,
                    prior_intercept,
                    priors, 
                    ...)
->>>>>>> main
 }
 
 ##' Fit eDNA model
@@ -183,7 +153,7 @@ run_model = function(model_name = "eDNA_lm.stan",
     
 {
     ### XXXX FIX THIS!!! ####
-    m = model$sample(data = data, ...)
+    m = sampling(data = data, ...)
     fit = read_stan_csv(m$output_files())
     
     fit = as(fit, "eDNA_model")

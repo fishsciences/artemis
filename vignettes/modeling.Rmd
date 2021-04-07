@@ -55,11 +55,7 @@ Note that there are no variable levels with missing or `NA` values - Stan models
 
 To fit a fixed effects model to the sample `eDNA_data` where `Distance_m` is the only predictor, we give the function a model formula and the input data listed above:
 
-<<<<<<< HEAD
-```{r warning = FALSE, eval=TRUE}
-=======
 ```{r warning = FALSE, eval=FALSE}
->>>>>>> main
 
 model_fit = eDNA_lm(Cq ~ Distance_m, 
                     data = eDNA_data,

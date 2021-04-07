@@ -96,25 +96,29 @@ effects. Defaults to exponential distribution with rate 1.}
 of a non-detection from a source other than low concentration
 of eDNA, e.g. a filter failure. Defaults to 8% (0.08), which
 was the estimated p(zero) from a daily sampling experiment.}
->>>>>>> main
 }
 \value{
 S4 object, with the following slots:
 \describe{
   \item{ln_conc}{matrix, the posterior samples for the latent
     variable, eDNA concentration}
-  \item{Cq_star}{matrix, the
+\item{Cq_star}{matrix, the
     posterior prediction for the observed response}
-    \item{betas}{array, the posterior estimates for the betas for
-    the linear model} \item{sigma_ln_eDNA}{array, the posterior
+\item{betas}{array, the posterior estimates for the betas for
+    the linear model}
+\item{sigma_ln_eDNA}{array, the posterior
     estimates for the measurement error of ln_eDNA}
-    \item{formula}{formula, the original formula used in the
-    model} \item{x}{data.frame, the model matrix used in the
-    model} \item{std_curve_alpha}{numeric, the std. curve value
-    used} \item{std_curve_beta}{numeric, the std. curve value
-    used} \item{upper_Cq}{numeric, the upper limit for observed CQ
-    used} \item{stanfit}{stanfit, the original results from
->>>>>>> main
+\item{formula}{formula, the original formula used in the
+    model}
+\item{x}{data.frame, the model matrix used in the
+    model}
+\item{std_curve_alpha}{numeric, the std. curve value
+    used}
+\item{std_curve_beta}{numeric, the std. curve value
+    used}
+\item{upper_Cq}{numeric, the upper limit for observed CQ
+    used}
+\item{stanfit}{stanfit, the original results from
     \code{rstan::sampling}} }
 }
 \description{

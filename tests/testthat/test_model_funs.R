@@ -1,18 +1,10 @@
 context("Model fitting")
 
-<<<<<<< HEAD
-ans = eDNA_lm(Cq ~ Distance_m, eDNA_data,
-              std_curve_alpha = 21.2, std_curve_beta = -1.5)
-ans2 = eDNA_lm(Cq ~ Distance_m + Volume_mL, eDNA_data,
-               std_curve_alpha = 21.2, std_curve_beta = -1.5)
-ans_prior = eDNA_lm(Cq ~ Distance_m, eDNA_data,
-=======
 ans = eDNA_lm(Cq ~ scale(Distance_m), eDNA_data,
               std_curve_alpha = 21.2, std_curve_beta = -1.5)
 ans2 = eDNA_lm(Cq ~ scale(Distance_m) + Volume_mL, eDNA_data,
                std_curve_alpha = 21.2, std_curve_beta = -1.5)
 ans_prior = eDNA_lm(Cq ~ scale(Distance_m), eDNA_data,
->>>>>>> main
               std_curve_alpha = 21.2, std_curve_beta = -1.5,
               prior_intercept = normal(-8,1),
               priors = normal(0, 1))
