@@ -7,6 +7,13 @@ WARNING: Any versions here are still under active developement, and
 will change in ways that will likely break your existing code. Until
 formal release v1.0.0, do not expect stability!
 
+## v0.17.0
+
+Moves the main development branch back to using the `rstan` backend
+for running the models. This was done because `cmdstanr` is not yet on
+CRAN, and we cannot have a strong dependency on a github package if
+`artemis` is to be on CRAN.
+
 ## v0.16.0
 
 Changed model and functions to apply the measurement error on ln(eDNA)
