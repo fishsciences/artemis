@@ -76,6 +76,9 @@ test_that("Intercepts", {
     ans = eDNA_lm(Cq ~ 1,  eDNA_data,
                   std_curve_alpha = 21.2, std_curve_beta = -1.5)
     expect_is(ans, "eDNA_model")
+    ans = eDNA_lmer(Cq ~ 1 + (1|FilterID),  eDNA_data,
+                  std_curve_alpha = 21.2, std_curve_beta = -1.5)
+    expect_is(ans, "eDNA_model")
 
 })
 

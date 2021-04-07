@@ -29,7 +29,7 @@ parameters {
 
 model {
   /* vector[N_obs] mu_obs = intercept + X_obs * betas; */
-  vector[N_cens] mu_cens = X_cens * betas +
+  vector[N_cens] mu_cens = (K ? X_cens * betas : rep_vector(0.0, N_cens)) +
 	(has_inter ? intercept[1] : 0.0);
 
   // priors
