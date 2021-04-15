@@ -3,9 +3,12 @@
 
 # Beta
 
-WARNING: Any versions here are still under active developement, and
+WARNING: Any versions here are still under active development, and
 will change in ways that will likely break your existing code. Until
 formal release v1.0.0, do not expect stability!
+
+## v0.18.0
+Changes the eDNA_data and data documentation to match what is in Espe et al. 2021 (in press). Data has completely changed; column names, where applicable, are the same. Year column is no longer present.
 
 ## v0.17.0
 
