@@ -22,7 +22,7 @@
 #' @importFrom graphics lines segments plot
 #' @importFrom lme4 lFormula ranef
 #' @importFrom loo loo waic extract_log_lik
-#' @importFrom rstan sampling
+#' @importFrom rstan sampling extract
 #' @importFrom rstantools posterior_interval
 #' @importFrom utils head
 #' @useDynLib artemis
