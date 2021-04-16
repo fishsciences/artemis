@@ -6,7 +6,7 @@
 ##' @rdname sim_eDNA_lmer
 ##' @export
 sim_eDNA_lm = function(formula, variable_list,
-                       betas, sigma_Cq,
+                       betas, sigma_ln_eDNA,
                        std_curve_alpha, std_curve_beta,
                        n_sim = 1L,
                        upper_Cq = 40,
@@ -24,7 +24,7 @@ sim_eDNA_lm = function(formula, variable_list,
              "Provided: ", length(betas), "\n",
              "Required: ", ncol(ml$x), "\n")
 
-    md = prep_data.sim(ml, std_curve_alpha, std_curve_beta, sigma_Cq, betas,
+    md = prep_data.sim(ml, std_curve_alpha, std_curve_beta, sigma_ln_eDNA, betas,
                        prob_zero, prior_int = normal(), prior_b = normal())
 
     sims = sampling(stanmodels$eDNA_sim_omni, data = md, chains = 1L,
@@ -91,7 +91,7 @@ sim_eDNA_lm = function(formula, variable_list,
 ##'     are ignored.
 ##' @param betas numeric vector, the beta for each variable in the
 ##'     design matrix
-##' @param sigma_Cq numeric, the measurement error on CQ.
+##' @param sigma_ln_eDNA numeric, the measurement error on ln[eDNA].
 ##' @param sigma_rand numeric vector, the stdev for the random
 ##'     effects. There must be one sigma per random effect specified
 ##' @param std_curve_alpha the alpha value for the formula for
@@ -152,18 +152,18 @@ sim_eDNA_lm = function(formula, variable_list,
 ##' ## Intercept only
 ##' ans = sim_eDNA_lm(Cq ~ 1, vars,
 ##'                       betas = c(intercept = -15),
-##'                       sigma_Cq = 1e-5,
+##'                       sigma_ln_eDNA = 1e-5,
 ##'                       std_curve_alpha = 21.2, std_curve_beta = -1.5)
 ##' 
 ##' print(ans)
 ##'
 ##' ans = sim_eDNA_lm(Cq ~ distance + volume, vars,
 ##'                   betas = c(intercept = -10.6, distance = -0.05, volume = 0.1),
-##'                   sigma_Cq = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
+##'                   sigma_ln_eDNA = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
 ##' }
 ##' @export
 sim_eDNA_lmer = function(formula, variable_list,
-                         betas, sigma_Cq,
+                         betas, sigma_ln_eDNA,
                          sigma_rand,
                          std_curve_alpha, std_curve_beta,
                          n_sim = 1L,
@@ -192,7 +192,7 @@ sim_eDNA_lmer = function(formula, variable_list,
              "Random effects: ", colnames(ml$groups))
 
     
-    md = prep_data.sim(ml, std_curve_alpha, std_curve_beta, sigma_Cq,
+    md = prep_data.sim(ml, std_curve_alpha, std_curve_beta, sigma_ln_eDNA,
                    betas = betas, prob_zero, rand_sd = sigma_rand,
                    prior_int = normal(), prior_b = normal())
 

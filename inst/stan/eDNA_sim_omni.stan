@@ -59,6 +59,7 @@ model{
 generated quantities{
   vector[N] Cq_star;
   vector[N] ln_conc_star;
+  vector[N] ln_conc_hat;
   vector[has_random ? n_rand : 0] rand_betas;
 
   ln_conc_star = X * betas;
@@ -71,9 +72,9 @@ generated quantities{
   }
   
   for(n in 1:N){
-	ln_eDNA_star[n] = normal_rng(ln_conc_star[n], sigma_ln_eDNA);
+	ln_conc_hat[n] = normal_rng(ln_conc_star[n], sigma_ln_eDNA);
 
-	Cq_star[n] = ln_eDNA_star[n] * std_curve_beta[n] + std_curve_alpha[n];
+	Cq_star[n] = ln_conc_hat[n] * std_curve_beta[n] + std_curve_alpha[n];
 	if(Cq_star[n] > upper_Cq)
 	  Cq_star[n] = upper_Cq;
 

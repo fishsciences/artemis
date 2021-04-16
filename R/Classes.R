@@ -17,7 +17,7 @@
 ##' 
 ##' @export
 setClass("eDNA_simulation", 
-         slots = c(ln_conc = "matrix", Cq_star = "matrix",
+         slots = c(ln_conc_hat = "matrix",ln_conc_star = "matrix", Cq_star = "matrix",
                    formula = "formula", variable_levels = "list",
                    betas = "numeric", x = "data.frame",
                    std_curve_alpha = "numeric", std_curve_beta = "numeric",
@@ -42,7 +42,8 @@ setAs("stanfit", "eDNA_simulation",
       function(from){
           tmp = extract(from)
           new("eDNA_simulation", 
-              ln_conc = tmp$ln_conc,
+              ln_conc_hat = tmp$ln_conc_hat,
+              ln_conc_star = tmp$ln_conc_star,
               Cq_star = tmp$Cq_star)
        
       })
@@ -51,10 +52,10 @@ setAs("stanfit", "eDNA_simulation",
 
 setAs("eDNA_simulation", "data.frame",
       function(from){
-          if(dim(from@ln_conc)[1] != 1)
+          if(dim(from@ln_conc_hat)[1] != 1)
               stop("Only single simulations can be converted at this time")
           
-          to = cbind(data.frame(ln_conc = as.vector(from@ln_conc),
+          to = cbind(data.frame(ln_conc_hat = as.vector(from@ln_conc_hat),
                                 Cq_star = as.vector(from@Cq_star)),
                      from@x)
           to

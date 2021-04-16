@@ -89,7 +89,7 @@ prep_data.sim = function(mod_list,
         model_data$rand_sigma = as.array(rand_sd)
     }
         model_data$betas = as.array(betas)
-        model_data$sigma_Cq = Cq_sd
+        model_data$sigma_ln_eDNA = Cq_sd
     
     return(model_data)
 }

@@ -35,7 +35,7 @@ print.eDNA_simulation = function(x, FUN = summary, digits = getOption("digits"),
     cat("\tStandard curve alpha = ", x@std_curve_alpha, "\n")
     cat("\tStandard curve beta = ", x@std_curve_beta, "\n")
     cat("\n ln concentration: \n")
-    print(summary(x, var = "ln_conc"), digits = digits, row.names = FALSE, ...)
+    print(summary(x, var = "ln_conc_hat"), digits = digits, row.names = FALSE, ...)
 
     cat("\n simulated Cq: \n")
     print(summary(x), digits = digits, row.names = FALSE, ...) 

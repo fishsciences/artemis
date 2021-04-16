@@ -13,7 +13,7 @@ betas = c(distance = .002, volume = -0.57, biomass = 1, alive = 1)
 test_that("Summary methods: simulations", {
     ans = sim_eDNA_lm(Cq ~ distance + volume, vars,
                       betas = c(intercept = 1, distance = 0.5, volume = 0),
-                      sigma_Cq = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
+                      sigma_ln_eDNA = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
     res = summary(ans)
 
