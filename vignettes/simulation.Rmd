@@ -23,8 +23,7 @@ library(artemis)
 
 # Introduction
 
-Simulating data is extremely useful.  It's like a sandbox to play and practice in without the anxiety of wasting resources, allowing us to test assumptions, visualize model relationships, and conduct power analyses on hypothetical experiments. 
-
+Simulating data is extremely useful.  It's like a sandbox to play and practice in, allowing us to test assumptions, visualize model relationships, and conduct power analyses on hypothetical experiments. 
 
 The `artemis` package includes two flexible functions for simulating
 data: `sim_eDNA_lm()` and `sim_eDNA_lmer()`.  These functions use the same data generation process outlined in the [Getting Started with `artemis` vignette](https://fishsciences.github.io/artemis/articles/artemis-overview.html).  
@@ -77,9 +76,9 @@ ans = sim_eDNA_lm(Cq ~ distance + volume,
                   std_curve_beta = -1.5)
 ```
 
-The returned object from the `sim_eDNA_*` functions is a list
-containing the latent variable `ln_conc`, the equivalent Cq value
-before truncation and measurement error `Cq_hat`, and the estimated Cq value
+The returned object from the `sim_eDNA_*` functions isan object of class "eDNA_simulation", which is essentially a list
+containing: 1) the latent variable `ln_conc`, 2) the equivalent Cq value
+before truncation and measurement error `Cq_hat`, and 3) the estimated Cq value
 following the truncation and measurement error `Cq_star`:
 
 ```{r eval=TRUE}
@@ -99,8 +98,7 @@ summary(ans)
 ***WARNING***: *these marginal effects can be misleading in cases where interactions are
 simulated; if you have interaction effects, additional analysis is recommended.*  
 
-The last column of the table returned by `summary` is the percent of observations that represented positive detections, i.e. a Cq value below the upper cycle threshold for non-detection (set to 40 by default). In the output above, 100% of the simulated data with `distance` = 0
-was below 40.0. 
+The last column of the table returned by `summary` is the percent of observations that represented positive detections, i.e. a Cq value below the upper cycle threshold for non-detection (set to 40 by default). In the output above, 93% of the simulated data with `distance` = 0 was below 40.0. 
 
 
 # Simulating many many datasets
@@ -120,7 +118,7 @@ ans2 = sim_eDNA_lm(Cq ~ distance + volume,
 ```
 
 When multiple simulations are requested, each of these will be stored in a
-matrix, with each column representing a single simulated instance.
+matrix, with each column representing a single simulated instance. 
 
 
 # Plotting simulated data
@@ -128,8 +126,7 @@ matrix, with each column representing a single simulated instance.
 The results of the simulations can be plotted with `plot()`: 
 
 ```{r eval=TRUE, fig.show='hold'}
-plot(ans)
-
+plot(ans, alpha = 0.5, jitter_width = 0.2)
 ```
 
 <br>
@@ -195,7 +192,7 @@ model matrix.
 
 <br>
 
-When we specified the `vars` above, we included many variables that we did not use in the formula. By
+When we specified the `vars` above, we included variables that we did not use in the formula. By
 design, the simulation and modeling functions ignore extra variables in the 
 `variable_list` or `data` inputs.  This is just a workflow perk; it allows us to create a comprehensive list of variables we might be
 interested in, and then we only need adjust the model formula to change the
@@ -203,7 +200,7 @@ simulations.
 
 <br>
 
-Sometimes we get simulation results that seem very surprising, and often our first instinct is to suspect the model. When this happens, it can be helpful to remember that the model underlying the simulation functions is highly deterministic to the expected value - which is to say that barring any bugs in the code, there is no stochasticity in the calculations that `artemis` performs; they are mathematically sound when the pieces are right. There is a random component in simulating the random error, but even that should play out predictably for us.  Thus if we're getting surprising or nonsensical simulations, the trouble probably lies with the assumptions or the data we provided to the model.  When we go to look for the source of the unexpected behavior, then, the input data is almost always the best place to start.
+Sometimes we get simulation results that seem very surprising, and often our first instinct is to suspect the model. When this happens, it can be helpful to remember that the model underlying the simulation functions is highly deterministic to the expected value - which is to say that barring any bugs in the code, there is no stochasticity in the calculations that `artemis` performs; they are mathematically sound when the pieces are right. There is a random component in simulating the random error, but even that should play out predictably for us.  Thus if we're getting surprising or nonsensical simulations, the trouble probably lies with the assumptions or the data we provided to the model.  When we go to look for the source of the unexpected behavior, the input data is almost always the best place to start.
 
 <br>
 <br>
