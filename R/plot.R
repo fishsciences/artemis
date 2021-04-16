@@ -39,7 +39,7 @@ plot.eDNA_simulation = function(x, y,
             geom_jitter(alpha = alpha, width = jitter_width) +
             xlab(v) +
             ylab(response) +
-            theme_bw()
+            theme_minimal()
     })
     p
 }
@@ -90,7 +90,7 @@ plot.eDNA_p_detect = function(x, y, probs = c(0.025, 0.975),
                               ylim = c(0,1),
                               point_size = 2.5,
                               n_breaks = 5,
-                              error_width = rel(1.5),
+                              error_width = rel(1.25),
                               ...)
 {
     if(length(probs) != 2)
@@ -116,7 +116,7 @@ plot.eDNA_p_detect = function(x, y, probs = c(0.025, 0.975),
                                expand = expansion(mult = 0.015)) +
             scale_y_continuous(limits = ylim, 
                                expand = expansion(add = 0.01)) +
-            theme_bw()
+            theme_minimal()
 }
 
 break_fun = function(x, n) {
