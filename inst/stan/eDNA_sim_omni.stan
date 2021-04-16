@@ -39,7 +39,7 @@ data{
   // zero-inflated
   real<lower = 0, upper = 1> p_zero;
   
-  real<lower = 0> sigma_Cq; // sd on Cq - assumed to be only on measurement
+  real<lower = 0> sigma_ln_eDNA; // sd on Cq - assumed to be only on measurement
   vector[n_vars] betas;
 
 }
@@ -57,28 +57,29 @@ model{
 }
 
 generated quantities{
-  /* vector */
-  vector[N] ln_conc;
   vector[N] Cq_star;
+  vector[N] ln_conc_star;
   vector[has_random ? n_rand : 0] rand_betas;
 
-  ln_conc = X * betas;
+  ln_conc_star = X * betas;
 
   if(has_random){
 	for(i in 1:n_rand)
 	  rand_betas[i] = normal_rng(0, 1) * rand_sigma[groups[i]];
 	
-	ln_conc = ln_conc + rand_x * rand_betas;
+	ln_conc_star = ln_conc_star + rand_x * rand_betas;
   }
   
   for(n in 1:N){
-	real Cq_hat = ln_conc[n] * std_curve_beta[n] + std_curve_alpha[n];
-	
-	Cq_star[n] = normal_rng(Cq_hat, sigma_Cq);
+	ln_eDNA_star[n] = normal_rng(ln_conc_star[n], sigma_ln_eDNA);
+
+	Cq_star[n] = ln_eDNA_star[n] * std_curve_beta[n] + std_curve_alpha[n];
 	if(Cq_star[n] > upper_Cq)
 	  Cq_star[n] = upper_Cq;
+
 	// zero-inflated part
 	if(bernoulli_rng(p_zero))
 	  Cq_star[n] = upper_Cq;
+
   }
 }
