@@ -9,7 +9,7 @@ Authors@R:
            family = "Espe",
            role = c("aut", "ctr"),
            email = "mespe@ucdavis.edu"))
-Maintainer: Myfanwy Johnston <myfanwy.johnston@fishsciences.net>
+Maintainer: Matt Espe <mespe@ucdavis.edu>
 Description: The design and analysis of experiments collecting eDNA.
 License: GPL (>=3)
 Depends: 
