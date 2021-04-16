@@ -1,5 +1,4 @@
 ##' @rdname est_power_range_lmer
-##' @export
 est_power_range_lm = function(formula, variable_list,
                      betas, sigma_Cq,
                      std_curve_alpha, std_curve_beta,
@@ -76,7 +75,6 @@ est_power_range_lm = function(formula, variable_list,
 ##' @return list, with each element a vector for the estimated power
 ##'     for each parameter for the corresponding number of replicates.
 ##' @author Matt Espe
-##' @export
 est_power_range_lmer = function(formula, variable_list,
                                 betas, sigma_Cq,
                                 sigma_rand,

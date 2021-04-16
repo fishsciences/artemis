@@ -132,15 +132,17 @@ model. More details on these characteristics and the model
 structure, please refer to the "Getting Started" vignette for the
 artemis package.
 
-There are two different modeling functions in the artemis package,
-\code{eDNA_lm} and \code{eDNA_lmer}. \code{eDNA_lm} is for fitting
-a fixed effects model, while \code{eDNA_lmer} is for fitting a
-mixed or random effects model. Both models are fit using the
-\code{rstan::sampling} function, which uses a Hamiltonian Monte
-Carlo algorithm to estimate parameters for the model. Users are
-encouraged to refer to the documentation for Stan and RStan at
-\url{https://mc-stan.org/users/documentation/} for details about
-how models are fit.
+There are four different modeling functions in the artemis
+package, \code{eDNA_lm}, \code{eDNA_lmer}, \code{eDNA_zinf_lm},
+\code{eDNA_zinf_lmer}.  \code{eDNA_lm} is for fitting a fixed
+effects model, while \code{eDNA_lmer} is for fitting a mixed or
+random effects model. The *_zinf versions implement a
+zero-inflated version of their respective lm function. All models
+are fit using the \code{rstan::sampling} function, which uses a
+Hamiltonian Monte Carlo algorithm to estimate parameters for the
+model. Users are encouraged to refer to the documentation for Stan
+and RStan at \url{https://mc-stan.org/users/documentation/} for
+details about how models are fit.
 }
 \section{Diagnosing warning and error messages}{
 
@@ -148,14 +150,14 @@ how models are fit.
 The models have been written in Stan with key focus on robustness
 and speed. However, it is possible that users might encounter
 issues. Typically, these issues will be highlighted by warning
-messages, which will be displayed regardless of the value of
-\code{verbose}. Often times, these warnings can be resolved by
-increasing the number of iterations that the HMC algorithm runs by
-specifying \code{iters} to be a larger value. This should be the
-first action attempted, as increasing the \code{iters} increases
-both the warm-up and sampling iterations. If users continue to
-have issues, additional control arguments can be passed to
-\code{rstan::sampling} via the \code{...} argument.
+messages coming from \code{rstan::sampling}. Often times, these
+warnings can be resolved by increasing the number of iterations
+that the HMC algorithm runs by specifying \code{iters} to be a
+larger value. This should be the first action attempted, as
+increasing the \code{iters} increases both the warm-up and
+sampling iterations. If users continue to have issues, additional
+control arguments can be passed to \code{rstan::sampling} via the
+\code{...} argument.
 }
 
 \examples{

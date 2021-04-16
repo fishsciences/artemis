@@ -1,6 +1,5 @@
 
 ##' @rdname est_power_lmer
-##' @export
 est_power_lm = function(formula, variable_list,
                      betas, sigma_Cq,
                      std_curve_alpha, std_curve_beta,
@@ -110,7 +109,6 @@ est_power_lm = function(formula, variable_list,
 ##' @return a named vector, with one estimate of the power for each
 ##'     parameter estimate.
 ##' @author Matt Espe
-##' @export
 est_power_lmer = function(formula, variable_list,
                           betas, sigma_Cq,
                           sigma_rand,
