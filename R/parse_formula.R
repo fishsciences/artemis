@@ -11,6 +11,9 @@ is_lme4 = function(formula)
 gen_model_list_lm = function(formula, data)
 {
     mf = model.frame(formula, data)
+    if(nrow(mf) != nrow(data))
+        stop("NA values present in response or predictor cols. Please remove NA values prior to modeling.")
+    
     y = model.response(mf)
     x = model.matrix(attr(mf, "terms"), data)
 
@@ -22,6 +25,8 @@ gen_model_list_lmer = function(formula, data)
     mf = lFormula(formula, data)
 
     x = mf$X
+    if(nrow(x) != nrow(data))
+        stop("NA values present in response or predictor cols. Please remove NA values prior to modeling.")
     
     y = mf$fr[, as.character(mf$formula[2L])]
     if (is.matrix(y) && ncol(y) == 1L) 
