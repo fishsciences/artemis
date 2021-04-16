@@ -7,7 +7,7 @@ test_that("Random effects", {
     rr = ranef(ans2)
 
     expect_is(rr, "matrix")
-    expect_true(nrow(rr) == 19)
+    expect_true(nrow(rr) == length(unique(eDNA_data$Distance_m)))
 
 
 })
