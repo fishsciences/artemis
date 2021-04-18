@@ -104,6 +104,21 @@ test_that("Multiple groups", {
                         std_curve_alpha = 21.2,
                         std_curve_beta = -1.5)
 
+    
+
+})
+
+test_that("Multiple sims", {
+
+    ans = sim_eDNA_lmer(Cq ~ distance + volume + (1|rep) + (1|tech_rep),
+                        vars, n_sim = 10,
+                        betas = c(intercept = -10.6, distance = -0.05, volume = 0.01),
+                        sigma_ln_eDNA = 1,
+                        sigma_rand = c(0.1, 0.1),
+                        std_curve_alpha = 21.2,
+                        std_curve_beta = -1.5)
+    expect_is(ans, "eDNA_simulation")
+    
 
 })
 
@@ -129,6 +144,21 @@ test_that("Methods", {
 
   expect_is(ans3, "data.frame")
   expect_equal(ans2, ans3)
+
+  ans = sim_eDNA_lmer(Cq ~ distance + volume + (1|rep) + (1|tech_rep),
+                      vars, n_sim = 10,
+                      betas = c(intercept = -10.6, distance = -0.05, volume = 0.01),
+                      sigma_ln_eDNA = 1,
+                      sigma_rand = c(0.1, 0.1),
+                      std_curve_alpha = 21.2,
+                      std_curve_beta = -1.5)
+
+  print(ans)
+  a = summary(ans)
+
+  expect_is(a, "eDNA_simulation.summary")
+  expect_is(a, "data.frame")
+
 })
 
 test_that("Simulation accuracy", {

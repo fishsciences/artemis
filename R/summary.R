@@ -19,8 +19,15 @@
 summary.eDNA_simulation = function(object, var = "Cq_star",
                                    probs = c(0.025, 0.5, 0.975), ...)
 {
+    if(nrow(slot(object, var)) > 1){
+        warning("Multiple sims present - computing summary on rep means")
+        y = colMeans(slot(object, var))
+    } else {
+        y = slot(object, var)
+    }
+
     ## Super ugly - clean up later
-    qtl = get_marginals(slot(object, var), object@x, quantile, probs = probs)
+    qtl = get_marginals(y, object@x, quantile, probs = probs)
     qtl = lapply(seq_along(qtl), function(i) {
         tmp = qtl[i]
         tmp = as.data.frame(tmp, stringsAsFactors = FALSE)
@@ -31,10 +38,10 @@ summary.eDNA_simulation = function(object, var = "Cq_star",
         tmp
     })
     qtl = do.call(rbind, qtl)
-    m = get_marginals(slot(object, var), object@x, mean)
+    m = get_marginals(y, object@x, mean)
     
     dt = if(var == "Cq_star"){
-             get_marginals(slot(object, var), object@x, p_detect,
+             get_marginals(y, object@x, p_detect,
                            thresh = object@upper_Cq)
          } else NA
     
