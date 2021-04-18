@@ -64,14 +64,14 @@ When specifying the `betas` values, it helps to remember that all the model para
 
 ## Step 3. Call the `sim_eDNA_*()` functions to simulate data
 
-With our variable list and `betas` decided, we're ready to simulate data! For fixed-effects variables, we use the `sim_eDNA_lm()` function.  This function takes a model formula (with syntax identical to that used in the `lme4` package), the variable list and the `betas` vector, but it also requires the parameters from a standard curve equation for the conversion formula between $log[eDNA]$ and Cq values to the simulation function, as well as the measurement error on Cq (`sigma_Cq`):
+With our variable list and `betas` decided, we're ready to simulate data! For fixed-effects variables, we use the `sim_eDNA_lm()` function.  This function takes a model formula (with syntax identical to that used in the `lme4` package), the variable list and the `betas` vector, but it also requires the parameters from a standard curve equation for the conversion formula between $log[eDNA]$ and Cq values to the simulation function, as well as the measurement error on Cq (`sigma_ln_eDNA`):
 
 ```{r warning = FALSE, eval=TRUE}
 set.seed(1234)
 ans = sim_eDNA_lm(Cq ~ distance + volume, 
                   variable_list = vars,
                   betas = betas,
-                  sigma_Cq = 1.5, 
+                  sigma_ln_eDNA = 1.5, 
                   std_curve_alpha = 21.2, 
                   std_curve_beta = -1.5)
 ```
@@ -111,7 +111,7 @@ datasets by adjusting the `n_sim` parameter.  This becomes especially useful whe
 ans2 = sim_eDNA_lm(Cq ~ distance + volume, 
                   variable_list = vars,
                   betas = betas,
-                  sigma_Cq = 1, 
+                  sigma_ln_eDNA = 1, 
                   std_curve_alpha = 21.2, 
                   std_curve_beta = -1.5,
                   n_sim = 500) # specifies the number of simulated datasets to generate
@@ -165,7 +165,7 @@ the `lme4` package, e.g. `(1|random effect)`:
 ans3 = sim_eDNA_lmer(Cq ~ distance + volume + (1|rep) + (1|tech_rep),
                      variable_list = vars,
                      betas = c(intercept = -10.6, distance = -0.05, volume = 0.01),
-                     sigma_Cq = 1,
+                     sigma_ln_eDNA = 1,
                      sigma_rand = c(0.1, 0.1), #stdev of the random effects
                      std_curve_alpha = 21.2,
                      std_curve_beta = -1.5)

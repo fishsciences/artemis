@@ -11,7 +11,7 @@
   ylim = c(0, 1),
   point_size = 2.5,
   n_breaks = 5,
-  error_width = rel(1.5),
+  error_width = rel(1.25),
   ...
 )
 }

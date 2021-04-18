@@ -9,7 +9,7 @@ sim_eDNA_lm(
   formula,
   variable_list,
   betas,
-  sigma_Cq,
+  sigma_ln_eDNA,
   std_curve_alpha,
   std_curve_beta,
   n_sim = 1L,
@@ -24,7 +24,7 @@ sim_eDNA_lmer(
   formula,
   variable_list,
   betas,
-  sigma_Cq,
+  sigma_ln_eDNA,
   sigma_rand,
   std_curve_alpha,
   std_curve_beta,
@@ -51,7 +51,7 @@ are ignored.}
 \item{betas}{numeric vector, the beta for each variable in the
 design matrix}
 
-\item{sigma_Cq}{numeric, the measurement error on CQ.}
+\item{sigma_ln_eDNA}{numeric, the measurement error on ln[eDNA].}
 
 \item{std_curve_alpha}{the alpha value for the formula for
 converting between log(eDNA concentration) and CQ value}
@@ -165,14 +165,14 @@ vars = list(Intercept = -10.6,
 ## Intercept only
 ans = sim_eDNA_lm(Cq ~ 1, vars,
                       betas = c(intercept = -15),
-                      sigma_Cq = 1e-5,
+                      sigma_ln_eDNA = 1e-5,
                       std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
 print(ans)
 
 ans = sim_eDNA_lm(Cq ~ distance + volume, vars,
                   betas = c(intercept = -10.6, distance = -0.05, volume = 0.1),
-                  sigma_Cq = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
+                  sigma_ln_eDNA = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
 }
 }
 \author{

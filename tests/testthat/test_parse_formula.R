@@ -58,3 +58,9 @@ test_that("lmer model.list", {
 
 })
 
+test_that("Error on NA", {
+    d = mtcars
+    d$mpg[3] = NA
+    expect_error(gen_model_list_lmer(mpg ~ cyl + (1|cyl), d))
+    expect_error(gen_model_list_lmer(mpg ~ cyl, d))
+})
