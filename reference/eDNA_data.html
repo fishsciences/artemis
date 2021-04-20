@@ -47,7 +47,7 @@
 
 
 <meta property="og:title" content="eDNA_data — eDNA_data" />
-<meta property="og:description" content="Data from Delta Smelt eDNA experiments, collected at the Central Valley Project facility in California." />
+<meta property="og:description" content="Data from Delta Smelt (Hypomesus transpacificus) eDNA experiments, collected at the Central Valley Project facility in California." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">artemis</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.14.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.18.2</span>
       </span>
     </div>
 
@@ -88,7 +88,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -110,6 +110,9 @@
     </li>
     <li>
       <a href="../articles/modeling.html">Modeling eDNA qPCR Data with `artemis`</a>
+    </li>
+    <li>
+      <a href="../articles/modeling_advice.html">Modeling Advice</a>
     </li>
     <li>
       <a href="../articles/simulation.html">Simulating eDNA Data with `artemis`</a>
@@ -138,28 +141,30 @@
     </div>
 
     <div class="ref-description">
-    <p>Data from Delta Smelt eDNA experiments, collected at the Central Valley Project facility in California.</p>
+    <p>Data from Delta Smelt (<em>Hypomesus transpacificus</em>) eDNA experiments, collected at the Central Valley Project facility in California.</p>
     </div>
 
-    <pre class="usage"><span class='no'>eDNA_data</span></pre>
+    <pre class="usage"><span class='va'>eDNA_data</span></pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A data frame of 624 observations and 7 variables associated with individual qPCR replicates within filters.</p><dl'>
+    <p>A data frame of 180 observations and 9 variables associated with individual qPCR replicates within filters.</p><dl>
    <dt>Date</dt><dd><p>Date of sample, yyyy-mm-dd</p></dd>
    <dt>FilterID</dt><dd><p>Represents a single Sterivex filter.  Each unique FilterID is associated with 3 qPCR reactions (technical replicates)</p></dd>
-   <dt>TechnicalRep</dt><dd><p>Index of technical replicate from a given SampleID.</p></dd>
+   <dt>TechRep</dt><dd><p>Index of technical replicate from a given SampleID.</p></dd>
    <dt>Cq</dt><dd><p>Quantification cycle of qPCR.  For this assay, the limit of detection was set at 40.0</p></dd>
-   <dt>Distance_m</dt><dd><p>Distance (in meters) from the 'source' of eDNA, which was a small underwater enclosure containing 22.5 deceased individual (hatchery-origin) Delta Smelt.</p></dd>
+   <dt>Distance_m</dt><dd><p>Distance (in meters) from the 'source' of eDNA, which was a small underwater enclosure containing 100 live individual (cultured) Delta Smelt.</p></dd>
    <dt>Volume_mL</dt><dd><p>Volume (in milliliters) of water pulled through the Sterivex filter in the sample.</p></dd>
-   <dt>N_fish</dt><dd><p>The number of individual Delta Smelt carcasses present in the submerged cage.</p></dd>
+   <dt>Biomass_N</dt><dd><p>The number of individual Delta Smelt carcasses present in the submerged cage.</p></dd>
+   <dt>StdCrvAlpha_lnForm</dt><dd><p>The intercept of the standard curve equation associated with these filters, in ln form</p></dd>
+   <dt>StdCrvBeta_lnForm</dt><dd><p>The slope of the standard curve equation associated with these filters, in ln form</p></dd>
    
 </dl>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This sample dataset is designed to be representative of the type of data collected in a semi-controlled eDNA survey study.  The data consists of 624 technical replicates extracted from samples filtered at different volumes and taken at different distances from the 'source' of eDNA, which was a small underwater enclosure containing varying numbers of dead individual (hatchery-origin) Delta Smelt.  All samples were filtered from water flowing unidirectionally at the surface (depth &lt; 1.0m).</p>
+    <p>This sample dataset is designed to be representative of the type of data collected in a semi-controlled eDNA survey study.  The data consists of 180 technical replicates processed from samples filtered at different distances from the 'source' of eDNA, which was a small underwater enclosure containing 100 live individual (cultured) Delta Smelt.  All samples were filtered from water flowing unidirectionally at the surface (depth &lt; 1.0m). Filtered volume was fixed at either 50mL or 200mL. From distances of 10-50m, three  filters were taken in series every 10m at 50mL and 200mL, sampled from near to far relative to live car. Note that the live car itself (Distance_m = ~0) was not actually sampled. Full details on this data are presented in Espe et al. 2021 (in prep).</p>
 <p>The standard curve equation associated with this data is: Cq_star = -1.529*ln[eDNA concentration] + 21.168, where Cq_star is the Cq value estimated by the standard curve for the assay.</p>
 
   </div>
@@ -177,7 +182,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

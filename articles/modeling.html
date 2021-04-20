@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">artemis</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.14.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.18.2</span>
       </span>
     </div>
 
@@ -46,7 +46,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -70,6 +70,9 @@
       <a href="../articles/modeling.html">Modeling eDNA qPCR Data with `artemis`</a>
     </li>
     <li>
+      <a href="../articles/modeling_advice.html">Modeling Advice</a>
+    </li>
+    <li>
       <a href="../articles/simulation.html">Simulating eDNA Data with `artemis`</a>
     </li>
   </ul>
@@ -85,7 +88,7 @@
 
       
 
-      </header><script src="modeling_files/header-attrs-2.3/header-attrs.js"></script><div class="row">
+      </header><script src="modeling_files/header-attrs-2.7/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Modeling eDNA qPCR Data with <code>artemis</code>
@@ -99,11 +102,12 @@
 
     
     
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">artemis</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">artemis</span><span class="op">)</span></code></pre></div>
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
-<p>A primary purpose of the <code>artemis</code> package is to facilitate modeling of qPCR data from eDNA samples. It does this via two functions: <code><a href="../reference/eDNA_lmer.html">eDNA_lm()</a></code> for fixed effects models and <code><a href="../reference/eDNA_lmer.html">eDNA_lmer()</a></code> for mixed effects models.</p>
+<p>A primary purpose of the <code>artemis</code> package is to facilitate modeling of qPCR data from eDNA samples. It does this via two functions: <code><a href="../reference/eDNA_lm.html">eDNA_lm()</a></code> for fixed effects models and <code><a href="../reference/eDNA_lm.html">eDNA_lmer()</a></code> for mixed effects models.</p>
 <p>The underlying <a href="https://mc-stan.org">Stan</a> models are compiled the first time the models are used. Thereafter, the models will not need to be re-compiled. The model’s Stan code can be found in the <code>artemis</code> source code <a href="https://github.com/fishsciences/artemis/tree/master/inst/stan_files">here</a>.</p>
 <div id="model-inputs" class="section level2">
 <h2 class="hasAnchor">
@@ -114,23 +118,33 @@
 <li><p>The intercept value <span class="math inline">\(\alpha\)</span> and the slope value <span class="math inline">\(\beta\)</span> from a standard curve equation associated with the qPCR analysis. This is used to convert the observed Cq values to the corresponding log concentration of eDNA.</p></li>
 </ol>
 <p>An example of qPCR data in the correct format for modeling with <code>artemis</code> can be viewed by calling <code>eDNA_data</code>, which is a <code>data.frame</code> with Cq values from live car experiments completed in the California Sacramento-San Joaquin Delta with Delta Smelt:</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">eDNA_data</span>)
-<span class="co">#&gt;         Date FilterID TechnicalRep    Cq Distance_m Volume_mL N_fish</span>
-<span class="co">#&gt; 1 2017-08-02      100            1 40.00         50        50      0</span>
-<span class="co">#&gt; 2 2017-08-02      100            2 38.13         50        50      0</span>
-<span class="co">#&gt; 3 2017-08-02      100            3 37.38         50        50      0</span>
-<span class="co">#&gt; 4 2017-08-02      100            1 36.24         40       200      0</span>
-<span class="co">#&gt; 5 2017-08-02      100            2 40.00         40       200      0</span>
-<span class="co">#&gt; 6 2017-08-02      100            3 40.00         40       200      0</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="no">eDNA_data</span>)
-<span class="co">#&gt; 'data.frame':    624 obs. of  7 variables:</span>
-<span class="co">#&gt;  $ Date        : Date, format: "2017-08-02" "2017-08-02" ...</span>
-<span class="co">#&gt;  $ FilterID    : num  100 100 100 100 100 100 100 100 100 100 ...</span>
-<span class="co">#&gt;  $ TechnicalRep: num  1 2 3 1 2 3 1 2 3 1 ...</span>
-<span class="co">#&gt;  $ Cq          : num  40 38.1 37.4 36.2 40 ...</span>
-<span class="co">#&gt;  $ Distance_m  : num  50 50 50 40 40 40 40 40 40 40 ...</span>
-<span class="co">#&gt;  $ Volume_mL   : num  50 50 50 200 200 200 200 200 200 200 ...</span>
-<span class="co">#&gt;  $ N_fish      : num  0 0 0 0 0 0 0 0 0 0 ...</span></pre></body></html></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">eDNA_data</span><span class="op">)</span>
+<span class="co">#&gt;         Date FilterID TechRep    Cq Distance_m Volume_mL Biomass_N</span>
+<span class="co">#&gt; 1 2017-08-02  cvp-1-1       1 40.00         50        50       100</span>
+<span class="co">#&gt; 2 2017-08-02  cvp-1-1       2 38.13         50        50       100</span>
+<span class="co">#&gt; 3 2017-08-02  cvp-1-1       3 37.38         50        50       100</span>
+<span class="co">#&gt; 4 2017-08-02 cvp-1-10       1 36.24         40       200       100</span>
+<span class="co">#&gt; 5 2017-08-02 cvp-1-10       2 40.00         40       200       100</span>
+<span class="co">#&gt; 6 2017-08-02 cvp-1-10       3 40.00         40       200       100</span>
+<span class="co">#&gt;   StdCrvAlpha_lnForm StdCrvBeta_lnForm</span>
+<span class="co">#&gt; 1             21.168            -1.529</span>
+<span class="co">#&gt; 2             21.168            -1.529</span>
+<span class="co">#&gt; 3             21.168            -1.529</span>
+<span class="co">#&gt; 4             21.168            -1.529</span>
+<span class="co">#&gt; 5             21.168            -1.529</span>
+<span class="co">#&gt; 6             21.168            -1.529</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">eDNA_data</span><span class="op">)</span>
+<span class="co">#&gt; 'data.frame':    180 obs. of  9 variables:</span>
+<span class="co">#&gt;  $ Date              : Date, format: "2017-08-02" "2017-08-02" ...</span>
+<span class="co">#&gt;  $ FilterID          : chr  "cvp-1-1" "cvp-1-1" "cvp-1-1" "cvp-1-10" ...</span>
+<span class="co">#&gt;  $ TechRep           : num  1 2 3 1 2 3 1 2 3 1 ...</span>
+<span class="co">#&gt;  $ Cq                : num  40 38.1 37.4 36.2 40 ...</span>
+<span class="co">#&gt;  $ Distance_m        : num  50 50 50 40 40 40 40 40 40 40 ...</span>
+<span class="co">#&gt;  $ Volume_mL         : num  50 50 50 200 200 200 200 200 200 200 ...</span>
+<span class="co">#&gt;  $ Biomass_N         : num  100 100 100 100 100 100 100 100 100 100 ...</span>
+<span class="co">#&gt;  $ StdCrvAlpha_lnForm: num  21.2 21.2 21.2 21.2 21.2 ...</span>
+<span class="co">#&gt;  $ StdCrvBeta_lnForm : num  -1.53 -1.53 -1.53 -1.53 -1.53 ...</span></code></pre></div>
 <p>Note that there are no variable levels with missing or <code>NA</code> values - Stan models do not take <code>NA</code> values, and any rows with <code>NA</code>s in the data will be dropped in the construction of the model matrix when the data is prepped for modeling.</p>
 <p><br></p>
 </div>
@@ -140,160 +154,20 @@
 <a href="#fixed-effects-models-with-edna_lm" class="anchor"></a>Fixed effects models with <code>eDNA_lm()</code>
 </h1>
 <p>To fit a fixed effects model to the sample <code>eDNA_data</code> where <code>Distance_m</code> is the only predictor, we give the function a model formula and the input data listed above:</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r">
-<span class="no">model_fit</span> <span class="kw">=</span> <span class="fu"><a href="../reference/eDNA_lmer.html">eDNA_lm</a></span>(<span class="no">Cq</span> ~ <span class="no">Distance_m</span>,
-                    <span class="kw">data</span> <span class="kw">=</span> <span class="no">eDNA_data</span>,
-                    <span class="kw">std_curve_alpha</span> <span class="kw">=</span> <span class="fl">21.2</span>, <span class="kw">std_curve_beta</span> <span class="kw">=</span> -<span class="fl">1.5</span>)
-<span class="co">#&gt; Model executable is up to date!</span>
-<span class="co">#&gt; Running MCMC with 4 chain(s) on 1 core(s)...</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Running ./eDNA_omni 'id=1' random 'seed=1189497664' data \</span>
-<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/standata-1e8e134ba32b.json' output \</span>
-<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/eDNA_omni-202008281307-1-be9212.csv' 'method=sample' \</span>
-<span class="co">#&gt;   'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt 'engaged=1'</span>
-<span class="co">#&gt; Chain 1 Rejecting initial value:</span>
-<span class="co">#&gt; Chain 1   Gradient evaluated at the initial value is not finite.</span>
-<span class="co">#&gt; Chain 1   Stan can't start sampling from this initial value.</span>
-<span class="co">#&gt; Chain 1 Gradient evaluation took 9.5e-05 seconds</span>
-<span class="co">#&gt; Chain 1 1000 transitions using 10 leapfrog steps per transition would take 0.95 seconds.</span>
-<span class="co">#&gt; Chain 1 Adjust your expectations accordingly!</span>
-<span class="co">#&gt; Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup) </span>
-<span class="co">#&gt; Chain 1 Iteration:  100 / 2000 [  5%]  (Warmup) </span>
-<span class="co">#&gt; Chain 1 Iteration:  200 / 2000 [ 10%]  (Warmup) </span>
-<span class="co">#&gt; Chain 1 Iteration:  300 / 2000 [ 15%]  (Warmup) </span>
-<span class="co">#&gt; Chain 1 Iteration:  400 / 2000 [ 20%]  (Warmup) </span>
-<span class="co">#&gt; Chain 1 Iteration:  500 / 2000 [ 25%]  (Warmup) </span>
-<span class="co">#&gt; Chain 1 Iteration:  600 / 2000 [ 30%]  (Warmup) </span>
-<span class="co">#&gt; Chain 1 Iteration:  700 / 2000 [ 35%]  (Warmup) </span>
-<span class="co">#&gt; Chain 1 Iteration:  800 / 2000 [ 40%]  (Warmup) </span>
-<span class="co">#&gt; Chain 1 Iteration:  900 / 2000 [ 45%]  (Warmup) </span>
-<span class="co">#&gt; Chain 1 Iteration: 1000 / 2000 [ 50%]  (Warmup) </span>
-<span class="co">#&gt; Chain 1 Iteration: 1001 / 2000 [ 50%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 Iteration: 1100 / 2000 [ 55%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 Iteration: 1200 / 2000 [ 60%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 Iteration: 1300 / 2000 [ 65%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 Iteration: 1400 / 2000 [ 70%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 Iteration: 1500 / 2000 [ 75%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 Iteration: 1600 / 2000 [ 80%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 Iteration: 1700 / 2000 [ 85%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 Iteration: 1800 / 2000 [ 90%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 Iteration: 1900 / 2000 [ 95%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 finished in 1.4 seconds.</span>
-<span class="co">#&gt; Running ./eDNA_omni 'id=2' random 'seed=763280937' data \</span>
-<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/standata-1e8e134ba32b.json' output \</span>
-<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/eDNA_omni-202008281307-2-be9212.csv' 'method=sample' \</span>
-<span class="co">#&gt;   'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt 'engaged=1'</span>
-<span class="co">#&gt; Chain 2 Rejecting initial value:</span>
-<span class="co">#&gt; Chain 2   Gradient evaluated at the initial value is not finite.</span>
-<span class="co">#&gt; Chain 2   Stan can't start sampling from this initial value.</span>
-<span class="co">#&gt; Chain 2 Rejecting initial value:</span>
-<span class="co">#&gt; Chain 2   Gradient evaluated at the initial value is not finite.</span>
-<span class="co">#&gt; Chain 2   Stan can't start sampling from this initial value.</span>
-<span class="co">#&gt; Chain 2 Rejecting initial value:</span>
-<span class="co">#&gt; Chain 2   Gradient evaluated at the initial value is not finite.</span>
-<span class="co">#&gt; Chain 2   Stan can't start sampling from this initial value.</span>
-<span class="co">#&gt; Chain 2 Rejecting initial value:</span>
-<span class="co">#&gt; Chain 2   Gradient evaluated at the initial value is not finite.</span>
-<span class="co">#&gt; Chain 2   Stan can't start sampling from this initial value.</span>
-<span class="co">#&gt; Chain 2 Rejecting initial value:</span>
-<span class="co">#&gt; Chain 2   Gradient evaluated at the initial value is not finite.</span>
-<span class="co">#&gt; Chain 2   Stan can't start sampling from this initial value.</span>
-<span class="co">#&gt; Chain 2 Rejecting initial value:</span>
-<span class="co">#&gt; Chain 2   Gradient evaluated at the initial value is not finite.</span>
-<span class="co">#&gt; Chain 2   Stan can't start sampling from this initial value.</span>
-<span class="co">#&gt; Chain 2 Gradient evaluation took 9.4e-05 seconds</span>
-<span class="co">#&gt; Chain 2 1000 transitions using 10 leapfrog steps per transition would take 0.94 seconds.</span>
-<span class="co">#&gt; Chain 2 Adjust your expectations accordingly!</span>
-<span class="co">#&gt; Chain 2 Iteration:    1 / 2000 [  0%]  (Warmup) </span>
-<span class="co">#&gt; Chain 2 Iteration:  100 / 2000 [  5%]  (Warmup) </span>
-<span class="co">#&gt; Chain 2 Iteration:  200 / 2000 [ 10%]  (Warmup) </span>
-<span class="co">#&gt; Chain 2 Iteration:  300 / 2000 [ 15%]  (Warmup) </span>
-<span class="co">#&gt; Chain 2 Iteration:  400 / 2000 [ 20%]  (Warmup) </span>
-<span class="co">#&gt; Chain 2 Iteration:  500 / 2000 [ 25%]  (Warmup) </span>
-<span class="co">#&gt; Chain 2 Iteration:  600 / 2000 [ 30%]  (Warmup) </span>
-<span class="co">#&gt; Chain 2 Iteration:  700 / 2000 [ 35%]  (Warmup) </span>
-<span class="co">#&gt; Chain 2 Iteration:  800 / 2000 [ 40%]  (Warmup) </span>
-<span class="co">#&gt; Chain 2 Iteration:  900 / 2000 [ 45%]  (Warmup) </span>
-<span class="co">#&gt; Chain 2 Iteration: 1000 / 2000 [ 50%]  (Warmup) </span>
-<span class="co">#&gt; Chain 2 Iteration: 1001 / 2000 [ 50%]  (Sampling) </span>
-<span class="co">#&gt; Chain 2 Iteration: 1100 / 2000 [ 55%]  (Sampling) </span>
-<span class="co">#&gt; Chain 2 Iteration: 1200 / 2000 [ 60%]  (Sampling) </span>
-<span class="co">#&gt; Chain 2 Iteration: 1300 / 2000 [ 65%]  (Sampling) </span>
-<span class="co">#&gt; Chain 2 Iteration: 1400 / 2000 [ 70%]  (Sampling) </span>
-<span class="co">#&gt; Chain 2 Iteration: 1500 / 2000 [ 75%]  (Sampling) </span>
-<span class="co">#&gt; Chain 2 Iteration: 1600 / 2000 [ 80%]  (Sampling) </span>
-<span class="co">#&gt; Chain 2 Iteration: 1700 / 2000 [ 85%]  (Sampling) </span>
-<span class="co">#&gt; Chain 2 Iteration: 1800 / 2000 [ 90%]  (Sampling) </span>
-<span class="co">#&gt; Chain 2 Iteration: 1900 / 2000 [ 95%]  (Sampling) </span>
-<span class="co">#&gt; Chain 2 Iteration: 2000 / 2000 [100%]  (Sampling) </span>
-<span class="co">#&gt; Chain 2 finished in 1.6 seconds.</span>
-<span class="co">#&gt; Running ./eDNA_omni 'id=3' random 'seed=71631794' data \</span>
-<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/standata-1e8e134ba32b.json' output \</span>
-<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/eDNA_omni-202008281307-3-be9212.csv' 'method=sample' \</span>
-<span class="co">#&gt;   'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt 'engaged=1'</span>
-<span class="co">#&gt; Chain 3 Iteration:    1 / 2000 [  0%]  (Warmup) </span>
-<span class="co">#&gt; Chain 3 Iteration:  100 / 2000 [  5%]  (Warmup) </span>
-<span class="co">#&gt; Chain 3 Iteration:  200 / 2000 [ 10%]  (Warmup) </span>
-<span class="co">#&gt; Chain 3 Iteration:  300 / 2000 [ 15%]  (Warmup) </span>
-<span class="co">#&gt; Chain 3 Iteration:  400 / 2000 [ 20%]  (Warmup) </span>
-<span class="co">#&gt; Chain 3 Iteration:  500 / 2000 [ 25%]  (Warmup) </span>
-<span class="co">#&gt; Chain 3 Iteration:  600 / 2000 [ 30%]  (Warmup) </span>
-<span class="co">#&gt; Chain 3 Iteration:  700 / 2000 [ 35%]  (Warmup) </span>
-<span class="co">#&gt; Chain 3 Iteration:  800 / 2000 [ 40%]  (Warmup) </span>
-<span class="co">#&gt; Chain 3 Iteration:  900 / 2000 [ 45%]  (Warmup) </span>
-<span class="co">#&gt; Chain 3 Iteration: 1000 / 2000 [ 50%]  (Warmup) </span>
-<span class="co">#&gt; Chain 3 Iteration: 1001 / 2000 [ 50%]  (Sampling) </span>
-<span class="co">#&gt; Chain 3 Iteration: 1100 / 2000 [ 55%]  (Sampling) </span>
-<span class="co">#&gt; Chain 3 Iteration: 1200 / 2000 [ 60%]  (Sampling) </span>
-<span class="co">#&gt; Chain 3 Iteration: 1300 / 2000 [ 65%]  (Sampling) </span>
-<span class="co">#&gt; Chain 3 Iteration: 1400 / 2000 [ 70%]  (Sampling) </span>
-<span class="co">#&gt; Chain 3 Iteration: 1500 / 2000 [ 75%]  (Sampling) </span>
-<span class="co">#&gt; Chain 3 Iteration: 1600 / 2000 [ 80%]  (Sampling) </span>
-<span class="co">#&gt; Chain 3 Iteration: 1700 / 2000 [ 85%]  (Sampling) </span>
-<span class="co">#&gt; Chain 3 Iteration: 1800 / 2000 [ 90%]  (Sampling) </span>
-<span class="co">#&gt; Chain 3 Iteration: 1900 / 2000 [ 95%]  (Sampling) </span>
-<span class="co">#&gt; Chain 3 Iteration: 2000 / 2000 [100%]  (Sampling) </span>
-<span class="co">#&gt; Chain 3 finished in 1.4 seconds.</span>
-<span class="co">#&gt; Running ./eDNA_omni 'id=4' random 'seed=1485362050' data \</span>
-<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/standata-1e8e134ba32b.json' output \</span>
-<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/eDNA_omni-202008281307-4-be9212.csv' 'method=sample' \</span>
-<span class="co">#&gt;   'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt 'engaged=1'</span>
-<span class="co">#&gt; Chain 4 Iteration:    1 / 2000 [  0%]  (Warmup) </span>
-<span class="co">#&gt; Chain 4 Iteration:  100 / 2000 [  5%]  (Warmup) </span>
-<span class="co">#&gt; Chain 4 Iteration:  200 / 2000 [ 10%]  (Warmup) </span>
-<span class="co">#&gt; Chain 4 Iteration:  300 / 2000 [ 15%]  (Warmup) </span>
-<span class="co">#&gt; Chain 4 Iteration:  400 / 2000 [ 20%]  (Warmup) </span>
-<span class="co">#&gt; Chain 4 Iteration:  500 / 2000 [ 25%]  (Warmup) </span>
-<span class="co">#&gt; Chain 4 Iteration:  600 / 2000 [ 30%]  (Warmup) </span>
-<span class="co">#&gt; Chain 4 Iteration:  700 / 2000 [ 35%]  (Warmup) </span>
-<span class="co">#&gt; Chain 4 Iteration:  800 / 2000 [ 40%]  (Warmup) </span>
-<span class="co">#&gt; Chain 4 Iteration:  900 / 2000 [ 45%]  (Warmup) </span>
-<span class="co">#&gt; Chain 4 Iteration: 1000 / 2000 [ 50%]  (Warmup) </span>
-<span class="co">#&gt; Chain 4 Iteration: 1001 / 2000 [ 50%]  (Sampling) </span>
-<span class="co">#&gt; Chain 4 Iteration: 1100 / 2000 [ 55%]  (Sampling) </span>
-<span class="co">#&gt; Chain 4 Iteration: 1200 / 2000 [ 60%]  (Sampling) </span>
-<span class="co">#&gt; Chain 4 Iteration: 1300 / 2000 [ 65%]  (Sampling) </span>
-<span class="co">#&gt; Chain 4 Iteration: 1400 / 2000 [ 70%]  (Sampling) </span>
-<span class="co">#&gt; Chain 4 Iteration: 1500 / 2000 [ 75%]  (Sampling) </span>
-<span class="co">#&gt; Chain 4 Iteration: 1600 / 2000 [ 80%]  (Sampling) </span>
-<span class="co">#&gt; Chain 4 Iteration: 1700 / 2000 [ 85%]  (Sampling) </span>
-<span class="co">#&gt; Chain 4 Iteration: 1800 / 2000 [ 90%]  (Sampling) </span>
-<span class="co">#&gt; Chain 4 Iteration: 1900 / 2000 [ 95%]  (Sampling) </span>
-<span class="co">#&gt; Chain 4 Iteration: 2000 / 2000 [100%]  (Sampling) </span>
-<span class="co">#&gt; Chain 4 finished in 1.4 seconds.</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; All 4 chains finished successfully.</span>
-<span class="co">#&gt; Mean chain execution time: 1.5 seconds.</span>
-<span class="co">#&gt; Total execution time: 5.9 seconds.</span></pre></body></html></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="va">model_fit</span> <span class="op">=</span> <span class="fu"><a href="../reference/eDNA_lm.html">eDNA_lm</a></span><span class="op">(</span><span class="va">Cq</span> <span class="op">~</span> <span class="va">Distance_m</span>, 
+                    data <span class="op">=</span> <span class="va">eDNA_data</span>,
+                    std_curve_alpha <span class="op">=</span> <span class="fl">21.2</span>, std_curve_beta <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span><span class="op">)</span></code></pre></div>
 <p><br></p>
 <p>The model functions, similar to <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> in base R, will automatically add an intercept term. You can explicitly omit the intercept if you have a good reason for doing so. Full control of the MCMC algorithm can be accomplished by adding these control arguments to the end of the <code>eDNA_lm*()</code> call, which then passes them on to <code>cmdstanr::model$sample()</code>. <em>Note: the arguments for the model follow the naming conventions for <code>cmdstan</code>, which differ from those used by <code>rstan</code>. Documentation of these arguments can be found <a href="https://mc-stan.org/cmdstanr/reference/model-method-sample.html">here</a></em></p>
 <p>For example,</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">model_fit</span> <span class="kw">=</span> <span class="fu"><a href="../reference/eDNA_lmer.html">eDNA_lm</a></span>(<span class="no">Cq</span> ~ <span class="no">Distance_m</span>,
-                    <span class="kw">data</span> <span class="kw">=</span> <span class="no">eDNA_data</span>,
-                    <span class="kw">std_curve_alpha</span> <span class="kw">=</span> <span class="fl">21.2</span>, <span class="kw">std_curve_beta</span> <span class="kw">=</span> -<span class="fl">1.5</span>,
-                    <span class="kw">seed</span> <span class="kw">=</span> <span class="fl">1234</span>,
-                    <span class="kw">chains</span> <span class="kw">=</span> <span class="fl">1</span>) <span class="co"># we don't recommend sampling just 1 chain; the default is 4</span></pre></body></html></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">model_fit</span> <span class="op">=</span> <span class="fu"><a href="../reference/eDNA_lm.html">eDNA_lm</a></span><span class="op">(</span><span class="va">Cq</span> <span class="op">~</span> <span class="va">Distance_m</span>, 
+                    data <span class="op">=</span> <span class="va">eDNA_data</span>,
+                    std_curve_alpha <span class="op">=</span> <span class="fl">21.2</span>, std_curve_beta <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span>,
+                    seed <span class="op">=</span> <span class="fl">1234</span>, 
+                    chains <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="co"># we don't recommend sampling just 1 chain; the default is 4</span></code></pre></div>
 <p><br></p>
 <!-- By default, `artemis` suppresses the (often verbose) output from Stan, -->
 <!-- but users can (and should) enable it with `verbose = TRUE` when the model is sampling slowly or the -->
@@ -314,189 +188,32 @@
 <a href="#mixed-effects-models-with-edna_lmer" class="anchor"></a>Mixed effects models with <code>eDNA_lmer()</code>
 </h1>
 <p><br></p>
-<p>To fit a model with one or more random effect(s), use the <code><a href="../reference/eDNA_lmer.html">eDNA_lmer()</a></code> function. Random effects are specified using the same syntax as the <code>lme4</code> package, e.g. <code>(1|random effect)</code>:</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">d</span> <span class="kw">=</span> <span class="no">eDNA_data</span> <span class="co"># create a copy to modify </span>
-<span class="no">d</span>$<span class="no">Year</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">2018</span>:<span class="fl">2020</span>, <span class="kw">size</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">d</span>), <span class="kw">replace</span> <span class="kw">=</span> <span class="fl">TRUE</span>)) <span class="co"># create a random variable</span>
+<p>To fit a model with one or more random effect(s), use the <code><a href="../reference/eDNA_lm.html">eDNA_lmer()</a></code> function. Random effects are specified using the same syntax as the <code>lme4</code> package, e.g. <code>(1|random effect)</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">d</span> <span class="op">=</span> <span class="va">eDNA_data</span> <span class="co"># create a copy to modify </span>
+<span class="va">d</span><span class="op">$</span><span class="va">Year</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">2018</span><span class="op">:</span><span class="fl">2020</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="co"># create a random variable</span>
 
-<span class="no">model_fit2</span> <span class="kw">=</span> <span class="fu"><a href="../reference/eDNA_lmer.html">eDNA_lmer</a></span>(<span class="no">Cq</span> ~ <span class="no">Distance_m</span> + <span class="no">Volume_mL</span> + (<span class="fl">1</span><span class="kw">|</span><span class="no">Year</span>),
-                       <span class="kw">data</span> <span class="kw">=</span> <span class="no">d</span>,
-                       <span class="kw">std_curve_alpha</span> <span class="kw">=</span> <span class="fl">21.2</span>, <span class="kw">std_curve_beta</span> <span class="kw">=</span> -<span class="fl">1.5</span>,
-                       <span class="kw">iter_sampling</span> <span class="kw">=</span> <span class="fl">1000</span>,
-                       <span class="kw">seed</span> <span class="kw">=</span> <span class="fl">1234</span>)
-<span class="co">#&gt; Model executable is up to date!</span>
-<span class="co">#&gt; Running MCMC with 4 chain(s) on 1 core(s)...</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Running ./eDNA_omni 'id=1' random 'seed=1234' data \</span>
-<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/standata-1e8e494d9611.json' output \</span>
-<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/eDNA_omni-202008281307-1-eab3d8.csv' 'method=sample' \</span>
-<span class="co">#&gt;   'num_samples=1000' 'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt \</span>
-<span class="co">#&gt;   'engaged=1'</span>
-<span class="co">#&gt; Chain 1 Rejecting initial value:</span>
-<span class="co">#&gt; Chain 1   Gradient evaluated at the initial value is not finite.</span>
-<span class="co">#&gt; Chain 1   Stan can't start sampling from this initial value.</span>
-<span class="co">#&gt; Chain 1 Gradient evaluation took 0.000153 seconds</span>
-<span class="co">#&gt; Chain 1 1000 transitions using 10 leapfrog steps per transition would take 1.53 seconds.</span>
-<span class="co">#&gt; Chain 1 Adjust your expectations accordingly!</span>
-<span class="co">#&gt; Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup) </span>
-<span class="co">#&gt; Chain 1 Iteration:  100 / 2000 [  5%]  (Warmup) </span>
-<span class="co">#&gt; Chain 1 Iteration:  200 / 2000 [ 10%]  (Warmup) </span>
-<span class="co">#&gt; Chain 1 Iteration:  300 / 2000 [ 15%]  (Warmup) </span>
-<span class="co">#&gt; Chain 1 Iteration:  400 / 2000 [ 20%]  (Warmup) </span>
-<span class="co">#&gt; Chain 1 Iteration:  500 / 2000 [ 25%]  (Warmup) </span>
-<span class="co">#&gt; Chain 1 Iteration:  600 / 2000 [ 30%]  (Warmup) </span>
-<span class="co">#&gt; Chain 1 Iteration:  700 / 2000 [ 35%]  (Warmup) </span>
-<span class="co">#&gt; Chain 1 Iteration:  800 / 2000 [ 40%]  (Warmup) </span>
-<span class="co">#&gt; Chain 1 Iteration:  900 / 2000 [ 45%]  (Warmup) </span>
-<span class="co">#&gt; Chain 1 Iteration: 1000 / 2000 [ 50%]  (Warmup) </span>
-<span class="co">#&gt; Chain 1 Iteration: 1001 / 2000 [ 50%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 Iteration: 1100 / 2000 [ 55%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 Iteration: 1200 / 2000 [ 60%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 Iteration: 1300 / 2000 [ 65%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 Iteration: 1400 / 2000 [ 70%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 Iteration: 1500 / 2000 [ 75%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 Iteration: 1600 / 2000 [ 80%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 Iteration: 1700 / 2000 [ 85%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 Iteration: 1800 / 2000 [ 90%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 Iteration: 1900 / 2000 [ 95%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) </span>
-<span class="co">#&gt; Chain 1 finished in 3.8 seconds.</span>
-<span class="co">#&gt; Running ./eDNA_omni 'id=2' random 'seed=1235' data \</span>
-<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/standata-1e8e494d9611.json' output \</span>
-<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/eDNA_omni-202008281307-2-eab3d8.csv' 'method=sample' \</span>
-<span class="co">#&gt;   'num_samples=1000' 'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt \</span>
-<span class="co">#&gt;   'engaged=1'</span>
-<span class="co">#&gt; Chain 2 Rejecting initial value:</span>
-<span class="co">#&gt; Chain 2   Gradient evaluated at the initial value is not finite.</span>
-<span class="co">#&gt; Chain 2   Stan can't start sampling from this initial value.</span>
-<span class="co">#&gt; Chain 2 Rejecting initial value:</span>
-<span class="co">#&gt; Chain 2   Gradient evaluated at the initial value is not finite.</span>
-<span class="co">#&gt; Chain 2   Stan can't start sampling from this initial value.</span>
-<span class="co">#&gt; Chain 2 Rejecting initial value:</span>
-<span class="co">#&gt; Chain 2   Gradient evaluated at the initial value is not finite.</span>
-<span class="co">#&gt; Chain 2   Stan can't start sampling from this initial value.</span>
-<span class="co">#&gt; Chain 2 Gradient evaluation took 0.00027 seconds</span>
-<span class="co">#&gt; Chain 2 1000 transitions using 10 leapfrog steps per transition would take 2.7 seconds.</span>
-<span class="co">#&gt; Chain 2 Adjust your expectations accordingly!</span>
-<span class="co">#&gt; Chain 2 Iteration:    1 / 2000 [  0%]  (Warmup) </span>
-<span class="co">#&gt; Chain 2 Iteration:  100 / 2000 [  5%]  (Warmup) </span>
-<span class="co">#&gt; Chain 2 Iteration:  200 / 2000 [ 10%]  (Warmup) </span>
-<span class="co">#&gt; Chain 2 Iteration:  300 / 2000 [ 15%]  (Warmup) </span>
-<span class="co">#&gt; Chain 2 Iteration:  400 / 2000 [ 20%]  (Warmup) </span>
-<span class="co">#&gt; Chain 2 Iteration:  500 / 2000 [ 25%]  (Warmup) </span>
-<span class="co">#&gt; Chain 2 Iteration:  600 / 2000 [ 30%]  (Warmup) </span>
-<span class="co">#&gt; Chain 2 Iteration:  700 / 2000 [ 35%]  (Warmup) </span>
-<span class="co">#&gt; Chain 2 Iteration:  800 / 2000 [ 40%]  (Warmup) </span>
-<span class="co">#&gt; Chain 2 Iteration:  900 / 2000 [ 45%]  (Warmup) </span>
-<span class="co">#&gt; Chain 2 Iteration: 1000 / 2000 [ 50%]  (Warmup) </span>
-<span class="co">#&gt; Chain 2 Iteration: 1001 / 2000 [ 50%]  (Sampling) </span>
-<span class="co">#&gt; Chain 2 Iteration: 1100 / 2000 [ 55%]  (Sampling) </span>
-<span class="co">#&gt; Chain 2 Iteration: 1200 / 2000 [ 60%]  (Sampling) </span>
-<span class="co">#&gt; Chain 2 Iteration: 1300 / 2000 [ 65%]  (Sampling) </span>
-<span class="co">#&gt; Chain 2 Iteration: 1400 / 2000 [ 70%]  (Sampling) </span>
-<span class="co">#&gt; Chain 2 Iteration: 1500 / 2000 [ 75%]  (Sampling) </span>
-<span class="co">#&gt; Chain 2 Iteration: 1600 / 2000 [ 80%]  (Sampling) </span>
-<span class="co">#&gt; Chain 2 Iteration: 1700 / 2000 [ 85%]  (Sampling) </span>
-<span class="co">#&gt; Chain 2 Iteration: 1800 / 2000 [ 90%]  (Sampling) </span>
-<span class="co">#&gt; Chain 2 Iteration: 1900 / 2000 [ 95%]  (Sampling) </span>
-<span class="co">#&gt; Chain 2 Iteration: 2000 / 2000 [100%]  (Sampling) </span>
-<span class="co">#&gt; Chain 2 finished in 3.9 seconds.</span>
-<span class="co">#&gt; Running ./eDNA_omni 'id=3' random 'seed=1236' data \</span>
-<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/standata-1e8e494d9611.json' output \</span>
-<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/eDNA_omni-202008281307-3-eab3d8.csv' 'method=sample' \</span>
-<span class="co">#&gt;   'num_samples=1000' 'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt \</span>
-<span class="co">#&gt;   'engaged=1'</span>
-<span class="co">#&gt; Chain 3 Rejecting initial value:</span>
-<span class="co">#&gt; Chain 3   Gradient evaluated at the initial value is not finite.</span>
-<span class="co">#&gt; Chain 3   Stan can't start sampling from this initial value.</span>
-<span class="co">#&gt; Chain 3 Rejecting initial value:</span>
-<span class="co">#&gt; Chain 3   Gradient evaluated at the initial value is not finite.</span>
-<span class="co">#&gt; Chain 3   Stan can't start sampling from this initial value.</span>
-<span class="co">#&gt; Chain 3 Rejecting initial value:</span>
-<span class="co">#&gt; Chain 3   Gradient evaluated at the initial value is not finite.</span>
-<span class="co">#&gt; Chain 3   Stan can't start sampling from this initial value.</span>
-<span class="co">#&gt; Chain 3 Gradient evaluation took 0.000343 seconds</span>
-<span class="co">#&gt; Chain 3 1000 transitions using 10 leapfrog steps per transition would take 3.43 seconds.</span>
-<span class="co">#&gt; Chain 3 Adjust your expectations accordingly!</span>
-<span class="co">#&gt; Chain 3 Iteration:    1 / 2000 [  0%]  (Warmup) </span>
-<span class="co">#&gt; Chain 3 Iteration:  100 / 2000 [  5%]  (Warmup) </span>
-<span class="co">#&gt; Chain 3 Iteration:  200 / 2000 [ 10%]  (Warmup) </span>
-<span class="co">#&gt; Chain 3 Iteration:  300 / 2000 [ 15%]  (Warmup) </span>
-<span class="co">#&gt; Chain 3 Iteration:  400 / 2000 [ 20%]  (Warmup) </span>
-<span class="co">#&gt; Chain 3 Iteration:  500 / 2000 [ 25%]  (Warmup) </span>
-<span class="co">#&gt; Chain 3 Iteration:  600 / 2000 [ 30%]  (Warmup) </span>
-<span class="co">#&gt; Chain 3 Iteration:  700 / 2000 [ 35%]  (Warmup) </span>
-<span class="co">#&gt; Chain 3 Iteration:  800 / 2000 [ 40%]  (Warmup) </span>
-<span class="co">#&gt; Chain 3 Iteration:  900 / 2000 [ 45%]  (Warmup) </span>
-<span class="co">#&gt; Chain 3 Iteration: 1000 / 2000 [ 50%]  (Warmup) </span>
-<span class="co">#&gt; Chain 3 Iteration: 1001 / 2000 [ 50%]  (Sampling) </span>
-<span class="co">#&gt; Chain 3 Iteration: 1100 / 2000 [ 55%]  (Sampling) </span>
-<span class="co">#&gt; Chain 3 Iteration: 1200 / 2000 [ 60%]  (Sampling) </span>
-<span class="co">#&gt; Chain 3 Iteration: 1300 / 2000 [ 65%]  (Sampling) </span>
-<span class="co">#&gt; Chain 3 Iteration: 1400 / 2000 [ 70%]  (Sampling) </span>
-<span class="co">#&gt; Chain 3 Iteration: 1500 / 2000 [ 75%]  (Sampling) </span>
-<span class="co">#&gt; Chain 3 Iteration: 1600 / 2000 [ 80%]  (Sampling) </span>
-<span class="co">#&gt; Chain 3 Iteration: 1700 / 2000 [ 85%]  (Sampling) </span>
-<span class="co">#&gt; Chain 3 Iteration: 1800 / 2000 [ 90%]  (Sampling) </span>
-<span class="co">#&gt; Chain 3 Iteration: 1900 / 2000 [ 95%]  (Sampling) </span>
-<span class="co">#&gt; Chain 3 Iteration: 2000 / 2000 [100%]  (Sampling) </span>
-<span class="co">#&gt; Chain 3 finished in 4.0 seconds.</span>
-<span class="co">#&gt; Running ./eDNA_omni 'id=4' random 'seed=1237' data \</span>
-<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/standata-1e8e494d9611.json' output \</span>
-<span class="co">#&gt;   'file=/tmp/Rtmp7zZ1rF/eDNA_omni-202008281307-4-eab3d8.csv' 'method=sample' \</span>
-<span class="co">#&gt;   'num_samples=1000' 'save_warmup=0' 'algorithm=hmc' 'engine=nuts' adapt \</span>
-<span class="co">#&gt;   'engaged=1'</span>
-<span class="co">#&gt; Chain 4 Iteration:    1 / 2000 [  0%]  (Warmup) </span>
-<span class="co">#&gt; Chain 4 Iteration:  100 / 2000 [  5%]  (Warmup) </span>
-<span class="co">#&gt; Chain 4 Iteration:  200 / 2000 [ 10%]  (Warmup) </span>
-<span class="co">#&gt; Chain 4 Iteration:  300 / 2000 [ 15%]  (Warmup) </span>
-<span class="co">#&gt; Chain 4 Iteration:  400 / 2000 [ 20%]  (Warmup) </span>
-<span class="co">#&gt; Chain 4 Iteration:  500 / 2000 [ 25%]  (Warmup) </span>
-<span class="co">#&gt; Chain 4 Iteration:  600 / 2000 [ 30%]  (Warmup) </span>
-<span class="co">#&gt; Chain 4 Iteration:  700 / 2000 [ 35%]  (Warmup) </span>
-<span class="co">#&gt; Chain 4 Iteration:  800 / 2000 [ 40%]  (Warmup) </span>
-<span class="co">#&gt; Chain 4 Iteration:  900 / 2000 [ 45%]  (Warmup) </span>
-<span class="co">#&gt; Chain 4 Iteration: 1000 / 2000 [ 50%]  (Warmup) </span>
-<span class="co">#&gt; Chain 4 Iteration: 1001 / 2000 [ 50%]  (Sampling) </span>
-<span class="co">#&gt; Chain 4 Iteration: 1100 / 2000 [ 55%]  (Sampling) </span>
-<span class="co">#&gt; Chain 4 Iteration: 1200 / 2000 [ 60%]  (Sampling) </span>
-<span class="co">#&gt; Chain 4 Iteration: 1300 / 2000 [ 65%]  (Sampling) </span>
-<span class="co">#&gt; Chain 4 Iteration: 1400 / 2000 [ 70%]  (Sampling) </span>
-<span class="co">#&gt; Chain 4 Iteration: 1500 / 2000 [ 75%]  (Sampling) </span>
-<span class="co">#&gt; Chain 4 Iteration: 1600 / 2000 [ 80%]  (Sampling) </span>
-<span class="co">#&gt; Chain 4 Iteration: 1700 / 2000 [ 85%]  (Sampling) </span>
-<span class="co">#&gt; Chain 4 Iteration: 1800 / 2000 [ 90%]  (Sampling) </span>
-<span class="co">#&gt; Chain 4 Iteration: 1900 / 2000 [ 95%]  (Sampling) </span>
-<span class="co">#&gt; Chain 4 Iteration: 2000 / 2000 [100%]  (Sampling) </span>
-<span class="co">#&gt; Chain 4 finished in 3.5 seconds.</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; All 4 chains finished successfully.</span>
-<span class="co">#&gt; Mean chain execution time: 3.8 seconds.</span>
-<span class="co">#&gt; Total execution time: 15.2 seconds.</span>
-<span class="co">#&gt; 5 of 4000 (0.0%) transitions ended with a divergence.</span>
-<span class="co">#&gt; These divergent transitions indicate that HMC is not fully able to explore the posterior distribution.</span>
-<span class="co">#&gt; Try increasing adapt delta closer to 1.</span>
-<span class="co">#&gt; If this doesn't remove all divergences, try to reparameterize the model.</span></pre></body></html></div>
+<span class="va">model_fit2</span> <span class="op">=</span> <span class="fu"><a href="../reference/eDNA_lm.html">eDNA_lmer</a></span><span class="op">(</span><span class="va">Cq</span> <span class="op">~</span> <span class="va">Distance_m</span> <span class="op">+</span> <span class="va">Volume_mL</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">Year</span><span class="op">)</span>,
+                       data <span class="op">=</span> <span class="va">d</span>,
+                       std_curve_alpha <span class="op">=</span> <span class="fl">21.2</span>, std_curve_beta <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span>,
+                       seed <span class="op">=</span> <span class="fl">1234</span><span class="op">)</span> </code></pre></div>
 </div>
 <div id="summarizing-and-plotting-model-output" class="section level1">
 <h1 class="hasAnchor">
 <a href="#summarizing-and-plotting-model-output" class="anchor"></a>Summarizing and plotting model output</h1>
-<p>As with the simulation objects, the model results can be summarized or plotted with default methods using <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> and <code><a href="https://rdrr.io/r/base/plot.html">plot()</a></code>, or converted to a <code>data.frame</code> object for further manipulation.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">model_fit</span>)
-<span class="co">#&gt;                      Mean          2.5%           50%         97.5%</span>
-<span class="co">#&gt; (Intercept) -11.808434250 -12.240312500 -11.808250000 -11.382280000</span>
-<span class="co">#&gt; Distance_m   -0.004414149  -0.006042215  -0.004394445  -0.002902262</span>
-<span class="co">#&gt; Cq_sigma      6.103136875   5.616327500   6.098335000   6.632476500</span>
+<p>As with the simulation objects, the model results can be summarized or plotted with default methods using <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> and <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code>, or converted to a <code>data.frame</code> object for further manipulation.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">model_fit</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">model_fit</span>, <span class="kw">pars</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"intercept"</span>, <span class="st">"betas"</span>))
-<span class="co">#&gt; ci_level: 0.8 (80% intervals)</span>
-<span class="co">#&gt; outer_level: 0.95 (95% intervals)</span></pre></body></html></div>
-<p><img src="modeling_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">model_fit</span>, pars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"intercept"</span>, <span class="st">"betas"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><br></p>
-<p>Matching <code>lme4</code> convention, random effects are not included in the default <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> output. You can view or plot the random effects estimates by subsetting the <code>stanfit</code> slot of the model object with <code>@</code>, and specifying the <code>random_betas</code> parameters with the <code>pars</code> argument:</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="kw pkg">rstan</span><span class="kw ns">::</span><span class="fu">summary</span>(<span class="no">model_fit2</span>@<span class="kw">stanfit</span>, <span class="kw">pars</span> <span class="kw">=</span> <span class="st">"rand_betas"</span>, <span class="kw">probs</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.50</span>, <span class="fl">0.025</span>, <span class="fl">0.975</span>))$<span class="no">summary</span>
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">model_fit2</span>, <span class="kw">pars</span> <span class="kw">=</span> <span class="st">"rand_betas"</span>)</pre></body></html></div>
+<p>Matching <code>lme4</code> convention, random effects are not included in the default <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> output. You can view or plot the random effects estimates by subsetting the <code>stanfit</code> slot of the model object with <code><a href="https://rdrr.io/r/base/slotOp.html">@</a></code>, and specifying the <code>random_betas</code> parameters with the <code>pars</code> argument:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">rstan</span><span class="fu">::</span><span class="fu">summary</span><span class="op">(</span><span class="va">model_fit2</span><span class="op">@</span><span class="va">stanfit</span>, pars <span class="op">=</span> <span class="st">"rand_betas"</span>, probs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.50</span>, <span class="fl">0.025</span>, <span class="fl">0.975</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">summary</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">model_fit2</span>, pars <span class="op">=</span> <span class="st">"rand_betas"</span><span class="op">)</span></code></pre></div>
 <p>Similar to <code>lme4</code>, there is a <code>ranef</code> method for <code>eDNA_model</code> objects</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu">ranef</span>(<span class="no">model_fit2</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">ranef</span><span class="op">(</span><span class="va">model_fit2</span><span class="op">)</span></code></pre></div>
 <p><br></p>
 </div>
 <div id="further-notes-on-modeling" class="section level1">
@@ -527,7 +244,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

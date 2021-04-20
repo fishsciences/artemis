@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">artemis</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.14.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.18.2</span>
       </span>
     </div>
 
@@ -88,7 +88,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -110,6 +110,9 @@
     </li>
     <li>
       <a href="../articles/modeling.html">Modeling eDNA qPCR Data with `artemis`</a>
+    </li>
+    <li>
+      <a href="../articles/modeling_advice.html">Modeling Advice</a>
     </li>
     <li>
       <a href="../articles/simulation.html">Simulating eDNA Data with `artemis`</a>
@@ -141,40 +144,40 @@
     <p>Estimate the power for a given eDNA design</p>
     </div>
 
-    <pre class="usage"><span class='fu'>est_power_lm</span>(
-  <span class='no'>formula</span>,
-  <span class='no'>variable_list</span>,
-  <span class='no'>betas</span>,
-  <span class='no'>sigma_Cq</span>,
-  <span class='no'>std_curve_alpha</span>,
-  <span class='no'>std_curve_beta</span>,
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"exclude_zero"</span>, <span class='st'>"accuracy"</span>),
-  <span class='kw'>accuracy_level</span> <span class='kw'>=</span> <span class='fl'>0.2</span>,
-  <span class='kw'>conf_level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
-  <span class='kw'>n_sim</span> <span class='kw'>=</span> <span class='fl'>200L</span>,
-  <span class='kw'>probs</span> <span class='kw'>=</span> <span class='fu'><a href='conf_to_probs.html'>conf_to_probs</a></span>(<span class='no'>conf_level</span>),
-  <span class='kw'>upper_Cq</span> <span class='kw'>=</span> <span class='fl'>40</span>,
-  <span class='kw'>X</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span>(<span class='no'>variable_list</span>),
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)
+    <pre class="usage"><span class='fu'>est_power_lm</span><span class='op'>(</span>
+  <span class='va'>formula</span>,
+  <span class='va'>variable_list</span>,
+  <span class='va'>betas</span>,
+  <span class='va'>sigma_Cq</span>,
+  <span class='va'>std_curve_alpha</span>,
+  <span class='va'>std_curve_beta</span>,
+  type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"exclude_zero"</span>, <span class='st'>"accuracy"</span><span class='op'>)</span>,
+  accuracy_level <span class='op'>=</span> <span class='fl'>0.2</span>,
+  conf_level <span class='op'>=</span> <span class='fl'>0.95</span>,
+  n_sim <span class='op'>=</span> <span class='fl'>200L</span>,
+  probs <span class='op'>=</span> <span class='fu'><a href='conf_to_probs.html'>conf_to_probs</a></span><span class='op'>(</span><span class='va'>conf_level</span><span class='op'>)</span>,
+  upper_Cq <span class='op'>=</span> <span class='fl'>40</span>,
+  X <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span><span class='op'>(</span><span class='va'>variable_list</span><span class='op'>)</span>,
+  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
 
-<span class='fu'>est_power_lmer</span>(
-  <span class='no'>formula</span>,
-  <span class='no'>variable_list</span>,
-  <span class='no'>betas</span>,
-  <span class='no'>sigma_Cq</span>,
-  <span class='no'>sigma_rand</span>,
-  <span class='no'>std_curve_alpha</span>,
-  <span class='no'>std_curve_beta</span>,
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"exclude_zero"</span>, <span class='st'>"accuracy"</span>),
-  <span class='kw'>accuracy_level</span> <span class='kw'>=</span> <span class='fl'>0.2</span>,
-  <span class='kw'>conf_level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
-  <span class='kw'>n_sim</span> <span class='kw'>=</span> <span class='fl'>200L</span>,
-  <span class='kw'>probs</span> <span class='kw'>=</span> <span class='fu'><a href='conf_to_probs.html'>conf_to_probs</a></span>(<span class='no'>conf_level</span>),
-  <span class='kw'>upper_Cq</span> <span class='kw'>=</span> <span class='fl'>40</span>,
-  <span class='kw'>X</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span>(<span class='no'>variable_list</span>),
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)</pre>
+<span class='fu'>est_power_lmer</span><span class='op'>(</span>
+  <span class='va'>formula</span>,
+  <span class='va'>variable_list</span>,
+  <span class='va'>betas</span>,
+  <span class='va'>sigma_Cq</span>,
+  <span class='va'>sigma_rand</span>,
+  <span class='va'>std_curve_alpha</span>,
+  <span class='va'>std_curve_beta</span>,
+  type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"exclude_zero"</span>, <span class='st'>"accuracy"</span><span class='op'>)</span>,
+  accuracy_level <span class='op'>=</span> <span class='fl'>0.2</span>,
+  conf_level <span class='op'>=</span> <span class='fl'>0.95</span>,
+  n_sim <span class='op'>=</span> <span class='fl'>200L</span>,
+  probs <span class='op'>=</span> <span class='fu'><a href='conf_to_probs.html'>conf_to_probs</a></span><span class='op'>(</span><span class='va'>conf_level</span><span class='op'>)</span>,
+  upper_Cq <span class='op'>=</span> <span class='fl'>40</span>,
+  X <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span><span class='op'>(</span><span class='va'>variable_list</span><span class='op'>)</span>,
+  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -292,6 +295,9 @@ of uncertainty. When are primarily interested in the precision of
 the estimate, the classic definition of power is not helpful. For
 these reasons, these functions allow the user to specify
 "accuracy" as the metric of interest.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Matt Espe</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -308,7 +314,7 @@ these reasons, these functions allow the user to specify
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
