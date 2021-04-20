@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">artemis</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.14.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.18.2</span>
       </span>
     </div>
 
@@ -88,7 +88,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -110,6 +110,9 @@
     </li>
     <li>
       <a href="../articles/modeling.html">Modeling eDNA qPCR Data with `artemis`</a>
+    </li>
+    <li>
+      <a href="../articles/modeling_advice.html">Modeling Advice</a>
     </li>
     <li>
       <a href="../articles/simulation.html">Simulating eDNA Data with `artemis`</a>
@@ -141,36 +144,36 @@
     <p>Simulate eDNA data</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sim_eDNA_lm</span>(
-  <span class='no'>formula</span>,
-  <span class='no'>variable_list</span>,
-  <span class='no'>betas</span>,
-  <span class='no'>sigma_Cq</span>,
-  <span class='no'>std_curve_alpha</span>,
-  <span class='no'>std_curve_beta</span>,
-  <span class='kw'>n_sim</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>upper_Cq</span> <span class='kw'>=</span> <span class='fl'>40</span>,
-  <span class='kw'>prob_zero</span> <span class='kw'>=</span> <span class='fl'>0.08</span>,
-  <span class='kw'>X</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span>(<span class='no'>variable_list</span>),
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>sink_file</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span>()
-)
+    <pre class="usage"><span class='fu'>sim_eDNA_lm</span><span class='op'>(</span>
+  <span class='va'>formula</span>,
+  <span class='va'>variable_list</span>,
+  <span class='va'>betas</span>,
+  <span class='va'>sigma_ln_eDNA</span>,
+  <span class='va'>std_curve_alpha</span>,
+  <span class='va'>std_curve_beta</span>,
+  n_sim <span class='op'>=</span> <span class='fl'>1L</span>,
+  upper_Cq <span class='op'>=</span> <span class='fl'>40</span>,
+  prob_zero <span class='op'>=</span> <span class='fl'>0.08</span>,
+  X <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span><span class='op'>(</span><span class='va'>variable_list</span><span class='op'>)</span>,
+  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  sink_file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>)</span>
 
-<span class='fu'>sim_eDNA_lmer</span>(
-  <span class='no'>formula</span>,
-  <span class='no'>variable_list</span>,
-  <span class='no'>betas</span>,
-  <span class='no'>sigma_Cq</span>,
-  <span class='no'>sigma_rand</span>,
-  <span class='no'>std_curve_alpha</span>,
-  <span class='no'>std_curve_beta</span>,
-  <span class='kw'>n_sim</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>upper_Cq</span> <span class='kw'>=</span> <span class='fl'>40</span>,
-  <span class='kw'>prob_zero</span> <span class='kw'>=</span> <span class='fl'>0.08</span>,
-  <span class='kw'>X</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span>(<span class='no'>variable_list</span>),
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>sink_file</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span>()
-)</pre>
+<span class='fu'>sim_eDNA_lmer</span><span class='op'>(</span>
+  <span class='va'>formula</span>,
+  <span class='va'>variable_list</span>,
+  <span class='va'>betas</span>,
+  <span class='va'>sigma_ln_eDNA</span>,
+  <span class='va'>sigma_rand</span>,
+  <span class='va'>std_curve_alpha</span>,
+  <span class='va'>std_curve_beta</span>,
+  n_sim <span class='op'>=</span> <span class='fl'>1L</span>,
+  upper_Cq <span class='op'>=</span> <span class='fl'>40</span>,
+  prob_zero <span class='op'>=</span> <span class='fl'>0.08</span>,
+  X <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span><span class='op'>(</span><span class='va'>variable_list</span><span class='op'>)</span>,
+  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  sink_file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -196,8 +199,8 @@ are ignored.</p></td>
 design matrix</p></td>
     </tr>
     <tr>
-      <th>sigma_Cq</th>
-      <td><p>numeric, the measurement error on CQ.</p></td>
+      <th>sigma_ln_eDNA</th>
+      <td><p>numeric, the measurement error on ln[eDNA].</p></td>
     </tr>
     <tr>
       <th>std_curve_alpha</th>
@@ -255,17 +258,22 @@ effects. There must be one sigma per random effect specified</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>S4 object of class "eDNA_simulation_lm/lmer" with the
-    following slots:</p><dl'>
+    following slots:</p><dl>
 <dt>ln_conc matrix</dt><dd><p>the
-    simulated log(concentration)</p></dd> <dt>Cq_star matrix</dt><dd><p>the
+    simulated log(concentration)</p></dd>
+<dt>Cq_star matrix</dt><dd><p>the
     simulated CQ values, including the measurement error</p></dd>
-    <dt>formula</dt><dd><p>the formula for the simulation</p></dd>
-    <dt>variable_levels</dt><dd><p>named list, the variable levels used
-    for the simulation</p></dd> <dt>betas</dt><dd><p>numeric vector, the betas for
-    the simulation</p></dd> <dt>x</dt><dd><p>data.frame, the design matrix</p></dd>
-    <dt>std_curve_alpha numeric</dt><dd><p>the alpha for the std curve
-    conversion</p></dd> <dt>std_curve_beta numeric</dt><dd><p>the alpha for the
-    std curve conversion</p></dd> <dt>upper_Cq</dt><dd><p>the upper limit for CQ</p></dd>
+<dt>formula</dt><dd><p>the formula for the simulation</p></dd>
+<dt>variable_levels</dt><dd><p>named list, the variable levels used
+    for the simulation</p></dd>
+<dt>betas</dt><dd><p>numeric vector, the betas for
+    the simulation</p></dd>
+<dt>x</dt><dd><p>data.frame, the design matrix</p></dd>
+<dt>std_curve_alpha numeric</dt><dd><p>the alpha for the std curve
+    conversion</p></dd>
+<dt>std_curve_beta numeric</dt><dd><p>the alpha for the
+    std curve conversion</p></dd>
+<dt>upper_Cq</dt><dd><p>the upper limit for CQ</p></dd>
     
 </dl>
 
@@ -305,31 +313,35 @@ important that you use the same conversion between Cq values and
 log[eDNA concentration] as the comparison data.</p></li>
 </ol>
 
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Matt Espe</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 
 <span class='co'>## Includes extra variables</span>
-<span class='no'>vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>Intercept</span> <span class='kw'>=</span> -<span class='fl'>10.6</span>,
-            <span class='kw'>distance</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>15</span>, <span class='fl'>50</span>),
-            <span class='kw'>volume</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>25</span>, <span class='fl'>50</span>),
-            <span class='kw'>biomass</span> <span class='kw'>=</span> <span class='fl'>100</span>,
-            <span class='kw'>alive</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-            <span class='kw'>tech_rep</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>10</span>,
-            <span class='kw'>rep</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>Cq</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+<span class='va'>vars</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>Intercept <span class='op'>=</span> <span class='op'>-</span><span class='fl'>10.6</span>,
+            distance <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>15</span>, <span class='fl'>50</span><span class='op'>)</span>,
+            volume <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>25</span>, <span class='fl'>50</span><span class='op'>)</span>,
+            biomass <span class='op'>=</span> <span class='fl'>100</span>,
+            alive <span class='op'>=</span> <span class='fl'>1</span>,
+            tech_rep <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>,
+            rep <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>, Cq <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
 
 <span class='co'>## Intercept only</span>
-<span class='no'>ans</span> <span class='kw'>=</span> <span class='fu'>sim_eDNA_lm</span>(<span class='no'>Cq</span> ~ <span class='fl'>1</span>, <span class='no'>vars</span>,
-                      <span class='kw'>betas</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>intercept</span> <span class='kw'>=</span> -<span class='fl'>15</span>),
-                      <span class='kw'>sigma_Cq</span> <span class='kw'>=</span> <span class='fl'>1e-5</span>,
-                      <span class='kw'>std_curve_alpha</span> <span class='kw'>=</span> <span class='fl'>21.2</span>, <span class='kw'>std_curve_beta</span> <span class='kw'>=</span> -<span class='fl'>1.5</span>)
+<span class='va'>ans</span> <span class='op'>=</span> <span class='fu'>sim_eDNA_lm</span><span class='op'>(</span><span class='va'>Cq</span> <span class='op'>~</span> <span class='fl'>1</span>, <span class='va'>vars</span>,
+                      betas <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>intercept <span class='op'>=</span> <span class='op'>-</span><span class='fl'>15</span><span class='op'>)</span>,
+                      sigma_ln_eDNA <span class='op'>=</span> <span class='fl'>1e-5</span>,
+                      std_curve_alpha <span class='op'>=</span> <span class='fl'>21.2</span>, std_curve_beta <span class='op'>=</span> <span class='op'>-</span><span class='fl'>1.5</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>ans</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>ans</span><span class='op'>)</span>
 
-<span class='no'>ans</span> <span class='kw'>=</span> <span class='fu'>sim_eDNA_lm</span>(<span class='no'>Cq</span> ~ <span class='no'>distance</span> + <span class='no'>volume</span>, <span class='no'>vars</span>,
-                  <span class='kw'>betas</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>intercept</span> <span class='kw'>=</span> -<span class='fl'>10.6</span>, <span class='kw'>distance</span> <span class='kw'>=</span> -<span class='fl'>0.05</span>, <span class='kw'>volume</span> <span class='kw'>=</span> <span class='fl'>0.1</span>),
-                  <span class='kw'>sigma_Cq</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>std_curve_alpha</span> <span class='kw'>=</span> <span class='fl'>21.2</span>, <span class='kw'>std_curve_beta</span> <span class='kw'>=</span> -<span class='fl'>1.5</span>)
-}</div></pre>
+<span class='va'>ans</span> <span class='op'>=</span> <span class='fu'>sim_eDNA_lm</span><span class='op'>(</span><span class='va'>Cq</span> <span class='op'>~</span> <span class='va'>distance</span> <span class='op'>+</span> <span class='va'>volume</span>, <span class='va'>vars</span>,
+                  betas <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>intercept <span class='op'>=</span> <span class='op'>-</span><span class='fl'>10.6</span>, distance <span class='op'>=</span> <span class='op'>-</span><span class='fl'>0.05</span>, volume <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span>,
+                  sigma_ln_eDNA <span class='op'>=</span> <span class='fl'>1</span>, std_curve_alpha <span class='op'>=</span> <span class='fl'>21.2</span>, std_curve_beta <span class='op'>=</span> <span class='op'>-</span><span class='fl'>1.5</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -345,7 +357,7 @@ log[eDNA concentration] as the comparison data.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

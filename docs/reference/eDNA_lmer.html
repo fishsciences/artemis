@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">artemis</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.14.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.18.2</span>
       </span>
     </div>
 
@@ -88,7 +88,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -110,6 +110,9 @@
     </li>
     <li>
       <a href="../articles/modeling.html">Modeling eDNA qPCR Data with `artemis`</a>
+    </li>
+    <li>
+      <a href="../articles/modeling_advice.html">Modeling Advice</a>
     </li>
     <li>
       <a href="../articles/simulation.html">Simulating eDNA Data with `artemis`</a>
@@ -141,33 +144,53 @@
     <p>Fit eDNA model</p>
     </div>
 
-    <pre class="usage"><span class='fu'>eDNA_lm</span>(
-  <span class='no'>formula</span>,
-  <span class='no'>data</span>,
-  <span class='no'>std_curve_alpha</span>,
-  <span class='no'>std_curve_beta</span>,
-  <span class='kw'>upper_Cq</span> <span class='kw'>=</span> <span class='fl'>40</span>,
-  <span class='kw'>QR</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>probability_zero</span> <span class='kw'>=</span> <span class='fl'>0.08</span>,
-  <span class='kw'>prior_intercept</span> <span class='kw'>=</span> <span class='fu'><a href='normal.html'>normal</a></span>(<span class='kw'>location</span> <span class='kw'>=</span> -<span class='fl'>15</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>10</span>),
-  <span class='kw'>priors</span> <span class='kw'>=</span> <span class='fu'><a href='normal.html'>normal</a></span>(),
-  <span class='kw'>Cq_error_type</span> <span class='kw'>=</span> <span class='st'>"fixed"</span>,
-  <span class='no'>...</span>
-)
+    <pre class="usage"><span class='fu'>eDNA_lm</span><span class='op'>(</span>
+  <span class='va'>formula</span>,
+  <span class='va'>data</span>,
+  <span class='va'>std_curve_alpha</span>,
+  <span class='va'>std_curve_beta</span>,
+  upper_Cq <span class='op'>=</span> <span class='fl'>40</span>,
+  prior_intercept <span class='op'>=</span> <span class='fu'><a href='normal.html'>normal</a></span><span class='op'>(</span>location <span class='op'>=</span> <span class='op'>-</span><span class='fl'>15</span>, scale <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>,
+  priors <span class='op'>=</span> <span class='fu'><a href='normal.html'>normal</a></span><span class='op'>(</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
 
-<span class='fu'>eDNA_lmer</span>(
-  <span class='no'>formula</span>,
-  <span class='no'>data</span>,
-  <span class='no'>std_curve_alpha</span>,
-  <span class='no'>std_curve_beta</span>,
-  <span class='kw'>upper_Cq</span> <span class='kw'>=</span> <span class='fl'>40</span>,
-  <span class='kw'>QR</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>probability_zero</span> <span class='kw'>=</span> <span class='fl'>0.08</span>,
-  <span class='kw'>prior_intercept</span> <span class='kw'>=</span> <span class='fu'><a href='normal.html'>normal</a></span>(<span class='kw'>location</span> <span class='kw'>=</span> -<span class='fl'>15</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>10</span>),
-  <span class='kw'>priors</span> <span class='kw'>=</span> <span class='fu'><a href='normal.html'>normal</a></span>(),
-  <span class='kw'>Cq_error_type</span> <span class='kw'>=</span> <span class='st'>"fixed"</span>,
-  <span class='no'>...</span>
-)</pre>
+<span class='fu'>eDNA_lmer</span><span class='op'>(</span>
+  <span class='va'>formula</span>,
+  <span class='va'>data</span>,
+  <span class='va'>std_curve_alpha</span>,
+  <span class='va'>std_curve_beta</span>,
+  upper_Cq <span class='op'>=</span> <span class='fl'>40</span>,
+  prior_intercept <span class='op'>=</span> <span class='fu'><a href='normal.html'>normal</a></span><span class='op'>(</span>location <span class='op'>=</span> <span class='op'>-</span><span class='fl'>15</span>, scale <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>,
+  priors <span class='op'>=</span> <span class='fu'><a href='normal.html'>normal</a></span><span class='op'>(</span><span class='op'>)</span>,
+  prior_random_variance <span class='op'>=</span> <span class='fu'><a href='normal.html'>exponential</a></span><span class='op'>(</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
+
+<span class='fu'>eDNA_zinf_lm</span><span class='op'>(</span>
+  <span class='va'>formula</span>,
+  <span class='va'>data</span>,
+  <span class='va'>std_curve_alpha</span>,
+  <span class='va'>std_curve_beta</span>,
+  upper_Cq <span class='op'>=</span> <span class='fl'>40</span>,
+  probability_zero <span class='op'>=</span> <span class='fl'>0.08</span>,
+  prior_intercept <span class='op'>=</span> <span class='fu'><a href='normal.html'>normal</a></span><span class='op'>(</span>location <span class='op'>=</span> <span class='op'>-</span><span class='fl'>15</span>, scale <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>,
+  priors <span class='op'>=</span> <span class='fu'><a href='normal.html'>normal</a></span><span class='op'>(</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
+
+<span class='fu'>eDNA_zinf_lmer</span><span class='op'>(</span>
+  <span class='va'>formula</span>,
+  <span class='va'>data</span>,
+  <span class='va'>std_curve_alpha</span>,
+  <span class='va'>std_curve_beta</span>,
+  upper_Cq <span class='op'>=</span> <span class='fl'>40</span>,
+  probability_zero <span class='op'>=</span> <span class='fl'>0.08</span>,
+  prior_intercept <span class='op'>=</span> <span class='fu'><a href='normal.html'>normal</a></span><span class='op'>(</span>location <span class='op'>=</span> <span class='op'>-</span><span class='fl'>15</span>, scale <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>,
+  priors <span class='op'>=</span> <span class='fu'><a href='normal.html'>normal</a></span><span class='op'>(</span><span class='op'>)</span>,
+  prior_random_variance <span class='op'>=</span> <span class='fu'><a href='normal.html'>exponential</a></span><span class='op'>(</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -198,21 +221,6 @@ value of log(concentration) which would result in a value
 greater than this limit is instead recorded as the limit.</p></td>
     </tr>
     <tr>
-      <th>QR</th>
-      <td><p>logical, use the QR decomposition. Typically more
-efficient when informative priors are not used. When TRUE, the
-priors are ignored and a standard normal prior is used on
-theta, the parameters estimates on the QR decomposed model
-matrix.</p></td>
-    </tr>
-    <tr>
-      <th>probability_zero</th>
-      <td><p>numeric, between 0 and 1. The probability
-of a non-detection from a source other than low concentration
-of eDNA, e.g. a filter failure. Defaults to 8<!-- % (0.08), which -->
-was the estimated p(zero) from a daily sampling experiment.</p></td>
-    </tr>
-    <tr>
       <th>prior_intercept</th>
       <td><p>named list such as created by
 <code><a href='https://mc-stan.org/rstanarm/reference/priors.html'>rstanarm::normal</a></code>. The list must contain elements named
@@ -232,40 +240,46 @@ scaled by the sd of the predictors similar to rstanarm handles
 them.</p></td>
     </tr>
     <tr>
-      <th>Cq_error_type</th>
-      <td><p>either "fixed" or "varying", specifying if
-measurement error is assumed to be the same for all values of
-CQ, or if it increases or decreases as CQ increases.</p></td>
-    </tr>
-    <tr>
       <th>...</th>
       <td><p>additional arguments passed to
 <code><a href='https://mc-stan.org/rstan/reference/stanmodel-method-sampling.html'>sampling</a></code></p></td>
+    </tr>
+    <tr>
+      <th>prior_random_variance</th>
+      <td><p>the prior on variance of the random
+effects. Defaults to exponential distribution with rate 1.</p></td>
+    </tr>
+    <tr>
+      <th>probability_zero</th>
+      <td><p>numeric, between 0 and 1. The probability
+of a non-detection from a source other than low concentration
+of eDNA, e.g. a filter failure. Defaults to 8<!-- % (0.08), which -->
+was the estimated p(zero) from a daily sampling experiment.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>S4 object, with the following slots:</p><dl'>
+    <p>S4 object, with the following slots:</p><dl>
   <dt>ln_conc</dt><dd><p>matrix, the posterior samples for the latent
     variable, eDNA concentration</p></dd>
-  <dt>Cq_star</dt><dd><p>matrix, the
+<dt>Cq_star</dt><dd><p>matrix, the
     posterior prediction for the observed response</p></dd>
-  <dt>betas</dt><dd><p>array, the posterior estimates for the betas for
+<dt>betas</dt><dd><p>array, the posterior estimates for the betas for
     the linear model</p></dd>
-  <dt>sigma_Cq</dt><dd><p>array, the posterior
-    estimates for the measurement error of CQ</p></dd>
-  <dt>formula</dt><dd><p>formula, the original formula used in the
+<dt>sigma_ln_eDNA</dt><dd><p>array, the posterior
+    estimates for the measurement error of ln_eDNA</p></dd>
+<dt>formula</dt><dd><p>formula, the original formula used in the
     model</p></dd>
-  <dt>x</dt><dd><p>data.frame, the model matrix used in the
+<dt>x</dt><dd><p>data.frame, the model matrix used in the
     model</p></dd>
-  <dt>std_curve_alpha</dt><dd><p>numeric, the std. curve value
+<dt>std_curve_alpha</dt><dd><p>numeric, the std. curve value
     used</p></dd>
-  <dt>std_curve_beta</dt><dd><p>numeric, the std. curve value
+<dt>std_curve_beta</dt><dd><p>numeric, the std. curve value
     used</p></dd>
-  <dt>upper_Cq</dt><dd><p>numeric, the upper limit for observed CQ
+<dt>upper_Cq</dt><dd><p>numeric, the upper limit for observed CQ
     used</p></dd>
-  <dt>stanfit</dt><dd><p>stanfit, the original results from
+<dt>stanfit</dt><dd><p>stanfit, the original results from
     <code><a href='https://mc-stan.org/rstan/reference/stanmodel-method-sampling.html'>rstan::sampling</a></code></p></dd> 
 </dl>
 
@@ -277,15 +291,17 @@ particular characteristics that justify using a specialized
 model. More details on these characteristics and the model
 structure, please refer to the "Getting Started" vignette for the
 artemis package.</p>
-<p>There are two different modeling functions in the artemis package,
-<code>eDNA_lm</code> and <code>eDNA_lmer</code>. <code>eDNA_lm</code> is for fitting
-a fixed effects model, while <code>eDNA_lmer</code> is for fitting a
-mixed or random effects model. Both models are fit using the
-<code><a href='https://mc-stan.org/rstan/reference/stanmodel-method-sampling.html'>rstan::sampling</a></code> function, which uses a Hamiltonian Monte
-Carlo algorithm to estimate parameters for the model. Users are
-encouraged to refer to the documentation for Stan and RStan at
-<a href='https://mc-stan.org/users/documentation/'>https://mc-stan.org/users/documentation/</a> for details about
-how models are fit.</p>
+<p>There are four different modeling functions in the artemis
+package, <code>eDNA_lm</code>, <code>eDNA_lmer</code>, <code>eDNA_zinf_lm</code>,
+<code>eDNA_zinf_lmer</code>.  <code>eDNA_lm</code> is for fitting a fixed
+effects model, while <code>eDNA_lmer</code> is for fitting a mixed or
+random effects model. The *_zinf versions implement a
+zero-inflated version of their respective lm function. All models
+are fit using the <code><a href='https://mc-stan.org/rstan/reference/stanmodel-method-sampling.html'>rstan::sampling</a></code> function, which uses a
+Hamiltonian Monte Carlo algorithm to estimate parameters for the
+model. Users are encouraged to refer to the documentation for Stan
+and RStan at <a href='https://mc-stan.org/users/documentation/'>https://mc-stan.org/users/documentation/</a> for
+details about how models are fit.</p>
     <h2 class="hasAnchor" id="diagnosing-warning-and-error-messages"><a class="anchor" href="#diagnosing-warning-and-error-messages"></a>Diagnosing warning and error messages</h2>
 
     
@@ -294,28 +310,33 @@ how models are fit.</p>
 <p>The models have been written in Stan with key focus on robustness
 and speed. However, it is possible that users might encounter
 issues. Typically, these issues will be highlighted by warning
-messages, which will be displayed regardless of the value of
-<code>verbose</code>. Often times, these warnings can be resolved by
-increasing the number of iterations that the HMC algorithm runs by
-specifying <code>iters</code> to be a larger value. This should be the
-first action attempted, as increasing the <code>iters</code> increases
-both the warm-up and sampling iterations. If users continue to
-have issues, additional control arguments can be passed to
-<code><a href='https://mc-stan.org/rstan/reference/stanmodel-method-sampling.html'>rstan::sampling</a></code> via the <code>...</code> argument.</p>
+messages coming from <code><a href='https://mc-stan.org/rstan/reference/stanmodel-method-sampling.html'>rstan::sampling</a></code>. Often times, these
+warnings can be resolved by increasing the number of iterations
+that the HMC algorithm runs by specifying <code>iters</code> to be a
+larger value. This should be the first action attempted, as
+increasing the <code>iters</code> increases both the warm-up and
+sampling iterations. If users continue to have issues, additional
+control arguments can be passed to <code><a href='https://mc-stan.org/rstan/reference/stanmodel-method-sampling.html'>rstan::sampling</a></code> via the
+<code>...</code> argument.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Matt Espe</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 
 <span class='co'>## Fixed effect model</span>
-<span class='no'>ans</span> <span class='kw'>=</span> <span class='fu'>eDNA_lm</span>(<span class='no'>Cq</span> ~ <span class='no'>Distance</span>, <span class='no'>eDNA_data</span>,
-              <span class='kw'>std_curve_alpha</span> <span class='kw'>=</span> <span class='fl'>21.2</span>, <span class='kw'>std_curve_beta</span> <span class='kw'>=</span> -<span class='fl'>1.5</span>)
+<span class='va'>ans</span> <span class='op'>=</span> <span class='fu'>eDNA_lm</span><span class='op'>(</span><span class='va'>Cq</span> <span class='op'>~</span> <span class='va'>Distance_m</span>, <span class='va'>eDNA_data</span>,
+              std_curve_alpha <span class='op'>=</span> <span class='fl'>21.2</span>, std_curve_beta <span class='op'>=</span> <span class='op'>-</span><span class='fl'>1.5</span><span class='op'>)</span>
 
 <span class='co'>## Mixed-effect model</span>
 <span class='co'>## This takes a while to run</span>
-<span class='no'>ans2</span> <span class='kw'>=</span> <span class='fu'>eDNA_lmer</span>(<span class='no'>Cq</span> ~ <span class='no'>Distance</span> + (<span class='fl'>1</span><span class='kw'>|</span><span class='no'>SampleID</span>), <span class='no'>eDNA_data</span>,
-                 <span class='kw'>std_curve_alpha</span> <span class='kw'>=</span> <span class='fl'>21.2</span>, <span class='kw'>std_curve_beta</span> <span class='kw'>=</span> -<span class='fl'>1.5</span>)
+<span class='va'>ans2</span> <span class='op'>=</span> <span class='fu'>eDNA_lmer</span><span class='op'>(</span><span class='va'>Cq</span> <span class='op'>~</span> <span class='va'>Distance_m</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span><span class='op'>|</span><span class='va'>SampleID</span><span class='op'>)</span>, <span class='va'>eDNA_data</span>,
+                 std_curve_alpha <span class='op'>=</span> <span class='fl'>21.2</span>, std_curve_beta <span class='op'>=</span> <span class='op'>-</span><span class='fl'>1.5</span><span class='op'>)</span>
 
-}</div></pre>
+<span class='op'>}</span>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -331,7 +352,7 @@ have issues, additional control arguments can be passed to
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

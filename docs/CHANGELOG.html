@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">artemis</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.14.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.18.2</span>
       </span>
     </div>
 
@@ -87,7 +87,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -109,6 +109,9 @@
     </li>
     <li>
       <a href="articles/modeling.html">Modeling eDNA qPCR Data with `artemis`</a>
+    </li>
+    <li>
+      <a href="articles/modeling_advice.html">Modeling Advice</a>
     </li>
     <li>
       <a href="articles/simulation.html">Simulating eDNA Data with `artemis`</a>
@@ -141,7 +144,37 @@
 <div id="beta" class="section level1">
 <h1 class="hasAnchor">
 <a href="#beta" class="anchor"></a>Beta</h1>
-<p>WARNING: Any versions here are still under active developement, and will change in ways that will likely break your existing code. Until formal release v1.0.0, do not expect stability!</p>
+<p>WARNING: Any versions here are still under active development, and will change in ways that will likely break your existing code. Until formal release v1.0.0, do not expect stability!</p>
+<div id="v0181" class="section level2">
+<h2 class="hasAnchor">
+<a href="#v0181" class="anchor"></a>v0.18.1</h2>
+<p>Adds check to prevent running model functions with NA values in the response. Normally, these values are dropped silently by <code>model.frame</code> or <code>lFormula</code>, but for our purposes this can create issues due to mismatches between the standard curve parameters and the model matrix. We decide to force conscious removal by the user.</p>
+</div>
+<div id="v0180" class="section level2">
+<h2 class="hasAnchor">
+<a href="#v0180" class="anchor"></a>v0.18.0</h2>
+<p>Changes the eDNA_data and data documentation to match what is in Espe et al. 2021 (in press). Data has completely changed; column names, where applicable, are the same. Year column is no longer present.</p>
+</div>
+<div id="v0170" class="section level2">
+<h2 class="hasAnchor">
+<a href="#v0170" class="anchor"></a>v0.17.0</h2>
+<p>Moves the main development branch back to using the <code>rstan</code> backend for running the models. This was done because <code>cmdstanr</code> is not yet on CRAN, and we cannot have a strong dependency on a github package if <code>artemis</code> is to be on CRAN.</p>
+</div>
+<div id="v0160" class="section level2">
+<h2 class="hasAnchor">
+<a href="#v0160" class="anchor"></a>v0.16.0</h2>
+<p>Changed model and functions to apply the measurement error on ln(eDNA) rather than on Cq. This is because when there are multiple standard curves in use, effectively there will also be multiple sigma_Cqs. This is atypical for a regression model, where the residual error is assumed to be I.I.D. Changing the error to apply to the ln(eDNA) avoids this, as the observations are on the same scale.</p>
+</div>
+<div id="v0150" class="section level2">
+<h2 class="hasAnchor">
+<a href="#v0150" class="anchor"></a>v0.15.0</h2>
+<p>Refactored the model code to make increase clarity and readability. This might reduce model performance slightly, but should make the code easier to maintain.</p>
+<p>Separated the zero-inflated models into their own Stan models and associated R functions. This should will force users to explicitely specify that they want the zero-inflated model. When this model does not fit well, it should be clearer.</p>
+</div>
+<div id="v0140" class="section level2">
+<h2 class="hasAnchor">
+<a href="#v0140" class="anchor"></a>v0.14.0</h2>
+</div>
 <div id="v0130" class="section level2">
 <h2 class="hasAnchor">
 <a href="#v0130" class="anchor"></a>v0.13.0</h2>
@@ -201,7 +234,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
