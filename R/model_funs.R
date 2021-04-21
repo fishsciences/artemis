@@ -267,10 +267,10 @@ get_mod_funs = function(model_type)
                 stop("Unknown model type")),
     
     gen_fun = switch(model_type,
-                     lm = quote(artemis:::gen_model_list_lm),
-                     lmer = quote(artemis:::gen_model_list_lmer),
-                     zero_inf_lm = quote(artemis:::gen_model_list_lm),
-                     zero_inf_lmer = quote(artemis:::gen_model_list_lmer)),
+                     lm = quote(gen_model_list_lm),
+                     lmer = quote(gen_model_list_lmer),
+                     zero_inf_lm = quote(gen_model_list_lm),
+                     zero_inf_lmer = quote(gen_model_list_lmer)),
     
     prep_fun = switch(model_type,
                       lm = prep_data.lm,
