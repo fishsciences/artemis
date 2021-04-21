@@ -113,7 +113,7 @@ which:
 
 ## Installing `artemis` 
 
-The `artemis` installation guide can be found [here]("https://fishsciences.github.io/artemis/articles/artemis-installation-guide.html").
+The `artemis` installation guide can be found [here](https://fishsciences.github.io/artemis/articles/artemis-installation-guide.html).
 
 
 ## A note on included sample data

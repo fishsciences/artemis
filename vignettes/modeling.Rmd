@@ -24,9 +24,8 @@ library(artemis)
 
 A primary purpose of the `artemis` package is to facilitate modeling of qPCR data from eDNA samples.  It does this via two functions: `eDNA_lm()` for fixed effects models and `eDNA_lmer()` for mixed effects models.
 
-The underlying [Stan](https://mc-stan.org) models are compiled the
-first time the models are used. Thereafter, the models will not need
-to be re-compiled. The model's Stan code can be found in the `artemis` source code [here](https://github.com/fishsciences/artemis/tree/master/inst/stan_files). 
+The underlying [Stan](https://mc-stan.org) models are compiled on install. Thereafter, the models will not need
+to be re-compiled. The model's Stan code can be found in the `artemis` source code [here](https://github.com/fishsciences/artemis/tree/main/inst/stan). 
 
 ## Model Inputs
 
