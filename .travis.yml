@@ -11,6 +11,8 @@ cache: packages
 # - loo
 # - lme4
 # - rmarkdown
+# - StanHeaders
+# - Rccp
 
 r_github_packages: stan-dev/cmdstanr
 
