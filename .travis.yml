@@ -28,8 +28,7 @@ before_script:
 - Rscript -e "install.packages(c('StanHeaders', 'Rccp', 'lme4', 'ggplot2', 'rstan', 'loo', 'rstantools','devtools', 'rmarkdown'))"
 
 script:
-  - |
-    R CMD build .
+  - R CMD build .
 	travis_wait 20 R CMD check artemis*.tar.gz
 
 warnings_are_errors: false	
