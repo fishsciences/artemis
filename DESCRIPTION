@@ -1,6 +1,6 @@
 Package: artemis
 Title: Analysis and Simulation of eDNA Experiments
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: c(person(given = "Matt", family = "Espe",
 		   role = c("aut", "cre", "ctr"),
 		   email = "mespe@ucdavis.edu"),
@@ -8,7 +8,7 @@ Authors@R: c(person(given = "Matt", family = "Espe",
 		   role = c("aut"),
 		   email = "myfanwy.johnston@fishsciences.net"))
 Maintainer: Matt Espe <mespe@ucdavis.edu>
-Description: The design and analysis of experiments collecting eDNA.
+Description: Provides a modeling framework for the design and analysis of experiments collecting environmental DNA (eDNA).
 License: GPL (>=3)
 Depends: 
     methods,
@@ -21,7 +21,6 @@ Imports:
     Rcpp (>= 1.0.1),
 	rstan (>= 2.19.0),
 	lme4 (>= 1.1.21),
-    RcppParallel (>= 5.0.1),
     rstantools (>= 2.1.1),
     utils
 Encoding: UTF-8
@@ -33,6 +32,7 @@ Suggests:
     testthat,
     knitr,
     rmarkdown,
+	markdown,
     covr
 VignetteBuilder: knitr
 Biarch: true
