@@ -23,7 +23,7 @@ install:
 - travis_wait 
 
 before_script:
-- Rscript -e "install.packages(c('lme4', 'ggplot2', 'rstan', 'loo', 'rstantools','devtools', 'rmarkdown'))"
+- Rscript -e "install.packages(c('StanHeaders', 'Rccp', 'lme4', 'ggplot2', 'rstan', 'loo', 'rstantools','devtools', 'rmarkdown'))"
 
 script:
   - |
