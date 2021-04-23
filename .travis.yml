@@ -3,20 +3,19 @@
 language: r
 cache: packages
 
-# r_packages:
-# - devtools
-# - ggplot2
-# - rstan
-# - rstantools
-# - loo
-# - lme4
-# - rmarkdown
-# - StanHeaders
-# - Rccp
+r_packages:
+- devtools
+- ggplot2
+- StanHeaders
+- Rccp
+- rstan
+- rstantools
+- loo
+- lme4
+- rmarkdown
+- covr
 
 # r_github_packages: stan-dev/cmdstanr
-
-r_packages: covr, StanHeaders, Rccp, rstan, rstantools, lme4, ggplot2, loo, devtools, rmarkdown
 
 before_install:
 - sudo apt-get -y install libv8-dev
