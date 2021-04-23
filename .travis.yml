@@ -14,22 +14,21 @@ cache: packages
 # - StanHeaders
 # - Rccp
 
-r_github_packages: stan-dev/cmdstanr
+# r_github_packages: stan-dev/cmdstanr
 
-r_packages: covr
+r_packages: covr, StanHeaders, Rccp, rstan, rstantools, lme4, ggplot2, loo, devtools, rmarkdown
 
 before_install:
 - sudo apt-get -y install libv8-dev
 
-install:
-- travis_wait 
+#install:
+#- travis_wait 
 
-before_script:
-- Rscript -e "install.packages(c('StanHeaders', 'Rccp', 'lme4', 'ggplot2', 'rstan', 'loo', 'rstantools','devtools', 'rmarkdown'))"
+#before_script:
+#- Rscript -e "install.packages(c('StanHeaders', 'Rccp', 'lme4', 'ggplot2', 'rstan', 'loo', 'rstantools','devtools', 'rmarkdown'))"
 
-script:
-  - R CMD build .
-	travis_wait 20 R CMD check artemis*.tar.gz
+#script:
+#- R CMD build . travis_wait 20 R CMD check artemis*.tar.gz
 
 warnings_are_errors: false	
 
