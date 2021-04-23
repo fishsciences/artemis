@@ -7,7 +7,6 @@ r_packages:
 - devtools
 - ggplot2
 - StanHeaders
-- Rccp
 - rstan
 - rstantools
 - loo
