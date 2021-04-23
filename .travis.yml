@@ -19,8 +19,8 @@ r_packages:
 before_install:
 - sudo apt-get -y install libv8-dev
 
-#install:
-#- travis_wait 
+install:
+- travis_wait 
 
 #before_script:
 #- Rscript -e "install.packages(c('StanHeaders', 'Rccp', 'lme4', 'ggplot2', 'rstan', 'loo', 'rstantools','devtools', 'rmarkdown'))"
@@ -31,4 +31,4 @@ before_install:
 warnings_are_errors: false	
 
 after_success:
-- Rscript -e 'library(covr); codecov()'
+- travis_wait 20 Rscript -e 'library(covr); codecov()'
