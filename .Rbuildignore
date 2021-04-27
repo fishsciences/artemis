@@ -14,5 +14,5 @@ inst/stan/eDNA_omni$
 inst/stan/eDNA_sim_omni$
 inst/stan/*.o$
 inst/stan/*.hpp$
-src/*.*
+#src/*.*
 CHANGELOG.md
