@@ -75,13 +75,10 @@ predict.eDNA_model_lmer = function(object, newdata = NULL,
     return(ans)
 }
 
-form_newdata = function(object, newdata)
+form_newdata = function(object, newdata, fm = object@formula)
 {
-    fm = object@formula
-    # remove response
-    fm = fm[-2]
-    # remove random effects
-    fm = fm[!is_rand_eff(fm)]
+    fm = formula(delete.response(terms(fm)))
+    fm = nobars(fm)
     model.frame(fm, newdata)
 }
 

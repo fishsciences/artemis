@@ -20,7 +20,7 @@
 #' @import loo
 #' @importFrom stats model.matrix model.response model.frame pnorm quantile rnorm terms sd
 #' @importFrom graphics lines segments plot
-#' @importFrom lme4 lFormula ranef
+#' @importFrom lme4 lFormula ranef nobars
 #' @importFrom loo loo waic extract_log_lik
 #' @importFrom rstan sampling extract
 #' @importFrom rstantools posterior_interval
