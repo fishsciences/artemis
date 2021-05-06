@@ -18,7 +18,7 @@
 #' @import methods
 #' @import ggplot2
 #' @import loo
-#' @importFrom stats model.matrix model.response model.frame pnorm quantile rnorm terms sd
+#' @importFrom stats model.matrix model.response model.frame pnorm quantile rnorm terms sd delete.response formula
 #' @importFrom graphics lines segments plot
 #' @importFrom lme4 lFormula ranef nobars
 #' @importFrom loo loo waic extract_log_lik

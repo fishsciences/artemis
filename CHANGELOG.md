@@ -1,5 +1,15 @@
 # artemis: ChangeLog
 
+# v1.0
+
+## 1.0.4
+
+Fixed issue with predict methods when random effects are present in
+the formula.
+
+## 1.0.0-3
+
+Various fixes to reduce NOTES for CRAN submission.
 
 # Beta
 

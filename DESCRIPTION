@@ -2,12 +2,11 @@ Package: artemis
 Title: Analysis and Simulation of Environmental DNA Experiments
 Version: 1.0.4
 Authors@R: c(person(given = "Matt", family = "Espe",
-		   role = c("aut", "cre", "ctr"),
+		   role = c("aut", "cre"),
 		   email = "mespe@ucdavis.edu"),
 		   person(given = "Myfanwy", family = "Johnston",
 		   role = c("aut"),
 		   email = "myfanwy.johnston@fishsciences.net"))
-Maintainer: Matt Espe <mespe@ucdavis.edu>
 Description: Provides a modeling framework for the design and analysis of experiments collecting environmental DNA.
 License: GPL (>=3)
 Depends: 
