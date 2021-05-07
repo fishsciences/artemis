@@ -51,8 +51,7 @@ library(artemis)
 model_fit = eDNA_lm(Cq ~ Distance + Volume + Distance*Volume, 
                     data = eDNA_data,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                    iter = 300, n_chain = 2,
-                    verbose = TRUE)
+                    iter = 300, n_chain = 2)
 
 model_fit2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID),
                        eDNA_data,

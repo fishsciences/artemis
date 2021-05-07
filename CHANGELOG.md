@@ -2,6 +2,10 @@
 
 # v1.0
 
+## 1.0.5
+
+Addresses review comments from CRAN.
+
 ## 1.0.4
 
 Fixed issue with predict methods when random effects are present in

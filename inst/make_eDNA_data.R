@@ -5,7 +5,7 @@
 # updated Thu Apr 15 12:41:09 2021 ------------------------------
 #--------------------------------------------#
 #--------------------------------------------#
-
+if(FALSE){
 d = rbind(elaphos::cvp01, elaphos::cvp02)
 # Need standard curve
 i = match(d$StdCrvID, elaphos::StdCrvKey$StdCrvID)
@@ -88,4 +88,5 @@ unique(smd$Date)
 # ggplot(eDNA_samples) +
 #   geom_jitter(aes(x = Distance, y = Cq, color = factor(Volume)))
 
+}
 }

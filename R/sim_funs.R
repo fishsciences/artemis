@@ -12,8 +12,7 @@ sim_eDNA_lm = function(formula, variable_list,
                        upper_Cq = 40,
                        prob_zero = 0.08,
                        X = expand.grid(variable_list),
-                       verbose = FALSE,
-                       sink_file = tempfile())
+                       verbose = FALSE)
 {
     if(!has_response(formula))
         stop("Please provide a dummy response variable for simulations")
@@ -113,9 +112,6 @@ sim_eDNA_lm = function(formula, variable_list,
 ##'     unbalanced design matrix.
 ##' @param verbose logical, when TRUE output from
 ##'     \code{rstan::sampling} is written to the console.
-##' @param sink_file character, a file to write the console output to
-##'     if \code{verbose = FALSE}, by default writes to
-##'     \code{tempfile()}
 ##' @return S4 object of class "eDNA_simulation_{lm/lmer}" with the
 ##'     following slots:
 ##' \describe{
@@ -138,7 +134,6 @@ sim_eDNA_lm = function(formula, variable_list,
 ##' 
 ##' @author Matt Espe
 ##' @examples
-##' \dontrun{
 ##' 
 ##' ## Includes extra variables
 ##' vars = list(Intercept = -10.6,
@@ -160,7 +155,6 @@ sim_eDNA_lm = function(formula, variable_list,
 ##' ans = sim_eDNA_lm(Cq ~ distance + volume, vars,
 ##'                   betas = c(intercept = -10.6, distance = -0.05, volume = 0.1),
 ##'                   sigma_ln_eDNA = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
-##' }
 ##' @export
 sim_eDNA_lmer = function(formula, variable_list,
                          betas, sigma_ln_eDNA,
@@ -170,7 +164,7 @@ sim_eDNA_lmer = function(formula, variable_list,
                          upper_Cq = 40,
                          prob_zero = 0.08,
                          X = expand.grid(variable_list),
-                         verbose = FALSE, sink_file = tempfile())
+                         verbose = FALSE)
 {
     if(!has_response(formula))
         stop("Please provide a dummy response variable for simulations")

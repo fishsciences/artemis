@@ -113,12 +113,12 @@ eDNA_lm = function(formula, data,
 ##' @author Matt Espe
 ##'
 ##' @examples
-##' \dontrun{
 ##' 
 ##' ## Fixed effect model
 ##' ans = eDNA_lm(Cq ~ Distance_m, eDNA_data,
 ##'               std_curve_alpha = 21.2, std_curve_beta = -1.5)
 ##'
+##' \donttest{
 ##' ## Mixed-effect model
 ##' ## This takes a while to run
 ##' ans2 = eDNA_lmer(Cq ~ Distance_m + (1|SampleID), eDNA_data,
