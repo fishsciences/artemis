@@ -121,7 +121,7 @@ eDNA_lm = function(formula, data,
 ##' \donttest{
 ##' ## Mixed-effect model
 ##' ## This takes a while to run
-##' ans2 = eDNA_lmer(Cq ~ Distance_m + (1|SampleID), eDNA_data,
+##' ans2 = eDNA_lmer(Cq ~ Distance_m + (1|FilterID), eDNA_data,
 ##'                  std_curve_alpha = 21.2, std_curve_beta = -1.5)
 ##'
 ##' }
