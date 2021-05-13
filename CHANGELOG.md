@@ -2,6 +2,10 @@
 
 # v1.0
 
+## 1.0.6
+
+Fixes missing import for rstan::plot
+
 ## 1.0.5
 
 Addresses review comments from CRAN.
