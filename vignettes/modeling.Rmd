@@ -20,6 +20,8 @@ knitr::opts_chunk$set(
 library(artemis)
 ```
 
+(Adapted from manuscript Espe et al, in preparation)
+
 # Introduction
 
 A primary purpose of the `artemis` package is to facilitate modeling of qPCR data from eDNA samples.  It does this via two functions: `eDNA_lm()` for fixed effects models and `eDNA_lmer()` for mixed effects models.
