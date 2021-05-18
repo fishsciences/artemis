@@ -18,25 +18,12 @@ knitr::opts_chunk$set(
 ```
 
 <br>
-The easiest way to install `artemis` is from one of the pre-compiled binaries on the `artemis` [releases page](https://github.com/fishsciences/artemis/releases).  Install package dependencies (first line below), then run the line below that applies to your particular platform. 
+The easiest way to install `artemis` is from [CRAN](https://cran.r-project.org/web/packages/artemis/index.html) with the `install.packages` function:
 
 
 ```{r, eval=FALSE, include=TRUE}
-# install dependencies
-install.packages(c("StanHeaders", "Rcpp", "rstan", "rstantools", "ggplot2", "lme4"))
 
-##-- MacOSX --##
-install.packages("https://github.com/fishsciences/artemis/releases/download/v0.14.0/MacOS-artemis_0.14.0.tar.gz",
-                 repos = NULL)
-
-##-- LINUX --##
-install.packages("https://github.com/fishsciences/artemis/releases/download/v0.14.0/artemis_0.14.0_R_x86_64-pc-linux-gnu.tar.gz", 
-                 repos = NULL)
-
-##-- Windows --#
-install.packages("https://github.com/fishsciences/artemis/releases/download/v0.14.0/artemis_0.14.0.zip", 
-                 repos = NULL)
-
+install.packages("artemis")
 
 ```
 <br>
@@ -48,12 +35,11 @@ If your installation of `artemis` and its dependencies was successful, the follo
 ```{r, eval=FALSE}
 library(artemis)
 
-model_fit = eDNA_lm(Cq ~ Distance + Volume + Distance*Volume, 
+model_fit = eDNA_lm(Cq ~ Distance_m + Volume_mL + Distance_m*Volume_mL, 
                     data = eDNA_data,
-                    std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                    iter = 300, n_chain = 2)
+                    std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
-model_fit2 = eDNA_lmer(Cq ~ Distance + Volume + (1|SampleID),
+model_fit2 = eDNA_lmer(Cq ~ scale(Distance_m) + scale(Volume_mL) + (1|FilterID),
                        eDNA_data,
                        std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
