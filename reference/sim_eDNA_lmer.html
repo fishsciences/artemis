@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">artemis</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.18.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.6</span>
       </span>
     </div>
 
@@ -155,8 +155,7 @@
   upper_Cq <span class='op'>=</span> <span class='fl'>40</span>,
   prob_zero <span class='op'>=</span> <span class='fl'>0.08</span>,
   X <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span><span class='op'>(</span><span class='va'>variable_list</span><span class='op'>)</span>,
-  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  sink_file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span><span class='op'>(</span><span class='op'>)</span>
+  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span>
 
 <span class='fu'>sim_eDNA_lmer</span><span class='op'>(</span>
@@ -171,8 +170,7 @@
   upper_Cq <span class='op'>=</span> <span class='fl'>40</span>,
   prob_zero <span class='op'>=</span> <span class='fl'>0.08</span>,
   X <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span><span class='op'>(</span><span class='va'>variable_list</span><span class='op'>)</span>,
-  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  sink_file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span><span class='op'>(</span><span class='op'>)</span>
+  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -241,12 +239,6 @@ unbalanced design matrix.</p></td>
       <th>verbose</th>
       <td><p>logical, when TRUE output from
 <code><a href='https://mc-stan.org/rstan/reference/stanmodel-method-sampling.html'>rstan::sampling</a></code> is written to the console.</p></td>
-    </tr>
-    <tr>
-      <th>sink_file</th>
-      <td><p>character, a file to write the console output to
-if <code>verbose = FALSE</code>, by default writes to
-<code><a href='https://rdrr.io/r/base/tempfile.html'>tempfile()</a></code></p></td>
     </tr>
     <tr>
       <th>sigma_rand</th>
@@ -318,8 +310,7 @@ log[eDNA concentration] as the comparison data.</p></li>
     <p>Matt Espe</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-
+    <pre class="examples"><div class='input'>
 <span class='co'>## Includes extra variables</span>
 <span class='va'>vars</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>Intercept <span class='op'>=</span> <span class='op'>-</span><span class='fl'>10.6</span>,
             distance <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>15</span>, <span class='fl'>50</span><span class='op'>)</span>,
@@ -334,14 +325,35 @@ log[eDNA concentration] as the comparison data.</p></li>
                       betas <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>intercept <span class='op'>=</span> <span class='op'>-</span><span class='fl'>15</span><span class='op'>)</span>,
                       sigma_ln_eDNA <span class='op'>=</span> <span class='fl'>1e-5</span>,
                       std_curve_alpha <span class='op'>=</span> <span class='fl'>21.2</span>, std_curve_beta <span class='op'>=</span> <span class='op'>-</span><span class='fl'>1.5</span><span class='op'>)</span>
-
+</div><div class='output co'>#&gt; Chain 1: 
+#&gt; Chain 1:  Elapsed Time: 0 seconds (Warm-up)
+#&gt; Chain 1:                5.1e-05 seconds (Sampling)
+#&gt; Chain 1:                5.1e-05 seconds (Total)
+#&gt; Chain 1: </div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>ans</span><span class='op'>)</span>
-
+</div><div class='output co'>#&gt; 
+#&gt; formula: Cq ~ 1
+#&gt; &lt;environment: 0x116a92be0&gt;
+#&gt; 
+#&gt; Standard curve parameters: Cq = alpha + beta * log(concentration)
+#&gt; 	Standard curve alpha =  21.2 
+#&gt; 	Standard curve beta =  -1.5 
+#&gt; 
+#&gt;  ln concentration: 
+#&gt;  variable level      2.5% 50%     97.5% mean p_detect
+#&gt;        V1     1 -15.00002 -15 -14.99998  -15       NA
+#&gt; 
+#&gt;  simulated Cq: 
+#&gt;  variable level 2.5% 50% 97.5% mean p_detect
+#&gt;        V1     1   40  40    40   40        0</div><div class='input'>
 <span class='va'>ans</span> <span class='op'>=</span> <span class='fu'>sim_eDNA_lm</span><span class='op'>(</span><span class='va'>Cq</span> <span class='op'>~</span> <span class='va'>distance</span> <span class='op'>+</span> <span class='va'>volume</span>, <span class='va'>vars</span>,
                   betas <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>intercept <span class='op'>=</span> <span class='op'>-</span><span class='fl'>10.6</span>, distance <span class='op'>=</span> <span class='op'>-</span><span class='fl'>0.05</span>, volume <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span>,
                   sigma_ln_eDNA <span class='op'>=</span> <span class='fl'>1</span>, std_curve_alpha <span class='op'>=</span> <span class='fl'>21.2</span>, std_curve_beta <span class='op'>=</span> <span class='op'>-</span><span class='fl'>1.5</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div></pre>
+</div><div class='output co'>#&gt; Chain 1: 
+#&gt; Chain 1:  Elapsed Time: 0 seconds (Warm-up)
+#&gt; Chain 1:                4.4e-05 seconds (Sampling)
+#&gt; Chain 1:                4.4e-05 seconds (Total)
+#&gt; Chain 1: </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -353,7 +365,7 @@ log[eDNA concentration] as the comparison data.</p></li>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Myfanwy Johnston, Matt Espe.</p>
+  <p>Developed by Matt Espe, Myfanwy Johnston.</p>
 </div>
 
 <div class="pkgdown">
