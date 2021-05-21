@@ -35,7 +35,7 @@ If your installation of `artemis` and its dependencies was successful, the follo
 ```{r, eval=FALSE}
 library(artemis)
 
-model_fit = eDNA_lm(Cq ~ Distance_m + Volume_mL + Distance_m*Volume_mL, 
+model_fit = eDNA_lm(Cq ~ scale(Distance_m) + scale(Volume_mL), 
                     data = eDNA_data,
                     std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
@@ -50,6 +50,6 @@ model_fit2 = eDNA_lmer(Cq ~ scale(Distance_m) + scale(Volume_mL) + (1|FilterID),
 
 Installing `artemis` from source on Windows is not currently well-supported; we recommend installing from the pre-compiled binary if you're on Windows.  If you're on MacOS or Linux and you prefer to install from source, then go ahead and do that with your function/utility of choice (`devtools::install_github()`, `utils::install.packages(type = "source")`, `R CMD INSTALL`, etc.).  
 <br>
-If you have sub-architecture you're really in to customizing, the source code is [here](https://github.com/fishsciences/artemis/releases), go nuts.
+If you have sub-architecture you're really in to customizing, the source code is [here](https://github.com/fishsciences/artemis), go nuts.
 
 <br>
