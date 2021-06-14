@@ -4,7 +4,8 @@
 
 ## 1.0.6
 
-Fixes missing import for rstan::plot
+Fixes missing import for rstan::plot. Moves/removes vignette material
+to make the vignettes more streamlined.
 
 ## 1.0.5
 
