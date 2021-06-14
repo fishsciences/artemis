@@ -1,5 +1,5 @@
 ---
-title: "ARTEMIS Installation Guide"
+title: "artemis Installation Guide"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{ARTEMIS Installation Guide}
@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 ```
 
 <br>
-The easiest way to install `artemis` is from [CRAN](https://cran.r-project.org/web/packages/artemis/index.html) with the `install.packages` function:
+The easiest way to install `artemis` is from [CRAN](https://cran.r-project.org/package=artemis) with the `install.packages` function:
 
 
 ```{r, eval=FALSE, include=TRUE}
