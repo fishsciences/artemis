@@ -22,19 +22,13 @@ data {
 }
 
 transformed data {
-  matrix[N_obs, K] Q_ast_obs;
-  matrix[K, K] R_ast_obs;
-  matrix[K, K] R_ast_inverse_obs;
-  matrix[N_cens, K] Q_ast_cens;
-  matrix[K, K] R_ast_cens;
-  matrix[K, K] R_ast_inverse_cens;
+  matrix[N_obs + N_cens, K] Q_ast;
+  matrix[K, K] R_ast;
+  matrix[K, K] R_ast_inverse;
   // thin and scale the QR decomposition
-  Q_ast_obs = qr_thin_Q(X_obs) * sqrt(N_obs - 1);
-  R_ast_obs = qr_thin_R(X_obs) / sqrt(N_obs - 1);
-  R_ast_inverse_obs = inverse(R_ast_obs);
-  Q_ast_cens = qr_thin_Q(X_cens) * sqrt(N_cens - 1);
-  R_ast_cens = qr_thin_R(X_cens) / sqrt(N_cens - 1);
-  R_ast_inverse_cens = inverse(R_ast_cens);
+  Q_ast = qr_thin_Q(append_row(X_obs, X_cens)) * sqrt((N_obs+N_cens) - 1);
+  R_ast = qr_thin_R(append_row(X_obs, X_cens)) / sqrt((N_obs+N_cens) - 1);
+  R_ast_inverse = inverse(R_ast);
 }
 parameters {
   real intercept[has_inter ? 1 : 0];
@@ -44,14 +38,14 @@ parameters {
 
 transformed parameters {
   vector[K] betas;
-  betas = R_ast_inverse_obs * thetas; // coefficients on x
+  betas = R_ast_inverse * thetas; // coefficients on x
 }
 
 model {
-  vector[N_obs] mu_obs = (K ? Q_ast_obs * thetas : rep_vector(0.0, N_obs)) +
+  vector[N_obs + N_cens] mu_all = (K ? Q_ast * thetas : rep_vector(0.0, N_obs + N_cens)) +
 	(has_inter ? intercept[1] : 0.0);
-  vector[N_cens] mu_cens = (K ? Q_ast_cens * thetas : rep_vector(0.0, N_cens)) +
-	(has_inter ? intercept[1] : 0.0);
+  vector[N_obs] mu_obs = mu_all[1:N_obs];
+  vector[N_cens] mu_cens = mu_all[(N_obs+1):];
 
   // priors
   intercept ~ normal(prior_int_mu, prior_int_sd);
