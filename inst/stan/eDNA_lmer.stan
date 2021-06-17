@@ -29,19 +29,43 @@ data {
   int<lower=0,upper=1> has_inter;
 }
 
+transformed data {
+  matrix[N_obs, K] Q_ast_obs;
+  matrix[K, K] R_ast_obs;
+  matrix[K, K] R_ast_inverse_obs;
+  matrix[N_cens, K] Q_ast_cens;
+  matrix[K, K] R_ast_cens;
+  matrix[K, K] R_ast_inverse_cens;
+  
+  // thin and scale the QR decomposition
+  Q_ast_obs = qr_thin_Q(X_obs) * sqrt(N_obs - 1);
+  R_ast_obs = qr_thin_R(X_obs) / sqrt(N_obs - 1);
+  R_ast_inverse_obs = inverse(R_ast_obs);
+  Q_ast_cens = qr_thin_Q(X_cens) * sqrt(N_cens - 1);
+  R_ast_cens = qr_thin_R(X_cens) / sqrt(N_cens - 1);
+  R_ast_inverse_cens = inverse(R_ast_cens);
+}
+
 parameters {
   real intercept[has_inter ? 1 : 0];
-  vector[K] betas;
+  vector[K] thetas; // coefficients on Q_ast
   vector[K_r] rand_betas;
   vector<lower=0>[N_grp] rand_sigma;
   real<lower=0> sigma_ln_eDNA;
 }
 
+transformed parameters {
+  vector[K] betas;
+  betas = R_ast_inverse_obs * thetas; // coefficients on x
+}
+
 model {
-  /* vector[N_obs] mu_obs = intercept + X_obs * betas; */
-  vector[N_cens] mu_cens = append_col(X_cens, X_cens_r) *
-	append_row(betas, rand_betas) +
-	(has_inter ? intercept[1] : 0.0);
+  vector[N_obs] mu_obs = (K ? Q_ast_obs * thetas : rep_vector(0.0, N_obs)) +
+    (X_obs_r * rand_betas) + 
+    (has_inter ? intercept[1] : 0.0);
+  vector[N_cens] mu_cens = (K ? Q_ast_cens * thetas : rep_vector(0.0, N_cens)) +
+    (X_cens_r * rand_betas) + 
+    (has_inter ? intercept[1] : 0.0);
 
   // priors
   intercept ~ normal(prior_int_mu, prior_int_sd);
@@ -53,30 +77,27 @@ model {
   for(k in 1:K_r)
 	rand_betas[k] ~ normal(0, rand_sigma[group[k]]);
   
-  sigma_ln_eDNA ~ exponential(1);
+  sigma_ln_eDNA ~ exponential(rand_sd);
   
-  y_obs ~ normal_id_glm(append_col(X_obs, X_obs_r),
-						has_inter ? intercept[1] : 0.0,
-						append_row(betas, rand_betas),
-						sigma_ln_eDNA);
+  target += normal_lpdf(y_obs | mu_obs, sigma_ln_eDNA);
   target += normal_lcdf(L | mu_cens, sigma_ln_eDNA);
 }
 
 generated quantities{
   vector[N_obs + N_cens] log_lik;
   {
-	matrix[N_obs, K + K_r] X_obs_tmp = append_col(X_obs, X_obs_r);
- 	matrix[N_cens, K + K_r] X_cens_tmp = append_col(X_cens, X_cens_r);
-	vector[K+K_r] betas_tmp = append_row(betas, rand_betas);
-	
-  for(n in 1:N_obs){
-	
-	log_lik[n] = normal_lpdf(y_obs[n] | (has_inter ? intercept[1] : 0.0) +
-							 X_obs_tmp[n] * betas_tmp, sigma_ln_eDNA);
-  }
-  for(n in 1:N_cens){
-	log_lik[n+N_obs] = normal_lcdf(L[n] | (has_inter ? intercept[1] : 0) +
-								   X_cens_tmp[n] * betas_tmp, sigma_ln_eDNA);
-  }
+    matrix[N_obs, K + K_r] X_obs_tmp = append_col(X_obs, X_obs_r);
+    matrix[N_cens, K + K_r] X_cens_tmp = append_col(X_cens, X_cens_r);
+    vector[K+K_r] betas_tmp = append_row(betas, rand_betas);
+    
+    for(n in 1:N_obs){
+      
+      log_lik[n] = normal_lpdf(y_obs[n] | (has_inter ? intercept[1] : 0.0) +
+			       X_obs_tmp[n] * betas_tmp, sigma_ln_eDNA);
+    }
+    for(n in 1:N_cens){
+      log_lik[n+N_obs] = normal_lcdf(L[n] | (has_inter ? intercept[1] : 0) +
+				     X_cens_tmp[n] * betas_tmp, sigma_ln_eDNA);
+    }
   }
 }
