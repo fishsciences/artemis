@@ -33,28 +33,36 @@ transformed data {
   matrix[N_obs + N_cens, K] Q_ast;
   matrix[K, K] R_ast;
   matrix[K, K] R_ast_inverse;
+  matrix[N_obs + N_cens, K_r] Q_ast_r;
+  matrix[K_r, K_r] R_ast_r;
+  matrix[K_r, K_r] R_ast_inverse_r;
   // thin and scale the QR decomposition
   Q_ast = qr_thin_Q(append_row(X_obs, X_cens)) * sqrt((N_obs+N_cens) - 1);
   R_ast = qr_thin_R(append_row(X_obs, X_cens)) / sqrt((N_obs+N_cens) - 1);
   R_ast_inverse = inverse(R_ast);
+  Q_ast_r = qr_thin_Q(append_row(X_obs_r, X_cens_r)) * sqrt((N_obs+N_cens) - 1);
+  R_ast_r = qr_thin_R(append_row(X_obs_r, X_cens_r)) / sqrt((N_obs+N_cens) - 1);
+  R_ast_inverse_r = inverse(R_ast_r);
 }
 
 parameters {
   real intercept[has_inter ? 1 : 0];
   vector[K] thetas; // coefficients on Q_ast
-  vector[K_r] rand_betas;
+  vector[K_r] rand_thetas;
   vector<lower=0>[N_grp] rand_sigma;
   real<lower=0> sigma_ln_eDNA;
 }
 
 transformed parameters {
   vector[K] betas;
+  vector[K_r] rand_betas;
   betas = R_ast_inverse * thetas; // coefficients on x
+  rand_betas = R_ast_inverse_r * rand_thetas; // coefficients on x
 }
 
 model {
   vector[N_obs + N_cens] mu_all = (K ? Q_ast * thetas : rep_vector(0.0, N_obs + N_cens)) +
-	(append_row(X_obs_r, X_cens_r) * rand_betas) +
+	(Q_ast_r * rand_thetas) +
 	(has_inter ? intercept[1] : 0.0);
   vector[N_obs] mu_obs = mu_all[1:N_obs];
   vector[N_cens] mu_cens = mu_all[(N_obs+1):];
