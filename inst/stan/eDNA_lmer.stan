@@ -65,14 +65,14 @@ model {
 
   // priors
   intercept ~ normal(prior_int_mu, prior_int_sd);
-  rand_sigma ~ gamma(2, 0);
+  rand_sigma ~ gamma(2, 0.1);
   
   for(k in 1:K)
 	betas[k] ~ normal(prior_mu[k], prior_sd[k]);
 
   rand_betas_raw ~ std_normal();
   
-  sigma_ln_eDNA ~ exponential(rand_sd);
+  sigma_ln_eDNA ~ exponential(1);
   
   target += normal_lpdf(y_obs | mu_obs, sigma_ln_eDNA);
   target += normal_lcdf(L | mu_cens, sigma_ln_eDNA);
