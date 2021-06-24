@@ -1,6 +1,21 @@
 /*
   New, simplified model
  */
+functions{
+  int num_nonzero(matrix m){
+	int n_row = rows(m);
+	int n_col = cols(m);
+	int ans = 0;
+
+	for(i in 1:n_row)
+	  for(j in 1:n_col)
+		if(m[i,j] > 0)
+		  ans += 1;
+	
+	return ans;
+  }
+
+}
 
 data {
   int<lower=0> N_obs;
@@ -30,15 +45,23 @@ data {
 }
 
 transformed data {
+  // QR decomp
   matrix[N_obs + N_cens, K] Q_ast;
   matrix[K, K] R_ast;
   matrix[K, K] R_ast_inverse;
+
+  // Random effect X to sparse mat for efficiency
+  matrix[N_obs+N_cens, K_r] X_r_all = append_row(X_obs_r, X_cens_r);
+  int n_nonzero = num_nonzero(X_r_all);
+  vector[n_nonzero] w = csr_extract_w(X_r_all);
+  int v[n_nonzero] = csr_extract_v(X_r_all);
+  int u[N_obs+N_cens+1] = csr_extract_u(X_r_all);
+  
   // thin and scale the QR decomposition
   Q_ast = qr_thin_Q(append_row(X_obs, X_cens)) * sqrt((N_obs+N_cens) - 1);
   R_ast = qr_thin_R(append_row(X_obs, X_cens)) / sqrt((N_obs+N_cens) - 1);
   R_ast_inverse = inverse(R_ast);
 }
-
 parameters {
   real intercept[has_inter ? 1 : 0];
   vector[K] thetas; // coefficients on Q_ast
@@ -58,7 +81,8 @@ transformed parameters {
 model {
   vector[N_obs + N_cens] mu_all =
 	(K ? Q_ast * thetas : rep_vector(0.0, N_obs + N_cens)) +
-	(append_row(X_obs_r, X_cens_r) * rand_betas) +
+	csr_matrix_times_vector(N_obs+N_cens, K_r, w, v, u, rand_betas) +
+  /* (append_row(X_obs_r, X_cens_r) * rand_betas) + */
 	(has_inter ? intercept[1] : 0.0);
   vector[N_obs] mu_obs = mu_all[1:N_obs];
   vector[N_cens] mu_cens = mu_all[(N_obs+1):];
