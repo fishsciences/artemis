@@ -60,9 +60,9 @@ eDNA_lm = function(formula, data,
 ##' @param formula a formula, specifying the relationship between the
 ##'     predictors and the latent variable eDNA concentration.
 ##' @param data data.frame, with the response and predictors
-##' @param std_curve_alpha the alpha value for the formula for
+##' @param std_curve_alpha the alpha (intercept) value for the formula for
 ##'     converting between log(eDNA concentration) and CQ value
-##' @param std_curve_beta the beta value for the formula for
+##' @param std_curve_beta the beta (slope) value for the formula for
 ##'     converting between log(eDNA concentration) and CQ value
 ##' @param upper_Cq numeric, the upper limit on CQ detection. Any
 ##'     value of log(concentration) which would result in a value
@@ -102,9 +102,9 @@ eDNA_lm = function(formula, data,
 ##'     model}
 ##' \item{x}{data.frame, the model matrix used in the
 ##'     model}
-##' \item{std_curve_alpha}{numeric, the std. curve value
+##' \item{std_curve_alpha}{numeric, the std. curve intercept value
 ##'     used}
-##' \item{std_curve_beta}{numeric, the std. curve value
+##' \item{std_curve_beta}{numeric, the std. curve slope value
 ##'     used}
 ##' \item{upper_Cq}{numeric, the upper limit for observed CQ
 ##'     used}
