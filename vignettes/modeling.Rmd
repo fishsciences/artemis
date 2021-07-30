@@ -20,25 +20,22 @@ knitr::opts_chunk$set(
 library(artemis)
 ```
 
-(Adapted from manuscript Espe et al, in preparation)
+(Adapted from manuscript Espe et al, in review)
 
 # Introduction
 
-A primary purpose of the `artemis` package is to facilitate modeling of qPCR data from eDNA samples.  It does this via two functions: `eDNA_lm()` for fixed effects models and `eDNA_lmer()` for mixed effects models.
-
-The underlying [Stan](https://mc-stan.org) models are compiled on install. Thereafter, the models will not need
-to be re-compiled. The model's Stan code can be found in the `artemis` source code [here](https://github.com/fishsciences/artemis/tree/main/inst/stan). 
+A primary purpose of the `artemis` package is to facilitate modeling of qPCR data from eDNA samples.  It does this via two modeling functions: `eDNA_lm()` for fixed effects models and `eDNA_lmer()` for mixed effects models. These functions mirror the semantics of R's built in `lm()` and lme4's `lmer()`.
 
 ## Model Inputs
 
-Both modeling functions require the following inputs:
+Both modeling functions require the following inputs from the data:
 
-1. A vector of numeric Cq values (one for each qPCR replicate). Cq values corresponding to non-detections for your assay should be recorded as the threshold value (the default is 40.0 cycles).
+1. A vector of numeric Cq values (quantification cycles), one for each qPCR replicate. Cq values corresponding to non-detections for your assay should be recorded as the threshold value (the default is 40.0 cycles).
 
 2. The intercept value $\alpha$ and the slope value $\beta$ from a
    standard curve equation associated with the qPCR analysis. This is
    used to convert the observed Cq values to the corresponding log
-   concentration of eDNA.
+   concentration of eDNA. This conversion occurs internally.
 
 An example of qPCR data in the correct format for modeling with `artemis` can be viewed by calling `eDNA_data`, which is a `data.frame` with Cq values from live car experiments completed in the California Sacramento-San Joaquin Delta with Delta Smelt:
 
@@ -47,12 +44,28 @@ head(eDNA_data)
 str(eDNA_data)
 ```
 
+Note that there are no variable levels with missing or `NA` values in
+these example data. However if there were `NA` values in the input
+data set, any rows with `NA`s in the data will be dropped when the
+data is prepped for modeling.  This is because Stan models cannot not
+take `NA` values. Although `NA` values will be automatically dropped
+from the data prior to modeling, we recommend removing `NA` value
+prior to modeling. This allows inspection and potentially correction
+of the rows with `NA` values. For example, 
 
-Note that there are no variable levels with missing or `NA` values - Stan models do not take `NA` values, and any rows with `NA`s in the data will be dropped in the construction of the model matrix when the data is prepped for modeling.
+```{r eval = FALSE}
+na_vals = !complete.cases(eDNA_data)
+eDNA_data[na_vals,]
+```
 
 <br>
 
 # Fixed effects models with `eDNA_lm()`
+
+Fixed effects models are primarily used with completely randomized
+experiments without blocking variables. For most observational data or
+blocked experimental data, mixed effects models are likely more
+appropriate.
 
 To fit a fixed effects model to the sample `eDNA_data` where `Distance_m` is the only predictor, we give the function a model formula and the input data listed above:
 
@@ -64,17 +77,26 @@ model_fit = eDNA_lm(Cq ~ Distance_m,
 
 ```
 
+Notice that we provide the standard curve parameters
+(`std_curve_alpha` and `std_curve_beta` as separate arguments to the
+function. In cases where there are multiple standard curve parameters
+in use in the same dataset (e.g. using data from multiple labs or
+experiments), the standard curve parameters can each be given as
+vectors. These vectors must be the same length as the number of rows
+in the data. 
+
 <br>
 
 The model functions, similar to `lm()` in base R, will automatically
 add an intercept term. You can explicitly omit the intercept if you
-have a good reason for doing so.  Full control of the MCMC algorithm
-can be accomplished by adding these control arguments to the end of
-the `eDNA_lm*()` call, which then passes them on to
-`cmdstanr::model$sample()`. *Note: the arguments for the model follow
-the naming conventions for `cmdstan`, which differ from those used by
-`rstan`. Documentation of these arguments can be found
-[here](https://mc-stan.org/cmdstanr/reference/model-method-sample.html)*
+have a good reason for doing so. Please see `?lm` for a more full
+description of how to specify linear models in R.
+
+
+Full control of the MCMC algorithm can be accomplished by adding these
+control arguments to the end of the `eDNA_lm*()` call, which then
+passes them on to `rstan::sampling()`. Available arguments for MCMC
+control can be found in the help for `rstan::sampling`.
 
 For example,
 
@@ -90,27 +112,17 @@ model_fit = eDNA_lm(Cq ~ Distance_m,
 
 <br>
 
-<!-- By default, `artemis` suppresses the (often verbose) output from Stan, -->
-<!-- but users can (and should) enable it with `verbose = TRUE` when the model is sampling slowly or the -->
-<!-- output suggests the MCMC algorithm might not have converged, for example, -->
-
-<!-- ```{r warning = FALSE, eval=TRUE} -->
-<!-- model_fit = eDNA_lm(Cq ~ Distance + Volume + Distance*Volume,  -->
-<!--                     data = eDNA_data, -->
-<!--                     std_curve_alpha = 21.2, std_curve_beta = -1.5, -->
-<!--                     iter = 500,  -->
-<!--                     seed = 1234,  -->
-<!--                     n_chain = 1, # set to 1 for vignette; default is 4 -->
-<!--                     verbose = TRUE) -->
-<!-- ``` -->
-
-<!-- <br> -->
-
 # Mixed effects models with `eDNA_lmer()`
 
 <br>
 
-To fit a model with one or more random effect(s), use the `eDNA_lmer()` function. Random effects are specified using the same syntax as the `lme4` package, e.g. `(1|random effect)`:
+Random or mixed effects models are typically used when there are
+grouping factors which need to be accounted for in the model
+(e.g. blocking variables, subsamplings from a single filter, etc.). 
+
+To fit a model with one or more random effect(s), use the `eDNA_lmer()` function. Random effects are specified using the same syntax as the `lme4` package, e.g. `(1|random effect)`.
+
+For example, to specify a random effect for "Year",
 
 ```{r warning = FALSE, eval=FALSE}
 d = eDNA_data # create a copy to modify 
@@ -134,19 +146,27 @@ summary(model_fit)
 plot(model_fit, pars = c("intercept", "betas"))
 ```
 
+Additional arguments can be provided to the plot method, which are
+passed to `rstan::plot` methods for `stanfit` objects. More details
+are available via `?rstan::plot`.
+
 <br>
 
-Matching `lme4` convention, random effects are not included in the default `summary()` output.  You can view or plot the random effects estimates by subsetting the `stanfit` slot of the model object with `@`, and specifying the `random_betas` parameters with the `pars` argument:
+Matching `lme4` convention, random effects are not included in the
+default `summary()` output.  You can view a summary of the random
+effects with `ranef()`,
+
+
+```{r eval=FALSE}
+ranef(model_fit2)
+```
+
+or by subsetting the `stanfit` slot of the model object with `@`, and
+specifying the `random_betas` parameters with the `pars` argument:
 
 ```{r, eval=FALSE}
 rstan::summary(model_fit2@stanfit, pars = "rand_betas", probs = c(0.50, 0.025, 0.975))$summary
 plot(model_fit2, pars = "rand_betas")
-```
-
-Similar to `lme4`, there is a `ranef` method for `eDNA_model` objects
-
-```{r eval=FALSE}
-ranef(model_fit2)
 ```
 
 <br>
@@ -164,12 +184,17 @@ This is a collection of advice for modeling eDNA data with the
    estimate values, and this will be more efficient if the predictor
    values are not on vastly different scales. In general, the MCMC
    will be the most efficient when the predictors are roughly centered
-   at 0, and have sd of 1.
+   at 0, and have stdev of 1.
    
 2. Use priors: The default priors in `artemis` follow the conventions
    of the `rstanarm` package, and are weakly informative. When the
    data do not strongly inform the parameter estimates, the model fit
    can be improved by specifying stronger priors. 
+
+## Other information
+
+The underlying [Stan](https://mc-stan.org) models are compiled on install. Thereafter, the models will not need
+to be re-compiled. The model's Stan code can be found in the `artemis` source code [here](https://github.com/fishsciences/artemis/tree/main/inst/stan). 
 
 
 <br>
