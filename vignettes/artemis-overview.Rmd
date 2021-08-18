@@ -20,6 +20,7 @@ knitr::opts_chunk$set(
 ```{r setup, echo = FALSE, eval=TRUE, message=FALSE, warning=FALSE}
 library(artemis)
 ```
+(Adapted from manuscript Espe et al, in review)
 
 ## Background
 
@@ -156,7 +157,6 @@ p_detect = est_p_detect(variable_levels = c(Intercept = 1,
                         n_rep = 12:30)
 p_detect
 ```
-
 
 We can also plot this,
 
