@@ -36,6 +36,8 @@ Both modeling functions require the following inputs from the data:
    standard curve equation associated with the qPCR analysis. This is
    used to convert the observed Cq values to the corresponding log
    concentration of eDNA. This conversion occurs internally.
+   
+3. A threshold value of the most cycles which are attempted in qPCR (defaults to 40 cycles).
 
 An example of qPCR data in the correct format for modeling with `artemis` can be viewed by calling `eDNA_data`, which is a `data.frame` with Cq values from live car experiments completed in the California Sacramento-San Joaquin Delta with Delta Smelt:
 
@@ -49,13 +51,13 @@ these example data. However if there were `NA` values in the input
 data set, any rows with `NA`s in the data will be dropped when the
 data is prepped for modeling.  This is because Stan models cannot not
 take `NA` values. Although `NA` values will be automatically dropped
-from the data prior to modeling, we recommend removing `NA` value
-prior to modeling. This allows inspection and potentially correction
-of the rows with `NA` values. For example, 
+from the data prior to modeling, we recommend removing `NA` values as
+a separate step prior to modeling. This allows inspection and
+potentially correction of the rows with `NA` values. For example,
 
 ```{r eval = FALSE}
 na_vals = !complete.cases(eDNA_data)
-eDNA_data[na_vals,]
+eDNA_data[na_vals,] # visual inspection
 ```
 
 <br>
@@ -91,7 +93,6 @@ The model functions, similar to `lm()` in base R, will automatically
 add an intercept term. You can explicitly omit the intercept if you
 have a good reason for doing so. Please see `?lm` for a more full
 description of how to specify linear models in R.
-
 
 Full control of the MCMC algorithm can be accomplished by adding these
 control arguments to the end of the `eDNA_lm*()` call, which then
