@@ -26,9 +26,11 @@ transformed data {
   matrix[K, K] R_ast;
   matrix[K, K] R_ast_inverse;
   // thin and scale the QR decomposition
-  Q_ast = qr_thin_Q(append_row(X_obs, X_cens)) * sqrt((N_obs+N_cens) - 1);
-  R_ast = qr_thin_R(append_row(X_obs, X_cens)) / sqrt((N_obs+N_cens) - 1);
-  R_ast_inverse = inverse(R_ast);
+  if(K){
+	Q_ast = qr_thin_Q(append_row(X_obs, X_cens)) * sqrt((N_obs+N_cens) - 1);
+	R_ast = qr_thin_R(append_row(X_obs, X_cens)) / sqrt((N_obs+N_cens) - 1);
+	R_ast_inverse = inverse(R_ast);
+  }
 }
 parameters {
   real intercept[has_inter ? 1 : 0];
@@ -38,7 +40,8 @@ parameters {
 
 transformed parameters {
   vector[K] betas;
-  betas = R_ast_inverse * thetas; // coefficients on x
+  if(K)
+	betas = R_ast_inverse * thetas; // coefficients on x
 }
 
 model {
@@ -50,8 +53,9 @@ model {
   // priors
   intercept ~ normal(prior_int_mu, prior_int_sd);
 
-  for(k in 1:K)
-	betas[k] ~ normal(prior_mu[k], prior_sd[k]);
+  if(K)
+	for(k in 1:K)
+	  betas[k] ~ normal(prior_mu[k], prior_sd[k]);
 
   sigma_ln_eDNA ~ normal(0, 1);
   

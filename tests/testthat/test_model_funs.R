@@ -9,6 +9,21 @@ ans_prior = eDNA_lm(Cq ~ scale(Distance_m), eDNA_data,
               prior_intercept = normal(-8,1),
               priors = normal(0, 1))
 
+test_that("Intercept only", {
+
+    # Check that intercept only model will work - not inside test block, but should still throw error
+
+    m = eDNA_lm(Cq ~ 1, eDNA_data,
+                std_curve_alpha = 21.2, std_curve_beta = -1.5)
+
+    expect_is(m, "eDNA_model")
+    m = eDNA_lmer(Cq ~ 1 + (1|Distance_m), eDNA_data,
+                  std_curve_alpha = 21.2, std_curve_beta = -1.5)
+    expect_is(m, "eDNA_model")
+
+})
+
+
 test_that("Fit the model with simple data",{
     skip_on_cran()
     skip_on_travis()

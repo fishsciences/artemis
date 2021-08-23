@@ -56,11 +56,13 @@ transformed data {
   vector[n_nonzero] w = csr_extract_w(X_r_all);
   int v[n_nonzero] = csr_extract_v(X_r_all);
   int u[N_obs+N_cens+1] = csr_extract_u(X_r_all);
-  
-  // thin and scale the QR decomposition
-  Q_ast = qr_thin_Q(append_row(X_obs, X_cens)) * sqrt((N_obs+N_cens) - 1);
-  R_ast = qr_thin_R(append_row(X_obs, X_cens)) / sqrt((N_obs+N_cens) - 1);
-  R_ast_inverse = inverse(R_ast);
+
+  if(K){
+	// thin and scale the QR decomposition
+	Q_ast = qr_thin_Q(append_row(X_obs, X_cens)) * sqrt((N_obs+N_cens) - 1);
+	R_ast = qr_thin_R(append_row(X_obs, X_cens)) / sqrt((N_obs+N_cens) - 1);
+	R_ast_inverse = inverse(R_ast);
+  }
 }
 parameters {
   real intercept[has_inter ? 1 : 0];
@@ -73,7 +75,8 @@ parameters {
 transformed parameters {
   vector[K] betas;
   vector[K_r] rand_betas;
-  betas = R_ast_inverse * thetas; // coefficients on x
+  if(K)
+	betas = R_ast_inverse * thetas; // coefficients on x
   for(k in 1:K_r)
 	rand_betas[k] = rand_betas_raw[k] * rand_sigma[group[k]];
 }
@@ -90,9 +93,10 @@ model {
   // priors
   intercept ~ normal(prior_int_mu, prior_int_sd);
   rand_sigma ~ gamma(2, 0.1);
-  
-  for(k in 1:K)
-	betas[k] ~ normal(prior_mu[k], prior_sd[k]);
+
+  if(K)
+	for(k in 1:K)
+	  betas[k] ~ normal(prior_mu[k], prior_sd[k]);
 
   rand_betas_raw ~ std_normal();
   
