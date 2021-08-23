@@ -65,18 +65,23 @@ cq_to_lnconc = function(Cq_values, std_curve_alpha, std_curve_beta)
 ##'
 ##' Convenience function for converting values
 ##' @title Convert [eDNA] to Cq
-##' @param x [eDNA] values
+##' @param x log[eDNA] values
 ##' @param std_curve_alpha the alpha (intercept) value for the standard curve
 ##' @param std_curve_beta the beta (slope) value for the standard curve
 ##' @param upper_Cq the max Cq value
 ##' @return vector of Cq values
 ##' @author Matt Espe
 ##' @export
-lnconc_to_cq = function(x, std_curve_alpha,
-                        std_curve_beta, upper_Cq = 40)
+lnconc_to_cq = function(x,
+                        std_curve_alpha,
+                        std_curve_beta,
+                        censor = TRUE, upper_Cq = 40)
 
 {
-    ans = beta * log(x) + alpha
-    ans[ans > upper_Cq] = upper_Cq
+    ans = std_curve_beta * x +
+        std_curve_alpha
+    
+    if(censor)
+        ans[ans > upper_Cq] = upper_Cq
     ans
 }

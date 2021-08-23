@@ -20,3 +20,9 @@ test_that("Interval funs", {
 
 
 })
+
+test_that("Convenience conversion funs", {
+    expect_true(lnconc_to_cq(-10, 21, -1.5) == 36)
+    expect_true(cq_to_lnconc(36, 21, -1.5) == -10)
+
+    })
