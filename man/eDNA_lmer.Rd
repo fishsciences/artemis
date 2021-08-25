@@ -61,10 +61,10 @@ predictors and the latent variable eDNA concentration.}
 
 \item{data}{data.frame, with the response and predictors}
 
-\item{std_curve_alpha}{the alpha value for the formula for
+\item{std_curve_alpha}{the alpha (intercept) value for the formula for
 converting between log(eDNA concentration) and CQ value}
 
-\item{std_curve_beta}{the beta value for the formula for
+\item{std_curve_beta}{the beta (slope) value for the formula for
 converting between log(eDNA concentration) and CQ value}
 
 \item{upper_Cq}{numeric, the upper limit on CQ detection. Any
@@ -112,9 +112,9 @@ S4 object, with the following slots:
     model}
 \item{x}{data.frame, the model matrix used in the
     model}
-\item{std_curve_alpha}{numeric, the std. curve value
+\item{std_curve_alpha}{numeric, the std. curve intercept value
     used}
-\item{std_curve_beta}{numeric, the std. curve value
+\item{std_curve_beta}{numeric, the std. curve slope value
     used}
 \item{upper_Cq}{numeric, the upper limit for observed CQ
     used}

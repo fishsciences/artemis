@@ -4,14 +4,20 @@
 \alias{lnconc_to_cq}
 \title{Convert [eDNA] to Cq}
 \usage{
-lnconc_to_cq(x, std_curve_alpha, std_curve_beta, upper_Cq = 40)
+lnconc_to_cq(x, std_curve_alpha, std_curve_beta, censor = TRUE, upper_Cq = 40)
 }
 \arguments{
-\item{x}{[eDNA] values}
+\item{x}{log[eDNA] values}
 
-\item{std_curve_alpha}{the alpha value for the standard curve}
+\item{std_curve_alpha}{the alpha (intercept) value for the
+standard curve}
 
-\item{std_curve_beta}{the beta value for the standard curve}
+\item{std_curve_beta}{the beta (slope) value for the standard
+curve}
+
+\item{censor}{logical, whether Cq values larger than the upper_Cq
+should be censored. If TRUE, these any values above the
+threshold will be replaced with the upper_Cq value.}
 
 \item{upper_Cq}{the max Cq value}
 }

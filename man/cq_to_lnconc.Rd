@@ -9,9 +9,9 @@ cq_to_lnconc(Cq_values, std_curve_alpha, std_curve_beta)
 \arguments{
 \item{Cq_values}{numeric vector, value of CQ}
 
-\item{std_curve_alpha}{the alpha value for the standard curve}
+\item{std_curve_alpha}{the alpha (intercept) value for the standard curve}
 
-\item{std_curve_beta}{the beta value for the standard curve}
+\item{std_curve_beta}{the beta (slope) value for the standard curve}
 }
 \value{
 numeric vector, [eDNA] values
