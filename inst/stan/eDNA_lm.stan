@@ -68,10 +68,10 @@ generated quantities{
 
   for(n in 1:N_obs){
 	log_lik[n] = normal_lpdf(y_obs[n] | (has_inter ? intercept[1] : 0.0) +
-							 X_obs[n] * betas, sigma_ln_eDNA);
+				 (K ? X_obs[n] * betas : 0), sigma_ln_eDNA);
   }
   for(n in 1:N_cens){
 	log_lik[n+N_obs] = normal_lcdf(L[n] | (has_inter ? intercept[1] : 0) +
-								   X_cens[n] * betas, sigma_ln_eDNA);
+				       (K ? X_cens[n] * betas : 0), sigma_ln_eDNA);
   }
 }
