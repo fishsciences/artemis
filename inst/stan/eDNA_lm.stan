@@ -40,23 +40,25 @@ parameters {
 
 transformed parameters {
   vector[K] betas;
-  if(K)
-	betas = R_ast_inverse * thetas; // coefficients on x
+  if(K){
+    betas = R_ast_inverse * thetas; // coefficients on x
+  }
 }
 
 model {
   vector[N_obs + N_cens] mu_all = (K ? Q_ast * thetas : rep_vector(0.0, N_obs + N_cens)) +
-	(has_inter ? intercept[1] : 0.0);
+    (has_inter ? intercept[1] : 0.0);
   vector[N_obs] mu_obs = mu_all[1:N_obs];
   vector[N_cens] mu_cens = mu_all[(N_obs+1):];
-
+  
   // priors
   intercept ~ normal(prior_int_mu, prior_int_sd);
 
-  if(K)
-	for(k in 1:K)
-	  betas[k] ~ normal(prior_mu[k], prior_sd[k]);
-
+  if(K) {
+    for(k in 1:K)
+      betas[k] ~ normal(prior_mu[k], prior_sd[k]);
+  }
+  
   sigma_ln_eDNA ~ normal(0, 1);
   
   target += normal_lpdf(y_obs | mu_obs, sigma_ln_eDNA);
@@ -66,12 +68,16 @@ model {
 generated quantities{
   vector[N_obs + N_cens] log_lik;
 
-  for(n in 1:N_obs){
-	log_lik[n] = normal_lpdf(y_obs[n] | (has_inter ? intercept[1] : 0.0) +
-				 (K ? X_obs[n] * betas : 0), sigma_ln_eDNA);
+  if(N_obs){
+    for(n in 1:N_obs){
+      log_lik[n] = normal_lpdf(y_obs[n] | (has_inter ? intercept[1] : 0.0) +
+			       (K ? X_obs[n] * betas : 0), sigma_ln_eDNA);
+    }
   }
-  for(n in 1:N_cens){
-	log_lik[n+N_obs] = normal_lcdf(L[n] | (has_inter ? intercept[1] : 0) +
-				       (K ? X_cens[n] * betas : 0), sigma_ln_eDNA);
+  if(N_cens){
+    for(n in 1:N_cens){
+      log_lik[n+N_obs] = normal_lcdf(L[n] | (has_inter ? intercept[1] : 0) +
+				     (K ? X_cens[n] * betas : 0), sigma_ln_eDNA);
+    }
   }
 }

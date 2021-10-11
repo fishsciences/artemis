@@ -9,7 +9,7 @@ functions{
 
 	for(i in 1:n_row)
 	  for(j in 1:n_col)
-		if(m[i,j] > 0)
+		if(m[i , j] > 0)
 		  ans += 1;
 	
 	return ans;
@@ -27,7 +27,7 @@ data {
   vector[N_cens] L; // lower bound on ln[eDNA]
   //#include lm_data.stan // Play with this later
   // Random effects
-  int<lower=0> K_r;
+  int<lower=1> K_r; // must have at least one 
   int<lower=1> N_grp;
   int<lower=1,upper=N_grp> group[K_r];
   matrix[N_obs, K_r] X_obs_r;
@@ -75,8 +75,10 @@ parameters {
 transformed parameters {
   vector[K] betas;
   vector[K_r] rand_betas;
-  if(K)
+  if(K){
 	betas = R_ast_inverse * thetas; // coefficients on x
+  }
+  
   for(k in 1:K_r)
 	rand_betas[k] = rand_betas_raw[k] * rand_sigma[group[k]];
 }
@@ -94,10 +96,11 @@ model {
   intercept ~ normal(prior_int_mu, prior_int_sd);
   rand_sigma ~ gamma(2, 0.1);
 
-  if(K)
+  if(K) {
 	for(k in 1:K)
 	  betas[k] ~ normal(prior_mu[k], prior_sd[k]);
-
+  }
+  
   rand_betas_raw ~ std_normal();
   
   sigma_ln_eDNA ~ exponential(1);
@@ -112,15 +115,18 @@ generated quantities{
     matrix[N_obs, K + K_r] X_obs_tmp = append_col(X_obs, X_obs_r);
     matrix[N_cens, K + K_r] X_cens_tmp = append_col(X_cens, X_cens_r);
     vector[K+K_r] betas_tmp = append_row(betas, rand_betas);
-    
-    for(n in 1:N_obs){
-      
-      log_lik[n] = normal_lpdf(y_obs[n] | (has_inter ? intercept[1] : 0.0) +
-			       X_obs_tmp[n] * betas_tmp, sigma_ln_eDNA);
+    if(N_obs) {
+      for(n in 1:N_obs){
+	log_lik[n] = normal_lpdf(y_obs[n] | (has_inter ? intercept[1] : 0.0) +
+				 X_obs_tmp[n] * betas_tmp, sigma_ln_eDNA);
+      }
     }
-    for(n in 1:N_cens){
-      log_lik[n+N_obs] = normal_lcdf(L[n] | (has_inter ? intercept[1] : 0) +
+    
+    if(N_cens) {
+      for(n in 1:N_cens){
+	log_lik[n+N_obs] = normal_lcdf(L[n] | (has_inter ? intercept[1] : 0) +
 				     X_cens_tmp[n] * betas_tmp, sigma_ln_eDNA);
+      }
     }
   }
 }
