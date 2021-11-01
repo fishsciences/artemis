@@ -20,12 +20,12 @@ latent-variable, truncated data models which are fit using
 ## Installation
 
 <br>
-The easiest way to install `artemis` is from [CRAN](https://cran.r-project.org/package=artemis) with the `install.packages` function:
+The easiest way to install `artemis` is with the `devtools` or `remotes` package:
 
 
 ```{r, eval=FALSE, include=TRUE}
 
-install.packages("artemis")
+devtools::install_github("fishsciences/artemis")
 
 ```
 <br>
