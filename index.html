@@ -99,16 +99,14 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p><br> The easiest way to install <code>artemis</code> is with the <code>devtools</code> or <code>remotes</code> package:</p>
-<p>```{r, eval=FALSE, include=TRUE}</p>
-<p>devtools::install_github(“fishsciences/artemis”)</p>
-<pre><code>&lt;br&gt;
-
-### Testing your installation
-
-If your installation of `artemis` and its dependencies was successful, the following code should run without error (although you may see warning messages from `rstan` about Bulk/Tail Effective Samples Sizes being too low). If the first or second model returns an error that seems to have something to do with your `c++` compiler, you may need to [follow instructions to edit your `Makevars` or `Makevars.win` file](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started).
-
-```{r, eval=FALSE}
-library(artemis)
+<pre><code>devtools::install_github("fishsciences/artemis")
+</code></pre>
+<p><br></p>
+<div id="testing-your-installation" class="section level3">
+<h3 class="hasAnchor">
+<a href="#testing-your-installation" class="anchor"></a>Testing your installation</h3>
+<p>If your installation of <code>artemis</code> and its dependencies was successful, the following code should run without error (although you may see warning messages from <code>rstan</code> about Bulk/Tail Effective Samples Sizes being too low). If the first or second model returns an error that seems to have something to do with your <code>c++</code> compiler, you may need to <a href="https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started">follow instructions to edit your <code>Makevars</code> or <code>Makevars.win</code> file</a>.</p>
+<pre><code><a href="https://rdrr.io/r/base/library.html">library(artemis)
 
 model_fit = eDNA_lm(Cq ~ scale(Distance_m) + scale(Volume_mL), 
                     data = eDNA_data,
@@ -117,7 +115,8 @@ model_fit = eDNA_lm(Cq ~ scale(Distance_m) + scale(Volume_mL),
 model_fit2 = eDNA_lmer(Cq ~ scale(Distance_m) + scale(Volume_mL) + (1|FilterID),
                        eDNA_data,
                        std_curve_alpha = 21.2, std_curve_beta = -1.5)
-</code></pre>
+</a></code></pre>
+</div>
 <div id="installing-artemis-from-source" class="section level3">
 <h3 class="hasAnchor">
 <a href="#installing-artemis-from-source" class="anchor"></a>Installing <code>artemis</code> from source</h3>
