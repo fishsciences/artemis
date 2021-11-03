@@ -23,8 +23,7 @@ latent-variable, truncated data models which are fit using
 The easiest way to install `artemis` is with the `devtools` or `remotes` package:
 
 
-```{r, eval=FALSE, include=TRUE}
-
+```
 devtools::install_github("fishsciences/artemis")
 
 ```
@@ -34,7 +33,7 @@ devtools::install_github("fishsciences/artemis")
 
 If your installation of `artemis` and its dependencies was successful, the following code should run without error (although you may see warning messages from `rstan` about Bulk/Tail Effective Samples Sizes being too low). If the first or second model returns an error that seems to have something to do with your `c++` compiler, you may need to [follow instructions to edit your `Makevars` or `Makevars.win` file](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started).
 
-```{r, eval=FALSE}
+```
 library(artemis)
 
 model_fit = eDNA_lm(Cq ~ scale(Distance_m) + scale(Volume_mL), 
