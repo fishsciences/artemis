@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">artemis</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
       </span>
     </div>
 
@@ -103,16 +103,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/artemis-installation-guide.html">ARTEMIS Installation Guide</a>
-    </li>
-    <li>
       <a href="../articles/artemis-overview.html">Getting started with the artemis package</a>
     </li>
     <li>
       <a href="../articles/modeling.html">Modeling eDNA qPCR Data with `artemis`</a>
-    </li>
-    <li>
-      <a href="../articles/modeling_advice.html">Modeling Advice</a>
     </li>
     <li>
       <a href="../articles/simulation.html">Simulating eDNA Data with `artemis`</a>
@@ -251,29 +245,30 @@ normal distributions is itself a random normal distribution.</p>
     <p>Matt Espe</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'>est_p_detect</span><span class='op'>(</span>variable_levels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>Intercept <span class='op'>=</span> <span class='fl'>1</span>, Distance <span class='op'>=</span> <span class='fl'>100</span>, Volume <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span>,
-             betas <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>Intercept <span class='op'>=</span> <span class='op'>-</span><span class='fl'>10.5</span>, Distance <span class='op'>=</span> <span class='op'>-</span><span class='fl'>0.05</span>, Volume <span class='op'>=</span> <span class='fl'>0.001</span><span class='op'>)</span>,
-             ln_eDNA_sd <span class='op'>=</span> <span class='fl'>1</span>, std_curve_alpha <span class='op'>=</span> <span class='fl'>21.2</span>, std_curve_beta <span class='op'>=</span> <span class='op'>-</span><span class='fl'>1.5</span>,
-             n_rep <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>12</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Variable levels: 
-#&gt; Intercept  Distance    Volume 
-#&gt;         1       100        20 
-#&gt; 
-#&gt;    n_reps    p_detect
-#&gt; 1       1 0.001477609
-#&gt; 2       2 0.002953034
-#&gt; 3       3 0.004426279
-#&gt; 4       4 0.005897347
-#&gt; 5       5 0.007366242
-#&gt; 6       6 0.008832966
-#&gt; 7       7 0.010297523
-#&gt; 8       8 0.011759916
-#&gt; 9       9 0.013220148
-#&gt; 10     10 0.014678222
-#&gt; 11     11 0.016134142
-#&gt; 12     12 0.017587911</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='fu'>est_p_detect</span><span class='op'>(</span>variable_levels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>Intercept <span class='op'>=</span> <span class='fl'>1</span>, Distance <span class='op'>=</span> <span class='fl'>100</span>, Volume <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span>,</span>
+<span class='r-in'>             betas <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>Intercept <span class='op'>=</span> <span class='op'>-</span><span class='fl'>10.5</span>, Distance <span class='op'>=</span> <span class='op'>-</span><span class='fl'>0.05</span>, Volume <span class='op'>=</span> <span class='fl'>0.001</span><span class='op'>)</span>,</span>
+<span class='r-in'>             ln_eDNA_sd <span class='op'>=</span> <span class='fl'>1</span>, std_curve_alpha <span class='op'>=</span> <span class='fl'>21.2</span>, std_curve_beta <span class='op'>=</span> <span class='op'>-</span><span class='fl'>1.5</span>,</span>
+<span class='r-in'>             n_rep <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>12</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Variable levels: </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Intercept  Distance    Volume </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         1       100        20 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    n_reps    p_detect</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1       1 0.001477609</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2       2 0.002953034</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3       3 0.004426279</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4       4 0.005897347</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5       5 0.007366242</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6       6 0.008832966</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7       7 0.010297523</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8       8 0.011759916</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9       9 0.013220148</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10     10 0.014678222</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11     11 0.016134142</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 12     12 0.017587911</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">artemis</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
       </span>
     </div>
 
@@ -103,16 +103,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/artemis-installation-guide.html">ARTEMIS Installation Guide</a>
-    </li>
-    <li>
       <a href="../articles/artemis-overview.html">Getting started with the artemis package</a>
     </li>
     <li>
       <a href="../articles/modeling.html">Modeling eDNA qPCR Data with `artemis`</a>
-    </li>
-    <li>
-      <a href="../articles/modeling_advice.html">Modeling Advice</a>
     </li>
     <li>
       <a href="../articles/simulation.html">Simulating eDNA Data with `artemis`</a>
@@ -310,50 +304,53 @@ log[eDNA concentration] as the comparison data.</p></li>
     <p>Matt Espe</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'>## Includes extra variables</span>
-<span class='va'>vars</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>Intercept <span class='op'>=</span> <span class='op'>-</span><span class='fl'>10.6</span>,
-            distance <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>15</span>, <span class='fl'>50</span><span class='op'>)</span>,
-            volume <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>25</span>, <span class='fl'>50</span><span class='op'>)</span>,
-            biomass <span class='op'>=</span> <span class='fl'>100</span>,
-            alive <span class='op'>=</span> <span class='fl'>1</span>,
-            tech_rep <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>,
-            rep <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>, Cq <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-
-<span class='co'>## Intercept only</span>
-<span class='va'>ans</span> <span class='op'>=</span> <span class='fu'>sim_eDNA_lm</span><span class='op'>(</span><span class='va'>Cq</span> <span class='op'>~</span> <span class='fl'>1</span>, <span class='va'>vars</span>,
-                      betas <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>intercept <span class='op'>=</span> <span class='op'>-</span><span class='fl'>15</span><span class='op'>)</span>,
-                      sigma_ln_eDNA <span class='op'>=</span> <span class='fl'>1e-5</span>,
-                      std_curve_alpha <span class='op'>=</span> <span class='fl'>21.2</span>, std_curve_beta <span class='op'>=</span> <span class='op'>-</span><span class='fl'>1.5</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0 seconds (Warm-up)
-#&gt; Chain 1:                4.1e-05 seconds (Sampling)
-#&gt; Chain 1:                4.1e-05 seconds (Total)
-#&gt; Chain 1: </div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>ans</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 
-#&gt; formula: Cq ~ 1
-#&gt; &lt;environment: 0x7fd03cf14790&gt;
-#&gt; 
-#&gt; Standard curve parameters: Cq = alpha + beta * log(concentration)
-#&gt; 	Standard curve alpha =  21.2 
-#&gt; 	Standard curve beta =  -1.5 
-#&gt; 
-#&gt;  ln concentration: 
-#&gt;  variable level      2.5% 50%     97.5% mean p_detect
-#&gt;        V1     1 -15.00002 -15 -14.99998  -15       NA
-#&gt; 
-#&gt;  simulated Cq: 
-#&gt;  variable level 2.5% 50% 97.5% mean p_detect
-#&gt;        V1     1   40  40    40   40        0</div><div class='input'>
-<span class='va'>ans</span> <span class='op'>=</span> <span class='fu'>sim_eDNA_lm</span><span class='op'>(</span><span class='va'>Cq</span> <span class='op'>~</span> <span class='va'>distance</span> <span class='op'>+</span> <span class='va'>volume</span>, <span class='va'>vars</span>,
-                  betas <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>intercept <span class='op'>=</span> <span class='op'>-</span><span class='fl'>10.6</span>, distance <span class='op'>=</span> <span class='op'>-</span><span class='fl'>0.05</span>, volume <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span>,
-                  sigma_ln_eDNA <span class='op'>=</span> <span class='fl'>1</span>, std_curve_alpha <span class='op'>=</span> <span class='fl'>21.2</span>, std_curve_beta <span class='op'>=</span> <span class='op'>-</span><span class='fl'>1.5</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0 seconds (Warm-up)
-#&gt; Chain 1:                3.6e-05 seconds (Sampling)
-#&gt; Chain 1:                3.6e-05 seconds (Total)
-#&gt; Chain 1: </div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='co'>## Includes extra variables</span></span>
+<span class='r-in'><span class='va'>vars</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>Intercept <span class='op'>=</span> <span class='op'>-</span><span class='fl'>10.6</span>,</span>
+<span class='r-in'>            distance <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>15</span>, <span class='fl'>50</span><span class='op'>)</span>,</span>
+<span class='r-in'>            volume <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>25</span>, <span class='fl'>50</span><span class='op'>)</span>,</span>
+<span class='r-in'>            biomass <span class='op'>=</span> <span class='fl'>100</span>,</span>
+<span class='r-in'>            alive <span class='op'>=</span> <span class='fl'>1</span>,</span>
+<span class='r-in'>            tech_rep <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>,</span>
+<span class='r-in'>            rep <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>, Cq <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## Intercept only</span></span>
+<span class='r-in'><span class='va'>ans</span> <span class='op'>=</span> <span class='fu'>sim_eDNA_lm</span><span class='op'>(</span><span class='va'>Cq</span> <span class='op'>~</span> <span class='fl'>1</span>, <span class='va'>vars</span>,</span>
+<span class='r-in'>                      betas <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>intercept <span class='op'>=</span> <span class='op'>-</span><span class='fl'>15</span><span class='op'>)</span>,</span>
+<span class='r-in'>                      sigma_ln_eDNA <span class='op'>=</span> <span class='fl'>1e-5</span>,</span>
+<span class='r-in'>                      std_curve_alpha <span class='op'>=</span> <span class='fl'>21.2</span>, std_curve_beta <span class='op'>=</span> <span class='op'>-</span><span class='fl'>1.5</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1: </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1:  Elapsed Time: 0 seconds (Warm-up)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1:                6.7e-05 seconds (Sampling)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1:                6.7e-05 seconds (Total)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1: </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>ans</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> formula: Cq ~ 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;environment: 0x5586701f98c8&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Standard curve parameters: Cq = alpha + beta * log(concentration)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 	Standard curve alpha =  21.2 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 	Standard curve beta =  -1.5 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  ln concentration: </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  variable level      2.5% 50%     97.5% mean p_detect</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        V1     1 -15.00002 -15 -14.99998  -15       NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  simulated Cq: </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  variable level 2.5% 50% 97.5% mean p_detect</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        V1     1   40  40    40   40        0</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>ans</span> <span class='op'>=</span> <span class='fu'>sim_eDNA_lm</span><span class='op'>(</span><span class='va'>Cq</span> <span class='op'>~</span> <span class='va'>distance</span> <span class='op'>+</span> <span class='va'>volume</span>, <span class='va'>vars</span>,</span>
+<span class='r-in'>                  betas <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>intercept <span class='op'>=</span> <span class='op'>-</span><span class='fl'>10.6</span>, distance <span class='op'>=</span> <span class='op'>-</span><span class='fl'>0.05</span>, volume <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span>,</span>
+<span class='r-in'>                  sigma_ln_eDNA <span class='op'>=</span> <span class='fl'>1</span>, std_curve_alpha <span class='op'>=</span> <span class='fl'>21.2</span>, std_curve_beta <span class='op'>=</span> <span class='op'>-</span><span class='fl'>1.5</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1: </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1:  Elapsed Time: 0 seconds (Warm-up)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1:                4.1e-05 seconds (Sampling)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1:                4.1e-05 seconds (Total)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1: </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
