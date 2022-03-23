@@ -110,7 +110,7 @@ model {
 }
 
 generated quantities{
-  vector[N_obs + N_cens] log_lik;
+  vector[N_obs + N_cens] log_lik = rep_vector(0, N_obs + N_cens);
   {
     matrix[N_obs, K + K_r] X_obs_tmp = append_col(X_obs, X_obs_r);
     matrix[N_cens, K + K_r] X_cens_tmp = append_col(X_cens, X_cens_r);

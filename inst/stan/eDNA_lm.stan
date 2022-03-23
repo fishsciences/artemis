@@ -66,7 +66,7 @@ model {
 }
 
 generated quantities{
-  vector[N_obs + N_cens] log_lik;
+  vector[N_obs + N_cens] log_lik = rep_vector(0, N_obs + N_cens);
 
   if(N_obs){
     for(n in 1:N_obs){
