@@ -26,7 +26,6 @@
 #' @importFrom rstan sampling extract plot read_stan_csv
 #' @importFrom rstantools posterior_interval
 #' @importFrom utils head
-#' @useDynLib artemis
 #' @references 
 #' Stan Development Team (2018). RStan: the R interface to Stan. R package version 2.18.2. http://mc-stan.org
 #' 

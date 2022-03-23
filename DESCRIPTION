@@ -1,6 +1,6 @@
 Package: artemis
 Title: Analysis and Simulation of Environmental DNA Experiments
-Version: 1.1.5
+Version: 2.0.0
 Authors@R: c(person(given = "Matt", family = "Espe",
 		   role = c("aut", "cre"),
 		   email = "mespe@ucdavis.edu"),
@@ -20,7 +20,8 @@ Depends:
 Imports: 
 	rstan (>= 2.19.0),
 	lme4 (>= 1.1.21),
-    utils
+    utils,
+	rstantools
 Encoding: UTF-8
 LazyData: true
 SystemRequirements: GNU make
@@ -31,6 +32,7 @@ Suggests:
     rmarkdown,
 	markdown,
     covr
+Remotes: stan-dev/cmdstanr
 VignetteBuilder: knitr
 Biarch: true
 LinkingTo: 
