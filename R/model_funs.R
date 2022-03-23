@@ -150,8 +150,8 @@ run_model = function(model,
                      data, ...)
     
 {
-    ### XXXX FIX THIS!!! ####
-    fit = sampling(model, data = data, ...)
+    m = model$sample(data = data, ...)
+    fit = read_stan_csv(m$output_files())
     
     fit = as(fit, "eDNA_model")
     return(fit)
@@ -251,38 +251,33 @@ eDNA_lm_shared = function(model_type,
 # Put this here to allow us to easily swap out pieces later
 get_mod_funs = function(model_type)
 {
-    list(
-        mod = with(stanmodels, switch(model_type,
-                lm = eDNA_lm,
-                lmer = eDNA_lmer,
-                zero_inf_lm = eDNA_lm_zinf,
-                zero_inf_lmer = eDNA_lmer_zinf,
-                stop("Unknown model type"))),
-    
     mn = switch(model_type,
                 lm = "eDNA_lm.stan",
                 lmer = "eDNA_lmer.stan",
                 zero_inf_lm = "eDNA_lm_zinf.stan",
                 zero_inf_lmer = "eDNA_lmer_zinf.stan",
-                stop("Unknown model type")),
+                stop("Unknown model type"))
+    mod = cmdstan_model(system.file("stan", mn, package = "artemis"))
     
-    gen_fun = switch(model_type,
-                     lm = quote(gen_model_list_lm),
-                     lmer = quote(gen_model_list_lmer),
-                     zero_inf_lm = quote(gen_model_list_lm),
-                     zero_inf_lmer = quote(gen_model_list_lmer)),
-    
-    prep_fun = switch(model_type,
-                      lm = prep_data.lm,
-                      lmer = prep_data.lmer,
-                      zero_inf_lm = prep_data.lm, 
-                      zero_inf_lmer = prep_data.lmer),
-
-
-    model_class = switch(model_type,
-                      lm = "eDNA_model_lm",
-                      lmer = "eDNA_model_lmer",
-                      zero_inf_lm = "eDNA_model_zip", 
-                      zero_inf_lmer = "eDNA_model_ziper")
-    )
+    list(mn = mn,
+         mod = mod,
+         gen_fun = switch(model_type,
+                          lm = quote(gen_model_list_lm),
+                          lmer = quote(gen_model_list_lmer),
+                          zero_inf_lm = quote(gen_model_list_lm),
+                          zero_inf_lmer = quote(gen_model_list_lmer)),
+         
+         prep_fun = switch(model_type,
+                           lm = prep_data.lm,
+                           lmer = prep_data.lmer,
+                           zero_inf_lm = prep_data.lm, 
+                           zero_inf_lmer = prep_data.lmer),
+         
+         
+         model_class = switch(model_type,
+                              lm = "eDNA_model_lm",
+                              lmer = "eDNA_model_lmer",
+                              zero_inf_lm = "eDNA_model_zip", 
+                              zero_inf_lmer = "eDNA_model_ziper")
+         )
 }

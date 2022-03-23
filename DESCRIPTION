@@ -15,18 +15,16 @@ Depends:
 	stats,
 	ggplot2,
     R (>= 3.5.0),
+	cmdstanr,
     loo
 Imports: 
-    Rcpp (>= 1.0.1),
 	rstan (>= 2.19.0),
 	lme4 (>= 1.1.21),
-    rstantools (>= 2.1.1),
     utils
 Encoding: UTF-8
 LazyData: true
-NeedsCompilation: yes
 SystemRequirements: GNU make
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Suggests: 
     testthat,
     knitr,

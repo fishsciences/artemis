@@ -25,12 +25,12 @@ sim_eDNA_lm = function(formula, variable_list,
 
     md = prep_data.sim(ml, std_curve_alpha, std_curve_beta, sigma_ln_eDNA, betas,
                        prob_zero, prior_int = normal(), prior_b = normal())
-
-    sims = sampling(stanmodels$eDNA_sim_omni, data = md, chains = 1L,
-                    algorithm = "Fixed_param", iter = n_sim, warmup = 0L,
-                    refresh = ifelse(verbose, 100, -1), show_messages = verbose,
-                    open_progress = FALSE)
-    # hacky
+    mod = cmdstan_model(system.file("stan", "eDNA_sim_omni.stan", package = "artemis"))
+    m = mod$sample(data = md, chains = 1L,
+                      fixed_param = TRUE, iter_sampling = n_sim, iter_warmup = 0L,
+                      show_messages = verbose)
+    ## hacky
+    sims = read_stan_csv(m$output_files())
     sims = as(sims, "eDNA_simulation_lm")
     sims = load_slots(sims)
     return(sims)
@@ -189,12 +189,13 @@ sim_eDNA_lmer = function(formula, variable_list,
     md = prep_data.sim(ml, std_curve_alpha, std_curve_beta, sigma_ln_eDNA,
                    betas = betas, prob_zero, rand_sd = sigma_rand,
                    prior_int = normal(), prior_b = normal())
-
-    sims = sampling(stanmodels$eDNA_sim_omni, data = md, chains = 1L,
-                    algorithm = "Fixed_param", iter = n_sim, warmup = 0L,
-                    refresh = ifelse(verbose, 100, -1), show_messages = verbose,
-                    open_progress = FALSE)        
-    # hacky
+    mod = cmdstan_model(system.file("stan", "eDNA_sim_omni.stan", package = "artemis"))
+    m = mod$sample(data = md, chains = 1L,
+                   fixed_param = TRUE, iter_sampling = n_sim, iter_warmup = 0L,
+                   show_messages = verbose)
+    ## hacky
+    sims = read_stan_csv(m$output_files())
+                                        # hacky
     sims = as(sims, "eDNA_simulation_lmer")
     sims = load_slots(sims)
     
