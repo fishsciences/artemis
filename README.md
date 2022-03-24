@@ -20,8 +20,13 @@ latent-variable, truncated data models which are fit using
 ## Installation
 
 <br>
-The easiest way to install `artemis` is with the `devtools` or `remotes` package:
+The artemis package requires the `cmdstanr` package (as of 2022-03-24). This can be installed via
 
+```
+install.packages("cmdstanr", repos = c("https://mc-stan.org/r-packages/", getOption("repos")))
+```
+
+Once that is installed, the easiest way to install `artemis` is with the `devtools` or `remotes` package:
 
 ```
 devtools::install_github("fishsciences/artemis")
@@ -30,6 +35,12 @@ devtools::install_github("fishsciences/artemis")
 <br>
 
 ### Testing your installation
+
+Before you can run the models in `artemis`, the backend `cmdstan` must be installed. This can be done with,
+
+```
+cmdstanr::install_cmdstan()
+```
 
 If your installation of `artemis` and its dependencies was successful, the following code should run without error (although you may see warning messages from `Stan` about Bulk/Tail Effective Samples Sizes being too low). 
 
@@ -48,6 +59,7 @@ model_fit2 = eDNA_lmer(Cq ~ scale(Distance_m) + scale(Volume_mL) + (1|FilterID),
 
 ```
 
+The first time these models are run the model code will need to be compiled. Thereafter, they should run without needing to be re-compiled.
 
 ### Installing `artemis` from source
 
