@@ -20,8 +20,13 @@ latent-variable, truncated data models which are fit using
 ## Installation
 
 <br>
-The easiest way to install `artemis` is with the `devtools` or `remotes` package:
+The artemis package requires the `cmdstanr` package (as of 2022-03-24). This can be installed via
 
+```
+install.packages("cmdstanr", repos = c("https://mc-stan.org/r-packages/", getOption("repos")))
+```
+
+Once that is installed, the easiest way to install `artemis` is with the `devtools` or `remotes` package:
 
 ```
 devtools::install_github("fishsciences/artemis")
@@ -31,7 +36,15 @@ devtools::install_github("fishsciences/artemis")
 
 ### Testing your installation
 
-If your installation of `artemis` and its dependencies was successful, the following code should run without error (although you may see warning messages from `rstan` about Bulk/Tail Effective Samples Sizes being too low). If the first or second model returns an error that seems to have something to do with your `c++` compiler, you may need to [follow instructions to edit your `Makevars` or `Makevars.win` file](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started).
+Before you can run the models in `artemis`, the backend `cmdstan` must be installed. This can be done with,
+
+```
+cmdstanr::install_cmdstan()
+```
+
+If your installation of `artemis` and its dependencies was successful, the following code should run without error (although you may see warning messages from `Stan` about Bulk/Tail Effective Samples Sizes being too low). 
+
+<!-- If the first or second model returns an error that seems to have something to do with your `c++` compiler, you may need to [follow instructions to edit your `Makevars` or `Makevars.win` file](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started). -->
 
 ```
 library(artemis)
@@ -46,12 +59,15 @@ model_fit2 = eDNA_lmer(Cq ~ scale(Distance_m) + scale(Volume_mL) + (1|FilterID),
 
 ```
 
+The first time these models are run the model code will need to be compiled. Thereafter, they should run without needing to be re-compiled.
 
 ### Installing `artemis` from source
 
-Installing `artemis` from source on Windows is not currently well-supported; we recommend installing from the pre-compiled binary if you're on Windows.  If you're on MacOS or Linux and you prefer to install from source, then go ahead and do that with your function/utility of choice (`devtools::install_github()`, `utils::install.packages(type = "source")`, `R CMD INSTALL`, etc.).  
+<!-- Installing `artemis` from source on Windows is not currently well-supported; we recommend installing from the pre-compiled binary if you're on Windows.   -->
+
+If you prefer to install from source, then go ahead and do that with your function/utility of choice (`devtools::install_github()`, `utils::install.packages(type = "source")`, `R CMD INSTALL`, etc.).  
 <br>
-If you have sub-architecture you're really in to customizing, the source code is [here](https://github.com/fishsciences/artemis), go nuts.
+<!-- If you have sub-architecture you're really in to customizing, the source code is [here](https://github.com/fishsciences/artemis), go nuts. -->
 
 <br>
 
