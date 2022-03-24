@@ -1,5 +1,11 @@
 # artemis: ChangeLog
 
+# v2.0
+
+## 2.0.0
+
+Complete overhaul to use the R package `cmdstanr` as the backend for fitting models, rather than `rstan`. 
+
 # v1.0
 
 ## 1.0.6
