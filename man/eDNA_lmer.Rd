@@ -15,6 +15,7 @@ eDNA_lm(
   upper_Cq = 40,
   prior_intercept = normal(location = -15, scale = 10),
   priors = normal(),
+  cache_dir = tools::R_user_dir("artemis", "cache"),
   ...
 )
 
@@ -27,6 +28,7 @@ eDNA_lmer(
   prior_intercept = normal(location = -15, scale = 10),
   priors = normal(),
   prior_random_variance = exponential(),
+  cache_dir = tools::R_user_dir("artemis", "cache"),
   ...
 )
 
@@ -39,6 +41,7 @@ eDNA_zinf_lm(
   probability_zero = 0.08,
   prior_intercept = normal(location = -15, scale = 10),
   priors = normal(),
+  cache_dir = tools::R_user_dir("artemis", "cache"),
   ...
 )
 
@@ -52,6 +55,7 @@ eDNA_zinf_lmer(
   prior_intercept = normal(location = -15, scale = 10),
   priors = normal(),
   prior_random_variance = exponential(),
+  cache_dir = tools::R_user_dir("artemis", "cache"),
   ...
 )
 }
@@ -61,8 +65,8 @@ predictors and the latent variable eDNA concentration.}
 
 \item{data}{data.frame, with the response and predictors}
 
-\item{std_curve_alpha}{the alpha (intercept) value for the formula for
-converting between log(eDNA concentration) and CQ value}
+\item{std_curve_alpha}{the alpha (intercept) value for the formula
+for converting between log(eDNA concentration) and CQ value}
 
 \item{std_curve_beta}{the beta (slope) value for the formula for
 converting between log(eDNA concentration) and CQ value}
@@ -85,6 +89,10 @@ value is provided, this value will be repeated for each
 beta. If \code{autoscale = TRUE}, the scale of the priors is
 scaled by the sd of the predictors similar to rstanarm handles
 them.}
+
+\item{cache_dir}{the cache directory where pre-compiled models are
+stored. Defaults to the output of
+\code{tools::R_user_dir("artemis", "cache")}}
 
 \item{...}{additional arguments passed to
 \code{\link[rstan]{sampling}}}

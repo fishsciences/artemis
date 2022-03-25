@@ -62,8 +62,8 @@ eDNA_lm = function(formula, data,
 ##' @param formula a formula, specifying the relationship between the
 ##'     predictors and the latent variable eDNA concentration.
 ##' @param data data.frame, with the response and predictors
-##' @param std_curve_alpha the alpha (intercept) value for the formula for
-##'     converting between log(eDNA concentration) and CQ value
+##' @param std_curve_alpha the alpha (intercept) value for the formula
+##'     for converting between log(eDNA concentration) and CQ value
 ##' @param std_curve_beta the beta (slope) value for the formula for
 ##'     converting between log(eDNA concentration) and CQ value
 ##' @param upper_Cq numeric, the upper limit on CQ detection. Any
@@ -88,6 +88,9 @@ eDNA_lm = function(formula, data,
 ##'     beta. If \code{autoscale = TRUE}, the scale of the priors is
 ##'     scaled by the sd of the predictors similar to rstanarm handles
 ##'     them.
+##' @param cache_dir the cache directory where pre-compiled models are
+##'     stored. Defaults to the output of
+##'     \code{tools::R_user_dir("artemis", "cache")}
 ##' @param ... additional arguments passed to
 ##'     \code{\link[rstan]{sampling}}
 ##' @return S4 object, with the following slots:
