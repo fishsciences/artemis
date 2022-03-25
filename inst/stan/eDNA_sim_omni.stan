@@ -26,14 +26,14 @@ data{
   matrix[N, n_vars] X;
   
   int<lower = 0, upper = 1> has_random;
-  int groups[n_rand];
+  array[n_rand] int groups;
   matrix[N,n_rand] rand_x;
   vector<lower = 0>[n_grp] rand_sigma;
   
   // alpha and beta of the ln_conc -> Cq conversion according to
   // beta * log(conc) + alpha
-  real std_curve_alpha[N];
-  real std_curve_beta[N];
+  array[N] real std_curve_alpha;
+  array[N] real std_curve_beta;
   real upper_Cq; // upper value that Cq can take
 
   // zero-inflated

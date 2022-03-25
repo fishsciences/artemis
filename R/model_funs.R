@@ -6,6 +6,7 @@ eDNA_lm = function(formula, data,
                    upper_Cq = 40, 
                    prior_intercept = normal(location = -15, scale = 10),
                    priors = normal(),
+                   cache_dir = tools::R_user_dir("artemis", "cache"),
                    ...)
 {
     eDNA_lm_shared(model_type = "lm",
@@ -14,7 +15,8 @@ eDNA_lm = function(formula, data,
                    upper_Cq,
                    probability_zero = 0,
                    prior_intercept,
-                   priors, 
+                   priors,
+                   cache_dir,
                    ...)
 }
 
@@ -131,7 +133,8 @@ eDNA_lmer = function(formula, data,
                      upper_Cq = 40, 
                      prior_intercept = normal(location = -15, scale = 10),
                      priors = normal(),
-                     prior_random_variance = exponential(), 
+                     prior_random_variance = exponential(),
+                     cache_dir = tools::R_user_dir("artemis", "cache"),
                      ...)
 {
     eDNA_lm_shared(model_type = "lmer",
@@ -142,6 +145,7 @@ eDNA_lmer = function(formula, data,
                    prior_intercept,
                    priors,
                    prior_random_variance,
+                   cache_dir,
                    ...)
 }
 
@@ -175,17 +179,19 @@ eDNA_zinf_lm = function(formula, data,
                         probability_zero = 0.08,
                         prior_intercept = normal(location = -15, scale = 10),
                         priors = normal(), 
+                        cache_dir = tools::R_user_dir("artemis", "cache"),
                         ...)
 {
     # from lm
     eDNA_lm_shared(model_type = "zero_inf_lm",
-                          formula, data, 
-                          std_curve_alpha, std_curve_beta,
-                          upper_Cq,
-                          probability_zero,
-                          prior_intercept,
-                          priors, 
-                          ...)
+                   formula, data, 
+                   std_curve_alpha, std_curve_beta,
+                   upper_Cq,
+                   probability_zero,
+                   prior_intercept,
+                   priors,
+                   cache_dir,
+                   ...)
 }
 ##' @rdname eDNA_lmer
 ##' @export
@@ -196,6 +202,7 @@ eDNA_zinf_lmer = function(formula, data,
                           prior_intercept = normal(location = -15, scale = 10),
                           priors = normal(),
                           prior_random_variance = exponential(),
+                          cache_dir = tools::R_user_dir("artemis", "cache"),
                           ...)
 {
     # from lm
@@ -207,6 +214,7 @@ eDNA_zinf_lmer = function(formula, data,
                    prior_intercept,
                    priors,
                    prior_random_variance,
+                   cache_dir,
                    ...)
 }
 
@@ -220,9 +228,10 @@ eDNA_lm_shared = function(model_type,
                           prior_intercept = normal(location = -15, scale = 10),
                           priors = normal(), 
                           prior_random_variance = exponential(),
+                          cache_dir = tools::R_user_dir("artemis", "cache"),
                           ...)
 {
-    md_pars = get_mod_funs(model_type)
+    md_pars = get_mod_funs(model_type, cache_dir)
     
     # from lm
     mf <- match.call(expand.dots = FALSE)
@@ -248,7 +257,7 @@ eDNA_lm_shared = function(model_type,
 }
 
 # Put this here to allow us to easily swap out pieces later
-get_mod_funs = function(model_type)
+get_mod_funs = function(model_type, cache_dir)
 {
     mn = switch(model_type,
                 lm = "eDNA_lm.stan",
@@ -256,7 +265,14 @@ get_mod_funs = function(model_type)
                 zero_inf_lm = "eDNA_lm_zinf.stan",
                 zero_inf_lmer = "eDNA_lmer_zinf.stan",
                 stop("Unknown model type"))
-    mod = cmdstan_model(system.file("stan", mn, package = "artemis"))
+    mod_file = file.path(cache_dir, mn)
+    if(!file.exists(mod_file))
+        stop("Pre-compiled model file not found. Please check:\n",
+             "1. cache_dir is set to proper location\n",
+             "2. models have been compiled using compile_models()\n",
+             "For more help, see ?compile_models")
+    
+    mod = cmdstan_model(mod_file)
     
     list(mn = mn,
          mod = mod,

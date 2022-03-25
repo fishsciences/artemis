@@ -12,7 +12,8 @@ sim_eDNA_lm = function(formula, variable_list,
                        upper_Cq = 40,
                        prob_zero = 0.08,
                        X = expand.grid(variable_list),
-                       verbose = FALSE)
+                       verbose = FALSE,
+                       cache_dir = tools::R_user_dir("artemis", "cache"))
 {
     if(!has_response(formula))
         stop("Please provide a dummy response variable for simulations")
@@ -25,7 +26,14 @@ sim_eDNA_lm = function(formula, variable_list,
 
     md = prep_data.sim(ml, std_curve_alpha, std_curve_beta, sigma_ln_eDNA, betas,
                        prob_zero, prior_int = normal(), prior_b = normal())
-    mod = cmdstan_model(system.file("stan", "eDNA_sim_omni.stan", package = "artemis"))
+    mod_file = file.path(cache_dir, "eDNA_sim_omni.stan")
+    if(!file.exists(mod_file))
+        stop("Pre-compiled model file not found. Please check:\n",
+             "1. cache_dir is set to proper location\n",
+             "2. models have been compiled using compile_models()\n",
+             "For more help, see ?compile_models")
+
+    mod = cmdstan_model(mod_file)
     m = mod$sample(data = md, chains = 1L,
                       fixed_param = TRUE, iter_sampling = n_sim, iter_warmup = 0L,
                       show_messages = verbose)
@@ -165,7 +173,8 @@ sim_eDNA_lmer = function(formula, variable_list,
                          upper_Cq = 40,
                          prob_zero = 0.08,
                          X = expand.grid(variable_list),
-                         verbose = FALSE)
+                         verbose = FALSE,
+                         cache_dir = tools::R_user_dir("artemis", "cache"))
 {
     if(!has_response(formula))
         stop("Please provide a dummy response variable for simulations")
@@ -190,7 +199,15 @@ sim_eDNA_lmer = function(formula, variable_list,
     md = prep_data.sim(ml, std_curve_alpha, std_curve_beta, sigma_ln_eDNA,
                    betas = betas, prob_zero, rand_sd = sigma_rand,
                    prior_int = normal(), prior_b = normal())
-    mod = cmdstan_model(system.file("stan", "eDNA_sim_omni.stan", package = "artemis"))
+
+    mod_file = file.path(cache_dir, "eDNA_sim_omni.stan")
+    if(!file.exists(mod_file))
+        stop("Pre-compiled model file not found. Please check:\n",
+             "1. cache_dir is set to proper location\n",
+             "2. models have been compiled using compile_models()\n",
+             "For more help, see ?compile_models")
+
+    mod = cmdstan_model(mod_file)
     m = mod$sample(data = md, chains = 1L,
                    fixed_param = TRUE, iter_sampling = n_sim, iter_warmup = 0L,
                    show_messages = verbose)

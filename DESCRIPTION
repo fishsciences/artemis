@@ -14,7 +14,7 @@ Depends:
 	graphics,
 	stats,
 	ggplot2,
-    R (>= 3.5.0),
+    R (>= 4.0.0),
 	cmdstanr,
     loo
 Imports: 
