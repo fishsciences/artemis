@@ -23,9 +23,10 @@
 #' @importFrom graphics lines segments plot
 #' @importFrom lme4 lFormula ranef nobars
 #' @importFrom loo loo waic extract_log_lik
-#' @importFrom rstan sampling extract plot read_stan_csv
+#' @importFrom rstan extract plot read_stan_csv
 #' @importFrom rstantools posterior_interval
 #' @importFrom utils head
+#' @importFrom tools R_user_dir
 #' @references 
 #' Stan Development Team (2018). RStan: the R interface to Stan. R package version 2.18.2. http://mc-stan.org
 #' 

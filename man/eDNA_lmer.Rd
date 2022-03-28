@@ -15,7 +15,7 @@ eDNA_lm(
   upper_Cq = 40,
   prior_intercept = normal(location = -15, scale = 10),
   priors = normal(),
-  cache_dir = tools::R_user_dir("artemis", "cache"),
+  cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache")),
   ...
 )
 
@@ -28,7 +28,7 @@ eDNA_lmer(
   prior_intercept = normal(location = -15, scale = 10),
   priors = normal(),
   prior_random_variance = exponential(),
-  cache_dir = tools::R_user_dir("artemis", "cache"),
+  cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache")),
   ...
 )
 
@@ -90,12 +90,14 @@ beta. If \code{autoscale = TRUE}, the scale of the priors is
 scaled by the sd of the predictors similar to rstanarm handles
 them.}
 
-\item{cache_dir}{the cache directory where pre-compiled models are
-stored. Defaults to the output of
-\code{tools::R_user_dir("artemis", "cache")}}
+\item{cache_dir}{a directory which stores the Stan model code and
+compiled models. This directory can be set up and the models
+compiled via \code{compile_models()}.  Can be set with the
+option "artemis_cache_dir", otherwise defaults to the
+directory returned by \code{R_user_dir()}.}
 
 \item{...}{additional arguments passed to
-\code{\link[rstan]{sampling}}}
+\code{\link[cmdstanr]{sample}}}
 
 \item{prior_random_variance}{the prior on variance of the random
 effects. Defaults to exponential distribution with rate 1.}

@@ -2,12 +2,12 @@
 % Please edit documentation in R/compile_models.R
 \name{compile_models}
 \alias{compile_models}
-\title{Compile models}
+\title{Compile artemis models}
 \usage{
 compile_models(
   model_names = c("eDNA_lm.stan", "eDNA_lmer.stan", "eDNA_sim_omni.stan"),
   models = system.file("stan", model_names, package = "artemis"),
-  cache_dir = tools::R_user_dir("artemis", "cache"),
+  cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache")),
   rewrite = TRUE,
   verbose = TRUE,
   ...
@@ -18,15 +18,25 @@ compile_models(
 
 \item{models}{full file path to the location of models}
 
-\item{rewrite}{logical, whether to re-compile the models}
+\item{cache_dir}{a directory to store the Stan model code and
+compiled models. Can be set with the option
+"artemis_cache_dir", otherwise defaults to the directory
+returned by \code{R_user_dir()}. If the directory does not
+exist, it will be created.}
 
-\item{...}{additional arguments passed to \code{cmdstanr::cmdstan_model()}}
+\item{rewrite}{logical, whether to re-compile the models,
+overwriting previous versions.}
+
+\item{verbose}{logical, if TRUE messages will report steps being
+taken}
+
+\item{...}{additional arguments passed to
+\code{cmdstanr::cmdstan_model()}}
 }
 \description{
-This compiles the models needed for the package.
-}
-\details{
-Compile models.
+This compiles the models needed for the artemis package. This must
+be done before using the \code{eDNA_lm*} functions. This function
+is called for its side-effects.
 }
 \author{
 Matt Espe
