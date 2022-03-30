@@ -60,6 +60,8 @@ compile_models = function(model_names = c("eDNA_lm.stan",
 ##'     added
 ##' @param cache_dir directory where the compiled models should be
 ##'     found.
+##' @param issue_error logical, if TRUE an error will be raised if the
+##'     models are not all found in the specified cache_dir
 ##' @return logical, TRUE if the compiled models were found and FALSE
 ##'     otherwise
 ##' @author Matt Espe
@@ -70,13 +72,22 @@ compile_models = function(model_names = c("eDNA_lm.stan",
 compiled_models_ok = function(model_names = c("eDNA_lm",
                                               "eDNA_lmer",
                                               "eDNA_sim_omni"),
-                              cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache")))
+                              cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache")),
+                              issue_error = FALSE)
 {
     is_windows = .Platform$OS.type == "windows"
     if(is_windows)
         model_names = paste0(model_names, ".exe")
     out = file.path(cache_dir, model_names)
-    !all(file.exists(out))
+    models_ok = all(file.exists(out))
+    if(issue_error && !models_ok){
+        stop("Pre-compiled model file not found. Please check:\n",
+             "1. cache_dir is set to proper location\n",
+             "2. models have been compiled using compile_models()\n",
+             "For more help, see ?compile_models")
+    }
+
+    models_ok
 }
 
                           

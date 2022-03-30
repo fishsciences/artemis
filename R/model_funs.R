@@ -271,11 +271,10 @@ get_mod_funs = function(model_type, cache_dir)
                 zero_inf_lmer = "eDNA_lmer_zinf.stan",
                 stop("Unknown model type"))
     mod_file = file.path(cache_dir, mn)
-    if(!file.exists(mod_file))
-        stop("Pre-compiled model file not found. Please check:\n",
-             "1. cache_dir is set to proper location\n",
-             "2. models have been compiled using compile_models()\n",
-             "For more help, see ?compile_models")
+
+    compiled_models_ok(model_names = mn,
+                       cache_dir,
+                       issue_error = TRUE)
     
     mod = cmdstan_model(mod_file)
     
