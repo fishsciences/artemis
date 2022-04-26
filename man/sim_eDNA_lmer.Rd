@@ -16,7 +16,8 @@ sim_eDNA_lm(
   upper_Cq = 40,
   prob_zero = 0.08,
   X = expand.grid(variable_list),
-  verbose = FALSE
+  verbose = FALSE,
+  cache_dir = tools::R_user_dir("artemis", "cache")
 )
 
 sim_eDNA_lmer(
@@ -31,7 +32,8 @@ sim_eDNA_lmer(
   upper_Cq = 40,
   prob_zero = 0.08,
   X = expand.grid(variable_list),
-  verbose = FALSE
+  verbose = FALSE,
+  cache_dir = tools::R_user_dir("artemis", "cache")
 )
 }
 \arguments{
@@ -76,6 +78,10 @@ unbalanced design matrix.}
 
 \item{verbose}{logical, when TRUE output from
 \code{rstan::sampling} is written to the console.}
+
+\item{cache_dir}{the cache directory where pre-compiled models are
+stored. Defaults to the output of
+\code{tools::R_user_dir("artemis", "cache")}}
 
 \item{sigma_rand}{numeric vector, the stdev for the random
 effects. There must be one sigma per random effect specified}
@@ -145,7 +151,7 @@ log[eDNA concentration] as the comparison data.
 }
 
 \examples{
-
+\donttest{
 ## Includes extra variables
 vars = list(Intercept = -10.6,
             distance = c(0, 15, 50),
@@ -166,6 +172,7 @@ print(ans)
 ans = sim_eDNA_lm(Cq ~ distance + volume, vars,
                   betas = c(intercept = -10.6, distance = -0.05, volume = 0.1),
                   sigma_ln_eDNA = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
+}
 }
 \author{
 Matt Espe

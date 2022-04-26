@@ -33,7 +33,7 @@ transformed data {
   }
 }
 parameters {
-  real intercept[has_inter ? 1 : 0];
+  array[has_inter ? 1 : 0] real intercept;
   vector[K] thetas;      // coefficients on Q_ast
   real<lower=0> sigma_ln_eDNA;
 }

@@ -12,7 +12,8 @@ sim_eDNA_lm = function(formula, variable_list,
                        upper_Cq = 40,
                        prob_zero = 0.08,
                        X = expand.grid(variable_list),
-                       verbose = FALSE)
+                       verbose = FALSE,
+                       cache_dir = tools::R_user_dir("artemis", "cache"))
 {
     if(!has_response(formula))
         stop("Please provide a dummy response variable for simulations")
@@ -25,12 +26,14 @@ sim_eDNA_lm = function(formula, variable_list,
 
     md = prep_data.sim(ml, std_curve_alpha, std_curve_beta, sigma_ln_eDNA, betas,
                        prob_zero, prior_int = normal(), prior_b = normal())
-
-    sims = sampling(stanmodels$eDNA_sim_omni, data = md, chains = 1L,
-                    algorithm = "Fixed_param", iter = n_sim, warmup = 0L,
-                    refresh = ifelse(verbose, 100, -1), show_messages = verbose,
-                    open_progress = FALSE)
-    # hacky
+    mod_file = file.path(cache_dir, "eDNA_sim_omni.stan")
+    compiled_models_ok("eDNA_sim_omni.stan", cache_dir, issue_error = TRUE)
+    mod = cmdstan_model(mod_file)
+    m = mod$sample(data = md, chains = 1L,
+                      fixed_param = TRUE, iter_sampling = n_sim, iter_warmup = 0L,
+                      show_messages = verbose)
+    ## hacky
+    sims = read_stan_csv(m$output_files())
     sims = as(sims, "eDNA_simulation_lm")
     sims = load_slots(sims)
     return(sims)
@@ -112,6 +115,9 @@ sim_eDNA_lm = function(formula, variable_list,
 ##'     unbalanced design matrix.
 ##' @param verbose logical, when TRUE output from
 ##'     \code{rstan::sampling} is written to the console.
+##' @param cache_dir the cache directory where pre-compiled models are
+##'     stored. Defaults to the output of
+##'     \code{tools::R_user_dir("artemis", "cache")}
 ##' @return S4 object of class "eDNA_simulation_{lm/lmer}" with the
 ##'     following slots:
 ##' \describe{
@@ -134,7 +140,7 @@ sim_eDNA_lm = function(formula, variable_list,
 ##' 
 ##' @author Matt Espe
 ##' @examples
-##' 
+##' \donttest{
 ##' ## Includes extra variables
 ##' vars = list(Intercept = -10.6,
 ##'             distance = c(0, 15, 50),
@@ -155,6 +161,7 @@ sim_eDNA_lm = function(formula, variable_list,
 ##' ans = sim_eDNA_lm(Cq ~ distance + volume, vars,
 ##'                   betas = c(intercept = -10.6, distance = -0.05, volume = 0.1),
 ##'                   sigma_ln_eDNA = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
+##' }
 ##' @export
 sim_eDNA_lmer = function(formula, variable_list,
                          betas, sigma_ln_eDNA,
@@ -164,7 +171,8 @@ sim_eDNA_lmer = function(formula, variable_list,
                          upper_Cq = 40,
                          prob_zero = 0.08,
                          X = expand.grid(variable_list),
-                         verbose = FALSE)
+                         verbose = FALSE,
+                         cache_dir = tools::R_user_dir("artemis", "cache"))
 {
     if(!has_response(formula))
         stop("Please provide a dummy response variable for simulations")
@@ -190,11 +198,16 @@ sim_eDNA_lmer = function(formula, variable_list,
                    betas = betas, prob_zero, rand_sd = sigma_rand,
                    prior_int = normal(), prior_b = normal())
 
-    sims = sampling(stanmodels$eDNA_sim_omni, data = md, chains = 1L,
-                    algorithm = "Fixed_param", iter = n_sim, warmup = 0L,
-                    refresh = ifelse(verbose, 100, -1), show_messages = verbose,
-                    open_progress = FALSE)        
-    # hacky
+    mod_file = file.path(cache_dir, "eDNA_sim_omni.stan")
+    compiled_models_ok("eDNA_sim_omni.stan", cache_dir, issue_error = TRUE)
+    
+    mod = cmdstan_model(mod_file)
+    m = mod$sample(data = md, chains = 1L,
+                   fixed_param = TRUE, iter_sampling = n_sim, iter_warmup = 0L,
+                   show_messages = verbose)
+    ## hacky
+    sims = read_stan_csv(m$output_files())
+                                        # hacky
     sims = as(sims, "eDNA_simulation_lmer")
     sims = load_slots(sims)
     

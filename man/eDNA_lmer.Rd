@@ -15,6 +15,7 @@ eDNA_lm(
   upper_Cq = 40,
   prior_intercept = normal(location = -15, scale = 10),
   priors = normal(),
+  cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache")),
   ...
 )
 
@@ -27,6 +28,7 @@ eDNA_lmer(
   prior_intercept = normal(location = -15, scale = 10),
   priors = normal(),
   prior_random_variance = exponential(),
+  cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache")),
   ...
 )
 
@@ -39,6 +41,7 @@ eDNA_zinf_lm(
   probability_zero = 0.08,
   prior_intercept = normal(location = -15, scale = 10),
   priors = normal(),
+  cache_dir = tools::R_user_dir("artemis", "cache"),
   ...
 )
 
@@ -52,6 +55,7 @@ eDNA_zinf_lmer(
   prior_intercept = normal(location = -15, scale = 10),
   priors = normal(),
   prior_random_variance = exponential(),
+  cache_dir = tools::R_user_dir("artemis", "cache"),
   ...
 )
 }
@@ -61,8 +65,8 @@ predictors and the latent variable eDNA concentration.}
 
 \item{data}{data.frame, with the response and predictors}
 
-\item{std_curve_alpha}{the alpha (intercept) value for the formula for
-converting between log(eDNA concentration) and CQ value}
+\item{std_curve_alpha}{the alpha (intercept) value for the formula
+for converting between log(eDNA concentration) and CQ value}
 
 \item{std_curve_beta}{the beta (slope) value for the formula for
 converting between log(eDNA concentration) and CQ value}
@@ -86,8 +90,14 @@ beta. If \code{autoscale = TRUE}, the scale of the priors is
 scaled by the sd of the predictors similar to rstanarm handles
 them.}
 
+\item{cache_dir}{a directory which stores the Stan model code and
+compiled models. This directory can be set up and the models
+compiled via \code{compile_models()}.  Can be set with the
+option "artemis_cache_dir", otherwise defaults to the
+directory returned by \code{R_user_dir()}.}
+
 \item{...}{additional arguments passed to
-\code{\link[rstan]{sampling}}}
+\code{\link[cmdstanr]{sample}}}
 
 \item{prior_random_variance}{the prior on variance of the random
 effects. Defaults to exponential distribution with rate 1.}
@@ -161,12 +171,11 @@ control arguments can be passed to \code{rstan::sampling} via the
 }
 
 \examples{
-
+\donttest{
 ## Fixed effect model
 ans = eDNA_lm(Cq ~ Distance_m, eDNA_data,
               std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
-\donttest{
 ## Mixed-effect model
 ## This takes a while to run
 ans2 = eDNA_lmer(Cq ~ Distance_m + (1|FilterID), eDNA_data,

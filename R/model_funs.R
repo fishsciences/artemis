@@ -6,6 +6,7 @@ eDNA_lm = function(formula, data,
                    upper_Cq = 40, 
                    prior_intercept = normal(location = -15, scale = 10),
                    priors = normal(),
+                   cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache")),
                    ...)
 {
     eDNA_lm_shared(model_type = "lm",
@@ -14,7 +15,8 @@ eDNA_lm = function(formula, data,
                    upper_Cq,
                    probability_zero = 0,
                    prior_intercept,
-                   priors, 
+                   priors,
+                   cache_dir,
                    ...)
 }
 
@@ -60,8 +62,8 @@ eDNA_lm = function(formula, data,
 ##' @param formula a formula, specifying the relationship between the
 ##'     predictors and the latent variable eDNA concentration.
 ##' @param data data.frame, with the response and predictors
-##' @param std_curve_alpha the alpha (intercept) value for the formula for
-##'     converting between log(eDNA concentration) and CQ value
+##' @param std_curve_alpha the alpha (intercept) value for the formula
+##'     for converting between log(eDNA concentration) and CQ value
 ##' @param std_curve_beta the beta (slope) value for the formula for
 ##'     converting between log(eDNA concentration) and CQ value
 ##' @param upper_Cq numeric, the upper limit on CQ detection. Any
@@ -86,8 +88,13 @@ eDNA_lm = function(formula, data,
 ##'     beta. If \code{autoscale = TRUE}, the scale of the priors is
 ##'     scaled by the sd of the predictors similar to rstanarm handles
 ##'     them.
+##' @param cache_dir a directory which stores the Stan model code and
+##'     compiled models. This directory can be set up and the models
+##'     compiled via \code{compile_models()}.  Can be set with the
+##'     option "artemis_cache_dir", otherwise defaults to the
+##'     directory returned by \code{R_user_dir()}.
 ##' @param ... additional arguments passed to
-##'     \code{\link[rstan]{sampling}}
+##'     \code{\link[cmdstanr]{sample}}
 ##' @return S4 object, with the following slots:
 ##' \describe{
 ##'   \item{ln_conc}{matrix, the posterior samples for the latent
@@ -113,12 +120,11 @@ eDNA_lm = function(formula, data,
 ##' @author Matt Espe
 ##'
 ##' @examples
-##' 
+##' \donttest{
 ##' ## Fixed effect model
 ##' ans = eDNA_lm(Cq ~ Distance_m, eDNA_data,
 ##'               std_curve_alpha = 21.2, std_curve_beta = -1.5)
 ##'
-##' \donttest{
 ##' ## Mixed-effect model
 ##' ## This takes a while to run
 ##' ans2 = eDNA_lmer(Cq ~ Distance_m + (1|FilterID), eDNA_data,
@@ -132,7 +138,8 @@ eDNA_lmer = function(formula, data,
                      upper_Cq = 40, 
                      prior_intercept = normal(location = -15, scale = 10),
                      priors = normal(),
-                     prior_random_variance = exponential(), 
+                     prior_random_variance = exponential(),
+                     cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache")),
                      ...)
 {
     eDNA_lm_shared(model_type = "lmer",
@@ -143,6 +150,7 @@ eDNA_lmer = function(formula, data,
                    prior_intercept,
                    priors,
                    prior_random_variance,
+                   cache_dir,
                    ...)
 }
 
@@ -150,8 +158,8 @@ run_model = function(model,
                      data, ...)
     
 {
-    ### XXXX FIX THIS!!! ####
-    fit = sampling(model, data = data, ...)
+    m = model$sample(data = data, ...)
+    fit = read_stan_csv(m$output_files())
     
     fit = as(fit, "eDNA_model")
     return(fit)
@@ -176,17 +184,19 @@ eDNA_zinf_lm = function(formula, data,
                         probability_zero = 0.08,
                         prior_intercept = normal(location = -15, scale = 10),
                         priors = normal(), 
+                        cache_dir = tools::R_user_dir("artemis", "cache"),
                         ...)
 {
     # from lm
     eDNA_lm_shared(model_type = "zero_inf_lm",
-                          formula, data, 
-                          std_curve_alpha, std_curve_beta,
-                          upper_Cq,
-                          probability_zero,
-                          prior_intercept,
-                          priors, 
-                          ...)
+                   formula, data, 
+                   std_curve_alpha, std_curve_beta,
+                   upper_Cq,
+                   probability_zero,
+                   prior_intercept,
+                   priors,
+                   cache_dir,
+                   ...)
 }
 ##' @rdname eDNA_lmer
 ##' @export
@@ -197,6 +207,7 @@ eDNA_zinf_lmer = function(formula, data,
                           prior_intercept = normal(location = -15, scale = 10),
                           priors = normal(),
                           prior_random_variance = exponential(),
+                          cache_dir = tools::R_user_dir("artemis", "cache"),
                           ...)
 {
     # from lm
@@ -208,6 +219,7 @@ eDNA_zinf_lmer = function(formula, data,
                    prior_intercept,
                    priors,
                    prior_random_variance,
+                   cache_dir,
                    ...)
 }
 
@@ -221,9 +233,10 @@ eDNA_lm_shared = function(model_type,
                           prior_intercept = normal(location = -15, scale = 10),
                           priors = normal(), 
                           prior_random_variance = exponential(),
+                          cache_dir = tools::R_user_dir("artemis", "cache"),
                           ...)
 {
-    md_pars = get_mod_funs(model_type)
+    md_pars = get_mod_funs(model_type, cache_dir)
     
     # from lm
     mf <- match.call(expand.dots = FALSE)
@@ -249,40 +262,41 @@ eDNA_lm_shared = function(model_type,
 }
 
 # Put this here to allow us to easily swap out pieces later
-get_mod_funs = function(model_type)
+get_mod_funs = function(model_type, cache_dir)
 {
-    list(
-        mod = with(stanmodels, switch(model_type,
-                lm = eDNA_lm,
-                lmer = eDNA_lmer,
-                zero_inf_lm = eDNA_lm_zinf,
-                zero_inf_lmer = eDNA_lmer_zinf,
-                stop("Unknown model type"))),
-    
     mn = switch(model_type,
                 lm = "eDNA_lm.stan",
                 lmer = "eDNA_lmer.stan",
                 zero_inf_lm = "eDNA_lm_zinf.stan",
                 zero_inf_lmer = "eDNA_lmer_zinf.stan",
-                stop("Unknown model type")),
-    
-    gen_fun = switch(model_type,
-                     lm = quote(gen_model_list_lm),
-                     lmer = quote(gen_model_list_lmer),
-                     zero_inf_lm = quote(gen_model_list_lm),
-                     zero_inf_lmer = quote(gen_model_list_lmer)),
-    
-    prep_fun = switch(model_type,
-                      lm = prep_data.lm,
-                      lmer = prep_data.lmer,
-                      zero_inf_lm = prep_data.lm, 
-                      zero_inf_lmer = prep_data.lmer),
+                stop("Unknown model type"))
+    mod_file = file.path(cache_dir, mn)
 
-
-    model_class = switch(model_type,
-                      lm = "eDNA_model_lm",
-                      lmer = "eDNA_model_lmer",
-                      zero_inf_lm = "eDNA_model_zip", 
-                      zero_inf_lmer = "eDNA_model_ziper")
-    )
+    compiled_models_ok(model_names = mn,
+                       cache_dir,
+                       issue_error = TRUE)
+    
+    mod = cmdstan_model(mod_file)
+    
+    list(mn = mn,
+         mod = mod,
+         gen_fun = switch(model_type,
+                          lm = quote(gen_model_list_lm),
+                          lmer = quote(gen_model_list_lmer),
+                          zero_inf_lm = quote(gen_model_list_lm),
+                          zero_inf_lmer = quote(gen_model_list_lmer)),
+         
+         prep_fun = switch(model_type,
+                           lm = prep_data.lm,
+                           lmer = prep_data.lmer,
+                           zero_inf_lm = prep_data.lm, 
+                           zero_inf_lmer = prep_data.lmer),
+         
+         
+         model_class = switch(model_type,
+                              lm = "eDNA_model_lm",
+                              lmer = "eDNA_model_lmer",
+                              zero_inf_lm = "eDNA_model_zip", 
+                              zero_inf_lmer = "eDNA_model_ziper")
+         )
 }
