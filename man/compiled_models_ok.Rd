@@ -6,7 +6,8 @@
 \usage{
 compiled_models_ok(
   model_names = c("eDNA_lm", "eDNA_lmer", "eDNA_sim_omni"),
-  cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache"))
+  cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache")),
+  issue_error = FALSE
 )
 }
 \arguments{
@@ -16,6 +17,9 @@ added}
 
 \item{cache_dir}{directory where the compiled models should be
 found.}
+
+\item{issue_error}{logical, if TRUE an error will be raised if the
+models are not all found in the specified cache_dir}
 }
 \value{
 logical, TRUE if the compiled models were found and FALSE

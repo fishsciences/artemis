@@ -17,3 +17,4 @@ inst/stan/*.o$
 inst/stan/*.hpp$
 #src/*.*
 CHANGELOG.md
+^\.github$
