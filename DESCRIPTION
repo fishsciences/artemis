@@ -32,7 +32,7 @@ Suggests:
     rmarkdown,
 	markdown,
     covr
-Remotes: cmdstanr::https://mc-stan.org/r-packages/
+Remotes: stan-dev/cmdstanr
 Additional_repositories: https://mc-stan.org/r-packages/
 VignetteBuilder: knitr
 Biarch: true
