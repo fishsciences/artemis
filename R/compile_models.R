@@ -37,14 +37,14 @@ compile_models = function(model_names = c("eDNA_lm.stan",
     is_windows = .Platform$OS.type == "windows"
     out_files = gsub("\\.stan$", ifelse(is_windows, ".exe", ""), model_files)
 
-    if(!all(file.exists(model_files)) || !rewrite){
+    if(!all(file.exists(model_files)) || rewrite){
         if(verbose) message("Copying .stan files to cache")
-        file.copy(models, out_files, overwrite = rewrite, ...)
+        file.copy(models, model_files, overwrite = rewrite, ...)
     }
 
-    if(!all(file.exists(out_files)) || !rewrite){
+    if(!all(file.exists(out_files)) || rewrite){
         if(verbose) message("Compiling executables")
-        m = lapply(out_files, cmdstan_model, force_recompile = rewrite, ... )
+        m = lapply(model_files, cmdstan_model, force_recompile = rewrite, ... )
     }
 
     if(verbose) message("Models compiled and ready to use!")

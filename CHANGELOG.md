@@ -2,6 +2,10 @@
 
 # v2.0
 
+## 2.0.1
+
+Fixed bug when data has no censored values. Corrected the behavior of `compile_models()`.
+
 ## 2.0.0
 
 Complete overhaul to use the R package `cmdstanr` as the backend for fitting models, rather than `rstan`. 

@@ -49,8 +49,8 @@ model {
   vector[N_obs + N_cens] mu_all = (K ? Q_ast * thetas : rep_vector(0.0, N_obs + N_cens)) +
     (has_inter ? intercept[1] : 0.0);
   vector[N_obs] mu_obs = mu_all[1:N_obs];
-  vector[N_cens] mu_cens = mu_all[(N_obs+1):];
-  
+  vector[N_cens ? N_cens : 1] mu_cens = N_cens ? mu_all[(N_obs+1):] : [0]';
+
   // priors
   intercept ~ normal(prior_int_mu, prior_int_sd);
 
@@ -62,7 +62,9 @@ model {
   sigma_ln_eDNA ~ normal(0, 1);
   
   target += normal_lpdf(y_obs | mu_obs, sigma_ln_eDNA);
-  target += normal_lcdf(L | mu_cens, sigma_ln_eDNA);
+  
+  if(N_cens)
+	target += normal_lcdf(L | mu_cens, sigma_ln_eDNA);
 }
 
 generated quantities{

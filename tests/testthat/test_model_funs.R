@@ -114,3 +114,13 @@ test_that("Varying measurement error", {
     }
 
 })
+
+test_that("All obs. below threshold", {
+    d = data.frame(x = rnorm(30, 30, 1))
+
+    ans = eDNA_lm(x ~ 1, d, std_curve_alpha = 20, std_curve_beta = -1.5)
+
+    expect_is(ans, "eDNA_model")
+
+})
+          
