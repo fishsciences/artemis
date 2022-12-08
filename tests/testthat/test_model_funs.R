@@ -27,7 +27,6 @@ test_that("Intercept only", {
 
 test_that("Fit the model with simple data",{
     skip_on_cran()
-    skip_on_travis()
     expect_is(ans, "eDNA_model_lm")
 
     expect_true(all(slotNames(ans) %in% c("ln_conc", "Cq_star", "intercept", "betas",
@@ -51,7 +50,6 @@ test_that("Fit the model with simple data",{
 
 test_that("Lmer", {
     skip_on_cran()
-    skip_on_travis()
     ans2 = eDNA_lmer(Cq ~ Distance_m + Volume_mL + (1|FilterID), eDNA_data,
                    std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
@@ -69,7 +67,6 @@ test_that("Lmer", {
 
 test_that("lm with priors", {
     skip_on_cran()
-    skip_on_travis()
     ## This should still work
     # ans = eDNA_lm(Cq ~ Distance_m, eDNA_data,
     #               std_curve_alpha = 21.2, std_curve_beta = -1.5)
@@ -88,7 +85,6 @@ test_that("lm with priors", {
 
 test_that("Intercepts", {
     skip_on_cran()
-    skip_on_travis()
     ans = eDNA_lm(Cq ~ 1,  eDNA_data,
                   std_curve_alpha = 21.2, std_curve_beta = -1.5)
     expect_is(ans, "eDNA_model")
@@ -100,7 +96,6 @@ test_that("Intercepts", {
 
 test_that("Varying measurement error", {
     skip_on_cran()
-    skip_on_travis()
     if(FALSE){
     ans = eDNA_lm(Cq ~ Distance_m + Volume_mL, eDNA_data,
                 std_curve_alpha = 21.2, std_curve_beta = -1.5,
