@@ -76,7 +76,7 @@ compiled_models_ok = function(model_names = c("eDNA_lm",
                               issue_error = FALSE)
 {
     is_windows = .Platform$OS.type == "windows"
-    out_files = gsub("\\.stan$", ifelse(is_windows, ".exe", ""), model_files)
+    out_files = gsub("\\.stan$", ifelse(is_windows, ".exe", ""), model_names)
     out = file.path(cache_dir, out_files)
     models_ok = all(file.exists(out))
     if(issue_error && !models_ok){
