@@ -47,7 +47,3 @@ jobs:
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
-
-      - name: Compile-models	    
-        run: artemis::compile_models()
-        shell: Rscript {0}

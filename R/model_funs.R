@@ -270,11 +270,15 @@ get_mod_funs = function(model_type, cache_dir)
                 zero_inf_lm = "eDNA_lm_zinf.stan",
                 zero_inf_lmer = "eDNA_lmer_zinf.stan",
                 stop("Unknown model type"))
+    
     mod_file = file.path(cache_dir, mn)
 
-    compiled_models_ok(model_names = mn,
-                       cache_dir,
-                       issue_error = TRUE)
+    # Not sure about this - will recompile the models
+    # but gets around issue with checks and installs
+    compile_models(model_names = mn,
+                   cache_dir,
+                   rewrite = FALSE,
+                   verbose = FALSE)
     
     mod = cmdstan_model(mod_file)
     
