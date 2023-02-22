@@ -27,7 +27,8 @@ sim_eDNA_lm = function(formula, variable_list,
     md = prep_data.sim(ml, std_curve_alpha, std_curve_beta, sigma_ln_eDNA, betas,
                        prob_zero, prior_int = normal(), prior_b = normal())
     mod_file = file.path(cache_dir, "eDNA_sim_omni.stan")
-    compiled_models_ok("eDNA_sim_omni.stan", cache_dir, issue_error = TRUE)
+
+    compile_models("eDNA_sim_omni.stan", ,cache_dir, rewrite = FALSE, verbose = FALSE)
     mod = cmdstan_model(mod_file)
     m = mod$sample(data = md, chains = 1L,
                       fixed_param = TRUE, iter_sampling = n_sim, iter_warmup = 0L,
