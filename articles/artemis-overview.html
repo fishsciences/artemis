@@ -26,6 +26,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -38,23 +40,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">artemis</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.3</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -82,7 +78,7 @@
 
       
 
-      </header><script src="artemis-overview_files/header-attrs-2.11/header-attrs.js"></script><script src="artemis-overview_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Getting started with the artemis package</h1>
@@ -96,14 +92,13 @@
     
     
 <p>(Adapted from manuscript Espe et al, in review)</p>
-<div id="background" class="section level2">
-<h2 class="hasAnchor">
-<a href="#background" class="anchor"></a>Background</h2>
-<p>The <code>artemis</code> R package was created to aid in the design and analysis of environmental DNA (eDNA) survey studies by offering a custom suite of models for quantitative polymerase chain reaction (qPCR) data from extracted eDNA samples. Data from eDNA sampling surveys is often analyzed with occupancy models or GLMS, but there are several characteristics of qPCR data in particular which made us feel that it would benefit from a different modeling approach. Specifically, our approach to this data makes use of Bayesian truncated latent variable models written in <a href="https://mc-stan.org">Stan</a>.</p>
+<div class="section level2">
+<h2 id="background">Background<a class="anchor" aria-label="anchor" href="#background"></a>
+</h2>
+<p>The <code>artemis</code> R package was created to aid in the design and analysis of environmental DNA (eDNA) survey studies by offering a custom suite of models for quantitative polymerase chain reaction (qPCR) data from extracted eDNA samples. Data from eDNA sampling surveys is often analyzed with occupancy models or GLMS, but there are several characteristics of qPCR data in particular which made us feel that it would benefit from a different modeling approach. Specifically, our approach to this data makes use of Bayesian truncated latent variable models written in <a href="https://mc-stan.org" class="external-link">Stan</a>.</p>
 </div>
-<div id="modeling-qpcr-edna-data-with-artemis" class="section level2">
-<h2 class="hasAnchor">
-<a href="#modeling-qpcr-edna-data-with-artemis" class="anchor"></a>Modeling qPCR eDNA Data with <code>artemis</code>
+<div class="section level2">
+<h2 id="modeling-qpcr-edna-data-with-artemis">Modeling qPCR eDNA Data with <code>artemis</code><a class="anchor" aria-label="anchor" href="#modeling-qpcr-edna-data-with-artemis"></a>
 </h2>
 <p>We created the <code>artemis</code> R package to implement Bayesian censored latent variable models, which mitigate the weaknesses of common statistical analysis techniques applied to qPCR data. Additionally, <code>artemis</code> includes utilities to aid in the design and analysis of eDNA survey studies, including simulation and power analysis functions.</p>
 <p>At its core, <code>artemis</code> is a specialized Generalized Linear Model, where the predictors are assumed to additively affect the response variable, in this case <span class="math inline">\(ln[eDNA]\)</span>,</p>
@@ -129,25 +124,24 @@
 <li><p>account for the data censoring at the upper limit of qPCR cycles, <em>which properly accounts for uncertainty and reduces bias in the estimates.</em></p></li>
 </ul>
 </div>
-<div id="installing-artemis" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installing-artemis" class="anchor"></a>Installing <code>artemis</code>
+<div class="section level2">
+<h2 id="installing-artemis">Installing <code>artemis</code><a class="anchor" aria-label="anchor" href="#installing-artemis"></a>
 </h2>
-<p>The <code>artemis</code> installation guide can be found <a href="https://fishsciences.github.io/artemis/articles/artemis-installation-guide.html">here</a>.</p>
+<p>The <code>artemis</code> installation guide can be found <a href="https://fishsciences.github.io/artemis/articles/artemis-installation-guide.html" class="external-link">here</a>.</p>
 </div>
-<div id="a-note-on-included-sample-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#a-note-on-included-sample-data" class="anchor"></a>A note on included sample data</h2>
+<div class="section level2">
+<h2 id="a-note-on-included-sample-data">A note on included sample data<a class="anchor" aria-label="anchor" href="#a-note-on-included-sample-data"></a>
+</h2>
 <p>Since <code>artemis</code> was originally written to analyze aquatic eDNA samples, the examples and sample data included in the package (see <code><a href="../reference/eDNA_data.html">?eDNA_data</a></code>) reference variables that are specific to aquatic eDNA survey data. These variables include <code>volume</code> (the the number of mililiters of water that went through the filter in each sample) and <code>distance</code> (the distance in meters from the source of eDNA). For example, <code>eDNA_data</code> is from a “live car” experiment, where eDNA was sampled at known distances from a source of eDNA (fish in a net pen in unidirectional flow).</p>
 <p>In the following examples, <code>tech_rep</code> refers to qPCR replicates generated from a single extracted sample or filter; <code>rep</code> refers to a single extracted filter or sample.</p>
 </div>
-<div id="overview-of-artemis-functionality" class="section level2">
-<h2 class="hasAnchor">
-<a href="#overview-of-artemis-functionality" class="anchor"></a>Overview of <code>artemis</code> Functionality</h2>
-<p>The functions included in <code>artemis</code> can be grouped into a few categories; each category is either introduced in this vignette, or addressed in detail by its own vignette. <a href="https://fishsciences.github.io/artemis/articles/">Available vignettes</a> are linked to individually below:</p>
+<div class="section level2">
+<h2 id="overview-of-artemis-functionality">Overview of <code>artemis</code> Functionality<a class="anchor" aria-label="anchor" href="#overview-of-artemis-functionality"></a>
+</h2>
+<p>The functions included in <code>artemis</code> can be grouped into a few categories; each category is either introduced in this vignette, or addressed in detail by its own vignette. <a href="https://fishsciences.github.io/artemis/articles/" class="external-link">Available vignettes</a> are linked to individually below:</p>
 <ol style="list-style-type: decimal">
-<li><a href="https://fishsciences.github.io/artemis/articles/simulation.html">Simulation of data</a></li>
-<li><a href="https://fishsciences.github.io/artemis/articles/modeling.html">Modeling data</a></li>
+<li><a href="https://fishsciences.github.io/artemis/articles/simulation.html" class="external-link">Simulation of data</a></li>
+<li><a href="https://fishsciences.github.io/artemis/articles/modeling.html" class="external-link">Modeling data</a></li>
 <li>Conducting post-hoc analyses
 <ul>
 <li>estimating probability of detection, generating predictions from model fits.</li>
@@ -156,66 +150,66 @@
 <li>Conducting power and precision analyses</li>
 </ol>
 <p>These categories are addressed in the sections that follow.<br><br></p>
-<p>The <code>artemis</code> package also includes methods for R’s <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code>, <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>, <code><a href="https://rdrr.io/r/base/data.frame.html">data.frame()</a></code>, and <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> functions.</p>
+<p>The <code>artemis</code> package also includes methods for R’s <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>, <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>, <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame()</a></code>, and <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> functions.</p>
 </div>
-<div id="post-hoc-analyses-pdetect" class="section level2">
-<h2 class="hasAnchor">
-<a href="#post-hoc-analyses-pdetect" class="anchor"></a>Post-hoc analyses (<em>p(detect)</em>)</h2>
+<div class="section level2">
+<h2 id="post-hoc-analyses-pdetect">Post-hoc analyses (<em>p(detect)</em>)<a class="anchor" aria-label="anchor" href="#post-hoc-analyses-pdetect"></a>
+</h2>
 <p>Often purpose of an eDNA sampling study is to inform a field sampling protocol. For these cases, we often want to know how likely we are to detect eDNA, given the way that we sampled. <code><a href="../reference/est_p_detect.html">est_p_detect()</a></code> returns the probability of getting a detection across all planned samples and replicates, where <code>n_rep</code> represents the product of the number of filters and technical replicates for each filter. For example, if you planned to take 2-5 filters at each variable level and then complete 6 extractions for each filter, that would be <code>n_rep = 12:30</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">p_detect</span> <span class="op">=</span> <span class="fu"><a href="../reference/est_p_detect.html">est_p_detect</a></span><span class="op">(</span>variable_levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>Intercept <span class="op">=</span> <span class="fl">1</span>, 
-                                            Distance <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>,
-                        betas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>Intercept <span class="op">=</span> <span class="op">-</span><span class="fl">10.5</span>, Distance <span class="op">=</span> <span class="op">-</span><span class="fl">0.03</span><span class="op">)</span>,
-                        ln_eDNA_sd <span class="op">=</span> <span class="fl">1</span>, 
-                        std_curve_alpha <span class="op">=</span> <span class="fl">21.2</span>, std_curve_beta <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span>,
-                        n_rep <span class="op">=</span> <span class="fl">12</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>
-<span class="va">p_detect</span>
-<span class="co">#&gt; Variable levels: </span>
-<span class="co">#&gt; Intercept  Distance </span>
-<span class="co">#&gt;         1       100 </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;    n_reps  p_detect</span>
-<span class="co">#&gt; 1      12 0.8646429</span>
-<span class="co">#&gt; 2      13 0.8854212</span>
-<span class="co">#&gt; 3      14 0.9030098</span>
-<span class="co">#&gt; 4      15 0.9178985</span>
-<span class="co">#&gt; 5      16 0.9305016</span>
-<span class="co">#&gt; 6      17 0.9411701</span>
-<span class="co">#&gt; 7      18 0.9502009</span>
-<span class="co">#&gt; 8      19 0.9578454</span>
-<span class="co">#&gt; 9      20 0.9643164</span>
-<span class="co">#&gt; 10     21 0.9697941</span>
-<span class="co">#&gt; 11     22 0.9744309</span>
-<span class="co">#&gt; 12     23 0.9783560</span>
-<span class="co">#&gt; 13     24 0.9816785</span>
-<span class="co">#&gt; 14     25 0.9844909</span>
-<span class="co">#&gt; 15     26 0.9868717</span>
-<span class="co">#&gt; 16     27 0.9888870</span>
-<span class="co">#&gt; 17     28 0.9905929</span>
-<span class="co">#&gt; 18     29 0.9920370</span>
-<span class="co">#&gt; 19     30 0.9932593</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">p_detect</span> <span class="op">=</span> <span class="fu"><a href="../reference/est_p_detect.html">est_p_detect</a></span><span class="op">(</span>variable_levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>Intercept <span class="op">=</span> <span class="fl">1</span>, </span>
+<span>                                            Distance <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>,</span>
+<span>                        betas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>Intercept <span class="op">=</span> <span class="op">-</span><span class="fl">10.5</span>, Distance <span class="op">=</span> <span class="op">-</span><span class="fl">0.03</span><span class="op">)</span>,</span>
+<span>                        ln_eDNA_sd <span class="op">=</span> <span class="fl">1</span>, </span>
+<span>                        std_curve_alpha <span class="op">=</span> <span class="fl">21.2</span>, std_curve_beta <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span>,</span>
+<span>                        n_rep <span class="op">=</span> <span class="fl">12</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
+<span><span class="va">p_detect</span></span>
+<span><span class="co">#&gt; Variable levels: </span></span>
+<span><span class="co">#&gt; Intercept  Distance </span></span>
+<span><span class="co">#&gt;         1       100 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;    n_reps  p_detect</span></span>
+<span><span class="co">#&gt; 1      12 0.8646429</span></span>
+<span><span class="co">#&gt; 2      13 0.8854212</span></span>
+<span><span class="co">#&gt; 3      14 0.9030098</span></span>
+<span><span class="co">#&gt; 4      15 0.9178985</span></span>
+<span><span class="co">#&gt; 5      16 0.9305016</span></span>
+<span><span class="co">#&gt; 6      17 0.9411701</span></span>
+<span><span class="co">#&gt; 7      18 0.9502009</span></span>
+<span><span class="co">#&gt; 8      19 0.9578454</span></span>
+<span><span class="co">#&gt; 9      20 0.9643164</span></span>
+<span><span class="co">#&gt; 10     21 0.9697941</span></span>
+<span><span class="co">#&gt; 11     22 0.9744309</span></span>
+<span><span class="co">#&gt; 12     23 0.9783560</span></span>
+<span><span class="co">#&gt; 13     24 0.9816785</span></span>
+<span><span class="co">#&gt; 14     25 0.9844909</span></span>
+<span><span class="co">#&gt; 15     26 0.9868717</span></span>
+<span><span class="co">#&gt; 16     27 0.9888870</span></span>
+<span><span class="co">#&gt; 17     28 0.9905929</span></span>
+<span><span class="co">#&gt; 18     29 0.9920370</span></span>
+<span><span class="co">#&gt; 19     30 0.9932593</span></span></code></pre></div>
 <p>We can also plot this,</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">p_detect</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p_detect</span><span class="op">)</span></span></code></pre></div>
 <p><img src="artemis-overview_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 <p>Alternatively, we can also use a fit model to estimate the p(detect) for a set of circumstances. Unlike the above, using a fit model allows us to estimate the probability of detection with the uncertainty in our effect size estimates taken into account.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">model_fit</span> <span class="op">=</span> <span class="fu"><a href="../reference/eDNA_lm.html">eDNA_lm</a></span><span class="op">(</span><span class="va">Cq</span> <span class="op">~</span> <span class="va">Distance_m</span> <span class="op">+</span> <span class="va">Volume_mL</span>, 
-                    data <span class="op">=</span> <span class="va">eDNA_data</span>,
-                    std_curve_alpha <span class="op">=</span> <span class="fl">21.2</span>, std_curve_beta <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span>,
-                    seed <span class="op">=</span> <span class="fl">1234</span>,
-                    chains <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-
-<span class="co"># Intercept is automatically supplied if in model_fit</span>
-<span class="va">p_detect2</span> <span class="op">=</span> <span class="fu"><a href="../reference/est_p_detect.html">est_p_detect</a></span><span class="op">(</span>variable_levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>Distance_m <span class="op">=</span> <span class="fl">100</span>,
-                                             Volume_mL <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>,
-                        model_fit <span class="op">=</span> <span class="va">model_fit</span>, 
-                        n_rep <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">p_detect2</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">model_fit</span> <span class="op">=</span> <span class="fu"><a href="../reference/eDNA_lmer.html">eDNA_lm</a></span><span class="op">(</span><span class="va">Cq</span> <span class="op">~</span> <span class="va">Distance_m</span> <span class="op">+</span> <span class="va">Volume_mL</span>, </span>
+<span>                    data <span class="op">=</span> <span class="va">eDNA_data</span>,</span>
+<span>                    std_curve_alpha <span class="op">=</span> <span class="fl">21.2</span>, std_curve_beta <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span>,</span>
+<span>                    seed <span class="op">=</span> <span class="fl">1234</span>,</span>
+<span>                    chains <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Intercept is automatically supplied if in model_fit</span></span>
+<span><span class="va">p_detect2</span> <span class="op">=</span> <span class="fu"><a href="../reference/est_p_detect.html">est_p_detect</a></span><span class="op">(</span>variable_levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>Distance_m <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>                                             Volume_mL <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>,</span>
+<span>                        model_fit <span class="op">=</span> <span class="va">model_fit</span>, </span>
+<span>                        n_rep <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p_detect2</span><span class="op">)</span></span></code></pre></div>
 <p>and we can plot the results,</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">p_detect2</span>, error_width <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p_detect2</span>, error_width <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></code></pre></div>
 <p><br><br> — <br><br></p>
 </div>
   </div>
@@ -231,11 +225,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Matt Espe, Myfanwy Johnston.</p>
+  <p></p>
+<p>Developed by Matt Espe, Myfanwy Johnston.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
@@ -243,6 +239,8 @@
 
   
 
+
+  
 
   </body>
 </html>

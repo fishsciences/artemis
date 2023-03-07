@@ -26,6 +26,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -38,23 +40,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">artemis</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.3</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -82,7 +78,7 @@
 
       
 
-      </header><script src="simulation_files/header-attrs-2.11/header-attrs.js"></script><script src="simulation_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Simulating eDNA Data with <code>artemis</code>
@@ -97,169 +93,167 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">artemis</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">artemis</span><span class="op">)</span></span></code></pre></div>
 <p>(Adapted from manuscript Espe et al, in preparation)</p>
-<div id="introduction" class="section level1">
-<h1 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h1>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
 <p>Simulating data is extremely useful. It’s like a sandbox to play and practice in, allowing us to test assumptions, visualize model relationships, and conduct power analyses on hypothetical experiments.</p>
-<p>The <code>artemis</code> package includes two flexible functions for simulating data: <code><a href="../reference/sim_eDNA_lm.html">sim_eDNA_lm()</a></code> and <code><a href="../reference/sim_eDNA_lm.html">sim_eDNA_lmer()</a></code>. These functions use the same data generation process outlined in the <a href="https://fishsciences.github.io/artemis/articles/artemis-overview.html">Getting Started with <code>artemis</code> vignette</a>.</p>
+<p>The <code>artemis</code> package includes two flexible functions for simulating data: <code><a href="../reference/sim_eDNA_lmer.html">sim_eDNA_lm()</a></code> and <code><a href="../reference/sim_eDNA_lmer.html">sim_eDNA_lmer()</a></code>. These functions use the same data generation process outlined in the <a href="https://fishsciences.github.io/artemis/articles/artemis-overview.html" class="external-link">Getting Started with <code>artemis</code> vignette</a>.</p>
 <p>In this vignette, we will work through the three main steps of the data simulation process in <code>artemis</code>, and show how the results of data simulation can be stored, summarized, and plotted.</p>
-<div id="step-1--create-a-list-of-variables" class="section level2">
-<h2 class="hasAnchor">
-<a href="#step-1--create-a-list-of-variables" class="anchor"></a>Step 1. Create a list of variables</h2>
+<div class="section level3">
+<h3 id="step-1--create-a-list-of-variables">Step 1. Create a list of variables<a class="anchor" aria-label="anchor" href="#step-1--create-a-list-of-variables"></a>
+</h3>
 <p>In order to simulate data, we first must provide a list of variables and their associated levels. For example, if the hypothetical survey or experiment had varying levels of the variables <code>distance</code>, <code>volume</code>,<code>tech_rep</code>, and <code>rep</code>, we might create the following complete list of variables:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">vars</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>Cq <span class="op">=</span> <span class="fl">1</span>,
-            Intercept <span class="op">=</span> <span class="fl">1</span>,
-            distance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">15</span>, <span class="fl">50</span><span class="op">)</span>,
-            volume <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">25</span>, <span class="fl">50</span><span class="op">)</span>,
-            tech_rep <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,
-            rep <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></code></pre></div>
-<p>There is nothing special about the names used here, other than that they must be matched in the formula eventually expressed in <code><a href="../reference/sim_eDNA_lm.html">sim_eDNA_lm()</a></code>. The variables can have as many levels as we like, and be categorical or continuous (we would wrap categorical variables with <code><a href="https://rdrr.io/r/base/factor.html">as.factor()</a></code>).</p>
-<p>We included two dummy variables in our list: one for the response (“<code>Cq</code>”), and one for the intercept. The response dummy variable is used internally by the simulation functions to create the model matrix. We could have omitted the intercept variable here, but the <code><a href="https://rdrr.io/r/stats/model.matrix.html">model.matrix()</a></code> function that gets called downstream will create one by default, so it’s good practice to include it in our variable list.</p>
+<code class="sourceCode R"><span><span class="va">vars</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Cq <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>            Intercept <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>            distance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">15</span>, <span class="fl">50</span><span class="op">)</span>,</span>
+<span>            volume <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">25</span>, <span class="fl">50</span><span class="op">)</span>,</span>
+<span>            tech_rep <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,</span>
+<span>            rep <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p>There is nothing special about the names used here, other than that they must be matched in the formula eventually expressed in <code><a href="../reference/sim_eDNA_lmer.html">sim_eDNA_lm()</a></code>. The variables can have as many levels as we like, and be categorical or continuous (we would wrap categorical variables with <code><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor()</a></code>).</p>
+<p>We included two dummy variables in our list: one for the response (“<code>Cq</code>”), and one for the intercept. The response dummy variable is used internally by the simulation functions to create the model matrix. We could have omitted the intercept variable here, but the <code><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix()</a></code> function that gets called downstream will create one by default, so it’s good practice to include it in our variable list.</p>
 </div>
-<div id="step-2--provide-effect-sizes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#step-2--provide-effect-sizes" class="anchor"></a>Step 2. Provide effect sizes</h2>
+<div class="section level3">
+<h3 id="step-2--provide-effect-sizes">Step 2. Provide effect sizes<a class="anchor" aria-label="anchor" href="#step-2--provide-effect-sizes"></a>
+</h3>
 <p>Next, we must provide effect sizes (<code>betas</code>) for the variables we plan to include in the model formula. The values we assign the <code>betas</code> will no doubt depend on our reasons for doing the simulation. If we have previous model results for the effects of distance and volume, for example, we might use those for our <code>betas</code> vector:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">betas</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>intercept <span class="op">=</span> <span class="op">-</span><span class="fl">10.6</span>, distance <span class="op">=</span> <span class="op">-</span><span class="fl">0.05</span>, volume <span class="op">=</span> <span class="fl">0.02</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">betas</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>intercept <span class="op">=</span> <span class="op">-</span><span class="fl">10.6</span>, distance <span class="op">=</span> <span class="op">-</span><span class="fl">0.05</span>, volume <span class="op">=</span> <span class="fl">0.02</span><span class="op">)</span></span></code></pre></div>
 <p>By default, the first beta value in <code>betas</code> will be considered the term for the intercept. The names of the <code>betas</code> don’t need to be the same as they are in the <code>vars</code> list above, or even the model formula expression, but the <code>sim_eDNA_*()</code> functions do reference the <code>betas</code> vector with respect to the model formula. This means that it’s the <em>order</em> of the variables between the <code>betas</code> vector and the model formula that needs to match, and that there needs to be one beta for each predictor in the model formula.</p>
 <p>When specifying the <code>betas</code> values, it helps to remember that all the model parameters are on the scale of <span class="math inline">\(log[eDNA]\)</span>, including the intercept. Here we specified the intercept to be -10, which came from previous modeling results but also corresponds to <code>exp(-10)</code><span class="math inline">\([eDNA]\)</span>. This is a very small number, and thus a proxy for eDNA that is very rare in the environment before any covariates are considered. Often if we’re getting simulation results we find bizarre or surprising, the scale of the <code>betas</code> is the place to start debugging.</p>
 </div>
-<div id="step-3--call-the-sim_edna_-functions-to-simulate-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#step-3--call-the-sim_edna_-functions-to-simulate-data" class="anchor"></a>Step 3. Call the <code>sim_eDNA_*()</code> functions to simulate data</h2>
-<p>With our variable list and <code>betas</code> decided, we’re ready to simulate data! For fixed-effects variables, we use the <code><a href="../reference/sim_eDNA_lm.html">sim_eDNA_lm()</a></code> function. This function takes a model formula (with syntax identical to that used in the <code>lme4</code> package), the variable list and the <code>betas</code> vector, but it also requires the parameters from a standard curve equation for the conversion formula between <span class="math inline">\(log[eDNA]\)</span> and Cq values to the simulation function, as well as the measurement error on Cq (<code>sigma_ln_eDNA</code>):</p>
+<div class="section level3">
+<h3 id="step-3--call-the-sim_edna_-functions-to-simulate-data">Step 3. Call the <code>sim_eDNA_*()</code> functions to simulate data<a class="anchor" aria-label="anchor" href="#step-3--call-the-sim_edna_-functions-to-simulate-data"></a>
+</h3>
+<p>With our variable list and <code>betas</code> decided, we’re ready to simulate data! For fixed-effects variables, we use the <code><a href="../reference/sim_eDNA_lmer.html">sim_eDNA_lm()</a></code> function. This function takes a model formula (with syntax identical to that used in the <code>lme4</code> package), the variable list and the <code>betas</code> vector, but it also requires the parameters from a standard curve equation for the conversion formula between <span class="math inline">\(log[eDNA]\)</span> and Cq values to the simulation function, as well as the measurement error on Cq (<code>sigma_ln_eDNA</code>):</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span>
-<span class="va">ans</span> <span class="op">=</span> <span class="fu"><a href="../reference/sim_eDNA_lm.html">sim_eDNA_lm</a></span><span class="op">(</span><span class="va">Cq</span> <span class="op">~</span> <span class="va">distance</span> <span class="op">+</span> <span class="va">volume</span>, 
-                  variable_list <span class="op">=</span> <span class="va">vars</span>,
-                  betas <span class="op">=</span> <span class="va">betas</span>,
-                  sigma_ln_eDNA <span class="op">=</span> <span class="fl">1.5</span>, 
-                  std_curve_alpha <span class="op">=</span> <span class="fl">21.2</span>, 
-                  std_curve_beta <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span><span class="op">)</span>
-<span class="co">#&gt; Chain 1: </span>
-<span class="co">#&gt; Chain 1:  Elapsed Time: 0 seconds (Warm-up)</span>
-<span class="co">#&gt; Chain 1:                4.1e-05 seconds (Sampling)</span>
-<span class="co">#&gt; Chain 1:                4.1e-05 seconds (Total)</span>
-<span class="co">#&gt; Chain 1:</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
+<span><span class="va">ans</span> <span class="op">=</span> <span class="fu"><a href="../reference/sim_eDNA_lmer.html">sim_eDNA_lm</a></span><span class="op">(</span><span class="va">Cq</span> <span class="op">~</span> <span class="va">distance</span> <span class="op">+</span> <span class="va">volume</span>, </span>
+<span>                  variable_list <span class="op">=</span> <span class="va">vars</span>,</span>
+<span>                  betas <span class="op">=</span> <span class="va">betas</span>,</span>
+<span>                  sigma_ln_eDNA <span class="op">=</span> <span class="fl">1.5</span>, </span>
+<span>                  std_curve_alpha <span class="op">=</span> <span class="fl">21.2</span>, </span>
+<span>                  std_curve_beta <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Running MCMC with 1 chain...</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Chain 1 Iteration: 1 / 1 [100%]  (Sampling) </span></span>
+<span><span class="co">#&gt; Chain 1 finished in 0.0 seconds.</span></span></code></pre></div>
 <p>The returned object from the <code>sim_eDNA_*</code> functions isan object of class “eDNA_simulation”, which is essentially a list containing: 1) the latent variable <code>ln_conc</code>, 2) the equivalent Cq value before truncation and measurement error <code>Cq_hat</code>, and 3) the estimated Cq value following the truncation and measurement error <code>Cq_star</code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">ans</span>, max.level <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
-<span class="co">#&gt; Formal class 'eDNA_simulation' [package "artemis"] with 10 slots</span>
-<span class="co">#&gt;   ..@ ln_conc_hat    : num [1, 1:180] -11.04 -10.76 -10.61 -11.45 -8.91 ...</span>
-<span class="co">#&gt;   .. ..- attr(*, "dimnames")=List of 2</span>
-<span class="co">#&gt;   ..@ ln_conc_star   : num [1, 1:180] -10.1 -10.8 -12.6 -9.6 -10.3 ...</span>
-<span class="co">#&gt;   .. ..- attr(*, "dimnames")=List of 2</span>
-<span class="co">#&gt;   ..@ Cq_star        : num [1, 1:180] 37.8 37.3 37.1 38.4 34.6 ...</span>
-<span class="co">#&gt;   .. ..- attr(*, "dimnames")=List of 2</span>
-<span class="co">#&gt;   ..@ formula        :Class 'formula'  language Cq ~ distance + volume</span>
-<span class="co">#&gt;   .. .. ..- attr(*, ".Environment")=&lt;environment: R_GlobalEnv&gt; </span>
-<span class="co">#&gt;   ..@ variable_levels:List of 6</span>
-<span class="co">#&gt;   .. ..$ Cq       : num 1</span>
-<span class="co">#&gt;   .. ..$ Intercept: num 1</span>
-<span class="co">#&gt;   .. ..$ distance : num [1:3] 0 15 50</span>
-<span class="co">#&gt;   .. ..$ volume   : num [1:2] 25 50</span>
-<span class="co">#&gt;   .. ..$ tech_rep : int [1:10] 1 2 3 4 5 6 7 8 9 10</span>
-<span class="co">#&gt;   .. ..$ rep      : int [1:3] 1 2 3</span>
-<span class="co">#&gt;   ..@ betas          : Named num [1:3] -10.6 -0.05 0.02</span>
-<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:3] "intercept" "distance" "volume"</span>
-<span class="co">#&gt;   ..@ x              :'data.frame':  180 obs. of  3 variables:</span>
-<span class="co">#&gt;   .. ..$ (Intercept): num [1:180] 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="co">#&gt;   .. ..$ distance   : num [1:180] 0 15 50 0 15 50 0 15 50 0 ...</span>
-<span class="co">#&gt;   .. ..$ volume     : num [1:180] 25 25 25 50 50 50 25 25 25 50 ...</span>
-<span class="co">#&gt;   ..@ std_curve_alpha: num 21.2</span>
-<span class="co">#&gt;   ..@ std_curve_beta : num -1.5</span>
-<span class="co">#&gt;   ..@ upper_Cq       : num 40</span></code></pre></div>
-<p>We can inspect empirical summaries of marginal distributions in the simulations with <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>,</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">ans</span>, max.level <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Formal class 'eDNA_simulation' [package "artemis"] with 10 slots</span></span>
+<span><span class="co">#&gt;   ..@ ln_conc_hat    : num [1, 1:180] -11.81 -12.36 -12.5 -8.65 -12.85 ...</span></span>
+<span><span class="co">#&gt;   .. ..- attr(*, "dimnames")=List of 2</span></span>
+<span><span class="co">#&gt;   ..@ ln_conc_star   : num [1, 1:180] -10.1 -10.8 -12.6 -9.6 -10.3 ...</span></span>
+<span><span class="co">#&gt;   .. ..- attr(*, "dimnames")=List of 2</span></span>
+<span><span class="co">#&gt;   ..@ Cq_star        : num [1, 1:180] 38.9 39.7 39.9 34.2 40 ...</span></span>
+<span><span class="co">#&gt;   .. ..- attr(*, "dimnames")=List of 2</span></span>
+<span><span class="co">#&gt;   ..@ formula        :Class 'formula'  language Cq ~ distance + volume</span></span>
+<span><span class="co">#&gt;   .. .. ..- attr(*, ".Environment")=&lt;environment: R_GlobalEnv&gt; </span></span>
+<span><span class="co">#&gt;   ..@ variable_levels:List of 6</span></span>
+<span><span class="co">#&gt;   .. ..$ Cq       : num 1</span></span>
+<span><span class="co">#&gt;   .. ..$ Intercept: num 1</span></span>
+<span><span class="co">#&gt;   .. ..$ distance : num [1:3] 0 15 50</span></span>
+<span><span class="co">#&gt;   .. ..$ volume   : num [1:2] 25 50</span></span>
+<span><span class="co">#&gt;   .. ..$ tech_rep : int [1:10] 1 2 3 4 5 6 7 8 9 10</span></span>
+<span><span class="co">#&gt;   .. ..$ rep      : int [1:3] 1 2 3</span></span>
+<span><span class="co">#&gt;   ..@ betas          : Named num [1:3] -10.6 -0.05 0.02</span></span>
+<span><span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:3] "intercept" "distance" "volume"</span></span>
+<span><span class="co">#&gt;   ..@ x              :'data.frame':  180 obs. of  3 variables:</span></span>
+<span><span class="co">#&gt;   .. ..$ (Intercept): num [1:180] 1 1 1 1 1 1 1 1 1 1 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ distance   : num [1:180] 0 15 50 0 15 50 0 15 50 0 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ volume     : num [1:180] 25 25 25 50 50 50 25 25 25 50 ...</span></span>
+<span><span class="co">#&gt;   ..@ std_curve_alpha: num 21.2</span></span>
+<span><span class="co">#&gt;   ..@ std_curve_beta : num -1.5</span></span>
+<span><span class="co">#&gt;   ..@ upper_Cq       : num 40</span></span></code></pre></div>
+<p>We can inspect empirical summaries of marginal distributions in the simulations with <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>,</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">ans</span><span class="op">)</span>
-<span class="co">#&gt;      variable level     2.5%      50% 97.5%     mean  p_detect</span>
-<span class="co">#&gt; 1 (Intercept)     1 31.99562 37.60102    40 37.29959 0.7888889</span>
-<span class="co">#&gt; 2    distance     0 31.44763 36.07375    40 35.92179 0.9333333</span>
-<span class="co">#&gt; 3    distance    15 33.87386 37.39391    40 37.31752 0.8500000</span>
-<span class="co">#&gt; 4    distance    50 34.86472 39.34097    40 38.65945 0.5833333</span>
-<span class="co">#&gt; 5      volume    25 32.42318 37.44094    40 37.32440 0.8222222</span>
-<span class="co">#&gt; 6      volume    50 31.74474 37.84910    40 37.27477 0.7555556</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">ans</span><span class="op">)</span></span>
+<span><span class="co">#&gt;      variable level     2.5%      50% 97.5%     mean  p_detect</span></span>
+<span><span class="co">#&gt; 1 (Intercept)     1 33.14726 38.12175    40 37.64939 0.6888889</span></span>
+<span><span class="co">#&gt; 2    distance     0 32.41931 36.17500    40 36.34446 0.8833333</span></span>
+<span><span class="co">#&gt; 3    distance    15 34.08044 37.41015    40 37.46728 0.7666667</span></span>
+<span><span class="co">#&gt; 4    distance    50 35.65393 40.00000    40 39.13642 0.4166667</span></span>
+<span><span class="co">#&gt; 5      volume    25 32.98615 38.33020    40 37.84253 0.6666667</span></span>
+<span><span class="co">#&gt; 6      volume    50 33.51568 37.41675    40 37.45624 0.7111111</span></span></code></pre></div>
 <p>…which summarizes the response (Cq on its natural scale) across each level of the variables used to simulate the data.</p>
 <p><strong><em>WARNING</em></strong>: <em>these marginal effects can be misleading in cases where interactions are simulated; if you have interaction effects, additional analysis is recommended.</em></p>
 <p>The last column of the table returned by <code>summary</code> is the percent of observations that represented positive detections, i.e. a Cq value below the upper cycle threshold for non-detection (set to 40 by default). In the output above, 93% of the simulated data with <code>distance</code> = 0 was below 40.0.</p>
 </div>
 </div>
-<div id="simulating-many-many-datasets" class="section level1">
-<h1 class="hasAnchor">
-<a href="#simulating-many-many-datasets" class="anchor"></a>Simulating many many datasets</h1>
+<div class="section level2">
+<h2 id="simulating-many-many-datasets">Simulating many many datasets<a class="anchor" aria-label="anchor" href="#simulating-many-many-datasets"></a>
+</h2>
 <p>By default, the <code>sim_eDNA_*</code> functions will only simulate one instance of the hypothetical survey/experiment, but we can easily simulate many datasets by adjusting the <code>n_sim</code> parameter. This becomes especially useful when we want to do power analyses on simulated results.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ans2</span> <span class="op">=</span> <span class="fu"><a href="../reference/sim_eDNA_lm.html">sim_eDNA_lm</a></span><span class="op">(</span><span class="va">Cq</span> <span class="op">~</span> <span class="va">distance</span> <span class="op">+</span> <span class="va">volume</span>, 
-                  variable_list <span class="op">=</span> <span class="va">vars</span>,
-                  betas <span class="op">=</span> <span class="va">betas</span>,
-                  sigma_ln_eDNA <span class="op">=</span> <span class="fl">1</span>, 
-                  std_curve_alpha <span class="op">=</span> <span class="fl">21.2</span>, 
-                  std_curve_beta <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span>,
-                  n_sim <span class="op">=</span> <span class="fl">500</span><span class="op">)</span> <span class="co"># specifies the number of simulated datasets to generate</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">ans2</span> <span class="op">=</span> <span class="fu"><a href="../reference/sim_eDNA_lmer.html">sim_eDNA_lm</a></span><span class="op">(</span><span class="va">Cq</span> <span class="op">~</span> <span class="va">distance</span> <span class="op">+</span> <span class="va">volume</span>, </span>
+<span>                  variable_list <span class="op">=</span> <span class="va">vars</span>,</span>
+<span>                  betas <span class="op">=</span> <span class="va">betas</span>,</span>
+<span>                  sigma_ln_eDNA <span class="op">=</span> <span class="fl">1</span>, </span>
+<span>                  std_curve_alpha <span class="op">=</span> <span class="fl">21.2</span>, </span>
+<span>                  std_curve_beta <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span>,</span>
+<span>                  n_sim <span class="op">=</span> <span class="fl">500</span><span class="op">)</span> <span class="co"># specifies the number of simulated datasets to generate</span></span></code></pre></div>
 <p>When multiple simulations are requested, each of these will be stored in a matrix, with each column representing a single simulated instance.</p>
 </div>
-<div id="plotting-simulated-data" class="section level1">
-<h1 class="hasAnchor">
-<a href="#plotting-simulated-data" class="anchor"></a>Plotting simulated data</h1>
-<p>The results of the simulations can be plotted with <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code>:</p>
+<div class="section level2">
+<h2 id="plotting-simulated-data">Plotting simulated data<a class="anchor" aria-label="anchor" href="#plotting-simulated-data"></a>
+</h2>
+<p>The results of the simulations can be plotted with <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">ans</span>, alpha <span class="op">=</span> <span class="fl">0.5</span>, jitter_width <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span>
-<span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[3]]</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ans</span>, alpha <span class="op">=</span> <span class="fl">0.5</span>, jitter_width <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [[1]]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[2]]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[3]]</span></span></code></pre></div>
 <p><img src="simulation_files/figure-html/unnamed-chunk-8-1.png" width="700"><img src="simulation_files/figure-html/unnamed-chunk-8-2.png" width="700"><img src="simulation_files/figure-html/unnamed-chunk-8-3.png" width="700"></p>
 <p><br></p>
-<p>Similar to <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>, each plot panel shows the marginal distribution of the response (either Cq or <span class="math inline">\(log[eDNA]\)</span>) across the levels of the variables used to simulate the data.</p>
-<div id="creating-custom-plots" class="section level2">
-<h2 class="hasAnchor">
-<a href="#creating-custom-plots" class="anchor"></a>Creating custom plots</h2>
-<p><code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> is a generic method intended for quick visualization of simulations. When we wish to create custom plots, we can convert a simulated dataset to a <code>dataframe</code> by calling <code><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame()</a></code> or <code><a href="https://rdrr.io/r/base/data.frame.html">data.frame()</a></code> on the simulation object, and then plot them with our method of choice. Here is an example using <code>ggplot2</code>:</p>
+<p>Similar to <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>, each plot panel shows the marginal distribution of the response (either Cq or <span class="math inline">\(log[eDNA]\)</span>) across the levels of the variables used to simulate the data.</p>
+<div class="section level3">
+<h3 id="creating-custom-plots">Creating custom plots<a class="anchor" aria-label="anchor" href="#creating-custom-plots"></a>
+</h3>
+<p><code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> is a generic method intended for quick visualization of simulations. When we wish to create custom plots, we can convert a simulated dataset to a <code>dataframe</code> by calling <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code> or <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame()</a></code> on the simulation object, and then plot them with our method of choice. Here is an example using <code>ggplot2</code>:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">simsdf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">ans</span><span class="op">)</span>
-
-<span class="co"># custom plot of simulated data</span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">simsdf</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">distance</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">Cq_star</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">volume</span><span class="op">)</span><span class="op">)</span>,
-              width <span class="op">=</span> <span class="fl">0.05</span>,
-              alpha <span class="op">=</span> <span class="fl">0.65</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.5</span>,
-               width <span class="op">=</span> <span class="fl">0.2</span>,
-               size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Distance (m)"</span>, y <span class="op">=</span> <span class="st">"Estimated Cq"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">simsdf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">ans</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># custom plot of simulated data</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">simsdf</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">distance</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">Cq_star</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html" class="external-link">geom_jitter</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">volume</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>              width <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>              alpha <span class="op">=</span> <span class="fl">0.65</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">geom_boxplot</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>               width <span class="op">=</span> <span class="fl">0.2</span>,</span>
+<span>               size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Distance (m)"</span>, y <span class="op">=</span> <span class="st">"Estimated Cq"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="simulation_files/figure-html/unnamed-chunk-9-1.png" width="672"></p>
 <p><br></p>
 </div>
 </div>
-<div id="simulating-data-from-mixed-effects-models" class="section level1">
-<h1 class="hasAnchor">
-<a href="#simulating-data-from-mixed-effects-models" class="anchor"></a>Simulating data from mixed effects models</h1>
-<p>To simulate from a mixed-effects model, we use the function <code><a href="../reference/sim_eDNA_lm.html">sim_eDNA_lmer()</a></code>. Random effects are specified using the syntax of the <code>lme4</code> package, e.g. <code>(1|random effect)</code>:</p>
+<div class="section level2">
+<h2 id="simulating-data-from-mixed-effects-models">Simulating data from mixed effects models<a class="anchor" aria-label="anchor" href="#simulating-data-from-mixed-effects-models"></a>
+</h2>
+<p>To simulate from a mixed-effects model, we use the function <code><a href="../reference/sim_eDNA_lmer.html">sim_eDNA_lmer()</a></code>. Random effects are specified using the syntax of the <code>lme4</code> package, e.g. <code>(1|random effect)</code>:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ans3</span> <span class="op">=</span> <span class="fu"><a href="../reference/sim_eDNA_lm.html">sim_eDNA_lmer</a></span><span class="op">(</span><span class="va">Cq</span> <span class="op">~</span> <span class="va">distance</span> <span class="op">+</span> <span class="va">volume</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">rep</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">tech_rep</span><span class="op">)</span>,
-                     variable_list <span class="op">=</span> <span class="va">vars</span>,
-                     betas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>intercept <span class="op">=</span> <span class="op">-</span><span class="fl">10.6</span>, distance <span class="op">=</span> <span class="op">-</span><span class="fl">0.05</span>, volume <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span>,
-                     sigma_ln_eDNA <span class="op">=</span> <span class="fl">1</span>,
-                     sigma_rand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.1</span><span class="op">)</span>, <span class="co">#stdev of the random effects</span>
-                     std_curve_alpha <span class="op">=</span> <span class="fl">21.2</span>,
-                     std_curve_beta <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span><span class="op">)</span>
-<span class="co">#&gt; Chain 1: </span>
-<span class="co">#&gt; Chain 1:  Elapsed Time: 0 seconds (Warm-up)</span>
-<span class="co">#&gt; Chain 1:                4.6e-05 seconds (Sampling)</span>
-<span class="co">#&gt; Chain 1:                4.6e-05 seconds (Total)</span>
-<span class="co">#&gt; Chain 1:</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">ans3</span> <span class="op">=</span> <span class="fu"><a href="../reference/sim_eDNA_lmer.html">sim_eDNA_lmer</a></span><span class="op">(</span><span class="va">Cq</span> <span class="op">~</span> <span class="va">distance</span> <span class="op">+</span> <span class="va">volume</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">rep</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">tech_rep</span><span class="op">)</span>,</span>
+<span>                     variable_list <span class="op">=</span> <span class="va">vars</span>,</span>
+<span>                     betas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>intercept <span class="op">=</span> <span class="op">-</span><span class="fl">10.6</span>, distance <span class="op">=</span> <span class="op">-</span><span class="fl">0.05</span>, volume <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span>,</span>
+<span>                     sigma_ln_eDNA <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                     sigma_rand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.1</span><span class="op">)</span>, <span class="co">#stdev of the random effects</span></span>
+<span>                     std_curve_alpha <span class="op">=</span> <span class="fl">21.2</span>,</span>
+<span>                     std_curve_beta <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Running MCMC with 1 chain...</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Chain 1 Iteration: 1 / 1 [100%]  (Sampling) </span></span>
+<span><span class="co">#&gt; Chain 1 finished in 0.0 seconds.</span></span></code></pre></div>
 <p>When we are simulating data with random effects, we must provide the standard deviation of the random effects (<code>sigma_rand</code>, a vector containing one value for each random effect <code>beta</code>), in addition to the information for the fixed effects.</p>
 <p>Random effects are assumed to be generated from a normal distribution for these simulations using this standard deviation (<code>sigma_rand</code>). When <code>n_sims</code> &gt; 1, different random effects are generated for each simulation.</p>
 </div>
-<div id="final-notes-on-the-simulation-functions" class="section level1">
-<h1 class="hasAnchor">
-<a href="#final-notes-on-the-simulation-functions" class="anchor"></a>Final notes on the simulation functions</h1>
+<div class="section level2">
+<h2 id="final-notes-on-the-simulation-functions">Final notes on the simulation functions<a class="anchor" aria-label="anchor" href="#final-notes-on-the-simulation-functions"></a>
+</h2>
 <p>By default, the simulation functions construct a model matrix assuming a complete block design (i.e. every level of each variable is represented). If we want to simulate data for an incomplete block design, we can specify our own variable <code>data.frame</code>, <code>X</code>, to create a model matrix.</p>
 <p><br></p>
 <p>When we specified the <code>vars</code> above, we included variables that we did not use in the formula. By design, the simulation and modeling functions ignore extra variables in the <code>variable_list</code> or <code>data</code> inputs. This is just a workflow perk; it allows us to create a comprehensive list of variables we might be interested in, and then we only need adjust the model formula to change the simulations.</p>
@@ -280,11 +274,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Matt Espe, Myfanwy Johnston.</p>
+  <p></p>
+<p>Developed by Matt Espe, Myfanwy Johnston.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
@@ -292,6 +288,8 @@
 
   
 
+
+  
 
   </body>
 </html>
