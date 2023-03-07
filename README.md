@@ -61,15 +61,6 @@ model_fit2 = eDNA_lmer(Cq ~ scale(Distance_m) + scale(Volume_mL) + (1|FilterID),
 
 The first time these models are run the model code will need to be compiled. Thereafter, they should run without needing to be re-compiled.
 
-### Installing `artemis` from source
-
-<!-- Installing `artemis` from source on Windows is not currently well-supported; we recommend installing from the pre-compiled binary if you're on Windows.   -->
-
-If you prefer to install from source, then go ahead and do that with your function/utility of choice (`devtools::install_github()`, `utils::install.packages(type = "source")`, `R CMD INSTALL`, etc.).  
-<br>
-<!-- If you have sub-architecture you're really in to customizing, the source code is [here](https://github.com/fishsciences/artemis), go nuts. -->
-
-<br>
 
 ## Basic use
 
