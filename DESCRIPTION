@@ -1,6 +1,6 @@
 Package: artemis
 Title: Analysis and Simulation of Environmental DNA Experiments
-Version: 2.0.1
+Version: 2.0.3
 Authors@R: c(person(given = "Matt", family = "Espe",
 		   role = c("aut", "cre"),
 		   email = "mespe@ucdavis.edu"),
