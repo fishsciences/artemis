@@ -17,6 +17,11 @@ sampling and qPCR data. It implements a set of Bayesian
 latent-variable, truncated data models which are fit using
 [Stan](https://mc-stan.org/). 
 
+# !!!IMPORTANT!!! 
+
+The documentation/vignettes and website are out of date. There are plans to update these in mid-Sept. Follow at your own risk!
+
+
 ## Installation
 
 <br>
