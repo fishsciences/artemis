@@ -89,46 +89,91 @@
 <div class="section level4">
 <h4 id="section"></h4>
 <!-- badges: start -->
+<p>[ <!--![Codecov test coverage](https://codecov.io/gh/fishsciences/artemis/branch/main/graph/badge.svg)](https://app.codecov.io/gh/fishsciences/artemis?branch=main)
+--></p>
 <p><a href="https://github.com/fishsciences/artemis/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/fishsciences/artemis/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a> <!-- badges: end --></p>
 <p>The <code>artemis</code> package was created to aid in the design and analysis of eDNA survey studies by offering a custom suite of models for eDNA sampling and qPCR data. It implements a set of Bayesian latent-variable, truncated data models which are fit using <a href="https://mc-stan.org/" class="external-link">Stan</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p><br> The artemis package requires the <code>cmdstanr</code> package (as of 2022-03-24). This can be installed via</p>
-<pre><code><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"cmdstanr"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"https://mc-stan.org/r-packages/"</span>, <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"repos"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre>
-<p>Once that is installed, the easiest way to install <code>artemis</code> is with the <code>devtools</code> or <code>remotes</code> package:</p>
-<pre><code><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"fishsciences/artemis"</span><span class="op">)</span></span></code></pre>
-<p><br></p>
+<p>While it is possible to install <code>artemis</code> to run natively on Windows, <code>artemis</code> is most stable and easiest to install under Unix OSs (Mac OSX or Linux). As such, we recommend using one of these operating systems. Users of Windows OS should consider running the <a href="https://learn.microsoft.com/en-us/windows/wsl/install" class="external-link">Windows Subsystem for Linux</a> to ensure best compatability and stability.</p>
+<p><em>Please be aware, the development team of <code>artemis</code> is small with limited resources. Therefore, support for <code>artemis</code> installed on Windows will be limited.</em></p>
 <div class="section level3">
-<h3 id="testing-your-installation">Testing your installation<a class="anchor" aria-label="anchor" href="#testing-your-installation"></a>
+<h3 id="install-cmdstanr">Install <code>cmdstanr</code>
+<a class="anchor" aria-label="anchor" href="#install-cmdstanr"></a>
 </h3>
-<p>Before you can run the models in <code>artemis</code>, the backend <code>cmdstan</code> must be installed. This can be done with,</p>
-<pre><code><span><span class="fu">cmdstanr</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/cmdstanr/reference/install_cmdstan.html" class="external-link">install_cmdstan</a></span><span class="op">(</span><span class="op">)</span></span></code></pre>
-<p>If your installation of <code>artemis</code> and its dependencies was successful, the following code should run without error (although you may see warning messages from <code>Stan</code> about Bulk/Tail Effective Samples Sizes being too low).</p>
-<!-- If the first or second model returns an error that seems to have something to do with your `c++` compiler, you may need to [follow instructions to edit your `Makevars` or `Makevars.win` file](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started). --><pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">artemis</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">model_fit</span> <span class="op">=</span> <span class="fu"><a href="reference/eDNA_lmer.html">eDNA_lm</a></span><span class="op">(</span><span class="va">Cq</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">Distance_m</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">Volume_mL</span><span class="op">)</span>, </span>
-<span>                    data <span class="op">=</span> <span class="va">eDNA_data</span>,</span>
-<span>                    std_curve_alpha <span class="op">=</span> <span class="fl">21.2</span>, std_curve_beta <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">model_fit2</span> <span class="op">=</span> <span class="fu"><a href="reference/eDNA_lmer.html">eDNA_lmer</a></span><span class="op">(</span><span class="va">Cq</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">Distance_m</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">Volume_mL</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">FilterID</span><span class="op">)</span>,</span>
-<span>                       <span class="va">eDNA_data</span>,</span>
-<span>                       std_curve_alpha <span class="op">=</span> <span class="fl">21.2</span>, std_curve_beta <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span><span class="op">)</span></span></code></pre>
-<p>The first time these models are run the model code will need to be compiled. Thereafter, they should run without needing to be re-compiled.</p>
+<p>The artemis package requires the <code>cmdstanr</code> package (as of 2022-03-24). Please follow the installation guide from <a href="https://mc-stan.org/cmdstanr/articles/cmdstanr.html" class="external-link">cmdstanr</a>. For Unix systems, this can generally be installed via a single command in R:</p>
+<pre><code><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"cmdstanr"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"https://mc-stan.org/r-packages/"</span>, <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"repos"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+<p><strong>Notes for Windows users</strong>: <code>cmdstanr</code> requires <a href="https://cran.r-project.org/bin/windows/Rtools/" class="external-link">Rtools</a>. It mighht also require R to be run with admin permissions (depending on your Windows configuration).</p>
 </div>
 <div class="section level3">
-<h3 id="installing-artemis-from-source">Installing <code>artemis</code> from source<a class="anchor" aria-label="anchor" href="#installing-artemis-from-source"></a>
+<h3 id="install-cmdstan">Install <code>cmdstan</code>
+<a class="anchor" aria-label="anchor" href="#install-cmdstan"></a>
 </h3>
-<!-- Installing `artemis` from source on Windows is not currently well-supported; we recommend installing from the pre-compiled binary if you're on Windows.   --><p>If you prefer to install from source, then go ahead and do that with your function/utility of choice (<code><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">devtools::install_github()</a></code>, <code>utils::install.packages(type = "source")</code>, <code>R CMD INSTALL</code>, etc.).<br><br><!-- If you have sub-architecture you're really in to customizing, the source code is [here](https://github.com/fishsciences/artemis), go nuts. --></p>
-<p><br></p>
+<p>The <code>cmdstanr</code> package provides an interface to the shell tool <code>cmdstan</code>, but this needs to be installed as a separate step in R via</p>
+<pre><code><span><span class="fu">install_cmdstan</span><span class="op">(</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="section level3">
+<h3 id="verify-cmdstanr-toolchain">Verify <code>cmdstanr</code> toolchain<a class="anchor" aria-label="anchor" href="#verify-cmdstanr-toolchain"></a>
+</h3>
+<p>If <code>cmdstanr</code> and <code>cmdstan</code> were both installed correctly, the following commands should run without error:</p>
+<pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mc-stan.org/cmdstanr/" class="external-link">cmdstanr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># verify path and version</span></span>
+<span><span class="fu"><a href="https://mc-stan.org/cmdstanr/reference/set_cmdstan_path.html" class="external-link">cmdstan_path</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://mc-stan.org/cmdstanr/reference/set_cmdstan_path.html" class="external-link">cmdstan_version</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Compile a model</span></span>
+<span><span class="va">file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://mc-stan.org/cmdstanr/reference/set_cmdstan_path.html" class="external-link">cmdstan_path</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"examples"</span>, <span class="st">"bernoulli"</span>, <span class="st">"bernoulli.stan"</span><span class="op">)</span></span>
+<span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/cmdstanr/reference/cmdstan_model.html" class="external-link">cmdstan_model</a></span><span class="op">(</span><span class="va">file</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Fitting the model</span></span>
+<span><span class="co"># names correspond to the data block in the Stan program</span></span>
+<span><span class="va">data_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">10</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="va">mod</span><span class="op">$</span><span class="fu">sample</span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">data_list</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">123</span>,</span>
+<span>  chains <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  parallel_chains <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  refresh <span class="op">=</span> <span class="fl">500</span> <span class="co"># print update every 500 iters</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Print the results</span></span>
+<span><span class="va">fit</span><span class="op">$</span><span class="fu">summary</span><span class="op">(</span><span class="op">)</span></span></code></pre>
+<p>If any of the above steps do not work correctly, please debug your <code>cmdstanr</code> and <code>cmdstan</code> installation before proceeding to install <code>artemis</code>.</p>
+</div>
+<div class="section level3">
+<h3 id="install-artemis">Install <code>artemis</code>
+<a class="anchor" aria-label="anchor" href="#install-artemis"></a>
+</h3>
+<p>Finally, the easiest way to install <code>artemis</code> is with the <code>devtools</code> or <code>remotes</code> package:</p>
+<pre><code><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"fishsciences/artemis"</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="section level3">
+<h3 id="compile-the-artemis-models">Compile the <code>artemis</code> models<a class="anchor" aria-label="anchor" href="#compile-the-artemis-models"></a>
+</h3>
+<p>The models included in <code>artemis</code> are not compiled on install - they must be compiled via a second step following installation:</p>
+<pre><code><span><span class="fu">artemis</span><span class="fu">::</span><span class="fu"><a href="reference/compile_models.html">compile_models</a></span><span class="op">(</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="section level3">
+<h3 id="testing-your-artemis-installation">Testing your <code>artemis</code> installation<a class="anchor" aria-label="anchor" href="#testing-your-artemis-installation"></a>
+</h3>
+<p>If your installation of <code>artemis</code> and its dependencies was successful, the following code should run without error (although you may see warning messages from <code>Stan</code> about Bulk/Tail Effective Samples Sizes being too low).</p>
+<pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">artemis</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">model_fit</span> <span class="op">=</span> <span class="fu"><a href="reference/eDNA_lmer.html">eDNA_lmer</a></span><span class="op">(</span><span class="va">Cq</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">Distance_m</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">Volume_mL</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">FilterID</span><span class="op">)</span>,</span>
+<span>                       <span class="va">eDNA_data</span>,</span>
+<span>                       std_curve_alpha <span class="op">=</span> <span class="fl">21.2</span>, std_curve_beta <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">model_fit</span><span class="op">)</span></span></code></pre>
 </div>
 </div>
 <div class="section level2">
 <h2 id="basic-use">Basic use<a class="anchor" aria-label="anchor" href="#basic-use"></a>
 </h2>
 <p>Please refer to the <a href="https://fishsciences.github.io/artemis/articles/artemis-overview.html" class="external-link">Getting Started with the <code>artemis</code> package</a> vignette, which covers most of the functionality of artemis.</p>
-<p>Additional vignettes are forthcoming!</p>
 </div>
 <div class="section level2">
 <h2 id="reporting-bugs">Reporting bugs<a class="anchor" aria-label="anchor" href="#reporting-bugs"></a>
@@ -169,12 +214,7 @@
 </ul>
 </div>
 
-<div class="dev-status">
-<h2 data-toc-skip>Dev status</h2>
-<ul class="list-unstyled">
-<li><a href="https://app.codecov.io/gh/fishsciences/artemis?branch=main" class="external-link"><img src="https://codecov.io/gh/fishsciences/artemis/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
-</ul>
-</div>
+
 
   </div>
 </div>

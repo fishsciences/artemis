@@ -81,7 +81,8 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Modeling eDNA qPCR Data with <code>artemis</code>
+      <h1 data-toc-skip>Modeling eDNA qPCR Data with
+<code>artemis</code>
 </h1>
             
       
@@ -98,17 +99,35 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>A primary purpose of the <code>artemis</code> package is to facilitate modeling of qPCR data from eDNA samples. It does this via two modeling functions: <code><a href="../reference/eDNA_lmer.html">eDNA_lm()</a></code> for fixed effects models and <code><a href="../reference/eDNA_lmer.html">eDNA_lmer()</a></code> for mixed effects models. These functions mirror the semantics of R’s built in <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code> and lme4’s <code>lmer()</code>.</p>
+<p>A primary purpose of the <code>artemis</code> package is to
+facilitate modeling of qPCR data from eDNA samples. It does this via two
+modeling functions: <code><a href="../reference/eDNA_lmer.html">eDNA_lm()</a></code> for fixed effects models and
+<code><a href="../reference/eDNA_lmer.html">eDNA_lmer()</a></code> for mixed effects models. These functions
+mirror the semantics of R’s built in <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code> and lme4’s
+<code>lmer()</code>.</p>
 <div class="section level3">
 <h3 id="model-inputs">Model Inputs<a class="anchor" aria-label="anchor" href="#model-inputs"></a>
 </h3>
-<p>Both modeling functions require the following inputs from the data:</p>
+<p>Both modeling functions require the following inputs from the
+data:</p>
 <ol style="list-style-type: decimal">
-<li><p>A vector of numeric Cq values (quantification cycles), one for each qPCR replicate. Cq values corresponding to non-detections for your assay should be recorded as the threshold value (the default is 40.0 cycles).</p></li>
-<li><p>The intercept value <span class="math inline">\(\alpha\)</span> and the slope value <span class="math inline">\(\beta\)</span> from a standard curve equation associated with the qPCR analysis. This is used to convert the observed Cq values to the corresponding log concentration of eDNA. This conversion occurs internally.</p></li>
-<li><p>A threshold value of the most cycles which are attempted in qPCR (defaults to 40 cycles).</p></li>
+<li><p>A vector of numeric Cq values (quantification cycles), one for
+each qPCR replicate. Cq values corresponding to non-detections for your
+assay should be recorded as the threshold value (the default is 40.0
+cycles).</p></li>
+<li><p>The intercept value <span class="math inline">\(\alpha\)</span>
+and the slope value <span class="math inline">\(\beta\)</span> from a
+standard curve equation associated with the qPCR analysis. This is used
+to convert the observed Cq values to the corresponding log concentration
+of eDNA. This conversion occurs internally.</p></li>
+<li><p>A threshold value of the most cycles which are attempted in qPCR
+(defaults to 40 cycles).</p></li>
 </ol>
-<p>An example of qPCR data in the correct format for modeling with <code>artemis</code> can be viewed by calling <code>eDNA_data</code>, which is a <code>data.frame</code> with Cq values from live car experiments completed in the California Sacramento-San Joaquin Delta with Delta Smelt:</p>
+<p>An example of qPCR data in the correct format for modeling with
+<code>artemis</code> can be viewed by calling <code>eDNA_data</code>,
+which is a <code>data.frame</code> with Cq values from live car
+experiments completed in the California Sacramento-San Joaquin Delta
+with Delta Smelt:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">eDNA_data</span><span class="op">)</span></span>
 <span><span class="co">#&gt;         Date FilterID TechRep    Cq Distance_m Volume_mL Biomass_N</span></span>
@@ -136,7 +155,16 @@
 <span><span class="co">#&gt;  $ Biomass_N         : num  100 100 100 100 100 100 100 100 100 100 ...</span></span>
 <span><span class="co">#&gt;  $ StdCrvAlpha_lnForm: num  21.2 21.2 21.2 21.2 21.2 ...</span></span>
 <span><span class="co">#&gt;  $ StdCrvBeta_lnForm : num  -1.53 -1.53 -1.53 -1.53 -1.53 ...</span></span></code></pre></div>
-<p>Note that there are no variable levels with missing or <code>NA</code> values in these example data. However if there were <code>NA</code> values in the input data set, any rows with <code>NA</code>s in the data will be dropped when the data is prepped for modeling. This is because Stan models cannot not take <code>NA</code> values. Although <code>NA</code> values will be automatically dropped from the data prior to modeling, we recommend removing <code>NA</code> values as a separate step prior to modeling. This allows inspection and potentially correction of the rows with <code>NA</code> values. For example,</p>
+<p>Note that there are no variable levels with missing or
+<code>NA</code> values in these example data. However if there were
+<code>NA</code> values in the input data set, any rows with
+<code>NA</code>s in the data will be dropped when the data is prepped
+for modeling. This is because Stan models cannot not take
+<code>NA</code> values. Although <code>NA</code> values will be
+automatically dropped from the data prior to modeling, we recommend
+removing <code>NA</code> values as a separate step prior to modeling.
+This allows inspection and potentially correction of the rows with
+<code>NA</code> values. For example,</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">na_vals</span> <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/stats/complete.cases.html" class="external-link">complete.cases</a></span><span class="op">(</span><span class="va">eDNA_data</span><span class="op">)</span></span>
 <span><span class="va">eDNA_data</span><span class="op">[</span><span class="va">na_vals</span>,<span class="op">]</span> <span class="co"># visual inspection</span></span></code></pre></div>
@@ -146,17 +174,36 @@
 <div class="section level2">
 <h2 id="fixed-effects-models-with-edna_lm">Fixed effects models with <code>eDNA_lm()</code><a class="anchor" aria-label="anchor" href="#fixed-effects-models-with-edna_lm"></a>
 </h2>
-<p>Fixed effects models are primarily used with completely randomized experiments without blocking variables. For most observational data or blocked experimental data, mixed effects models are likely more appropriate.</p>
-<p>To fit a fixed effects model to the sample <code>eDNA_data</code> where <code>Distance_m</code> is the only predictor, we give the function a model formula and the input data listed above:</p>
+<p>Fixed effects models are primarily used with completely randomized
+experiments without blocking variables. For most observational data or
+blocked experimental data, mixed effects models are likely more
+appropriate.</p>
+<p>To fit a fixed effects model to the sample <code>eDNA_data</code>
+where <code>Distance_m</code> is the only predictor, we give the
+function a model formula and the input data listed above:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">model_fit</span> <span class="op">=</span> <span class="fu"><a href="../reference/eDNA_lmer.html">eDNA_lm</a></span><span class="op">(</span><span class="va">Cq</span> <span class="op">~</span> <span class="va">Distance_m</span>, </span>
 <span>                    data <span class="op">=</span> <span class="va">eDNA_data</span>,</span>
 <span>                    std_curve_alpha <span class="op">=</span> <span class="fl">21.2</span>, std_curve_beta <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span><span class="op">)</span></span></code></pre></div>
-<p>Notice that we provide the standard curve parameters (<code>std_curve_alpha</code> and <code>std_curve_beta</code> as separate arguments to the function. In cases where there are multiple standard curve parameters in use in the same dataset (e.g. using data from multiple labs or experiments), the standard curve parameters can each be given as vectors. These vectors must be the same length as the number of rows in the data.</p>
+<p>Notice that we provide the standard curve parameters
+(<code>std_curve_alpha</code> and <code>std_curve_beta</code> as
+separate arguments to the function. In cases where there are multiple
+standard curve parameters in use in the same dataset (e.g. using data
+from multiple labs or experiments), the standard curve parameters can
+each be given as vectors. These vectors must be the same length as the
+number of rows in the data.</p>
 <p><br></p>
-<p>The model functions, similar to <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code> in base R, will automatically add an intercept term. You can explicitly omit the intercept if you have a good reason for doing so. Please see <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">?lm</a></code> for a more full description of how to specify linear models in R.</p>
-<p>Full control of the MCMC algorithm can be accomplished by adding these control arguments to the end of the <code>eDNA_lm*()</code> call, which then passes them on to <code><a href="https://mc-stan.org/rstan/reference/stanmodel-method-sampling.html" class="external-link">rstan::sampling()</a></code>. Available arguments for MCMC control can be found in the help for <code><a href="https://mc-stan.org/rstan/reference/stanmodel-method-sampling.html" class="external-link">rstan::sampling</a></code>.</p>
+<p>The model functions, similar to <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code> in base R, will
+automatically add an intercept term. You can explicitly omit the
+intercept if you have a good reason for doing so. Please see
+<code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">?lm</a></code> for a more full description of how to specify linear
+models in R.</p>
+<p>Full control of the MCMC algorithm can be accomplished by adding
+these control arguments to the end of the <code>eDNA_lm*()</code> call,
+which then passes them on to <code><a href="https://mc-stan.org/rstan/reference/stanmodel-method-sampling.html" class="external-link">rstan::sampling()</a></code>. Available
+arguments for MCMC control can be found in the help for
+<code><a href="https://mc-stan.org/rstan/reference/stanmodel-method-sampling.html" class="external-link">rstan::sampling</a></code>.</p>
 <p>For example,</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model_fit</span> <span class="op">=</span> <span class="fu"><a href="../reference/eDNA_lmer.html">eDNA_lm</a></span><span class="op">(</span><span class="va">Cq</span> <span class="op">~</span> <span class="va">Distance_m</span>, </span>
@@ -170,8 +217,13 @@
 <h2 id="mixed-effects-models-with-edna_lmer">Mixed effects models with <code>eDNA_lmer()</code><a class="anchor" aria-label="anchor" href="#mixed-effects-models-with-edna_lmer"></a>
 </h2>
 <p><br></p>
-<p>Random or mixed effects models are typically used when there are grouping factors which need to be accounted for in the model (e.g. blocking variables, subsamplings from a single filter, etc.).</p>
-<p>To fit a model with one or more random effect(s), use the <code><a href="../reference/eDNA_lmer.html">eDNA_lmer()</a></code> function. Random effects are specified using the same syntax as the <code>lme4</code> package, e.g. <code>(1|random effect)</code>.</p>
+<p>Random or mixed effects models are typically used when there are
+grouping factors which need to be accounted for in the model
+(e.g. blocking variables, subsamplings from a single filter, etc.).</p>
+<p>To fit a model with one or more random effect(s), use the
+<code><a href="../reference/eDNA_lmer.html">eDNA_lmer()</a></code> function. Random effects are specified using
+the same syntax as the <code>lme4</code> package,
+e.g. <code>(1|random effect)</code>.</p>
 <p>For example, to specify a random effect for “Year”,</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d</span> <span class="op">=</span> <span class="va">eDNA_data</span> <span class="co"># create a copy to modify </span></span>
@@ -185,17 +237,26 @@
 <div class="section level2">
 <h2 id="summarizing-and-plotting-model-output">Summarizing and plotting model output<a class="anchor" aria-label="anchor" href="#summarizing-and-plotting-model-output"></a>
 </h2>
-<p>As with the simulation objects, the model results can be summarized or plotted with default methods using <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> and <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>, or converted to a <code>data.frame</code> object for further manipulation.</p>
+<p>As with the simulation objects, the model results can be summarized
+or plotted with default methods using <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> and
+<code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>, or converted to a <code>data.frame</code> object
+for further manipulation.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">model_fit</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model_fit</span>, pars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"intercept"</span>, <span class="st">"betas"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>Additional arguments can be provided to the plot method, which are passed to <code>rstan::plot</code> methods for <code>stanfit</code> objects. More details are available via <code>?rstan::plot</code>.</p>
+<p>Additional arguments can be provided to the plot method, which are
+passed to <code>rstan::plot</code> methods for <code>stanfit</code>
+objects. More details are available via <code>?rstan::plot</code>.</p>
 <p><br></p>
-<p>Matching <code>lme4</code> convention, random effects are not included in the default <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> output. You can view a summary of the random effects with <code>ranef()</code>,</p>
+<p>Matching <code>lme4</code> convention, random effects are not
+included in the default <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> output. You can view a
+summary of the random effects with <code>ranef()</code>,</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">ranef</span><span class="op">(</span><span class="va">model_fit2</span><span class="op">)</span></span></code></pre></div>
-<p>or by subsetting the <code>stanfit</code> slot of the model object with <code>@</code>, and specifying the <code>random_betas</code> parameters with the <code>pars</code> argument:</p>
+<p>or by subsetting the <code>stanfit</code> slot of the model object
+with <code>@</code>, and specifying the <code>random_betas</code>
+parameters with the <code>pars</code> argument:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">rstan</span><span class="fu">::</span><span class="fu">summary</span><span class="op">(</span><span class="va">model_fit2</span><span class="op">@</span><span class="va">stanfit</span>, pars <span class="op">=</span> <span class="st">"rand_betas"</span>, probs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.50</span>, <span class="fl">0.025</span>, <span class="fl">0.975</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">summary</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model_fit2</span>, pars <span class="op">=</span> <span class="st">"rand_betas"</span><span class="op">)</span></span></code></pre></div>
@@ -204,20 +265,37 @@
 <div class="section level2">
 <h2 id="further-notes-on-modeling">Further notes on modeling<a class="anchor" aria-label="anchor" href="#further-notes-on-modeling"></a>
 </h2>
-<p>Because the models implemented in <code>artemis</code> are Bayesian, you will get the most out of their results when you can work with and summarize posterior probabilities. Some helpful resources for this are the <a href="https://mc-stan.org/docs/2_22/stan-users-guide/index.html" class="external-link">Stan User’s Guide</a>, and the <a href="http://mc-stan.org/rstan/articles/stanfit_objects.html" class="external-link">stanfit objects vignette</a> from the <code>rstan</code> package.</p>
+<p>Because the models implemented in <code>artemis</code> are Bayesian,
+you will get the most out of their results when you can work with and
+summarize posterior probabilities. Some helpful resources for this are
+the <a href="https://mc-stan.org/docs/2_22/stan-users-guide/index.html" class="external-link">Stan
+User’s Guide</a>, and the <a href="http://mc-stan.org/rstan/articles/stanfit_objects.html" class="external-link">stanfit
+objects vignette</a> from the <code>rstan</code> package.</p>
 <div class="section level3">
 <h3 id="useful-modeling-advice">Useful modeling advice<a class="anchor" aria-label="anchor" href="#useful-modeling-advice"></a>
 </h3>
-<p>This is a collection of advice for modeling eDNA data with the <code>artemis</code> package.</p>
+<p>This is a collection of advice for modeling eDNA data with the
+<code>artemis</code> package.</p>
 <ol style="list-style-type: decimal">
-<li><p>Center and scale your predictor values: <code>artemis</code> uses MCMC to estimate values, and this will be more efficient if the predictor values are not on vastly different scales. In general, the MCMC will be the most efficient when the predictors are roughly centered at 0, and have stdev of 1.</p></li>
-<li><p>Use priors: The default priors in <code>artemis</code> follow the conventions of the <code>rstanarm</code> package, and are weakly informative. When the data do not strongly inform the parameter estimates, the model fit can be improved by specifying stronger priors.</p></li>
+<li><p>Center and scale your predictor values: <code>artemis</code> uses
+MCMC to estimate values, and this will be more efficient if the
+predictor values are not on vastly different scales. In general, the
+MCMC will be the most efficient when the predictors are roughly centered
+at 0, and have stdev of 1.</p></li>
+<li><p>Use priors: The default priors in <code>artemis</code> follow the
+conventions of the <code>rstanarm</code> package, and are weakly
+informative. When the data do not strongly inform the parameter
+estimates, the model fit can be improved by specifying stronger
+priors.</p></li>
 </ol>
 </div>
 <div class="section level3">
 <h3 id="other-information">Other information<a class="anchor" aria-label="anchor" href="#other-information"></a>
 </h3>
-<p>The underlying <a href="https://mc-stan.org" class="external-link">Stan</a> models are compiled on install. Thereafter, the models will not need to be re-compiled. The model’s Stan code can be found in the <code>artemis</code> source code <a href="https://github.com/fishsciences/artemis/tree/main/inst/stan" class="external-link">here</a>.</p>
+<p>The underlying <a href="https://mc-stan.org" class="external-link">Stan</a> models are
+compiled on install. Thereafter, the models will not need to be
+re-compiled. The model’s Stan code can be found in the
+<code>artemis</code> source code <a href="https://github.com/fishsciences/artemis/tree/main/inst/stan" class="external-link">here</a>.</p>
 </div>
 <div class="section level3">
 <h3 id="section">

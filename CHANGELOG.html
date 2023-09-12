@@ -54,34 +54,36 @@
     </div>
 
 
-<div id="artemis-changelog" class="section level1"></div>
+<div id="artemis-changelog" class="section level1">
+
+</div>
 <div class="section level1">
 <h1 id="v20">v2.0<a class="anchor" aria-label="anchor" href="#v20"></a></h1>
 <div class="section level2">
-<h2 id="201">2.0.1<a class="anchor" aria-label="anchor" href="#201"></a></h2>
+<h2 id="id_201">2.0.1<a class="anchor" aria-label="anchor" href="#id_201"></a></h2>
 <p>Fixed bug when data has no censored values. Corrected the behavior of <code><a href="reference/compile_models.html">compile_models()</a></code>.</p>
 </div>
 <div class="section level2">
-<h2 id="200">2.0.0<a class="anchor" aria-label="anchor" href="#200"></a></h2>
+<h2 id="id_200">2.0.0<a class="anchor" aria-label="anchor" href="#id_200"></a></h2>
 <p>Complete overhaul to use the R package <code>cmdstanr</code> as the backend for fitting models, rather than <code>rstan</code>.</p>
 </div>
 </div>
 <div class="section level1">
 <h1 id="v10">v1.0<a class="anchor" aria-label="anchor" href="#v10"></a></h1>
 <div class="section level2">
-<h2 id="106">1.0.6<a class="anchor" aria-label="anchor" href="#106"></a></h2>
+<h2 id="id_106">1.0.6<a class="anchor" aria-label="anchor" href="#id_106"></a></h2>
 <p>Fixes missing import for rstan::plot. Moves/removes vignette material to make the vignettes more streamlined.</p>
 </div>
 <div class="section level2">
-<h2 id="105">1.0.5<a class="anchor" aria-label="anchor" href="#105"></a></h2>
+<h2 id="id_105">1.0.5<a class="anchor" aria-label="anchor" href="#id_105"></a></h2>
 <p>Addresses review comments from CRAN.</p>
 </div>
 <div class="section level2">
-<h2 id="104">1.0.4<a class="anchor" aria-label="anchor" href="#104"></a></h2>
+<h2 id="id_104">1.0.4<a class="anchor" aria-label="anchor" href="#id_104"></a></h2>
 <p>Fixed issue with predict methods when random effects are present in the formula.</p>
 </div>
 <div class="section level2">
-<h2 id="100-3">1.0.0-3<a class="anchor" aria-label="anchor" href="#100-3"></a></h2>
+<h2 id="id_100-3">1.0.0-3<a class="anchor" aria-label="anchor" href="#id_100-3"></a></h2>
 <p>Various fixes to reduce NOTES for CRAN submission.</p>
 </div>
 </div>
@@ -109,7 +111,9 @@
 <p>Refactored the model code to make increase clarity and readability. This might reduce model performance slightly, but should make the code easier to maintain.</p>
 <p>Separated the zero-inflated models into their own Stan models and associated R functions. This should will force users to explicitely specify that they want the zero-inflated model. When this model does not fit well, it should be clearer.</p>
 </div>
-<div class="section level2"><h2 id="v0140">v0.14.0<a class="anchor" aria-label="anchor" href="#v0140"></a></h2></div>
+<div class="section level2">
+<h2 id="v0140">v0.14.0<a class="anchor" aria-label="anchor" href="#v0140"></a></h2>
+</div>
 <div class="section level2">
 <h2 id="v0130">v0.13.0<a class="anchor" aria-label="anchor" href="#v0130"></a></h2>
 <p>Changed zero-inflated probability to a user-supplied value rather than an estimate in the model. This is because a large amount of data is required to reliably estimate the probability of zeros. In situations with lower amounts of data, the model was failing to fit properly.</p>
