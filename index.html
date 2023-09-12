@@ -81,7 +81,8 @@
       </header><div class="row">
   <div class="contents col-md-9">
 <div class="section level1">
-<div class="page-header"><h1 id="artemis-an-r-package-for-edna-analysis">artemis: an R package for eDNA analysis<a class="anchor" aria-label="anchor" href="#artemis-an-r-package-for-edna-analysis"></a>
+<div class="page-header"><h1 id="artemis-an-r-package-for-edna-analysis">
+<code>artemis</code>: an R package for eDNA analysis<a class="anchor" aria-label="anchor" href="#artemis-an-r-package-for-edna-analysis"></a>
 </h1></div>
 <p><img src="reference/figures/logo.png"></p>
 <div class="section level4">
@@ -176,6 +177,13 @@
 <h2 id="reporting-bugs">Reporting bugs<a class="anchor" aria-label="anchor" href="#reporting-bugs"></a>
 </h2>
 <p>Please report all bugs via an issue at the package <a href="https://github.com/fishsciences/artemis/issues" class="external-link">repo</a>.</p>
+</div>
+<div class="section level2">
+<h2 id="why-isnt-artemis-on-cran">Why isn’t <code>artemis</code> on CRAN?<a class="anchor" aria-label="anchor" href="#why-isnt-artemis-on-cran"></a>
+</h2>
+<p>Previous versions (v1.*) of <code>artemis</code> used the <code>rstan</code> package as the interface to <code>Stan</code>. Since <code>rstan</code> was available via CRAN, so was <code>artemis</code>. However, there was a UBSAN bug in the model code. We attempted to replicate the bug across multiple platforms and systems, but were unable to on any of the systems available to us. Seemingly, the bug was architecture or setup dependent (several other R package developers <a href="https://discourse.mc-stan.org/t/issues-with-clang-ubsan/13524/7" class="external-link">reported similar issues</a>).</p>
+<p>Without being able to replicate the UBSAN issue, we would be forced to attempt to fix it via blind trial and error, something that could have been both time intensive and fragile.</p>
+<p>Given the limited resources available for <code>artemis</code> development and the intended audience of <code>artemis</code>, a decision was made to sidestep the UBSAN bug entirely by switching the backend from <code>rstan</code> to <code>cmdstanr</code>. In the authors experience, <code>cmdstanr</code> provided a more robust, performant, up-to-date, and lighter-weight interface to Stan. However, the major downside was that <code>cmdstanr</code> is not and likely never will be available via CRAN due to its requirements on external software (<code>cmdstan</code>). This meant that <code>artemis</code> would likewise not be available via CRAN.</p>
 </div>
 </div>
   </div>
