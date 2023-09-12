@@ -1,20 +1,17 @@
 # artemis: an R package for eDNA analysis  
 
-<br>
-
-![artemis logo](man/figures/logo.png)
+![](man/figures/logo.png)
 
 
 #### 
 
-<!-- badges: start -->[
+<!-- badges: start -->
 <!-- ![Codecov test coverage](https://codecov.io/gh/fishsciences/artemis/branch/main/graph/badge.svg)](https://app.codecov.io/gh/fishsciences/artemis?branch=main) -->
 
 
-[![R-CMD-check](https://github.com/fishsciences/artemis/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/fishsciences/artemis/actions/workflows/R-CMD-check.yaml)
+![R-CMD-check](https://github.com/fishsciences/artemis/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/fishsciences/artemis/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-<br>
 
 The `artemis` package was created to aid in the design and analysis of
 eDNA survey studies by offering a custom suite of models for eDNA
