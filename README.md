@@ -1,4 +1,4 @@
-# artemis: an R package for eDNA analysis  
+# `artemis`: an R package for eDNA analysis 
 
 ![](man/figures/logo.png)
 
@@ -9,7 +9,7 @@
 <!-- ![Codecov test coverage](https://codecov.io/gh/fishsciences/artemis/branch/main/graph/badge.svg)](https://app.codecov.io/gh/fishsciences/artemis?branch=main) -->
 
 
-![R-CMD-check](https://github.com/fishsciences/artemis/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/fishsciences/artemis/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/fishsciences/artemis/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/fishsciences/artemis/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 
@@ -144,4 +144,30 @@ vignette, which covers most of the functionality of artemis.
 
 Please report all bugs via an issue at the package
 [repo](https://github.com/fishsciences/artemis/issues).
+
+## Why isn't `artemis` on CRAN?
+
+Previous versions (v1.*) of `artemis` used the `rstan` package as the
+interface to `Stan`. Since `rstan` was available via CRAN, so was
+`artemis`. However, there was a UBSAN bug in the model code. We
+attempted to replicate the bug across multiple platforms and systems,
+but were unable to on any of the systems available to us. Seemingly,
+the bug was architecture or setup dependent (several other R package
+developers [reported similar issues](https://discourse.mc-stan.org/t/issues-with-clang-ubsan/13524/7)).
+
+Without being able to replicate the UBSAN issue, we would be forced to
+attempt to fix it via blind trial and error, something that could have
+been both time intensive and fragile.
+
+Given the limited resources available for `artemis` development and
+the intended audience of `artemis`, a decision was made to sidestep
+the UBSAN bug entirely by switching the backend from `rstan` to
+`cmdstanr`. In the authors experience, `cmdstanr` provided a more
+robust, performant, up-to-date, and lighter-weight interface to
+Stan. However, the major downside was that `cmdstanr` is not and
+likely never will be available via CRAN due to its requirements on
+external software (`cmdstan`). This meant that `artemis` would
+likewise not be available via CRAN.
+
+
 
