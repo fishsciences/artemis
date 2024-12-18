@@ -121,11 +121,21 @@ setClass("eDNA_model",
                    formula = "formula", x = "data.frame",
                    std_curve_alpha = "numeric", std_curve_beta = "numeric",
                    upper_Cq = "numeric",
-                   stanfit = "stanfit"))
+                   stanfit = "CmdStanMCMC_CSV"))
 
 ##' @rdname eDNA_model-class
 ##' @export
 setClass("eDNA_model_lm", contains = "eDNA_model")
+
+##' @rdname eDNA_model-class
+##' @export
+setClass("eDNA_model_zip", contains = "eDNA_model",
+         slots = c(p_zero = "array"))
+
+setAs("eDNA_model_zip", "eDNA_model", function(from){
+  from@p_zero = as.matrix(from@stanfit$draws("p_zero", format = "draws_df")$p_zero)
+  from
+})
 
 ##' @slot random_x data.frame of the grouping variables used
 ##' @slot random_sd the estimated stdev. of each of the random effects
@@ -139,6 +149,7 @@ setClass("eDNA_model_lmer", contains = "eDNA_model_lm",
 setAs("stanfit", "eDNA_model_lmer", function(from) callNextMethod())
 setAs("stanfit", "eDNA_model_lm", function(from) callNextMethod())
 
+
 setAs("stanfit", "eDNA_model",
       function(from){
           tmp = extract(from)
@@ -150,5 +161,26 @@ setAs("stanfit", "eDNA_model",
               sigma_ln_eDNA = tmp$sigma_ln_eDNA,
               stanfit = from)
      
+      })
+
+
+## From https://stackoverflow.com/questions/72559243/is-there-a-way-method-to-assign-a-r6-object-to-an-s4-object-slot
+setClass("CmdStanMCMC_CSV")
+
+setAs("CmdStanMCMC_CSV", "eDNA_model",
+      function(from){
+        tmp = as.data.frame(from$draws(format = "draws_df"))
+        nms = names(tmp)
+        i = grepl("betas", nms)
+        betas = if(any(i)) as.matrix(tmp[i]) else array(numeric())
+
+        j = grepl("intercept", nms)
+        intercept = if(any(j)) as.matrix(tmp[j]) else array(numeric())
+        new("eDNA_model",
+            intercept = intercept,
+            betas = betas,
+            sigma_ln_eDNA = as.matrix(tmp$sigma_ln_eDNA),
+            stanfit = from)
+        
       })
 

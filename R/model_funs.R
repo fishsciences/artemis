@@ -159,8 +159,7 @@ run_model = function(model,
     
 {
     m = model$sample(data = data, ...)
-    fit = read_stan_csv(m$output_files())
-    
+    fit = as_cmdstan_fit(m$output_files())
     fit = as(fit, "eDNA_model")
     return(fit)
 }
