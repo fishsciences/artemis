@@ -60,7 +60,7 @@ plot.eDNA_simulation = function(x, y,
 ##' @method plot eDNA_model
 ##' @export
 plot.eDNA_model = function(x, y, pars = "betas",  ...) {
-    plot(x@stanfit, pars = pars, ...)
+    plot(x@fit, pars = pars, ...)
 }
 
 

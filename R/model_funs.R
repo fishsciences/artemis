@@ -115,8 +115,8 @@ eDNA_lm = function(formula, data,
 ##'     used}
 ##' \item{upper_Cq}{numeric, the upper limit for observed CQ
 ##'     used}
-##' \item{stanfit}{stanfit, the original results from
-##'     \code{rstan::sampling}} }
+##' \item{fit}{fit, the original results from
+##'     \code{cmdstanr::sample}} }
 ##' @author Matt Espe
 ##'
 ##' @examples

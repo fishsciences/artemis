@@ -4,6 +4,7 @@
 \name{eDNA_model-class}
 \alias{eDNA_model-class}
 \alias{eDNA_model_lm-class}
+\alias{eDNA_model_zip-class}
 \alias{eDNA_model_lmer-class}
 \title{eDNA model fit results}
 \description{
@@ -30,7 +31,7 @@ An S4 object holding the results of a model fit by \code{eDNA_lm*}
 
 \item{\code{upper_Cq}}{the upper limit for CQ}
 
-\item{\code{stanfit}}{the result from rstan::sampling}
+\item{\code{fit}}{the result from cmdstanr::sample}
 
 \item{\code{random_x}}{data.frame of the grouping variables used}
 

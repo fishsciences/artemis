@@ -4,7 +4,13 @@
 \alias{loo.eDNA_model}
 \title{Approximate leave-one-out cross-validation}
 \usage{
-\method{loo}{eDNA_model}(x, ...)
+\method{loo}{eDNA_model}(
+  x,
+  pars = "log_lik",
+  ...,
+  save_psis = FALSE,
+  cores = getOption("mc.cores", 1)
+)
 }
 \arguments{
 \item{x}{a eDNA_model object}

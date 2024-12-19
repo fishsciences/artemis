@@ -110,7 +110,7 @@ p_detect = function(y, thresh)
 ##' @slot std_curve_alpha the alpha for the std. curve conversion formual used
 ##' @slot std_curve_beta the beta for the std. curve conversion formula used
 ##' @slot upper_Cq the upper limit for CQ
-##' @slot stanfit the result from rstan::sampling
+##' @slot fit the result from cmdstanr::sample
 ##'
 ##' @export
 setClass("eDNA_model",
@@ -121,7 +121,7 @@ setClass("eDNA_model",
                    formula = "formula", x = "data.frame",
                    std_curve_alpha = "numeric", std_curve_beta = "numeric",
                    upper_Cq = "numeric",
-                   stanfit = "CmdStanMCMC_CSV"))
+                   fit = "CmdStanMCMC_CSV"))
 
 ##' @rdname eDNA_model-class
 ##' @export
@@ -133,7 +133,7 @@ setClass("eDNA_model_zip", contains = "eDNA_model",
          slots = c(p_zero = "array"))
 
 setAs("eDNA_model_zip", "eDNA_model", function(from){
-  from@p_zero = as.matrix(from@stanfit$draws("p_zero", format = "draws_df")$p_zero)
+  from@p_zero = as.matrix(from@fit$draws("p_zero", format = "draws_df")$p_zero)
   from
 })
 
@@ -144,25 +144,6 @@ setAs("eDNA_model_zip", "eDNA_model", function(from){
 ##' @export
 setClass("eDNA_model_lmer", contains = "eDNA_model_lm",
          slots = c(random_x = "data.frame", random_sd = "array"))
-
-
-setAs("stanfit", "eDNA_model_lmer", function(from) callNextMethod())
-setAs("stanfit", "eDNA_model_lm", function(from) callNextMethod())
-
-
-setAs("stanfit", "eDNA_model",
-      function(from){
-          tmp = extract(from)
-          betas = if("betas" %in% names(tmp)) tmp$betas else array(numeric())
-          intercept = if("intercept" %in% names(tmp)) tmp$intercept else array(numeric())
-          new("eDNA_model",
-              intercept = intercept,
-              betas = betas,
-              sigma_ln_eDNA = tmp$sigma_ln_eDNA,
-              stanfit = from)
-     
-      })
-
 
 ## From https://stackoverflow.com/questions/72559243/is-there-a-way-method-to-assign-a-r6-object-to-an-s4-object-slot
 setClass("CmdStanMCMC_CSV")
@@ -180,7 +161,7 @@ setAs("CmdStanMCMC_CSV", "eDNA_model",
             intercept = intercept,
             betas = betas,
             sigma_ln_eDNA = as.matrix(tmp$sigma_ln_eDNA),
-            stanfit = from)
+            fit = from)
         
       })
 

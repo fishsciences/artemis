@@ -21,3 +21,12 @@ can be found in the "Getting Started" vignette.
 \references{
 Stan Development Team (2018). RStan: the R interface to Stan. R package version 2.18.2. http://mc-stan.org
 }
+\author{
+\strong{Maintainer}: Matt Espe \email{mespe@ucdavis.edu}
+
+Authors:
+\itemize{
+  \item Myfanwy Johnston \email{myfanwy.johnston@fishsciences.net}
+}
+
+}

@@ -17,7 +17,7 @@ loo.eDNA_model = function(x,
 ## Based on LOO documentation https://mc-stan.org/loo/reference/loo.html
 {
   stopifnot(length(pars) == 1L)
-  LLarray <- x@stanfit$draws(variables = pars)
+  LLarray <- x@fit$draws(variables = pars)
   r_eff <- loo::relative_eff(x = exp(LLarray), cores = cores)
   loo::loo.array(LLarray,
                  r_eff = r_eff,
@@ -37,5 +37,5 @@ loo.eDNA_model = function(x,
 ##' @author Matt Espe
 ##' @export
 waic.eDNA_model = function(x, ...) {
-    waic(extract_log_lik(x@stanfit), ...)
+    waic(extract_log_lik(x@fit), ...)
 }

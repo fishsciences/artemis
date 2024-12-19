@@ -88,7 +88,7 @@ summary.eDNA_model = function(object, probs = c(0.025, 0.5, 0.975), ...)
     colnames(res) = c("Mean", paste0(probs * 100, "%"))
   
     structure(res,
-              iter = object@stanfit$metadata()$inter_sampling,
+              iter = object@fit$metadata()$inter_sampling,
               class = c("eDNA_model.summary", "data.frame"))
 }
 
@@ -98,6 +98,7 @@ summarize_par = function(x, p)
     qs = apply(x, 2, quantile, prob = p, simplify = TRUE)
     rbind(mean = means, qs)
 }
+
 
 summary.eDNA_predict_lm = function(object, probs = c(0.025, 0.5, 0.975), ...)
 {

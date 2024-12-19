@@ -12,7 +12,6 @@
 #' Additional details on the model implemented by the artemis package
 #' can be found in the "Getting Started" vignette.
 #' 
-#' @docType package
 #' @name artemis-package
 #' @aliases artemis
 #' @import methods
@@ -30,4 +29,4 @@
 #' @references 
 #' Stan Development Team (2018). RStan: the R interface to Stan. R package version 2.18.2. http://mc-stan.org
 #' 
-NULL
+"_PACKAGE"
