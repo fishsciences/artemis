@@ -4,25 +4,18 @@
 \alias{loo.eDNA_model}
 \title{Approximate leave-one-out cross-validation}
 \usage{
-\method{loo}{eDNA_model}(
-  x,
-  pars = "log_lik",
-  ...,
-  save_psis = FALSE,
-  cores = getOption("mc.cores", 1)
-)
+\method{loo}{eDNA_model}(x, ...)
 }
 \arguments{
 \item{x}{a eDNA_model object}
 
-\item{...}{additional args passed to \code{loo}}
+\item{...}{additional args passed to \code{$loo()}}
 }
 \value{
 a list with the results of the calculation.
 }
 \description{
-A 'loo' method for eDNA_model objects, which is simply a wrapper
-around \code{loo(extract_log_lik(x))}
+A 'loo' method for eDNA_model objects.
 }
 \details{
 See ?loo::loo for more information about this calculation

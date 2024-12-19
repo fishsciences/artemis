@@ -21,9 +21,7 @@
 #' @importFrom stats model.matrix model.response model.frame pnorm quantile rnorm terms sd delete.response formula
 #' @importFrom graphics lines segments plot
 #' @importFrom lme4 lFormula ranef nobars
-#' @importFrom loo loo waic extract_log_lik
-#' @importFrom rstan extract plot read_stan_csv
-#' @importFrom rstantools posterior_interval
+#' @importFrom loo waic
 #' @importFrom utils head
 #' @importFrom tools R_user_dir
 #' @references 

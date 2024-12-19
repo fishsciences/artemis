@@ -108,3 +108,5 @@ print.eDNA_p_detect = function(x, digits = getOption("digits"), ...)
 ##' @aliases eDNA_model, ANY-method
 ##' @export
 setMethod("show", "eDNA_model", function(object) print(object))
+
+setMethod("show", "eDNA_model_zip", function(object) print(object))

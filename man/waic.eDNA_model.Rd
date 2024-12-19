@@ -15,8 +15,7 @@
 a list with the results of the calculation.
 }
 \description{
-A 'waic' method for eDNA_model objects, which is simply a wrapper
-around \code{waic(extract_log_lik(x))}
+A 'waic' method for eDNA_model objects.
 }
 \details{
 See ?loo::waic for more information about this calculation

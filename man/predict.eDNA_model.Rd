@@ -10,7 +10,7 @@
   newdata = NULL,
   include_sigma = FALSE,
   interval = FALSE,
-  interval_fun = posterior_interval,
+  interval_fun = function(x) quantile(x, probs = c(0.05, 0.95)),
   ...
 )
 
