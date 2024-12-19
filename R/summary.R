@@ -88,7 +88,7 @@ summary.eDNA_model = function(object, probs = c(0.025, 0.5, 0.975), ...)
     colnames(res) = c("Mean", paste0(probs * 100, "%"))
   
     structure(res,
-              iter = object@stanfit@stan_args$iter,
+              iter = object@stanfit$metadata()$inter_sampling,
               class = c("eDNA_model.summary", "data.frame"))
 }
 
