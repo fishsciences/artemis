@@ -8,8 +8,8 @@ test_that("Model predictions",{
 
     ans2 = predict(dd, interval = TRUE)
     expect_is(ans2, "eDNA_predict_lm")
-    expect_true(ncol(ans2$ln_conc) == 2)
-    expect_true(ncol(ans2$Cq_hat) == 2)
+    expect_true(length(ans2$ln_conc) == 2)
+    expect_true(length(ans2$Cq_hat) == 2)
     expect_true(is.null(ans$Cq_star))
 
     ans3 = predict(dd, interval = TRUE, include_sigma = TRUE)

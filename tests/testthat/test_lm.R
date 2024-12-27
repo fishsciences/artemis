@@ -24,26 +24,24 @@ m2a
 loo(m2a)
 
 m2b = eDNA_lm(Cq ~ Distance_m + Volume_mL, eDNA_data, 21, -1.5,
-              priors = normal(autoscale = FALSE), , parallel_chains = 4L)
+              priors = normal(autoscale = FALSE), parallel_chains = 4L)
 m2b
 loo(m2b)
 # test that priors still work
 m3 = eDNA_lm(Cq ~ Distance_m + Volume_mL, eDNA_data, 21, -1.5,
-             priors = normal(1, c(0.02, 0.01)), , parallel_chains = 4L)
+             priors = normal(1, c(0.02, 0.01)), parallel_chains = 4L)
 m3
 
-compile_models("eDNA_lm_zinf.stan")
-library(artemis)
+## compile_models("eDNA_lm_zinf.stan")
+
 m4 = artemis:::eDNA_zinf_lm(Cq ~ Distance_m + Volume_mL, eDNA_data, 21, -1.5, parallel_chains = 4L)
 m4
 loo(m4)
 
-m5a = artemis:::eDNA_zinf_lm(Cq ~ 1, eDNA_data, 21, -1.5,
-                            probability_zero = 0.08)
+m5a = artemis:::eDNA_zinf_lm(Cq ~ 1, eDNA_data, 21, -1.5, parallel_chains = 4L)
 m5a
 loo(m5a)
-m5b = artemis:::eDNA_zinf_lm(Cq ~ -1 + Distance_m, eDNA_data, 21, -1.5,
-                            probability_zero = 0.08)
+m5b = artemis:::eDNA_zinf_lm(Cq ~ -1 + Distance_m, eDNA_data, 21, -1.5, parallel_chains = 4L)
 m5b
 loo(m5b)
 

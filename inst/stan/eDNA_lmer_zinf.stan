@@ -1,8 +1,21 @@
 /*
   New, simplified model
- 
-  Zero-inflated
-*/
+ */
+functions{
+  int num_nonzero(matrix m){
+	int n_row = rows(m);
+	int n_col = cols(m);
+	int ans = 0;
+
+	for(i in 1:n_row)
+	  for(j in 1:n_col)
+		if(m[i , j] > 0)
+		  ans += 1;
+	
+	return ans;
+  }
+
+}
 
 data {
   int<lower=0> N_obs;
@@ -12,62 +25,110 @@ data {
   matrix[N_cens, K] X_cens;
   vector[N_obs] y_obs; // ln[eDNA]
   vector[N_cens] L; // lower bound on ln[eDNA]
-
+  //#include lm_data.stan // Play with this later
+  // Random effects
+  int<lower=1> K_r; // must have at least one 
+  int<lower=1> N_grp;
+  array[K_r] int<lower=1,upper=N_grp> group;
+  matrix[N_obs, K_r] X_obs_r;
+  matrix[N_cens, K_r] X_cens_r;
+  
   // prior parameters - user provided
   real prior_int_mu;
   real<lower=0> prior_int_sd;
   vector[K] prior_mu;
   vector<lower=0>[K] prior_sd;  
-
+  real rand_sd;
+  
   // for intercept-less models
   int<lower=0,upper=1> has_inter;
-  
 }
 
+transformed data {
+  // QR decomp
+  matrix[N_obs + N_cens, K] Q_ast;
+  matrix[K, K] R_ast;
+  matrix[K, K] R_ast_inverse;
+
+  // Random effect X to sparse mat for efficiency
+  matrix[N_obs+N_cens, K_r] X_r_all = append_row(X_obs_r, X_cens_r);
+  int n_nonzero = num_nonzero(X_r_all);
+  vector[n_nonzero] w = csr_extract_w(X_r_all);
+  array[n_nonzero] int v = csr_extract_v(X_r_all);
+  array[N_obs+N_cens+1] int u= csr_extract_u(X_r_all);
+
+  if(K){
+	// thin and scale the QR decomposition
+	Q_ast = qr_thin_Q(append_row(X_obs, X_cens)) * sqrt((N_obs+N_cens) - 1);
+	R_ast = qr_thin_R(append_row(X_obs, X_cens)) / sqrt((N_obs+N_cens) - 1);
+	R_ast_inverse = inverse(R_ast);
+  }
+}
 parameters {
-  real intercept[has_inter ? 1 : 0];
-  vector[K] betas;
+  array[has_inter ? 1 : 0] real intercept;
+  vector[K] thetas; // coefficients on Q_ast
+  vector[K_r] rand_betas_raw;
+  vector<lower=0>[N_grp] rand_sigma;
   real<lower=0> sigma_ln_eDNA;
-  real<lower=0, upper=1> p_zero;
+}
+
+transformed parameters {
+  vector[K] betas;
+  vector[K_r] rand_betas;
+  if(K){
+	betas = R_ast_inverse * thetas; // coefficients on x
+  }
+  
+  for(k in 1:K_r)
+	rand_betas[k] = rand_betas_raw[k] * rand_sigma[group[k]];
 }
 
 model {
-  /* vector[N_obs] mu_obs = intercept + X_obs * betas; */
-  vector[N_cens] mu_cens = X_cens * betas +
+  vector[N_obs + N_cens] mu_all =
+	(K ? Q_ast * thetas : rep_vector(0.0, N_obs + N_cens)) +
+	csr_matrix_times_vector(N_obs+N_cens, K_r, w, v, u, rand_betas) +
+  /* (append_row(X_obs_r, X_cens_r) * rand_betas) + */
 	(has_inter ? intercept[1] : 0.0);
+  vector[N_obs] mu_obs = mu_all[1:N_obs];
+  vector[N_cens ? N_cens : 1] mu_cens = N_cens ? mu_all[(N_obs+1):] : [0]';
 
   // priors
   intercept ~ normal(prior_int_mu, prior_int_sd);
+  rand_sigma ~ gamma(2, 0.1);
 
-  for(k in 1:K)
-	betas[k] ~ normal(prior_mu[k], prior_sd[k]);
-
-  sigma_ln_eDNA ~ normal(0, 1);
+  if(K) {
+	for(k in 1:K)
+	  betas[k] ~ normal(prior_mu[k], prior_sd[k]);
+  }
   
-  y_obs ~ normal_id_glm(X_obs, has_inter ? intercept[1] : 0.0, betas, sigma_ln_eDNA);
-  // zero-inflated
-  target += N_obs * bernoulli_lpmf(0 | p_zero);
-  for(n in 1:N_cens)
-	target += log_sum_exp(bernoulli_lpmf(1 | p_zero),
-						  bernoulli_lpmf(0 | p_zero) +
-						  normal_lcdf(L[n] | mu_cens[n], sigma_ln_eDNA));
+  rand_betas_raw ~ std_normal();
+  
+  sigma_ln_eDNA ~ exponential(1);
+  
+  target += normal_lpdf(y_obs | mu_obs, sigma_ln_eDNA);
+  
+  if(N_cens)
+	target += normal_lcdf(L | mu_cens, sigma_ln_eDNA);
 }
 
 generated quantities{
-  vector[N_obs + N_cens] log_lik;
-
-  for(n in 1:N_obs){
+  vector[N_obs + N_cens] log_lik = rep_vector(0, N_obs + N_cens);
+  {
+    matrix[N_obs, K + K_r] X_obs_tmp = append_col(X_obs, X_obs_r);
+    matrix[N_cens, K + K_r] X_cens_tmp = append_col(X_cens, X_cens_r);
+    vector[K+K_r] betas_tmp = append_row(betas, rand_betas);
+    if(N_obs) {
+      for(n in 1:N_obs){
 	log_lik[n] = normal_lpdf(y_obs[n] | (has_inter ? intercept[1] : 0.0) +
-							 X_obs[n] * betas, sigma_ln_eDNA);
-  }
-  
-  for(n in 1:N_cens){
-	log_lik[n+N_obs] = log_sum_exp(bernoulli_lpmf(1 | p_zero),
-								   bernoulli_lpmf(0 | p_zero) +
-								   normal_lcdf(L[n] | (has_inter ? intercept[1] : 0) +
-											   X_cens[n] * betas,
-											   sigma_ln_eDNA));
-	
+				 X_obs_tmp[n] * betas_tmp, sigma_ln_eDNA);
+      }
+    }
+    
+    if(N_cens) {
+      for(n in 1:N_cens){
+	log_lik[n+N_obs] = normal_lcdf(L[n] | (has_inter ? intercept[1] : 0) +
+				     X_cens_tmp[n] * betas_tmp, sigma_ln_eDNA);
+      }
+    }
   }
 }
-

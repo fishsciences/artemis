@@ -32,7 +32,7 @@ test_that("Fit the model with simple data",{
     expect_true(all(slotNames(ans) %in% c("ln_conc", "Cq_star", "intercept", "betas",
                                           "sigma_ln_eDNA", "formula", "x", 
                                           "std_curve_alpha", "std_curve_beta",
-                                          "upper_Cq", "stanfit")))
+                                          "upper_Cq", "fit")))
 
     aa = summary(ans)
 
@@ -43,7 +43,7 @@ test_that("Fit the model with simple data",{
     expect_true(all(slotNames(ans) %in% c("ln_conc", "Cq_star", "intercept","betas",
                                           "sigma_ln_eDNA", "formula", "x", 
                                           "std_curve_alpha", "std_curve_beta",
-                                          "upper_Cq", "stanfit")))
+                                          "upper_Cq", "fit")))
 
     aa = summary(ans)
 })

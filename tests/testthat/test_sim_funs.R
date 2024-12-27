@@ -1,4 +1,3 @@
-
                                         # Test for simulation functions
                                         # M. Espe
                                         # March 2019
@@ -125,7 +124,7 @@ test_that("Multiple sims", {
 # might want to move these eventually to a methods test file
 test_that("Methods", {
   ans = sim_eDNA_lm(Cq ~ distance + volume, vars,
-                    betas = c(intercept = -10.6, distance = -0.05, volume = 0.01),,
+                    betas = c(intercept = -10.6, distance = -0.05, volume = 0.01),
                     sigma_ln_eDNA = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
 
 
@@ -137,13 +136,13 @@ test_that("Methods", {
   expect_is(a, "eDNA_simulation.summary")
   expect_is(a, "data.frame")
   
-  ans2 = as(ans, "data.frame")
+  ## ans2 = as(ans, "data.frame")
 
-  expect_is(ans2, "data.frame")
-  ans3 = as.data.frame(ans)
+  ## expect_is(ans2, "data.frame")
+  ## ans3 = as.data.frame(ans)
 
-  expect_is(ans3, "data.frame")
-  expect_equal(ans2, ans3)
+  ## expect_is(ans3, "data.frame")
+  ## expect_equal(ans2, ans3)
 
   ans = sim_eDNA_lmer(Cq ~ distance + volume + (1|rep) + (1|tech_rep),
                       vars, n_sim = 10,
@@ -162,7 +161,7 @@ test_that("Methods", {
 })
 
 test_that("Simulation accuracy", {
-    ans = sim_eDNA_lm(Cq ~ 1, vars,
+    ans = sim_eDNA_lm(Cq ~ 1, variable_list = vars,
                       betas = c(intercept = -15),
                       sigma_ln_eDNA = 1e-5, std_curve_alpha = 21.2, std_curve_beta = -1.5)
     

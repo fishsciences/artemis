@@ -106,7 +106,6 @@ model {
   sigma_ln_eDNA ~ exponential(1);
   
   target += normal_lpdf(y_obs | mu_obs, sigma_ln_eDNA);
-  
   if(N_cens)
 	target += normal_lcdf(L | mu_cens, sigma_ln_eDNA);
 }

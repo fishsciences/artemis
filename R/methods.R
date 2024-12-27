@@ -15,8 +15,8 @@
 setMethod("ranef", "eDNA_model_lmer",
           function(object, FUN = quantile, probs = c(0.025, 0.5, 0.975), ...)
           {
-            rands = as.data.frame(object@fit$draws(variables = "rand_betas", format = "draws_df"))
+            rands = object@fit[grep("rand_betas\\[", colnames(object@fit))]
             ans = apply(rands, 2, quantile, probs, ...)
-            colnames(ans) = colnames(object@random_x)
+            ## colnames(ans) = colnames(object@random_x)
             t(ans)
           })

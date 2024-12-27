@@ -16,7 +16,8 @@ sim_eDNA_lm = function(formula, variable_list,
                        cache_dir = tools::R_user_dir("artemis", "cache"))
 {
     if(!has_response(formula))
-        stop("Please provide a dummy response variable for simulations")
+      stop("Please provide a dummy response variable for simulations")
+   
     ml = gen_model_list_lm(formula, X)
     
     if(ncol(ml$x) != length(betas))
@@ -34,7 +35,7 @@ sim_eDNA_lm = function(formula, variable_list,
                       fixed_param = TRUE, iter_sampling = n_sim, iter_warmup = 0L,
                       show_messages = verbose)
     ## hacky
-    sims = read_stan_csv(m$output_files())
+    sims = as_cmdstan_fit(m$output_files())
     sims = as(sims, "eDNA_simulation_lm")
     sims = load_slots(sims)
     return(sims)
@@ -207,7 +208,7 @@ sim_eDNA_lmer = function(formula, variable_list,
                    fixed_param = TRUE, iter_sampling = n_sim, iter_warmup = 0L,
                    show_messages = verbose)
     ## hacky
-    sims = read_stan_csv(m$output_files())
+    sims = as_cmdstan_fit(m$output_files())
                                         # hacky
     sims = as(sims, "eDNA_simulation_lmer")
     sims = load_slots(sims)

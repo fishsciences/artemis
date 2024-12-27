@@ -19,11 +19,11 @@
 summary.eDNA_simulation = function(object, var = "Cq_star",
                                    probs = c(0.025, 0.5, 0.975), ...)
 {
-    if(nrow(slot(object, var)) > 1){
+    if(ncol(slot(object, var)) > 1){
         warning("Multiple sims present - computing summary on rep means")
         y = colMeans(slot(object, var))
     } else {
-        y = slot(object, var)
+      y = as.vector(slot(object, var))
     }
 
     ## Super ugly - clean up later
@@ -88,7 +88,7 @@ summary.eDNA_model = function(object, probs = c(0.025, 0.5, 0.975), ...)
     colnames(res) = c("Mean", paste0(probs * 100, "%"))
   
     structure(res,
-              iter = object@fit$metadata()$inter_sampling,
+              iter = nrow(object@fit),
               class = c("eDNA_model.summary", "data.frame"))
 }
 

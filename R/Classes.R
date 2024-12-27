@@ -1,3 +1,8 @@
+## From https://stackoverflow.com/questions/72559243/is-there-a-way-method-to-assign-a-r6-object-to-an-s4-object-slot
+## Required to put an R6 object inside an S4 object
+setClass("CmdStanMCMC_CSV")
+
+
 ################################################################################
 ## simulations
 
@@ -34,9 +39,21 @@ setClass("eDNA_simulation_lmer", contains = "eDNA_simulation",
 ##' @rdname eDNA_simulation-class
 ##' @export
 setClass("eDNA_simulation_lm", contains = "eDNA_simulation")
+setAs("CmdStanMCMC_CSV", "eDNA_simulation_lmer", function(from) callNextMethod())
+setAs("CmdStanMCMC_CSV", "eDNA_simulation_lm", function(from) callNextMethod())
 
-setAs("stanfit", "eDNA_simulation_lmer", function(from) callNextMethod())
-setAs("stanfit", "eDNA_simulation_lm", function(from) callNextMethod())
+setAs("CmdStanMCMC_CSV", "eDNA_simulation", function(from){
+  tmp = from$draws()
+  vars = dimnames(tmp)$variable
+  
+  new("eDNA_simulation", 
+      ln_conc_hat = as.matrix(tmp[1,1,grep("ln_conc_hat", vars)]),
+      ln_conc_star =  as.matrix(tmp[1,1,grep("ln_conc_star", vars)]),
+      Cq_star =  as.matrix(tmp[1,1,grep("Cq_star", vars)]))
+
+})
+
+if(FALSE){
 
 setAs("stanfit", "eDNA_simulation",
       function(from){
@@ -47,7 +64,7 @@ setAs("stanfit", "eDNA_simulation",
               Cq_star = tmp$Cq_star)
        
       })
-
+}
 
 
 setAs("eDNA_simulation", "data.frame",
@@ -121,7 +138,7 @@ setClass("eDNA_model",
                    formula = "formula", x = "data.frame",
                    std_curve_alpha = "numeric", std_curve_beta = "numeric",
                    upper_Cq = "numeric",
-                   fit = "CmdStanMCMC_CSV"))
+                   fit = "data.frame"))
 
 ##' @rdname eDNA_model-class
 ##' @export
@@ -145,14 +162,18 @@ setAs("eDNA_model_zip", "eDNA_model", function(from){
 setClass("eDNA_model_lmer", contains = "eDNA_model_lm",
          slots = c(random_x = "data.frame", random_sd = "array"))
 
-## From https://stackoverflow.com/questions/72559243/is-there-a-way-method-to-assign-a-r6-object-to-an-s4-object-slot
-setClass("CmdStanMCMC_CSV")
+setAs("eDNA_model_lmer", "eDNA_model", function(from) {
+  
+  ## fix later
+  from
+})
+
 
 setAs("CmdStanMCMC_CSV", "eDNA_model",
       function(from){
         tmp = as.data.frame(from$draws(format = "draws_df"))
         nms = names(tmp)
-        i = grepl("betas", nms)
+        i = grepl("^betas\\[", nms)
         betas = if(any(i)) as.matrix(tmp[i]) else array(numeric())
 
         j = grepl("intercept", nms)
@@ -161,7 +182,7 @@ setAs("CmdStanMCMC_CSV", "eDNA_model",
             intercept = intercept,
             betas = betas,
             sigma_ln_eDNA = as.matrix(tmp$sigma_ln_eDNA),
-            fit = from)
+            fit = tmp)
         
       })
 
