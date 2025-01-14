@@ -4,7 +4,7 @@
 \alias{waic.eDNA_model}
 \title{Approximate leave-one-out cross-validation}
 \usage{
-\method{waic}{eDNA_model}(x, ...)
+\method{waic}{eDNA_model}(x, pars = "log_lik", ...)
 }
 \arguments{
 \item{x}{a eDNA_model object}

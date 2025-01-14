@@ -209,17 +209,18 @@ eDNA_zinf_lmer = function(formula, data,
                           cache_dir = tools::R_user_dir("artemis", "cache"),
                           ...)
 {
-    # from lm
-    eDNA_lm_shared(model_type = "zero_inf_lmer",
-                   formula, data, 
-                   std_curve_alpha, std_curve_beta,
-                   upper_Cq,
-                   probability_zero,
-                   prior_intercept,
-                   priors,
-                   prior_random_variance,
-                   cache_dir,
-                   ...)
+
+  # from lm
+  eDNA_lm_shared(model_type = "zero_inf_lmer",
+                 formula, data, 
+                 std_curve_alpha, std_curve_beta,
+                 upper_Cq,
+                 probability_zero,
+                 prior_intercept,
+                 priors,
+                 prior_random_variance,
+                 cache_dir,
+                 ...)
 }
 
 # houses most lm() code, which is similar between the lm, lmer, and
@@ -286,13 +287,13 @@ get_mod_funs = function(model_type, cache_dir)
          gen_fun = switch(model_type,
                           lm = quote(gen_model_list_lm),
                           lmer = quote(gen_model_list_lmer),
-                          zero_inf_lm = quote(gen_model_list_lm),
+                          zero_inf_lm = quote(gen_model_list_lm_zip),
                           zero_inf_lmer = quote(gen_model_list_lmer)),
          
          prep_fun = switch(model_type,
                            lm = prep_data.lm,
                            lmer = prep_data.lmer,
-                           zero_inf_lm = prep_data.lm, 
+                           zero_inf_lm = prep_data.zip, 
                            zero_inf_lmer = prep_data.lmer),
          
          

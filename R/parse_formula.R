@@ -45,6 +45,32 @@ gen_model_list_lmer = function(formula, data)
                 n_grp = n_grp))
 }
 
+gen_model_list_lm_zip = function(formula, data)
+{
+  # modeled from pscl package
+  # Unpacking the mixed formula into two components
+  if (!identical(formula[[3]][[1]], as.name("|")))
+    stop("Please specify a zero-inflated model using `|` to separate model components.")
+  
+  ffc = . ~ .
+  ffz = ~ .
+  ffc[[2]] = formula[[2]]
+  ffc[[3]] = formula[[3]][[2]]
+  ffz[[3]] = formula[[3]][[3]]
+  ffz[[2]] = formula[[2]]
+  
+  mf = model.frame(ffc, data)
+  mfz = model.frame(ffz, data)
+  
+  if(nrow(mf) != nrow(data) || nrow(mfz) != nrow(data))
+    stop("NA values present in response or predictor cols. Please remove NA values prior to modeling.")
+
+  y = model.response(mf)
+  x = model.matrix(attr(mf, "terms"), data)
+  xz = model.matrix(attr(mfz, "terms"), data)
+  
+  return(list(x = x, xz = xz, y = y))    
+}
 
 mk_rand_mat = function(rt)
 {

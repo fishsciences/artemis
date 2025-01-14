@@ -181,3 +181,27 @@ prep_data.lm = function(mod_list,
    
     return(model_data)
 }
+
+prep_data.zip = function(mod_list,
+                         alpha, beta,
+                         prob_zero = 0,
+                         Cq_upper,
+                         prior_int, prior_b,
+                         rand_sd)
+{
+    # This gets most of the data in there
+  model_data = prep_data.lm(mod_list, alpha, beta, 
+                            prob_zero, Cq_upper, prior_int, prior_b)
+  has_inter = has_intercept(mod_list$xz)
+  mod_list$xz = remove_intercept(mod_list$xz)
+
+  i = mod_list$y < Cq_upper
+
+  # predictor matrix on zeros
+  model_data$K_z = ncol(mod_list$xz)
+  model_data$X_nz = as.matrix(mod_list$xz[i, , drop = FALSE])
+  model_data$X_z = as.matrix(mod_list$xz[!i, , drop = FALSE])
+
+  
+  return(model_data)
+}
