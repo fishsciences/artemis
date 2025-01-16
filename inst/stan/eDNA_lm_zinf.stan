@@ -40,8 +40,8 @@ transformed data {
 parameters {
   array[has_inter ? 1 : 0] real intercept;
   vector[K] thetas;      // coefficients on Q_ast
-  real<lower=0, upper=1> z_alpha;
-  vector[K_z] z_beta;
+  real nz_alpha;
+  vector[K_z] nz_beta;
   real<lower=0> sigma_ln_eDNA;
 }
 
@@ -68,20 +68,20 @@ model {
   
   sigma_ln_eDNA ~ normal(0, 1);
 
+  nz_alpha ~ std_normal();
+  nz_beta ~ std_normal();
+  
   // non-zero - efficient vectorized
-  target += bernoulli_logit_glm_lpmf(1 | X_nz, z_alpha, z_beta) +
+  target += bernoulli_logit_glm_lpmf(1 | X_nz, nz_alpha, nz_beta) +
 	normal_lpdf(y_obs | mu_obs, sigma_ln_eDNA);
 
   // zero - inefficient looping
   if(N_cens){
-	array[1] int zeros = rep_array(0,1);
-	array[1] int ones = rep_array(1,1);
-	for (n in 1:N_cens){
-	  target += log_sum_exp(bernoulli_logit_glm_lpmf(zeros[1] | to_matrix(X_z[n]), z_alpha, z_beta),
-							bernoulli_logit_glm_lpmf(ones[1] | to_matrix(X_z[n]), z_alpha, z_beta) +
-							normal_lcdf(L | mu_cens[n], sigma_ln_eDNA));
+	target += log_sum_exp(bernoulli_logit_glm_lpmf(0 | X_z, nz_alpha, nz_beta),
+						  bernoulli_logit_glm_lpmf(1 | X_z, nz_alpha, nz_beta) +
+						  normal_lcdf(L | mu_cens, sigma_ln_eDNA));
 	}
-  }
+  
 }
 
 generated quantities{
@@ -91,7 +91,7 @@ generated quantities{
 	array[1] int zeros = rep_array(0,1);
 	array[1] int ones = rep_array(1,1);
     for(n in 1:N_obs){
-      log_lik[n] = bernoulli_logit_glm_lpmf(ones[1] | to_matrix(X_nz[n]), z_alpha, z_beta) +
+      log_lik[n] = bernoulli_logit_glm_lpmf(ones[1] | to_matrix(X_nz[n]), nz_alpha, nz_beta) +
 		normal_lpdf(y_obs[n] | (has_inter ? intercept[1] : 0.0) +
 					(K ? X_obs[n] * betas : 0), sigma_ln_eDNA);
     }
@@ -100,8 +100,8 @@ generated quantities{
    	array[1] int zeros = rep_array(0,1);
 	array[1] int ones = rep_array(1,1);
 	for(n in 1:N_cens){
-      log_lik[n+N_obs] = log_sum_exp(bernoulli_logit_glm_lpmf(zeros[1] | to_matrix(X_z[n]), z_alpha, z_beta),
-									 bernoulli_logit_glm_lpmf(ones[1] | to_matrix(X_z[n]), z_alpha, z_beta) +
+      log_lik[n+N_obs] = log_sum_exp(bernoulli_logit_glm_lpmf(zeros[1] | to_matrix(X_z[n]), nz_alpha, nz_beta),
+									 bernoulli_logit_glm_lpmf(ones[1] | to_matrix(X_z[n]), nz_alpha, nz_beta) +
 									 normal_lcdf(L[n] | (has_inter ? intercept[1] : 0) +
 												 (K ? X_cens[n] * betas : 0), sigma_ln_eDNA));
     }

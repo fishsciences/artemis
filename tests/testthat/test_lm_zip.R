@@ -6,15 +6,20 @@ compile_models("eDNA_lm_zinf.stan")
 assertError(artemis:::eDNA_zinf_lm(Cq ~ Distance_m + Volume_mL, eDNA_data, 21, -1.5,
                                    parallel_chains = 4L))
 
-m4 = artemis:::eDNA_zinf_lm(Cq ~ Distance_m + Volume_mL | Volume_mL, eDNA_data, 21, -1.5,
-                                   parallel_chains = 4L)
+m4 = artemis:::eDNA_zinf_lm(Cq ~ Distance_m + Volume_mL | Distance_m, eDNA_data, 21, -1.5,
+                                   parallel_chains = 4L, adapt_delta = 0.99 )
 
-# should still work - drops the predictor to 0
+# should still work - drops the predict
 m4 = artemis:::eDNA_zinf_lm(Cq ~ Distance_m + Volume_mL | 1, eDNA_data, 21, -1.5,
                                    parallel_chains = 4L)
 
-m4
-loo(m4)
+
+## Need simulated dataset to test accuracy
+df = data.frame(Cq = rnorm(200, 35, 1))
+df$Cq[sample(1:200, 50)] = 40
+
+m = artemis:::eDNA_zinf_lm(Cq ~ 1 | 1,df , 21, -1.5)
+summary(plogis(m@fit[,"z_alpha"]))
 
 m5a = artemis:::eDNA_zinf_lm(Cq ~ 1, eDNA_data, 21, -1.5,
                              parallel_chains = 4L)
