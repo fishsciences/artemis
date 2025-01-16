@@ -19,7 +19,7 @@ df = data.frame(Cq = rnorm(200, 35, 1))
 df$Cq[sample(1:200, 50)] = 40
 
 m = artemis:::eDNA_zinf_lm(Cq ~ 1 | 1,df , 21, -1.5)
-summary(plogis(m@fit[,"z_alpha"]))
+summary(plogis(m@fit[,"nz_alpha"]))
 
 m5a = artemis:::eDNA_zinf_lm(Cq ~ 1, eDNA_data, 21, -1.5,
                              parallel_chains = 4L)
