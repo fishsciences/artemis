@@ -42,17 +42,14 @@ m3 = eDNA_lm(Cq ~ Distance_m + Volume_mL, cvp02, 21, -1.5,
 m3
 
 compile_models("eDNA_lm_zinf.stan")
-m4 = artemis:::eDNA_zinf_lm(Cq ~ Distance_m + Volume_mL, cvp02, 21, -1.5,
-                            probability_zero = 0.08)
+m4 = artemis:::eDNA_zinf_lm(Cq ~ Distance_m + Volume_mL, cvp02, 21, -1.5)
 m4
 loo(m4)
 
-m5a = artemis:::eDNA_zinf_lm(Cq ~ 1, cvp02, 21, -1.5,
-                            probability_zero = 0.08)
+m5a = artemis:::eDNA_zinf_lm(Cq ~ 1, cvp02, 21, -1.5)
 m5a
 loo(m5a)
-m5b = artemis:::eDNA_zinf_lm(Cq ~ -1 + Distance_m, cvp02, 21, -1.5,
-                            probability_zero = 0.08)
+m5b = artemis:::eDNA_zinf_lm(Cq ~ -1 + Distance_m, cvp02, 21, -1.5)
 m5b
 loo(m5b)
 

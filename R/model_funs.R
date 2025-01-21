@@ -13,7 +13,6 @@ eDNA_lm = function(formula, data,
                    formula, data, 
                    std_curve_alpha, std_curve_beta,
                    upper_Cq,
-                   probability_zero = 0,
                    prior_intercept,
                    priors,
                    cache_dir,
@@ -69,10 +68,6 @@ eDNA_lm = function(formula, data,
 ##' @param upper_Cq numeric, the upper limit on CQ detection. Any
 ##'     value of log(concentration) which would result in a value
 ##'     greater than this limit is instead recorded as the limit.
-##' @param probability_zero numeric, between 0 and 1. The probability
-##'     of a non-detection from a source other than low concentration
-##'     of eDNA, e.g. a filter failure. Defaults to 8% (0.08), which
-##'     was the estimated p(zero) from a daily sampling experiment.
 ##' @param prior_intercept named list such as created by
 ##'     \code{rstanarm::normal}. The list must contain elements named
 ##'     "location" and "scale", which are the location and scale for a
@@ -146,7 +141,6 @@ eDNA_lmer = function(formula, data,
                    formula, data, 
                    std_curve_alpha, std_curve_beta,
                    upper_Cq,
-                   probability_zero = 0,
                    prior_intercept,
                    priors,
                    prior_random_variance,
@@ -164,15 +158,23 @@ run_model = function(model,
     return(fit)
 }
 
-load_slots_model = function(obj)
-    {
-    obj@formula = get("formula", parent.frame())
-    obj@x = as.data.frame(get("md", parent.frame())$X)
-    obj@std_curve_alpha = get("std_curve_alpha", parent.frame())
-    obj@std_curve_beta = get("std_curve_beta", parent.frame())
-    obj@upper_Cq = get("upper_Cq", parent.frame())
-    
-    obj
+load_slots_model = function(obj, model_type)
+{
+  obj@formula = get("formula", parent.frame())
+  obj@x = as.data.frame(get("md", parent.frame())$X)
+  obj@std_curve_alpha = get("std_curve_alpha", parent.frame())
+  obj@std_curve_beta = get("std_curve_beta", parent.frame())
+  obj@upper_Cq = get("upper_Cq", parent.frame())
+  
+  if(model_type == "eDNA_model_lmer"){
+    obj@random_x = as.data.frame(get("md", parent.frame())$X)
+  }
+  if(model_type == "eDNA_model_zip"){
+    obj@z_intercept = array(get("md", parent.frame())$temp)
+    obj@random_sd = as.data.frame(get("md", parent.frame())$X)
+  }
+  
+  obj
 }
 
 ##' @rdname eDNA_lmer
@@ -180,21 +182,19 @@ load_slots_model = function(obj)
 eDNA_zinf_lm = function(formula, data, 
                         std_curve_alpha, std_curve_beta,
                         upper_Cq = 40,
-                        probability_zero = 0.08,
                         prior_intercept = normal(location = -15, scale = 10),
                         priors = normal(), 
                         cache_dir = tools::R_user_dir("artemis", "cache"),
                         ...)
 {
     # from lm
-    eDNA_lm_shared(model_type = "zero_inf_lm",
-                   formula, data, 
-                   std_curve_alpha, std_curve_beta,
-                   upper_Cq,
-                   probability_zero,
-                   prior_intercept,
-                   priors,
-                   cache_dir,
+  eDNA_lm_shared(model_type = "zero_inf_lm",
+                 formula, data, 
+                 std_curve_alpha, std_curve_beta,
+                 upper_Cq,
+                 prior_intercept,
+                 priors,
+                 cache_dir,
                    ...)
 }
 ##' @rdname eDNA_lmer
@@ -202,20 +202,18 @@ eDNA_zinf_lm = function(formula, data,
 eDNA_zinf_lmer = function(formula, data, 
                           std_curve_alpha, std_curve_beta,
                           upper_Cq = 40,
-                          probability_zero = 0.08,
                           prior_intercept = normal(location = -15, scale = 10),
                           priors = normal(),
                           prior_random_variance = exponential(),
                           cache_dir = tools::R_user_dir("artemis", "cache"),
                           ...)
 {
-
+  
   # from lm
   eDNA_lm_shared(model_type = "zero_inf_lmer",
                  formula, data, 
                  std_curve_alpha, std_curve_beta,
                  upper_Cq,
-                 probability_zero,
                  prior_intercept,
                  priors,
                  prior_random_variance,
@@ -229,7 +227,6 @@ eDNA_lm_shared = function(model_type,
                           formula, data, 
                           std_curve_alpha, std_curve_beta,
                           upper_Cq = 40,
-                          probability_zero = 0.08,
                           prior_intercept = normal(location = -15, scale = 10),
                           priors = normal(), 
                           prior_random_variance = exponential(),
@@ -249,13 +246,13 @@ eDNA_lm_shared = function(model_type,
        
     # This works because Stan ignores extra input data
     md = md_pars$prep_fun(ml, std_curve_alpha, std_curve_beta,
-                          Cq_upper = upper_Cq, prob_zero = probability_zero,
+                          Cq_upper = upper_Cq, 
                           prior_int = prior_intercept,
                           prior_b = priors, rand_sd = prior_random_variance)
     # md$y = ml$y
     fit = run_model(model = md_pars$mod,
                     data = md, ...)
-    fit = load_slots_model(fit)
+    fit = load_slots_model(fit, model_type)
     fit = as(fit, md_pars$model_class)
     
     return(fit)

@@ -198,6 +198,7 @@ prep_data.zip = function(mod_list,
   i = mod_list$y < Cq_upper
 
   # predictor matrix on zeros
+  model_data$has_nz_inter = as.integer(has_inter)
   model_data$K_z = ncol(mod_list$xz)
   model_data$X_nz = as.matrix(mod_list$xz[i, , drop = FALSE])
   model_data$X_z = as.matrix(mod_list$xz[!i, , drop = FALSE])

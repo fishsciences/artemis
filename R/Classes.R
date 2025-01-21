@@ -138,7 +138,7 @@ setClass("eDNA_model",
                    formula = "formula", x = "data.frame",
                    std_curve_alpha = "numeric", std_curve_beta = "numeric",
                    upper_Cq = "numeric",
-                   fit = "data.frame"))
+                   fit = "ANY"))
 
 ##' @rdname eDNA_model-class
 ##' @export
@@ -146,8 +146,10 @@ setClass("eDNA_model_lm", contains = "eDNA_model")
 
 ##' @rdname eDNA_model-class
 ##' @export
-setClass("eDNA_model_zip", contains = "eDNA_model",
-         slots = c(p_zero = "array"))
+setClass("eDNA_model_zip", contains = "eDNA_model_lm",
+         slots = c(z_intercept = "array",
+                   z_betas = "array",
+                   x_zip = "data.frame"))
 
 setAs("eDNA_model_zip", "eDNA_model", function(from){
   from@p_zero = as.matrix(from@fit$draws("p_zero", format = "draws_df")$p_zero)
@@ -168,7 +170,7 @@ setAs("eDNA_model_lmer", "eDNA_model", function(from) {
   from
 })
 
-
+if(FALSE){
 setAs("CmdStanMCMC_CSV", "eDNA_model",
       function(from){
         tmp = as.data.frame(from$draws(format = "draws_df"))
@@ -186,3 +188,4 @@ setAs("CmdStanMCMC_CSV", "eDNA_model",
         
       })
 
+}
