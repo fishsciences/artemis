@@ -170,7 +170,6 @@ setAs("eDNA_model_lmer", "eDNA_model", function(from) {
   from
 })
 
-if(FALSE){
 setAs("CmdStanMCMC_CSV", "eDNA_model",
       function(from){
         tmp = as.data.frame(from$draws(format = "draws_df"))
@@ -184,8 +183,7 @@ setAs("CmdStanMCMC_CSV", "eDNA_model",
             intercept = intercept,
             betas = betas,
             sigma_ln_eDNA = as.matrix(tmp$sigma_ln_eDNA),
-            fit = tmp)
+            fit = from)
         
       })
 
-}

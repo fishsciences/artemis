@@ -12,7 +12,8 @@ loo.eDNA_model = function(x,
                           ...)
 ## Based on LOO documentation https://mc-stan.org/loo/reference/loo.html
 {
-  loo(as.matrix(get_log_lik(x@fit)))
+  ## loo(as.matrix(get_log_lik(x@fit)))
+  x@fit$loo()
 }
 
 
@@ -26,11 +27,11 @@ loo.eDNA_model = function(x,
 ##' @author Matt Espe
 ##' @export
 waic.eDNA_model = function(x, pars = "log_lik", ...) {
-  LLarray <- as.matrix(get_log_lik(x@fit, pars))
+  LLarray <- get_log_lik(x@fit, pars)
   waic(LLarray, ...)
 }
 
 get_log_lik = function(fit, var = "log_lik")
 {
-  fit[grep(var, colnames(fit))]
+  fit$draws(variables = var)
 }
