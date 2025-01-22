@@ -202,7 +202,7 @@ prep_data.zip = function(mod_list,
   model_data$K_z = ncol(mod_list$xz)
   model_data$X_nz = as.matrix(mod_list$xz[i, , drop = FALSE])
   model_data$X_z = as.matrix(mod_list$xz[!i, , drop = FALSE])
-
+  model_data$Xz = mod_list$xz # preserve the original pred mat
   
   return(model_data)
 }

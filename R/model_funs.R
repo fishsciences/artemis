@@ -159,6 +159,8 @@ run_model = function(model,
 }
 
 load_slots_model = function(obj, model_type)
+  # This grabs data from 'md', the input data to the model and adds it
+  # to the final fit returned object, thus preserving the inputs.
 {
   obj@formula = get("formula", parent.frame())
   obj@x = as.data.frame(get("md", parent.frame())$X)
@@ -167,11 +169,11 @@ load_slots_model = function(obj, model_type)
   obj@upper_Cq = get("upper_Cq", parent.frame())
   
   if(model_type == "eDNA_model_lmer"){
-    obj@random_x = as.data.frame(get("md", parent.frame())$X)
+    #obj@random_x = as.data.frame(get("md", parent.frame())$X)
+    #obj@random_sd = as.data.frame(get("md", parent.frame())$X)
   }
-  if(model_type == "eDNA_model_zip"){
-    obj@z_intercept = array(get("md", parent.frame())$temp)
-    obj@random_sd = as.data.frame(get("md", parent.frame())$X)
+  if(model_type %in% c("zero_inf_lm", "zero_inf_lmer")){
+    obj@xz = as.data.frame(get("md", parent.frame())$Xz)
   }
   
   obj

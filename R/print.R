@@ -64,8 +64,16 @@ print.eDNA_model = function(x, digits = getOption("digits"), ...)
     cat("\tStandard curve alpha = ", head(x@std_curve_alpha), "\n")
     cat("\tStandard curve beta = ", head(x@std_curve_beta), "\n\n")
 
+    tmp = summary(x, ...)
     cat("\nParameter estimates:\n")
-    print(summary(x, ...), digits = digits, ...)
+    
+    if(inherits(x, "eDNA_model_zip")){
+      print(subset(tmp, !grepl("\\*$", variable)))
+      cat("\nZero-Inflated Model Parameter estimates:\n")
+      print(subset(tmp, grepl("\\*$", variable)))
+      } else {
+        print(summary(x, ...), digits = digits, ...)
+      }
     invisible(x)
 }
 

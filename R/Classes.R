@@ -135,7 +135,9 @@ setClass("eDNA_model",
                    intercept = "array",
                    betas = "array",
                    sigma_ln_eDNA = "array", 
-                   formula = "formula", x = "data.frame",
+                   formula = "formula",
+                   x = "data.frame",
+                   xz = "data.frame", # for zero-infl
                    std_curve_alpha = "numeric", std_curve_beta = "numeric",
                    upper_Cq = "numeric",
                    fit = "ANY"))

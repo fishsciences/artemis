@@ -69,14 +69,25 @@ summary.eDNA_simulation = function(object, var = "Cq_star",
 ##' @export
 summary.eDNA_model = function(object, probs = c(0.025, 0.5, 0.975), ...)
 {
-  res = object@fit$summary(...)
+  res = as.data.frame(object@fit$summary(...))
 
+  #remove thetas and log_lik to avoid confusion
+  res = res[!grepl("thetas\\[|log_lik\\[|lp__", res$variable),]
+
+  ## handle zip components
+  i = grepl("^nz_", res$variable)
+  if(any(i)){
+    res = res[order(i),]
+    res$variable[res$variable == "nz_alpha[1]"] = "(Intercept)*"
+    res$variable[grep("nz_beta\\[", res$variable)] = paste(colnames(object@xz), "*")   
+  }
+ 
   ## Fix names
   res$variable[res$variable == "intercept[1]"] = "(Intercept)"
   res$variable[grep("betas\\[", res$variable)] = colnames(object@x)
 
-  #remove thetas and log_lik to avoid confusion
-  res[!grepl("thetas\\[|log_lik\\[|lp__", res$variable),]
+  res
+    
     
 }
 

@@ -30,7 +30,7 @@ test_that("Fit the model with simple data",{
     expect_is(ans, "eDNA_model_lm")
 
     expect_true(all(slotNames(ans) %in% c("ln_conc", "Cq_star", "intercept", "betas",
-                                          "sigma_ln_eDNA", "formula", "x", 
+                                          "sigma_ln_eDNA", "formula", "x", "xz",
                                           "std_curve_alpha", "std_curve_beta",
                                           "upper_Cq", "fit")))
 
@@ -41,7 +41,7 @@ test_that("Fit the model with simple data",{
     expect_is(ans, "eDNA_model_lm")
 
     expect_true(all(slotNames(ans) %in% c("ln_conc", "Cq_star", "intercept","betas",
-                                          "sigma_ln_eDNA", "formula", "x", 
+                                          "sigma_ln_eDNA", "formula", "x", "xz",
                                           "std_curve_alpha", "std_curve_beta",
                                           "upper_Cq", "fit")))
 
@@ -61,7 +61,7 @@ test_that("Lmer", {
         ans2 = eDNA_lmer(Cq ~ Distance_m + Volume_mL + (1|FilterID),
                          eDNA_data,
                          std_curve_alpha = 21.2, std_curve_beta = -1.5,
-                         cores = floor(parallel::detectCores() / 2))
+                         parallel_chains = floor(parallel::detectCores() / 2))
     
 })
 
