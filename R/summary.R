@@ -69,31 +69,15 @@ summary.eDNA_simulation = function(object, var = "Cq_star",
 ##' @export
 summary.eDNA_model = function(object, probs = c(0.025, 0.5, 0.975), ...)
 {
-  object@fit$summary()
-  
-  if(FALSE){
-    res = c(mean = mean(object@sigma_ln_eDNA), quantile(object@sigma_ln_eDNA, probs))
-    nms = "ln(eDNA)_sigma"
-    
-    if(length(object@betas)){
-        res = cbind(summarize_par(object@betas, probs), res)
-        nms = c(colnames(object@x), nms)
-    }
-    
-    if(length(object@intercept)){
-        res = cbind(c(mean = mean(object@intercept),
-                    quantile(object@intercept, probs)), res)
-        nms = c("(Intercept)", nms)
-    }
+  res = object@fit$summary()
 
-    res = data.frame(t(res))
-    rownames(res) = nms
-    colnames(res) = c("Mean", paste0(probs * 100, "%"))
+  ## Fix names
+  res$variable[res$variable == "intercept[1]"] = "(Intercept)"
+  res$variable[grep("betas\\[", res$variable)] = colnames(object@x)
+
+  #remove thetas and log_lik to avoid confusion
+  res[!grepl("thetas\\[|log_lik\\[|lp__", res$variable),]
   
-    structure(res,
-              iter = nrow(object@fit),
-              class = c("eDNA_model.summary", "data.frame"))
-  }
   object@fit$summary(...)
   
 }
