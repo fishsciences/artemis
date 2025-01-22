@@ -69,7 +69,7 @@ summary.eDNA_simulation = function(object, var = "Cq_star",
 ##' @export
 summary.eDNA_model = function(object, probs = c(0.025, 0.5, 0.975), ...)
 {
-  res = object@fit$summary()
+  res = object@fit$summary(...)
 
   ## Fix names
   res$variable[res$variable == "intercept[1]"] = "(Intercept)"
@@ -77,9 +77,7 @@ summary.eDNA_model = function(object, probs = c(0.025, 0.5, 0.975), ...)
 
   #remove thetas and log_lik to avoid confusion
   res[!grepl("thetas\\[|log_lik\\[|lp__", res$variable),]
-  
-  object@fit$summary(...)
-  
+    
 }
 
 summarize_par = function(x, p)
