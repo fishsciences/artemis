@@ -36,13 +36,13 @@ test_that("Summary methods: model", {
     
     res = summary(ans)
 
-    expect_is(res, "eDNA_model.summary")
+    ## expect_is(res, "eDNA_model.summary")
     expect_is(res, "data.frame")
 
-    expect_true(nrow(res) == ncol(ans@betas) + 2)
-    expect_true(ncol(res) == 4)
+    ## expect_true(nrow(res) == ncol(ans@betas) + 2)
+    expect_true(ncol(res) == 10)
     
-    res2 = summary(ans, prob = 0.5)
+    res2 = summary(ans, quantiles = ~quantile(.x, probs = 0.5))
 
     expect_true(ncol(res2) == 2)
     

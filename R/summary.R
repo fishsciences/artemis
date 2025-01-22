@@ -69,6 +69,9 @@ summary.eDNA_simulation = function(object, var = "Cq_star",
 ##' @export
 summary.eDNA_model = function(object, probs = c(0.025, 0.5, 0.975), ...)
 {
+  object@fit$summary()
+  
+  if(FALSE){
     res = c(mean = mean(object@sigma_ln_eDNA), quantile(object@sigma_ln_eDNA, probs))
     nms = "ln(eDNA)_sigma"
     
@@ -90,6 +93,9 @@ summary.eDNA_model = function(object, probs = c(0.025, 0.5, 0.975), ...)
     structure(res,
               iter = nrow(object@fit),
               class = c("eDNA_model.summary", "data.frame"))
+  }
+  object@fit$summary(...)
+  
 }
 
 summarize_par = function(x, p)
