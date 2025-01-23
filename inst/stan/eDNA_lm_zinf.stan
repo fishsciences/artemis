@@ -67,7 +67,7 @@ model {
       betas[k] ~ normal(prior_mu[k], prior_sd[k]);
   }
   
-  sigma_ln_eDNA ~ normal(0, 1);
+  sigma_ln_eDNA ~ std_normal();
 
   nz_alpha ~ std_normal();
   nz_beta ~ std_normal();
@@ -89,10 +89,8 @@ generated quantities{
   vector[N_obs + N_cens] log_lik = rep_vector(0, N_obs + N_cens);
 
   if(N_obs){
-	array[1] int zeros = rep_array(0,1);
-	array[1] int ones = rep_array(1,1);
     for(n in 1:N_obs){
-      log_lik[n] = bernoulli_logit_glm_lpmf(ones[1] | to_matrix(X_nz[n]),
+      log_lik[n] = bernoulli_logit_glm_lpmf(1 | to_matrix(X_nz[n]),
 											(has_nz_inter ? nz_alpha[1] : 0.0), nz_beta) +
 		normal_lpdf(y_obs[n] | (has_inter ? intercept[1] : 0.0) +
 					(K ? X_obs[n] * betas : 0), sigma_ln_eDNA);
