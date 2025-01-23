@@ -23,7 +23,8 @@ df = data.frame(Cq = rnorm(n, 35, 1))
 df$z = sample(c(TRUE, FALSE), nrow(df), replace = TRUE, prob = c(0.75, 0.25))
 df$Cq[!df$z] = 40
 
-m = eDNA_zinf_lm(Cq ~ 1 | 1,df , 21, -1.5, parallel_chains = 4L)
+## takes a long time due to data dims
+m = eDNA_zinf_lm(Cq ~ 1 | 1,df , 21, -1.5, parallel_chains = 4L, adapt_delta = 0.99)
 summary(plogis(m@fit$draws(variables = "nz_alpha[1]", format = "draws_df")[[1]]))
 
 
