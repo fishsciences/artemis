@@ -287,19 +287,19 @@ get_mod_funs = function(model_type, cache_dir)
                           lm = quote(gen_model_list_lm),
                           lmer = quote(gen_model_list_lmer),
                           zero_inf_lm = quote(gen_model_list_lm_zip),
-                          zero_inf_lmer = quote(gen_model_list_lmer)),
+                          zero_inf_lmer = quote(gen_model_list_lmer_zip)),
          
          prep_fun = switch(model_type,
                            lm = prep_data.lm,
                            lmer = prep_data.lmer,
                            zero_inf_lm = prep_data.zip, 
-                           zero_inf_lmer = prep_data.lmer),
+                           zero_inf_lmer = prep_data.zipr),
          
          
          model_class = switch(model_type,
                               lm = "eDNA_model_lm",
                               lmer = "eDNA_model_lmer",
                               zero_inf_lm = "eDNA_model_zip", 
-                              zero_inf_lmer = "eDNA_model_ziper")
+                              zero_inf_lmer = "eDNA_model_zipr")
          )
 }

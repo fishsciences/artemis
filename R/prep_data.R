@@ -192,6 +192,26 @@ prep_data.zip = function(mod_list,
     # This gets most of the data in there
   model_data = prep_data.lm(mod_list, alpha, beta, 
                             prob_zero, Cq_upper, prior_int, prior_b)
+  add_zip_components(mod_list, model_data)
+}
+
+prep_data.zipr = function(mod_list,
+                         alpha, beta,
+                         prob_zero = 0,
+                         Cq_upper,
+                         prior_int, prior_b,
+                         rand_sd)
+{
+    # This gets most of the data in there
+  model_data = prep_data.lmer(mod_list, alpha, beta, 
+                              prob_zero, Cq_upper, prior_int, prior_b, rand_sd)
+
+  add_zip_components(mod_list, model_data, Cq_upper)
+}
+
+add_zip_components = function(mod_list, model_data, Cq_upper)
+  ## shared between all zip models
+{
   has_inter = has_intercept(mod_list$xz)
   mod_list$xz = remove_intercept(mod_list$xz)
 
@@ -203,6 +223,6 @@ prep_data.zip = function(mod_list,
   model_data$X_nz = as.matrix(mod_list$xz[i, , drop = FALSE])
   model_data$X_z = as.matrix(mod_list$xz[!i, , drop = FALSE])
   model_data$Xz = mod_list$xz # preserve the original pred mat
-  
-  return(model_data)
+
+  model_data
 }

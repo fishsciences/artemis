@@ -153,8 +153,14 @@ setClass("eDNA_model_zip", contains = "eDNA_model_lm",
                    z_betas = "array",
                    x_zip = "data.frame"))
 
+setClass("eDNA_model_zipr", contains = "eDNA_model_zip")
+
+
 setAs("eDNA_model_zip", "eDNA_model", function(from){
-  from@p_zero = as.matrix(from@fit$draws("p_zero", format = "draws_df")$p_zero)
+  from
+})
+
+setAs("eDNA_model_zipr", "eDNA_model", function(from){
   from
 })
 
