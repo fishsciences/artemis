@@ -37,5 +37,8 @@ compile_models("eDNA_lmer_zinf.stan")
 m5 = eDNA_zinf_lmer(Cq ~ Distance_m + Volume_mL + (1|FilterID) | 1, eDNA_data, 21, -1.5,
                                    parallel_chains = 4L, adapt_delta = 0.99)
 
+m6 = eDNA_zinf_lmer(Cq ~ Distance_m + (1|FilterID) | 1, eDNA_data, 21, -1.5,
+                                   parallel_chains = 4L, adapt_delta = 0.99)
+m6
 
 }

@@ -192,7 +192,7 @@ prep_data.zip = function(mod_list,
     # This gets most of the data in there
   model_data = prep_data.lm(mod_list, alpha, beta, 
                             prob_zero, Cq_upper, prior_int, prior_b)
-  add_zip_components(mod_list, model_data)
+  add_zip_components(mod_list, model_data, Cq_upper)
 }
 
 prep_data.zipr = function(mod_list,
