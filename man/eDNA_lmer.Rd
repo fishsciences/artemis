@@ -38,7 +38,6 @@ eDNA_zinf_lm(
   std_curve_alpha,
   std_curve_beta,
   upper_Cq = 40,
-  probability_zero = 0.08,
   prior_intercept = normal(location = -15, scale = 10),
   priors = normal(),
   cache_dir = tools::R_user_dir("artemis", "cache"),
@@ -51,7 +50,6 @@ eDNA_zinf_lmer(
   std_curve_alpha,
   std_curve_beta,
   upper_Cq = 40,
-  probability_zero = 0.08,
   prior_intercept = normal(location = -15, scale = 10),
   priors = normal(),
   prior_random_variance = exponential(),
@@ -101,11 +99,6 @@ directory returned by \code{R_user_dir()}.}
 
 \item{prior_random_variance}{the prior on variance of the random
 effects. Defaults to exponential distribution with rate 1.}
-
-\item{probability_zero}{numeric, between 0 and 1. The probability
-of a non-detection from a source other than low concentration
-of eDNA, e.g. a filter failure. Defaults to 8% (0.08), which
-was the estimated p(zero) from a daily sampling experiment.}
 }
 \value{
 S4 object, with the following slots:

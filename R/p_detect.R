@@ -101,15 +101,31 @@ est_p_detect = function(variable_levels,
         if(missing(std_curve_alpha) && missing(std_curve_beta)){
             std_curve_alpha = unique(model_fit@std_curve_alpha)
             std_curve_beta = unique(model_fit@std_curve_beta)
-        }
-    
-        if(length(std_curve_alpha) > 1 || length(std_curve_beta) > 1)
-            stop("Model was fit with multiple curves - please provide a single set of standard curve parameters")
+            if((length(std_curve_alpha) > 1 || length(std_curve_beta) > 1))
+              stop("Model was fit with multiple curves - please provide a single set of standard curve parameters")
         
-        inter = if(length(model_fit@intercept)) as.vector(model_fit@intercept) else 0
-        ln_conc_hat = apply(model_fit@betas, 1, function(y) variable_levels %*% y) + inter
+        }
+
+            
+      inter = if(length(model_fit@intercept)) as.vector(model_fit@intercept) else 0
+      ln_conc_hat = apply(model_fit@betas, 1, function(y) variable_levels %*% y) + inter
     }
 
+    if((length(std_curve_alpha) > 1 || length(std_curve_beta) > 1) && missing(model_fit)) {
+      warning("Multiple curves provided - function will be looped.")
+      return(mapply(est_p_detect,
+                    std_curve_alpha = std_curve_alpha,
+                    std_curve_beta = std_curve_beta,
+                    MoreArgs = list(variable_levels = variable_levels,
+                                    betas = betas,
+                                    ln_eDNA_sd = ln_eDNA_sd,
+                                    n_rep = n_rep,
+                                     prob_zero = prob_zero,
+                                    model_fit = model_fit,
+                                    upper_Cq = upper_Cq),
+                    SIMPLIFY = FALSE))              
+    }
+    
     lower_bound = (upper_Cq - std_curve_alpha) / std_curve_beta
     Cq_hat = ln_conc_hat * std_curve_beta + std_curve_alpha
     ans = prob_detect_ln(ln_conc_hat, ln_eDNA_sd, n_rep, prob_zero, lower_bound)
@@ -118,6 +134,29 @@ est_p_detect = function(variable_levels,
               variable_levels = variable_levels,
               reps = n_rep,
               class = c("eDNA_p_detect", class(ans)))
+}
+
+##' Summarizes estimates where multiple standard curves are used in
+##' \code{est_p_detect()}, which results in a list being returned for
+##' each standard curve parameter. 
+##'
+##' @title Summarize multiple probability of detection
+##' @param x list, the results from \code{est_p_detect()} when called
+##'   with multiple standard curve parameters
+##' @param probs vector, probabilities for quantiles passed to
+##'   \code{quantile()}
+##' @return data.frame
+##' @author Matt Espe
+##' @export
+summarize_multi_p_detect = function(x,
+                                    probs = c(0.025, 0.5, 0.975))
+  
+{
+  ests = do.call(cbind, x)
+  ans = as.data.frame(t(apply(ests, 1, quantile, probs = probs)))
+  ans$n_reps = attr(x[[1]], "reps")
+  ans
+
 }
 
 prob_detect_ln = function(ln_conc_hat, ln_sd, n_rep, p_zero, lwb)

@@ -7,7 +7,7 @@
 \alias{ANY-method}
 \title{Print eDNA model results}
 \usage{
-\method{print}{eDNA_model}(x, digits = getOption("digits"), ...)
+\method{print}{eDNA_model}(x, digits = getOption("digits", 3), ...)
 
 \S4method{show}{eDNA_model}(object)
 }
