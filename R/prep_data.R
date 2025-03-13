@@ -226,3 +226,42 @@ add_zip_components = function(mod_list, model_data, Cq_upper)
 
   model_data
 }
+
+prep_data.count = function(mod_list,
+                        alpha, beta,
+                        prob_zero = 0,
+                        Cq_upper,
+                        prior_int, prior_b,
+                        rand_sd = 0) # ignored for lm
+
+{
+    has_inter = has_intercept(mod_list$x)
+    x = remove_intercept(mod_list$x)
+    ## i = mod_list$y < Cq_upper
+    y = mod_list$y
+
+    priors = prep_priors(prior_b, x, y)
+    n_vars = if(is.null(ncol(x))) 0 else ncol(x)
+
+    if(!is.integer(y)){
+      warning("Model response is not integer and is being converted. This will round count numbers.")
+      y = as.integer(round(y))
+    }
+    
+    model_data = list(y = y,
+                      N = length(y),
+                      K = n_vars,
+                      X = as.matrix(x),
+                      has_inter = has_inter,
+                      prior_mu = priors$location,
+                      prior_sd = priors$scale)
+    
+    ## avoid #837 in rstan
+    if(typeof(model_data$X) == "logical" && ncol(model_data$X) == 0)
+        storage.mode(model_data$X) = "numeric"
+    
+    model_data$prior_int_mu = prior_int$location
+    model_data$prior_int_sd = prior_int$scale
+  
+    return(model_data)
+}

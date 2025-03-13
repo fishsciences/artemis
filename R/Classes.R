@@ -153,7 +153,13 @@ setClass("eDNA_model_zip", contains = "eDNA_model_lm",
                    z_betas = "array",
                    x_zip = "data.frame"))
 
+##' @rdname eDNA_model-class
+##' @export
 setClass("eDNA_model_zipr", contains = "eDNA_model_zip")
+
+##' @rdname eDNA_model-class
+##' @export
+setClass("eDNA_model_count", contains = "eDNA_model")
 
 
 setAs("eDNA_model_zip", "eDNA_model", function(from){
@@ -164,6 +170,9 @@ setAs("eDNA_model_zipr", "eDNA_model", function(from){
   from
 })
 
+setAs("eDNA_model_count", "eDNA_model", function(from){
+  from
+})
 ##' @slot random_x data.frame of the grouping variables used
 ##' @slot random_sd the estimated stdev. of each of the random effects
 ##'
@@ -187,10 +196,14 @@ setAs("CmdStanMCMC_CSV", "eDNA_model",
 
         j = grepl("intercept", nms)
         intercept = if(any(j)) as.matrix(tmp[j]) else array(numeric())
+        
+        k = grepl("sigma_ln_eDNA", nms)
+        sigma = if(any(k)) as.matrix(tmp[k]) else array(numeric())
+        
         new("eDNA_model",
             intercept = intercept,
             betas = betas,
-            sigma_ln_eDNA = as.matrix(tmp$sigma_ln_eDNA),
+            sigma_ln_eDNA = sigma,
             fit = from)
         
       })

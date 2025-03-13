@@ -119,3 +119,11 @@ test_that("All obs. below threshold", {
 
 })
           
+test_that("Count model", {
+  
+  d = data.frame(y = rpois(100, 1))
+
+  ans = eDNA_count_lm(y ~ 1, d)
+
+  print(ans)
+})

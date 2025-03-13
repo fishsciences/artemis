@@ -223,6 +223,29 @@ eDNA_zinf_lmer = function(formula, data,
                  ...)
 }
 
+##' @rdname eDNA_lmer
+##' @export
+eDNA_count_lm = function(formula, data, 
+                         prior_intercept = normal(location = -15, scale = 10),
+                         priors = normal(),
+                         cache_dir = tools::R_user_dir("artemis", "cache"),
+                         ...)
+{
+  
+  # Several parameters are not used for the count model, but
+  # we pass along dummy variables to re-use code
+  eDNA_lm_shared(model_type = "count",
+                 formula, data, 
+                 1L, 1L,
+                 1L,
+                 prior_intercept,
+                 priors,
+                 prior_random_variance,
+                 cache_dir,
+                 ...)
+}
+
+
 # houses most lm() code, which is similar between the lm, lmer, and
 # zero-inflated
 eDNA_lm_shared = function(model_type, 
@@ -268,6 +291,7 @@ get_mod_funs = function(model_type, cache_dir)
                 lmer = "eDNA_lmer.stan",
                 zero_inf_lm = "eDNA_lm_zinf.stan",
                 zero_inf_lmer = "eDNA_lmer_zinf.stan",
+                count = "eDNA_pois_lm.stan",
                 stop("Unknown model type"))
     
     mod_file = file.path(cache_dir, mn)
@@ -287,19 +311,23 @@ get_mod_funs = function(model_type, cache_dir)
                           lm = quote(gen_model_list_lm),
                           lmer = quote(gen_model_list_lmer),
                           zero_inf_lm = quote(gen_model_list_lm_zip),
-                          zero_inf_lmer = quote(gen_model_list_lmer_zip)),
+                          zero_inf_lmer = quote(gen_model_list_lmer_zip),
+                          count = quote(gen_model_list_lm)),
          
          prep_fun = switch(model_type,
                            lm = prep_data.lm,
                            lmer = prep_data.lmer,
                            zero_inf_lm = prep_data.zip, 
-                           zero_inf_lmer = prep_data.zipr),
+                           zero_inf_lmer = prep_data.zipr,
+                           count = prep_data.count),
          
          
          model_class = switch(model_type,
                               lm = "eDNA_model_lm",
                               lmer = "eDNA_model_lmer",
                               zero_inf_lm = "eDNA_model_zip", 
-                              zero_inf_lmer = "eDNA_model_zipr")
+                              zero_inf_lmer = "eDNA_model_zipr",
+                              count = "eDNA_model_count")
          )
 }
+

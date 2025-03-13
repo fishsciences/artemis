@@ -59,10 +59,16 @@ print.eDNA_simulation = function(x, FUN = summary, digits = getOption("digits"),
 ##' @export
 print.eDNA_model = function(x, digits = getOption("digits", 3), ...)
 {
-    cat("\nformula: "); print(x@formula)
+  cat("\nformula: "); print(x@formula)
+  if(!inherits(x, "eDNA_model_count")){
+    
     cat("\nStandard curve parameters: Cq = alpha + beta * log(concentration)\n")
     cat("\tStandard curve alpha = ", head(x@std_curve_alpha), "\n")
     cat("\tStandard curve beta = ", head(x@std_curve_beta), "\n\n")
+  }
+  if(inherits(x, "eDNA_model_count")){
+    cat("\nCount model")
+  }
 
     tmp = summary(x, ...)
     cat("\nParameter estimates:\n")
