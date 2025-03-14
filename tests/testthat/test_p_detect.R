@@ -39,3 +39,15 @@ test_that("Zero-inflated", {
                  n_rep = 1:3)
 
 })
+
+test_that("Multiple std curves", {
+  ans = est_p_detect(variable_levels = c(Intercept = 1, 
+                                         Distance_m = 10),
+                     betas = c(Intercept = -12, Distance_m = -0.0001),
+                     ln_eDNA_sd = 1, 
+                     std_curve_alpha = rnorm(100, 21.2, 0.1), std_curve_beta = rnorm(100, -1.5, 0.1),
+                     n_rep = 1:10)
+  expect_is(ans, "list")
+
+  summarize_multi_p_detect(ans)
+})

@@ -57,22 +57,28 @@ print.eDNA_simulation = function(x, FUN = summary, digits = getOption("digits"),
 ##' @author Matt Espe
 ##' @method print eDNA_model 
 ##' @export
-print.eDNA_model = function(x, digits = getOption("digits"), ...)
+print.eDNA_model = function(x, digits = getOption("digits", 3), ...)
 {
-    cat("\nformula: "); print(x@formula)
+  cat("\nformula: "); print(x@formula)
+  if(!inherits(x, "eDNA_model_count")){
+    
     cat("\nStandard curve parameters: Cq = alpha + beta * log(concentration)\n")
     cat("\tStandard curve alpha = ", head(x@std_curve_alpha), "\n")
     cat("\tStandard curve beta = ", head(x@std_curve_beta), "\n\n")
+  }
+  if(inherits(x, "eDNA_model_count")){
+    cat("\nCount model")
+  }
 
     tmp = summary(x, ...)
     cat("\nParameter estimates:\n")
     
     if(inherits(x, "eDNA_model_zip")){
-      print(subset(tmp, !grepl("\\*$", variable)))
+      print(subset(tmp, !grepl("\\*$", variable)), digits = digits, row.names = FALSE, ...)
       cat("\nZero-Inflated Model Parameter estimates:\n")
-      print(subset(tmp, grepl("\\*$", variable)))
+      print(subset(tmp, grepl("\\*$", variable)), digits = digits, row.names = FALSE, ...)
       } else {
-        print(summary(x, ...), digits = digits, ...)
+        print(summary(x, ...), digits = digits, row.names = FALSE, ...)
       }
     invisible(x)
 }

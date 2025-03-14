@@ -72,7 +72,7 @@ summary.eDNA_model = function(object, probs = c(0.025, 0.5, 0.975), ...)
   res = as.data.frame(object@fit$summary(...))
 
   #remove thetas and log_lik to avoid confusion
-  res = res[!grepl("thetas\\[|log_lik\\[|lp__", res$variable),]
+  res = res[!grepl("thetas\\[|log_lik\\[|lp__|_raw\\[|rand_", res$variable),]
 
   ## handle zip components
   i = grepl("^nz_", res$variable)
@@ -84,7 +84,7 @@ summary.eDNA_model = function(object, probs = c(0.025, 0.5, 0.975), ...)
  
   ## Fix names
   res$variable[res$variable == "intercept[1]"] = "(Intercept)"
-  res$variable[grep("betas\\[", res$variable)] = colnames(object@x)
+  res$variable[grep("^betas\\[", res$variable)] = colnames(object@x)
 
   res
     

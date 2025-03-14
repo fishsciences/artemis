@@ -21,6 +21,9 @@
 ##' @export
 compile_models = function(model_names = c("eDNA_lm.stan",
                                           "eDNA_lmer.stan",
+                                          "eDNA_lm_zinf.stan",
+                                          "eDNA_lmer_zinf.stan",
+                                          "eDNA_pois_lm.stan",
                                           "eDNA_sim_omni.stan"),
                           models = system.file("stan", model_names,
                                                package = "artemis"),

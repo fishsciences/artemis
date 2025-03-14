@@ -72,6 +72,25 @@ gen_model_list_lm_zip = function(formula, data)
   return(list(x = x, xz = xz, y = y))    
 }
 
+gen_model_list_lmer_zip = function(formula, data)
+{
+  ffr = . ~ .
+  ffz = ~ .
+  ffr[[2]] = formula[[2]]
+  
+  ffr[[3]] = formula[[3]][[2]]
+  ffz[[2]] = formula[[3]][[3]]
+
+  mfz = model.frame(ffz, data)
+  
+  ## use other gen functions to parse random effects
+  ans = gen_model_list_lmer(ffr, data)
+  ans$xz = model.matrix(attr(mfz, "terms"), data)
+
+  ans
+}
+
+
 mk_rand_mat = function(rt)
 {
     mats = lapply(rt$Ztlist, as.matrix)

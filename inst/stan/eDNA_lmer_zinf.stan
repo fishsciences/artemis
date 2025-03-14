@@ -26,13 +26,19 @@ data {
   vector[N_obs] y_obs; // ln[eDNA]
   vector[N_cens] L; // lower bound on ln[eDNA]
   //#include lm_data.stan // Play with this later
+
   // Random effects
   int<lower=1> K_r; // must have at least one 
   int<lower=1> N_grp;
   array[K_r] int<lower=1,upper=N_grp> group;
   matrix[N_obs, K_r] X_obs_r;
   matrix[N_cens, K_r] X_cens_r;
-  
+
+  // Zero-inf components
+  int<lower=0> K_z; // predictors
+  matrix[N_cens, K_z] X_z;
+  matrix[N_obs, K_z] X_nz;
+    
   // prior parameters - user provided
   real prior_int_mu;
   real<lower=0> prior_int_sd;
@@ -42,6 +48,7 @@ data {
   
   // for intercept-less models
   int<lower=0,upper=1> has_inter;
+  int<lower=0,upper=1> has_nz_inter;
 }
 
 transformed data {
@@ -67,6 +74,8 @@ transformed data {
 parameters {
   array[has_inter ? 1 : 0] real intercept;
   vector[K] thetas; // coefficients on Q_ast
+  array[has_nz_inter ? 1 : 0] real nz_alpha;
+  vector[K_z] nz_beta;
   vector[K_r] rand_betas_raw;
   vector<lower=0>[N_grp] rand_sigma;
   real<lower=0> sigma_ln_eDNA;
@@ -104,11 +113,18 @@ model {
   rand_betas_raw ~ std_normal();
   
   sigma_ln_eDNA ~ exponential(1);
+
+  nz_alpha ~ std_normal();
+  nz_beta ~ std_normal();
+
+  target +=  bernoulli_logit_glm_lpmf(1 | X_nz, (has_nz_inter ? nz_alpha[1] : 0.0), nz_beta) +
+	normal_lpdf(y_obs | mu_obs, sigma_ln_eDNA);
   
-  target += normal_lpdf(y_obs | mu_obs, sigma_ln_eDNA);
-  
-  if(N_cens)
-	target += normal_lcdf(L | mu_cens, sigma_ln_eDNA);
+  if(N_cens){
+	target += log_sum_exp(bernoulli_logit_glm_lpmf(0 | X_z,  (has_nz_inter ? nz_alpha[1] : 0.0), nz_beta),
+						  bernoulli_logit_glm_lpmf(1 | X_z,  (has_nz_inter ? nz_alpha[1] : 0.0), nz_beta) +
+						  normal_lcdf(L | mu_cens, sigma_ln_eDNA));
+  }
 }
 
 generated quantities{
@@ -119,15 +135,23 @@ generated quantities{
     vector[K+K_r] betas_tmp = append_row(betas, rand_betas);
     if(N_obs) {
       for(n in 1:N_obs){
-	log_lik[n] = normal_lpdf(y_obs[n] | (has_inter ? intercept[1] : 0.0) +
-				 X_obs_tmp[n] * betas_tmp, sigma_ln_eDNA);
+		log_lik[n] = bernoulli_logit_glm_lpmf(1 | to_matrix(X_nz[n]),
+											  (has_nz_inter ? nz_alpha[1] : 0.0), nz_beta) +
+		  normal_lpdf(y_obs[n] | (has_inter ? intercept[1] : 0.0) +
+					  X_obs_tmp[n] * betas_tmp, sigma_ln_eDNA);
       }
     }
     
     if(N_cens) {
       for(n in 1:N_cens){
-	log_lik[n+N_obs] = normal_lcdf(L[n] | (has_inter ? intercept[1] : 0) +
-				     X_cens_tmp[n] * betas_tmp, sigma_ln_eDNA);
+		log_lik[n+N_obs] = log_sum_exp(bernoulli_logit_glm_lpmf(0 | to_matrix(X_z[n]),
+																(has_nz_inter ? nz_alpha[1] : 0.0),
+																nz_beta),
+									   bernoulli_logit_glm_lpmf(1 | to_matrix(X_z[n]),
+																(has_nz_inter ? nz_alpha[1] : 0.0),
+																nz_beta) +
+									   normal_lcdf(L[n] | (has_inter ? intercept[1] : 0) +
+												   X_cens_tmp[n] * betas_tmp, sigma_ln_eDNA));
       }
     }
   }
