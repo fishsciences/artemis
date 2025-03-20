@@ -1,12 +1,13 @@
 /*
   New, simplified model
  */
-functions{
+
+functions {
   int num_nonzero(matrix m){
 	int n_row = rows(m);
 	int n_col = cols(m);
 	int ans = 0;
-
+	
 	for(i in 1:n_row)
 	  for(j in 1:n_col)
 		if(m[i , j] > 0)
@@ -14,7 +15,24 @@ functions{
 	
 	return ans;
   }
-
+  
+  vector sum_groups_to_zero(vector x, array[] int grp){
+	int N = size(x);
+	vector[N] res;
+	real ans = 0;
+	
+	for(n in 1:N){
+	  if(n == N || (grp[n] != grp[(n+1)])){
+		res[n] = -ans;
+		ans = 0;
+	  } else {
+		res[n] = x[n];
+		ans += x[n];
+	  }
+	}
+	return res;
+  }
+  
 }
 
 data {
@@ -81,6 +99,8 @@ transformed parameters {
   
   for(k in 1:K_r)
 	rand_betas[k] = rand_betas_raw[k] * rand_sigma[group[k]];
+
+  rand_betas = sum_groups_to_zero(rand_betas, group);
 }
 
 model {
@@ -131,3 +151,4 @@ generated quantities{
     }
   }
 }
+

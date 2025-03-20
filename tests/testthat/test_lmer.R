@@ -1,11 +1,11 @@
 if(FALSE){
 library(artemis)
-library(elaphos)
+## library(elaphos)
 
 # make sure model is up-to-date
-compile_models("eDNA_lmer.stan")
+compile_models()
 
-m = eDNA_lmer(Cq ~ Distance_m + (1|FilterID), cvp02, 21, -1.5)
+m = eDNA_lmer(Cq ~ Distance_m + (1|FilterID), eDNA_data, 21, -1.5)
 m
 loo(m)
 ranef(m)
