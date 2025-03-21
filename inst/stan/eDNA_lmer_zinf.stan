@@ -44,14 +44,14 @@ functions {
    * @param sizes component sizes
    * @return vector phi_ozs, the vector whose slices sum to zero
    */
-  vector zero_sum_components_jacobian(vector phi, array[] int sizes) {
+  vector zero_sum_components(vector phi, array[] int sizes) {
     vector[sum(sizes)] phi_ozs;
     int idx_phi = 1;
     int idx_ozs = 1;
     for (i in 1:size(sizes)) {
       int n = sizes[i];
       phi_ozs[idx_ozs : idx_ozs + n - 1] = 
-        zero_sum_constrain_jacobian(segment(phi, idx_phi, n - 1));
+        zero_sum_constrain(segment(phi, idx_phi, n - 1));
       idx_phi += n - 1;
       idx_ozs += n;
     }
@@ -65,7 +65,7 @@ functions {
    * @param y unconstrained zero-sum parameters
    * @return vector z, the vector whose slices sum to zero
    */
-  vector zero_sum_constrain_jacobian(vector y) {
+  vector zero_sum_constrain(vector y) {
     int N = num_elements(y);
     vector[N + 1] z = zeros_vector(N + 1);
     real sum_w = 0;
@@ -156,7 +156,7 @@ transformed parameters {
 	betas = R_ast_inverse * thetas; // coefficients on x
   }
 
-  rand_betas = zero_sum_components_jacobian(rand_betas_raw, comp_sizes);
+  rand_betas = zero_sum_components(rand_betas_raw, comp_sizes);
   
   for(k in 1:K_r)
 	rand_betas[k] = rand_betas[k] * rand_sigma[group[k]];
