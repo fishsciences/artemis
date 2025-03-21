@@ -292,6 +292,7 @@ get_mod_funs = function(model_type, cache_dir)
                 zero_inf_lm = "eDNA_lm_zinf.stan",
                 zero_inf_lmer = "eDNA_lmer_zinf.stan",
                 count = "eDNA_pois_lm.stan",
+                countr = "eDNA_pois_lmer.stan",
                 stop("Unknown model type"))
     
     mod_file = file.path(cache_dir, mn)
@@ -312,14 +313,17 @@ get_mod_funs = function(model_type, cache_dir)
                           lmer = quote(gen_model_list_lmer),
                           zero_inf_lm = quote(gen_model_list_lm_zip),
                           zero_inf_lmer = quote(gen_model_list_lmer_zip),
-                          count = quote(gen_model_list_lm)),
+                          count = quote(gen_model_list_lm),
+                          countr = quote(gen_model_list_lmer),
+                          ),
          
          prep_fun = switch(model_type,
                            lm = prep_data.lm,
                            lmer = prep_data.lmer,
                            zero_inf_lm = prep_data.zip, 
                            zero_inf_lmer = prep_data.zipr,
-                           count = prep_data.count),
+                           count = prep_data.count,
+                           countr = prep_data.countr),
          
          
          model_class = switch(model_type,
@@ -327,7 +331,8 @@ get_mod_funs = function(model_type, cache_dir)
                               lmer = "eDNA_model_lmer",
                               zero_inf_lm = "eDNA_model_zip", 
                               zero_inf_lmer = "eDNA_model_zipr",
-                              count = "eDNA_model_count")
+                              count = "eDNA_model_count",
+                              countr = "eDNA_model_countr")
          )
 }
 

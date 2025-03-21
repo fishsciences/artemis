@@ -161,6 +161,10 @@ setClass("eDNA_model_zipr", contains = "eDNA_model_zip")
 ##' @export
 setClass("eDNA_model_count", contains = "eDNA_model")
 
+##' @rdname eDNA_model-class
+##' @export
+setClass("eDNA_model_countr", contains = "eDNA_model")
+
 
 setAs("eDNA_model_zip", "eDNA_model", function(from){
   from
@@ -173,6 +177,11 @@ setAs("eDNA_model_zipr", "eDNA_model", function(from){
 setAs("eDNA_model_count", "eDNA_model", function(from){
   from
 })
+
+setAs("eDNA_model_countr", "eDNA_model", function(from){
+  from
+})
+
 ##' @slot random_x data.frame of the grouping variables used
 ##' @slot random_sd the estimated stdev. of each of the random effects
 ##'

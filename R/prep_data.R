@@ -228,11 +228,11 @@ add_zip_components = function(mod_list, model_data, Cq_upper)
 }
 
 prep_data.count = function(mod_list,
-                        alpha, beta,
-                        prob_zero = 0,
-                        Cq_upper,
-                        prior_int, prior_b,
-                        rand_sd = 0) # ignored for lm
+                           alpha, beta,
+                           prob_zero = 0,
+                           Cq_upper,
+                           prior_int, prior_b,
+                           rand_sd = 0) # ignored for lm
 
 {
     has_inter = has_intercept(mod_list$x)
@@ -264,4 +264,25 @@ prep_data.count = function(mod_list,
     model_data$prior_int_sd = prior_int$scale
   
     return(model_data)
+}
+
+prep_data.countr = function(mod_list,
+                            alpha, beta,
+                            prob_zero = 0,
+                            Cq_upper,
+                            prior_int, prior_b,
+                            rand_sd)
+{
+    # This gets most of the data in there
+  model_data = prep_data.count(mod_list, alpha, beta, 
+                               prob_zero, Cq_upper, prior_int, prior_b)
+  model_data$X_r = mod_list$rand_x
+
+  model_data$K_r = mod_list$n_rand
+  model_data$group = mod_list$groups
+  model_data$N_grp = mod_list$n_grp
+  if(rand_sd$dist != "exponential")
+    stop("Only exponential priors on random effect variance supported at this time")
+  model_data$rand_sd = rand_sd$scale^-1    
+  return(model_data)
 }
