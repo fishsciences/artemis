@@ -245,6 +245,29 @@ eDNA_count_lm = function(formula, data,
                  ...)
 }
 
+##' @rdname eDNA_lmer
+##' @export
+eDNA_count_lmer = function(formula, data, 
+                           prior_intercept = normal(location = -15, scale = 10),
+                           priors = normal(),
+                           prior_random_variance = exponential(),
+                           cache_dir = tools::R_user_dir("artemis", "cache"),
+                           ...)
+{
+  
+  # Several parameters are not used for the count model, but
+  # we pass along dummy variables to re-use code
+  eDNA_lm_shared(model_type = "countr",
+                 formula, data, 
+                 1L, 1L,
+                 1L,
+                 prior_intercept,
+                 priors,
+                 prior_random_variance,
+                 cache_dir,
+                 ...)
+}
+
 
 # houses most lm() code, which is similar between the lm, lmer, and
 # zero-inflated

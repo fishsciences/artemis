@@ -2,7 +2,7 @@
  * New, simplified model
  */
 
-// This needs to be copied into each file because there is a bug in the #includes parsing
+// This needs to be copied into each file because there is a bug in the #includes parsing 
 
 functions {
   int num_nonzero(matrix m){
@@ -78,8 +78,8 @@ functions {
     }
     return z;
   }
-
 }
+
 
 data {
   int<lower=0> N_obs;

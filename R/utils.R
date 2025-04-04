@@ -90,3 +90,22 @@ lnconc_to_cq = function(x,
         ans[ans > upper_Cq] = upper_Cq
     ans
 }
+
+
+zero_sum_constrain = function(y)
+## R version of the sum to zero function inside the Stan models with random effects
+{
+
+  N = length(y)
+    z = rep(0, N + 1)
+    sum_w = 0
+    for (ii in 1:N) {
+      i = N - ii + 1  
+      n = i 
+      w = y[i] * (sqrt(n * (n + 1)))^-1 
+      sum_w = sum_w + w 
+      z[i] = z[i] + sum_w      
+      z[i + 1] = z[i + 1] - w * n     
+    }
+    return(z)
+ }
