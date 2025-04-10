@@ -158,7 +158,7 @@ est_p_detect_count = function(variable_levels,
       lambda_hat = exp(variable_levels %*% betas)
     } else {
       inter = if(length(model_fit@intercept)) as.vector(model_fit@intercept) else 0
-      lambda_hat = apply(model_fit@betas, 1, function(y) variable_levels %*% y) + inter
+      lambda_hat = exp(apply(model_fit@betas, 1, function(y) variable_levels %*% y) + inter)
     }
 
     p_one = dpois(0, lambda_hat)
