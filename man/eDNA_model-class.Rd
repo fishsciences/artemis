@@ -7,6 +7,7 @@
 \alias{eDNA_model_zip-class}
 \alias{eDNA_model_zipr-class}
 \alias{eDNA_model_count-class}
+\alias{eDNA_model_countr-class}
 \alias{eDNA_model_lmer-class}
 \title{eDNA model fit results}
 \description{

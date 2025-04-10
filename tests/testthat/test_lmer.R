@@ -70,4 +70,18 @@ if(FALSE){
   m2 = artemis:::eDNA_count_lmer(count ~ 1 + (1|FilterID), eDNA_data)
   print(m2)
 
+  ## Check estimates vs. rstanarm
+  library(rstanarm)
+
+  w = stan_glm(count ~ 1, eDNA_data, family = "poisson")
+
+  ## similar estimates
+  print(w, digits = 3)
+  print(m)
+
+  w2 = stan_glmer(count ~ 1 + (1|FilterID), eDNA_data, family = "poisson")
+
+  ## Similar as well - need to get a more definitive test for this
+  print(w2, digits = 3)
+  print(m2)
 }

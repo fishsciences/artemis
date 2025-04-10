@@ -163,7 +163,7 @@ setClass("eDNA_model_count", contains = "eDNA_model")
 
 ##' @rdname eDNA_model-class
 ##' @export
-setClass("eDNA_model_countr", contains = "eDNA_model")
+setClass("eDNA_model_countr", contains = "eDNA_model_count")
 
 
 setAs("eDNA_model_zip", "eDNA_model", function(from){

@@ -6,7 +6,8 @@
 \usage{
 compile_models(
   model_names = c("eDNA_lm.stan", "eDNA_lmer.stan", "eDNA_lm_zinf.stan",
-    "eDNA_lmer_zinf.stan", "eDNA_pois_lm.stan", "eDNA_sim_omni.stan"),
+    "eDNA_lmer_zinf.stan", "eDNA_pois_lm.stan", "eDNA_pois_lmer.stan",
+    "eDNA_sim_omni.stan"),
   models = system.file("stan", model_names, package = "artemis"),
   cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache")),
   rewrite = TRUE,

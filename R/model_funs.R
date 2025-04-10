@@ -226,7 +226,7 @@ eDNA_zinf_lmer = function(formula, data,
 ##' @rdname eDNA_lmer
 ##' @export
 eDNA_count_lm = function(formula, data, 
-                         prior_intercept = normal(location = -15, scale = 10),
+                         prior_intercept = normal(location = 3, scale = 5),
                          priors = normal(),
                          cache_dir = tools::R_user_dir("artemis", "cache"),
                          ...)
@@ -248,7 +248,7 @@ eDNA_count_lm = function(formula, data,
 ##' @rdname eDNA_lmer
 ##' @export
 eDNA_count_lmer = function(formula, data, 
-                           prior_intercept = normal(location = -15, scale = 10),
+                           prior_intercept = normal(location = 3, scale = 5),
                            priors = normal(),
                            prior_random_variance = exponential(),
                            cache_dir = tools::R_user_dir("artemis", "cache"),

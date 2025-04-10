@@ -6,6 +6,7 @@
 \alias{eDNA_zinf_lm}
 \alias{eDNA_zinf_lmer}
 \alias{eDNA_count_lm}
+\alias{eDNA_count_lmer}
 \title{Fit eDNA Model}
 \usage{
 eDNA_lm(
@@ -61,9 +62,15 @@ eDNA_zinf_lmer(
 eDNA_count_lm(
   formula,
   data,
-  std_curve_alpha,
-  std_curve_beta,
-  upper_Cq = 40,
+  prior_intercept = normal(location = -15, scale = 10),
+  priors = normal(),
+  cache_dir = tools::R_user_dir("artemis", "cache"),
+  ...
+)
+
+eDNA_count_lmer(
+  formula,
+  data,
   prior_intercept = normal(location = -15, scale = 10),
   priors = normal(),
   prior_random_variance = exponential(),
