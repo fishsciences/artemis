@@ -59,8 +59,8 @@ plot.eDNA_simulation = function(x, y,
 ##' @author Matt Espe
 ##' @method plot eDNA_model
 ##' @export
-plot.eDNA_model = function(x, y, pars = "betas",  ...) {
-    plot(x@fit, pars = pars, ...)
+plot.eDNA_model = function(x, y, pars = c("intercept", "betas"),  ...) {
+    mcmc_intervalsplot(x@fit$draws(), regex_pars = pars, ...)
 }
 
 
