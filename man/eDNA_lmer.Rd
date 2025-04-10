@@ -62,7 +62,7 @@ eDNA_zinf_lmer(
 eDNA_count_lm(
   formula,
   data,
-  prior_intercept = normal(location = -15, scale = 10),
+  prior_intercept = normal(location = 3, scale = 5),
   priors = normal(),
   cache_dir = tools::R_user_dir("artemis", "cache"),
   ...
@@ -71,7 +71,7 @@ eDNA_count_lm(
 eDNA_count_lmer(
   formula,
   data,
-  prior_intercept = normal(location = -15, scale = 10),
+  prior_intercept = normal(location = 3, scale = 5),
   priors = normal(),
   prior_random_variance = exponential(),
   cache_dir = tools::R_user_dir("artemis", "cache"),

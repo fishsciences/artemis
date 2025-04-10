@@ -70,7 +70,8 @@
 ##'              n_rep = 1:12)
 ##'
 ##' @export
-est_p_detect = function(variable_levels,
+##' @rdname est_p_detect
+est_p_detect_lm = function(variable_levels,
                         betas, 
                         ln_eDNA_sd,
                         std_curve_alpha, std_curve_beta,
@@ -113,7 +114,7 @@ est_p_detect = function(variable_levels,
 
     if((length(std_curve_alpha) > 1 || length(std_curve_beta) > 1) && missing(model_fit)) {
       warning("Multiple curves provided - function will be looped.")
-      return(mapply(est_p_detect,
+      return(mapply(est_p_detect_lm,
                     std_curve_alpha = std_curve_alpha,
                     std_curve_beta = std_curve_beta,
                     MoreArgs = list(variable_levels = variable_levels,
@@ -135,6 +136,40 @@ est_p_detect = function(variable_levels,
               reps = n_rep,
               class = c("eDNA_p_detect", class(ans)))
 }
+
+##' @export
+##' @rdname est_p_detect
+est_p_detect_count = function(variable_levels,
+                        betas, 
+                        n_rep = 1:12,
+                        model_fit = NULL)
+
+{
+    if(!is.null(dim(variable_levels)))
+        stop("Sorry, only one set of variable levels at a time currently supported")
+    if((is.null(model_fit) && length(variable_levels) != length(betas)) ||
+       (!is.null(model_fit) && length(variable_levels) != ncol(model_fit@betas)) )
+        stop("Variable levels and betas cannot be of different lengths")
+    if(missing(betas) && is.null(model_fit))
+        stop("Must provide either a set of beta values or a model_fit object")
+
+    if(!missing(betas)) {
+      if(!is.null(model_fit)) dup_arg_warn("beta")
+      lambda_hat = exp(variable_levels %*% betas)
+    } else {
+      inter = if(length(model_fit@intercept)) as.vector(model_fit@intercept) else 0
+      lambda_hat = apply(model_fit@betas, 1, function(y) variable_levels %*% y) + inter
+    }
+
+    p_one = dpois(0, lambda_hat)
+    ans = sapply(n_rep, function(i) 1 - (p_one ^ i))
+    
+    structure(ans,
+              variable_levels = variable_levels,
+              reps = n_rep,
+              class = c("eDNA_p_detect", class(ans)))
+}
+
 
 ##' Summarizes estimates where multiple standard curves are used in
 ##' \code{est_p_detect()}, which results in a list being returned for
