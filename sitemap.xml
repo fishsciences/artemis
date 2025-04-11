@@ -1,120 +1,46 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/CHANGELOG.html</loc>
-  </url>
-  <url>
-    <loc>/articles/artemis-overview.html</loc>
-  </url>
-  <url>
-    <loc>/articles/background.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/modeling.html</loc>
-  </url>
-  <url>
-    <loc>/articles/simulation.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/artemis-package.html</loc>
-  </url>
-  <url>
-    <loc>/reference/as.data.frame.eDNA_simulation.html</loc>
-  </url>
-  <url>
-    <loc>/reference/compile_models.html</loc>
-  </url>
-  <url>
-    <loc>/reference/compiled_models_ok.html</loc>
-  </url>
-  <url>
-    <loc>/reference/conf_to_probs.html</loc>
-  </url>
-  <url>
-    <loc>/reference/cq_to_lnconc.html</loc>
-  </url>
-  <url>
-    <loc>/reference/eDNA_data.html</loc>
-  </url>
-  <url>
-    <loc>/reference/eDNA_lmer.html</loc>
-  </url>
-  <url>
-    <loc>/reference/eDNA_model-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/eDNA_simulation-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/est_p_detect.html</loc>
-  </url>
-  <url>
-    <loc>/reference/est_power_lmer.html</loc>
-  </url>
-  <url>
-    <loc>/reference/est_power_range_lmer.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lnconc_to_cq.html</loc>
-  </url>
-  <url>
-    <loc>/reference/loo.eDNA_model.html</loc>
-  </url>
-  <url>
-    <loc>/reference/normal.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot.eDNA_model.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot.eDNA_p_detect.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot.eDNA_simulation.html</loc>
-  </url>
-  <url>
-    <loc>/reference/predict.eDNA_model.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.eDNA_model.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.eDNA_p_detect.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.eDNA_simulation.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ranef-eDNA_model_lmer-method.html</loc>
-  </url>
-  <url>
-    <loc>/reference/sim_eDNA_lmer.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary.eDNA_model.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary.eDNA_p_detect.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary.eDNA_simulation.html</loc>
-  </url>
-  <url>
-    <loc>/reference/waic.eDNA_model.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/CHANGELOG.html</loc></url>
+<url><loc>/articles/artemis-overview.html</loc></url>
+<url><loc>/articles/background.html</loc></url>
+<url><loc>/articles/count_modeling.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/articles/model_types.html</loc></url>
+<url><loc>/articles/modeling.html</loc></url>
+<url><loc>/articles/simulation.html</loc></url>
+<url><loc>/articles/zero_inflated.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/reference/artemis-package.html</loc></url>
+<url><loc>/reference/as.data.frame.eDNA_simulation.html</loc></url>
+<url><loc>/reference/compile_models.html</loc></url>
+<url><loc>/reference/compiled_models_ok.html</loc></url>
+<url><loc>/reference/conf_to_probs.html</loc></url>
+<url><loc>/reference/cq_to_lnconc.html</loc></url>
+<url><loc>/reference/eDNA_data.html</loc></url>
+<url><loc>/reference/eDNA_lmer.html</loc></url>
+<url><loc>/reference/eDNA_model-class.html</loc></url>
+<url><loc>/reference/eDNA_simulation-class.html</loc></url>
+<url><loc>/reference/est_p_detect.html</loc></url>
+<url><loc>/reference/est_power_lmer.html</loc></url>
+<url><loc>/reference/est_power_range_lmer.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/lnconc_to_cq.html</loc></url>
+<url><loc>/reference/loo.eDNA_model.html</loc></url>
+<url><loc>/reference/normal.html</loc></url>
+<url><loc>/reference/plot.eDNA_model.html</loc></url>
+<url><loc>/reference/plot.eDNA_p_detect.html</loc></url>
+<url><loc>/reference/plot.eDNA_simulation.html</loc></url>
+<url><loc>/reference/predict.eDNA_model.html</loc></url>
+<url><loc>/reference/print.eDNA_model.html</loc></url>
+<url><loc>/reference/print.eDNA_p_detect.html</loc></url>
+<url><loc>/reference/print.eDNA_simulation.html</loc></url>
+<url><loc>/reference/ranef-eDNA_model_lmer-method.html</loc></url>
+<url><loc>/reference/sim_eDNA_lmer.html</loc></url>
+<url><loc>/reference/summarize_multi_p_detect.html</loc></url>
+<url><loc>/reference/summary.eDNA_model.html</loc></url>
+<url><loc>/reference/summary.eDNA_p_detect.html</loc></url>
+<url><loc>/reference/summary.eDNA_simulation.html</loc></url>
+<url><loc>/reference/waic.eDNA_model.html</loc></url>
 </urlset>
+
