@@ -1,0 +1,60 @@
+---
+title: "Modeling eDNA qPCR Data as Copy Number with `artemis`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Modeling eDNA qPCR Data with `artemis`}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, message = FALSE, warning = FALSE}
+library(artemis)
+```
+
+## Introduction to Zero-inflated models
+
+A zero-inflated model is a mixture model between two processes that both can result in zero values in the response variable. We use these models when we have more zero's in the response variable than would be expected under a single model. Thus, the "zero-inflated" tries to capture the mechanisms that could results in these extra zeros.
+
+For work in eDNA, there are several potential processes that could fall under a zero-inflated process, e.g. filter failures, reagent failures, etc. These are distinct from the zero values caused by the measured value falling under the limit of detection. 
+
+*Note: The above applies to cases when the threshold of detection, i.e. the sensitivity of the assay, is relatively high. In cases when the assay is sensitive to single copies of DNA, the expected distribution is not Normal, and hence different modeling decisions are warranted.*
+
+In a zero inflated model, there are two components:
+
+- the non-zero model, which is functionally similar to the non-zero inflated case
+- the zero-model, which determines the rate at which zero values can occur independent of the non-zero model.
+
+these two models are combined into a mixture where the likelihood is defined as
+
+```math
+p(y) = p(zero|X_1) + (1 - p(zero|X_1)) * p(y|X_2)
+```
+
+where `p(zero|X_1)` is the probability of zero, given data `X_1` and `p(y|X_2)` is the likelihood of `y` given data `X_2`. Note that the zero and non-zero components can be predicated on different data (i.e. the zero and non-zero models do not require matching terms).
+
+## Fitting Zero-inflated Models in `artemis`
+
+Zero-inflated models can be fit in `artemis` via the `eDNA_zinf_lm*()` functions. For these functions, the model is specified as in the `glm` package, where the model formula for the non-zero model and the zero-inflated model are separated by a `|` in the model formula, e.g. 
+
+```{r, eval = FALSE}
+eDNA_zinf_lm(Cq ~ Distance_m + Volume_mL | Distance_m, eDNA_data, ...)
+```
+
+In this formula, the term `~ Distance_m + Volume_ml` specifies the predictors for the non-zero model, whereas the `| Distance_m` term specifies the predictors for the zero-model. 
+
+The non-zero model follows the same form as the `eDNA_lm*()` models, namely a censored-data model using normally distributed errors. 
+
+The zero-inflated models can be summarized, printed, and plotted as any other model from the `artemis` package.
+
+## Evaluating a zero-inflated model
+
+The zero-inflated models can be compared using the `loo()` function, allowing model comparison. 
