@@ -105,7 +105,9 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>The</p>
+<p>For cases where the limit of detection is low (single digit copy numbers) AND the detected amount of DNA is near the limit of detection, the censored-data model in <code>artemis</code> may not be appropriate. At these low copy numbers, the assumption of normally distributed errors is possibly not valid. Instead, we expect the distribution to follow a Poisson distribution.</p>
+<p>There are other implications of assuming the copy numbers are Poisson distributed. First, the Poisson distribution has different expected number of zeros that can naturally occur at low rate (lambda) values. Compared to the Normal distribution, the Poisson is “zero-inflated” at these values. Thus, using a Poisson distribution in the likelihood accounts for some zero-inflation. Second, treating DNA in qPCR as an integer aligns more closely with the mechanics of the data generating process.</p>
+<p>However, there are some downsides. First, the CT values need to be converted to copy number with reasonable accuracy. In cases where the standard curve is being set via an unknown starting point (i.e. tissue samples), it can be difficult to get an accurate conversion. Second, because the response of the Poisson model is an integer, some rounding from continuous CT values is required which can introduce some inaccuracy.</p>
 </div>
   </div>
 
