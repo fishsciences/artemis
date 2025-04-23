@@ -149,7 +149,7 @@ The `artemis` package also includes methods for R's `plot()`, `summary()`, `data
 Often purpose of an eDNA sampling study is to inform a field sampling protocol. For these cases, we often want to know how likely we are to detect eDNA, given the way that we sampled. `est_p_detect()` returns the probability of getting a detection across all planned samples and replicates, where `n_rep` represents the product of the number of filters and technical replicates for each filter.  For example, if you planned to take 2-5 filters at each variable level and then complete 6 extractions for each filter, that would be `n_rep = 12:30`.
 
 ```{r eval=TRUE}
-p_detect = est_p_detect(variable_levels = c(Intercept = 1, 
+p_detect = est_p_detect_lm(variable_levels = c(Intercept = 1, 
                                             Distance = 100),
                         betas = c(Intercept = -10.5, Distance = -0.03),
                         ln_eDNA_sd = 1, 

@@ -1,8 +1,8 @@
 ---
-title: "Modeling eDNA qPCR Data as Copy Number with `artemis`"
+title: "Modeling Zero-Inflated eDNA qPCR Data with `artemis`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Modeling eDNA qPCR Data with `artemis`}
+  %\VignetteIndexEntry{Modeling zero-inflated eDNA qPCR Data with `artemis`}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -41,6 +41,15 @@ p(y) = p(zero|X_1) + (1 - p(zero|X_1)) * p(y|X_2)
 
 where `p(zero|X_1)` is the probability of zero, given data `X_1` and `p(y|X_2)` is the likelihood of `y` given data `X_2`. Note that the zero and non-zero components can be predicated on different data (i.e. the zero and non-zero models do not require matching terms).
 
+## When to Use Zero-inflated models
+
+There are two criteria that make zero-inflated models appropriate:
+
+1. The limit of detection is higher than single-digit copies, thus the distribution of non-zeros is approximately normal. When the limit of detection is in the single-digits, the Poisson (count) models in artemis are more appropriate. These models have the additional benefit of capturing zero-inflated process inherit in low-copy number situations.
+
+2. There are more zero values in the observed data than explained by the predictors. This can be assessed by inspecting the residual values (difference between predicted values and observed values). This presents as data values that are predicted to be high concentrations, but are observed to be low or zero concentrations. *Note: this assumes the model fits well to non-zero values. If the model does not fit well across all values, model refinement should be attempted.*
+
+
 ## Fitting Zero-inflated Models in `artemis`
 
 Zero-inflated models can be fit in `artemis` via the `eDNA_zinf_lm*()` functions. For these functions, the model is specified as in the `glm` package, where the model formula for the non-zero model and the zero-inflated model are separated by a `|` in the model formula, e.g. 
@@ -52,6 +61,8 @@ eDNA_zinf_lm(Cq ~ Distance_m + Volume_mL | Distance_m, eDNA_data, ...)
 In this formula, the term `~ Distance_m + Volume_ml` specifies the predictors for the non-zero model, whereas the `| Distance_m` term specifies the predictors for the zero-model. 
 
 The non-zero model follows the same form as the `eDNA_lm*()` models, namely a censored-data model using normally distributed errors. 
+
+The zero model is a Binomial Logit model, where the chance of an individual observation being a zero give the predictors is estimated via a GLM using a binomial distribution and a logit link function. 
 
 The zero-inflated models can be summarized, printed, and plotted as any other model from the `artemis` package.
 

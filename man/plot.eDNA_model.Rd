@@ -4,7 +4,7 @@
 \alias{plot.eDNA_model}
 \title{Plot eDNA model results}
 \usage{
-\method{plot}{eDNA_model}(x, y, pars = "betas", ...)
+\method{plot}{eDNA_model}(x, y, pars = c("intercept", "betas"), ...)
 }
 \arguments{
 \item{x}{object of class eDNA_model_*}

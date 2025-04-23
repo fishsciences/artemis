@@ -52,7 +52,7 @@ test_that("Summary methods: model", {
 })
 
 test_that("Summary methods: p-detect", {
-    p_detect = est_p_detect(variable_levels = c(Intercept = 1, 
+    p_detect = est_p_detect_lm(variable_levels = c(Intercept = 1, 
                                                 Distance_m = 1000),
                             betas = c(Intercept = -12, Distance_m = -0.0001),
                             ln_eDNA_sd = 1, 

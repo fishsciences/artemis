@@ -26,7 +26,7 @@ test_that("Print methods: simulations", {
                       betas = c(intercept = 1, distance = 0.5, volume = 0),
                       sigma_ln_eDNA = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5)
     ## should not throw an error
-    p_detect = est_p_detect(variable_levels = c(Intercept = 1, Distance = 100),
+    p_detect = est_p_detect_lm(variable_levels = c(Intercept = 1, Distance = 100),
                         betas = c(Intercept = -10.5, Distance = -0.04),
                         ln_eDNA_sd = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5,
                         n_rep = 1:12)

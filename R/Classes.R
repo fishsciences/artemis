@@ -69,7 +69,7 @@ setAs("stanfit", "eDNA_simulation",
 
 setAs("eDNA_simulation", "data.frame",
       function(from){
-          if(dim(from@ln_conc_hat)[1] != 1)
+          if(dim(from@ln_conc_hat)[2] != 1)
               stop("Only single simulations can be converted at this time")
           
           to = cbind(data.frame(ln_conc_hat = as.vector(from@ln_conc_hat),

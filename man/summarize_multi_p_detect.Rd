@@ -7,7 +7,7 @@
 summarize_multi_p_detect(x, probs = c(0.025, 0.5, 0.975))
 }
 \arguments{
-\item{x}{list, the results from \code{est_p_detect()} when called
+\item{x}{list, the results from \code{est_p_detect_lm()} when called
 with multiple standard curve parameters}
 
 \item{probs}{vector, probabilities for quantiles passed to
@@ -18,7 +18,7 @@ data.frame
 }
 \description{
 Summarizes estimates where multiple standard curves are used in
-\code{est_p_detect()}, which results in a list being returned for
+\code{est_p_detect_lm()}, which results in a list being returned for
 each standard curve parameter.
 }
 \author{

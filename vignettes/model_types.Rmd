@@ -2,7 +2,7 @@
 title: "Models included in the `artemis` package and when to use them"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Modeling eDNA qPCR Data with `artemis`}
+  %\VignetteIndexEntry{Modeling Types in `artemis`}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 

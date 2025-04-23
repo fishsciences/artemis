@@ -64,7 +64,7 @@
 ##'
 ##' @examples
 ##'
-##' est_p_detect(variable_levels = c(Intercept = 1, Distance = 100, Volume = 20),
+##' est_p_detect_lm(variable_levels = c(Intercept = 1, Distance = 100, Volume = 20),
 ##'              betas = c(Intercept = -10.5, Distance = -0.05, Volume = 0.001),
 ##'              ln_eDNA_sd = 1, std_curve_alpha = 21.2, std_curve_beta = -1.5,
 ##'              n_rep = 1:12)
@@ -172,11 +172,11 @@ est_p_detect_count = function(variable_levels,
 
 
 ##' Summarizes estimates where multiple standard curves are used in
-##' \code{est_p_detect()}, which results in a list being returned for
+##' \code{est_p_detect_lm()}, which results in a list being returned for
 ##' each standard curve parameter. 
 ##'
 ##' @title Summarize multiple probability of detection
-##' @param x list, the results from \code{est_p_detect()} when called
+##' @param x list, the results from \code{est_p_detect_lm()} when called
 ##'   with multiple standard curve parameters
 ##' @param probs vector, probabilities for quantiles passed to
 ##'   \code{quantile()}

@@ -26,12 +26,12 @@ test_that("Multi-curves: methods", {
     # with random curves, we should not see any models
     expect_true(!any(duplicated(res)))
     
-    expect_error(est_p_detect(10, model_fit = ans))
+    expect_error(est_p_detect_lm(10, model_fit = ans))
 
     ans2 = eDNA_lm(Cq ~ Distance_m, eDNA_data,
                   std_curve_alpha = rep(21.2,n) , std_curve_beta = rep(-1.5, n))
 
-    res2 = est_p_detect(10, model_fit = ans2)
+    res2 = est_p_detect_lm(10, model_fit = ans2)
 
     expect_is(res2, "eDNA_p_detect")   
 
