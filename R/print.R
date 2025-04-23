@@ -123,4 +123,6 @@ print.eDNA_p_detect = function(x, digits = getOption("digits"), ...)
 ##' @export
 setMethod("show", "eDNA_model", function(object) print(object))
 
+##' @rdname print.eDNA_model
+##' @export
 setMethod("show", "eDNA_model_zip", function(object) print(object))

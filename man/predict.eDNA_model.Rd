@@ -17,7 +17,7 @@
 \method{predict}{eDNA_model_lmer}(object, newdata = NULL, type = c(), ...)
 }
 \arguments{
-\item{object}{an object of class eDNA_lm{er}}
+\item{object}{an object of class eDNA_lm\{er\}}
 
 \item{newdata}{optional, data.frame of new observations to predict
 values for}

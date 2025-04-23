@@ -18,7 +18,7 @@
 #' @import ggplot2
 #' @import loo
 #' @import cmdstanr
-#' @importFrom stats model.matrix model.response model.frame pnorm quantile rnorm terms sd delete.response formula
+#' @importFrom stats model.matrix model.response model.frame pnorm quantile rnorm terms sd delete.response formula dpois
 #' @importFrom graphics lines segments plot
 #' @importFrom lme4 lFormula ranef nobars
 #' @importFrom loo waic

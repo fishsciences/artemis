@@ -9,7 +9,11 @@
 \arguments{
 \item{x}{a eDNA_model object}
 
-\item{...}{additional args passed to \code{waic}}
+\item{pars}{string, the name of the log likelihood parameter in
+the model output. For all artemis models, this should be
+"log_lik".}
+
+\item{...}{additional args passed to \code{$loo()}}
 }
 \value{
 a list with the results of the calculation.

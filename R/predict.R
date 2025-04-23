@@ -5,7 +5,7 @@
 ##' 
 ##' @title Predict eDNA model
 ##' 
-##' @param object an object of class eDNA_lm{er}
+##' @param object an object of class eDNA_lm\{er\}
 ##' @param newdata optional, data.frame of new observations to predict
 ##'     values for
 ##' @param include_sigma logical, should the predictions include

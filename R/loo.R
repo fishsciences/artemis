@@ -22,8 +22,11 @@ loo.eDNA_model = function(x,
 ##' See ?loo::waic for more information about this calculation
 ##' @title Approximate leave-one-out cross-validation
 ##' @param x a eDNA_model object
-##' @param ... additional args passed to \code{waic}
-##' @return a list with the results of the calculation. 
+##' @param pars string, the name of the log likelihood parameter in
+##'   the model output. For all artemis models, this should be
+##'   "log_lik".
+##' @param ... additional args passed to \code{$loo()}
+##' @return a list with the results of the calculation.
 ##' @author Matt Espe
 ##' @export
 waic.eDNA_model = function(x, pars = "log_lik", ...) {

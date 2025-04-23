@@ -1,5 +1,13 @@
 # artemis: ChangeLog
 
+# v3.0
+
+## 3.0.0
+
+Updates the models in `artemis` to include a Poisson distributed GLM
+(count model) and zero-inflated models. Added to address zero-inflated
+data.
+
 # v2.0
 
 ## 2.0.1

@@ -120,7 +120,7 @@ sim_eDNA_lm = function(formula, variable_list,
 ##' @param cache_dir the cache directory where pre-compiled models are
 ##'     stored. Defaults to the output of
 ##'     \code{tools::R_user_dir("artemis", "cache")}
-##' @return S4 object of class "eDNA_simulation_{lm/lmer}" with the
+##' @return S4 object of class "eDNA_simulation_\{lm/lmer\}" with the
 ##'     following slots:
 ##' \describe{
 ##' \item{ln_conc matrix}{the

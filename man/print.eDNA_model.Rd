@@ -5,11 +5,14 @@
 \alias{show,eDNA_model-method}
 \alias{eDNA_model,}
 \alias{ANY-method}
+\alias{show,eDNA_model_zip-method}
 \title{Print eDNA model results}
 \usage{
 \method{print}{eDNA_model}(x, digits = getOption("digits", 3), ...)
 
 \S4method{show}{eDNA_model}(object)
+
+\S4method{show}{eDNA_model_zip}(object)
 }
 \arguments{
 \item{x}{object of class "eDNA_model_*"}

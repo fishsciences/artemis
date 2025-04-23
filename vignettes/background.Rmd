@@ -2,6 +2,10 @@
 title: "The motivation behind the artemis package"
 author: "Matt Espe"
 date: "2023 Sept 12"
+vignette: >
+  %\VignetteIndexEntry{Getting started with the artemis package}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
 ---
 
 This vignette provides an overview of the driving motivation behind

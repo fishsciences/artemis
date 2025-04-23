@@ -87,7 +87,7 @@ stored. Defaults to the output of
 effects. There must be one sigma per random effect specified}
 }
 \value{
-S4 object of class "eDNA_simulation_{lm/lmer}" with the
+S4 object of class "eDNA_simulation_\{lm/lmer\}" with the
     following slots:
 \describe{
 \item{ln_conc matrix}{the

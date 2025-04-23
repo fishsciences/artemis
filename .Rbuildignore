@@ -12,7 +12,12 @@
 ^lib$
 inst/stan/eDNA_lm$
 inst/stan/eDNA_lmer$
+inst/stan/eDNA_lm_zinf$
+inst/stan/eDNA_lmer_zinf$
+inst/stan/eDNA_pois_lm$
+inst/stan/eDNA_pois_lmer$
 inst/stan/eDNA_sim_omni$
+inst/stan/funs$
 inst/stan/*.o$
 inst/stan/*.hpp$
 #src/*.*
