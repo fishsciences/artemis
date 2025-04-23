@@ -103,9 +103,7 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">artemis</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in get(paste0(generic, ".", class), envir = get_method_env()) : </span></span>
-<span><span class="co">#&gt;   object 'type_sum.accel' not found</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">artemis</span><span class="op">)</span></span></code></pre></div>
 <p>(Adapted from manuscript Espe et al, in preparation)</p>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
@@ -152,9 +150,9 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">ans</span>, max.level <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Formal class 'eDNA_simulation' [package "artemis"] with 10 slots</span></span>
-<span><span class="co">#&gt;   ..@ ln_conc_hat    : num [1:180, 1] -10.9 -11.5 -14.8 -9.9 -11.6 ...</span></span>
+<span><span class="co">#&gt;   ..@ ln_conc_hat    : num [1:180, 1] -8.64 -11.06 -12.07 -7.8 -5.86 ...</span></span>
 <span><span class="co">#&gt;   ..@ ln_conc_star   : num [1:180, 1] -10.1 -10.8 -12.6 -9.6 -10.3 ...</span></span>
-<span><span class="co">#&gt;   ..@ Cq_star        : num [1:180, 1] 37.5 38.4 40 36 40 ...</span></span>
+<span><span class="co">#&gt;   ..@ Cq_star        : num [1:180, 1] 34.2 37.8 39.3 32.9 30 ...</span></span>
 <span><span class="co">#&gt;   ..@ formula        :Class 'formula'  language Cq ~ distance + volume</span></span>
 <span><span class="co">#&gt;   .. .. ..- attr(*, ".Environment")=&lt;environment: R_GlobalEnv&gt; </span></span>
 <span><span class="co">#&gt;   ..@ variable_levels:List of 6</span></span>
@@ -177,12 +175,12 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">ans</span><span class="op">)</span></span>
 <span><span class="co">#&gt;      variable level     2.5%      50% 97.5%     mean  p_detect</span></span>
-<span><span class="co">#&gt; 1 (Intercept)     1 32.47593 38.02215    40 37.53718 0.7111111</span></span>
-<span><span class="co">#&gt; 2    distance     0 32.18267 36.44470    40 36.49219 0.8833333</span></span>
-<span><span class="co">#&gt; 3    distance    15 32.47593 36.93610    40 36.92650 0.8333333</span></span>
-<span><span class="co">#&gt; 4    distance    50 35.06470 40.00000    40 39.19285 0.4166667</span></span>
-<span><span class="co">#&gt; 5      volume    25 32.70804 38.43620    40 37.71695 0.6888889</span></span>
-<span><span class="co">#&gt; 6      volume    50 32.50409 37.40045    40 37.35742 0.7333333</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 (Intercept)     1 32.43618 38.12105    40 37.51921 0.7277778</span></span>
+<span><span class="co">#&gt; 2    distance     0 31.36924 36.34685    40 36.59825 0.8333333</span></span>
+<span><span class="co">#&gt; 3    distance    15 33.14563 37.06390    40 36.88183 0.8500000</span></span>
+<span><span class="co">#&gt; 4    distance    50 36.23754 39.84630    40 39.07753 0.5000000</span></span>
+<span><span class="co">#&gt; 5      volume    25 32.86639 38.41530    40 37.81321 0.7000000</span></span>
+<span><span class="co">#&gt; 6      volume    50 32.43151 37.68230    40 37.22520 0.7555556</span></span></code></pre></div>
 <p>…which summarizes the response (Cq on its natural scale) across each level of the variables used to simulate the data.</p>
 <p><strong><em>WARNING</em></strong>: <em>these marginal effects can be misleading in cases where interactions are simulated; if you have interaction effects, additional analysis is recommended.</em></p>
 <p>The last column of the table returned by <code>summary</code> is the percent of observations that represented positive detections, i.e. a Cq value below the upper cycle threshold for non-detection (set to 40 by default). In the output above, 93% of the simulated data with <code>distance</code> = 0 was below 40.0.</p>

@@ -187,11 +187,27 @@ normal distributions is itself a random normal distribution.</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">est_p_detect</span><span class="op">(</span>variable_levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>Intercept <span class="op">=</span> <span class="fl">1</span>, Distance <span class="op">=</span> <span class="fl">100</span>, Volume <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span><span class="fu">est_p_detect_lm</span><span class="op">(</span>variable_levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>Intercept <span class="op">=</span> <span class="fl">1</span>, Distance <span class="op">=</span> <span class="fl">100</span>, Volume <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>             betas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>Intercept <span class="op">=</span> <span class="op">-</span><span class="fl">10.5</span>, Distance <span class="op">=</span> <span class="op">-</span><span class="fl">0.05</span>, Volume <span class="op">=</span> <span class="fl">0.001</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>             ln_eDNA_sd <span class="op">=</span> <span class="fl">1</span>, std_curve_alpha <span class="op">=</span> <span class="fl">21.2</span>, std_curve_beta <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span>,</span></span>
 <span class="r-in"><span>             n_rep <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in est_p_detect(variable_levels = c(Intercept = 1, Distance = 100,     Volume = 20), betas = c(Intercept = -10.5, Distance = -0.05,     Volume = 0.001), ln_eDNA_sd = 1, std_curve_alpha = 21.2,     std_curve_beta = -1.5, n_rep = 1:12):</span> could not find function "est_p_detect"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Variable levels: </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Intercept  Distance    Volume </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         1       100        20 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    n_reps    p_detect</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       1 0.001477609</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       2 0.002953034</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       3 0.004426279</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       4 0.005897347</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       5 0.007366242</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6       6 0.008832966</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7       7 0.010297523</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8       8 0.011759916</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9       9 0.013220148</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10     10 0.014678222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11     11 0.016134142</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12     12 0.017587911</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

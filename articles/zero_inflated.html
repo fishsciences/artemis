@@ -103,9 +103,7 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">artemis</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in get(paste0(generic, ".", class), envir = get_method_env()) : </span></span>
-<span><span class="co">#&gt;   object 'type_sum.accel' not found</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">artemis</span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="introduction-to-zero-inflated-models">Introduction to Zero-inflated models<a class="anchor" aria-label="anchor" href="#introduction-to-zero-inflated-models"></a>
 </h2>
@@ -122,6 +120,15 @@
 <p>where <code>p(zero|X_1)</code> is the probability of zero, given data <code>X_1</code> and <code>p(y|X_2)</code> is the likelihood of <code>y</code> given data <code>X_2</code>. Note that the zero and non-zero components can be predicated on different data (i.e. the zero and non-zero models do not require matching terms).</p>
 </div>
 <div class="section level2">
+<h2 id="when-to-use-zero-inflated-models">When to Use Zero-inflated models<a class="anchor" aria-label="anchor" href="#when-to-use-zero-inflated-models"></a>
+</h2>
+<p>There are two criteria that make zero-inflated models appropriate:</p>
+<ol style="list-style-type: decimal">
+<li><p>The limit of detection is higher than single-digit copies, thus the distribution of non-zeros is approximately normal. When the limit of detection is in the single-digits, the Poisson (count) models in artemis are more appropriate. These models have the additional benefit of capturing zero-inflated process inherit in low-copy number situations.</p></li>
+<li><p>There are more zero values in the observed data than explained by the predictors. This can be assessed by inspecting the residual values (difference between predicted values and observed values). This presents as data values that are predicted to be high concentrations, but are observed to be low or zero concentrations. <em>Note: this assumes the model fits well to non-zero values. If the model does not fit well across all values, model refinement should be attempted.</em></p></li>
+</ol>
+</div>
+<div class="section level2">
 <h2 id="fitting-zero-inflated-models-in-artemis">Fitting Zero-inflated Models in <code>artemis</code><a class="anchor" aria-label="anchor" href="#fitting-zero-inflated-models-in-artemis"></a>
 </h2>
 <p>Zero-inflated models can be fit in <code>artemis</code> via the <code>eDNA_zinf_lm*()</code> functions. For these functions, the model is specified as in the <code>glm</code> package, where the model formula for the non-zero model and the zero-inflated model are separated by a <code>|</code> in the model formula, e.g. </p>
@@ -129,12 +136,13 @@
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/eDNA_lmer.html">eDNA_zinf_lm</a></span><span class="op">(</span><span class="va">Cq</span> <span class="op">~</span> <span class="va">Distance_m</span> <span class="op">+</span> <span class="va">Volume_mL</span> <span class="op">|</span> <span class="va">Distance_m</span>, <span class="va">eDNA_data</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
 <p>In this formula, the term <code>~ Distance_m + Volume_ml</code> specifies the predictors for the non-zero model, whereas the <code>| Distance_m</code> term specifies the predictors for the zero-model.</p>
 <p>The non-zero model follows the same form as the <code>eDNA_lm*()</code> models, namely a censored-data model using normally distributed errors.</p>
+<p>The zero model is a Binomial Logit model, where the chance of an individual observation being a zero give the predictors is estimated via a GLM using a binomial distribution and a logit link function.</p>
 <p>The zero-inflated models can be summarized, printed, and plotted as any other model from the <code>artemis</code> package.</p>
 </div>
 <div class="section level2">
 <h2 id="evaluating-a-zero-inflated-model">Evaluating a zero-inflated model<a class="anchor" aria-label="anchor" href="#evaluating-a-zero-inflated-model"></a>
 </h2>
-<p>The zero-inflated models can be compared using the <code><a href="https://mc-stan.org/loo/reference/loo.html" class="external-link">loo()</a></code> function, allowing model comparison.</p>
+<p>The zero-inflated models can be compared using the <code>loo()</code> function, allowing model comparison.</p>
 </div>
   </div>
 

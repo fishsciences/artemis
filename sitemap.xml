@@ -40,6 +40,7 @@
 <url><loc>/reference/summarize_multi_p_detect.html</loc></url>
 <url><loc>/reference/summary.eDNA_model.html</loc></url>
 <url><loc>/reference/summary.eDNA_p_detect.html</loc></url>
+<url><loc>/reference/summary.eDNA_predict_lm.html</loc></url>
 <url><loc>/reference/summary.eDNA_simulation.html</loc></url>
 <url><loc>/reference/waic.eDNA_model.html</loc></url>
 </urlset>

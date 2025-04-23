@@ -101,8 +101,6 @@
 
     
     
-<pre><code><span><span class="co">#&gt; Error in get(paste0(generic, ".", class), envir = get_method_env()) : </span></span>
-<span><span class="co">#&gt;   object 'type_sum.accel' not found</span></span></code></pre>
 <p>(Adapted from manuscript Espe et al, in review)</p>
 <div class="section level2">
 <h2 id="background">Background<a class="anchor" aria-label="anchor" href="#background"></a>
@@ -168,7 +166,7 @@
 <h2 id="post-hoc-analyses-pdetect">Post-hoc analyses (<em>p(detect)</em>)<a class="anchor" aria-label="anchor" href="#post-hoc-analyses-pdetect"></a>
 </h2>
 <p>Often purpose of an eDNA sampling study is to inform a field sampling protocol. For these cases, we often want to know how likely we are to detect eDNA, given the way that we sampled. <code>est_p_detect()</code> returns the probability of getting a detection across all planned samples and replicates, where <code>n_rep</code> represents the product of the number of filters and technical replicates for each filter. For example, if you planned to take 2-5 filters at each variable level and then complete 6 extractions for each filter, that would be <code>n_rep = 12:30</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p_detect</span> <span class="op">=</span> <span class="fu"><a href="../reference/est_p_detect.html">est_p_detect_lm</a></span><span class="op">(</span>variable_levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>Intercept <span class="op">=</span> <span class="fl">1</span>, </span>
 <span>                                            Distance <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>,</span>
 <span>                        betas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>Intercept <span class="op">=</span> <span class="op">-</span><span class="fl">10.5</span>, Distance <span class="op">=</span> <span class="op">-</span><span class="fl">0.03</span><span class="op">)</span>,</span>
@@ -201,11 +199,11 @@
 <span><span class="co">#&gt; 18     29 0.9920370</span></span>
 <span><span class="co">#&gt; 19     30 0.9932593</span></span></code></pre></div>
 <p>We can also plot this,</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p_detect</span><span class="op">)</span></span></code></pre></div>
 <p><img src="artemis-overview_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 <p>Alternatively, we can also use a fit model to estimate the p(detect) for a set of circumstances. Unlike the above, using a fit model allows us to estimate the probability of detection with the uncertainty in our effect size estimates taken into account.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model_fit</span> <span class="op">=</span> <span class="fu"><a href="../reference/eDNA_lmer.html">eDNA_lm</a></span><span class="op">(</span><span class="va">Cq</span> <span class="op">~</span> <span class="va">Distance_m</span> <span class="op">+</span> <span class="va">Volume_mL</span>, </span>
 <span>                    data <span class="op">=</span> <span class="va">eDNA_data</span>,</span>
 <span>                    std_curve_alpha <span class="op">=</span> <span class="fl">21.2</span>, std_curve_beta <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span>,</span>
@@ -220,7 +218,7 @@
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p_detect2</span><span class="op">)</span></span></code></pre></div>
 <p>and we can plot the results,</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p_detect2</span>, error_width <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></code></pre></div>
 <p><br><br> — <br><br></p>
 </div>
