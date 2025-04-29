@@ -29,7 +29,7 @@ compile_models = function(model_names = c("eDNA_lm.stan",
                           models = system.file("stan", model_names,
                                                package = "artemis"),
                           cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache")),
-                          rewrite = TRUE,
+                          rewrite = FALSE,
                           verbose = TRUE, ...)
 {
     if(!dir.exists(cache_dir)) {

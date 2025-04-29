@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 
 ```{r setup, message = FALSE, warning = FALSE}
 library(artemis)
+compile_models(rewrite = FALSE)
 ```
 
 ## Introduction to Zero-inflated models
