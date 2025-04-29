@@ -46,7 +46,7 @@ jobs:
 
       - name: Setup cmdstanr
 	    run: cmdstanr::install_cmdstan()
-		shell: Rscript {0}
+        shell: Rscript {0}
 		
       - uses: r-lib/actions/check-r-package@v2
         with:
