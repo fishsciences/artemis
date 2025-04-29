@@ -50,6 +50,10 @@ jobs:
         run: cmdstanr::install_cmdstan()
         shell: Rscript {0}
 
+      - name: Compile models
+        run: artemis::compile_models()
+        shell: Rscript {0}
+
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
