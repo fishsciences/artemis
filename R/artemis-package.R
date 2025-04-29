@@ -24,6 +24,7 @@
 #' @importFrom loo waic
 #' @importFrom utils head
 #' @importFrom tools R_user_dir
+#' @importFrom bayesplot mcmc_intervals
 #' @references 
 #' Stan Development Team (2018). RStan: the R interface to Stan. R package version 2.18.2. http://mc-stan.org
 #' 
