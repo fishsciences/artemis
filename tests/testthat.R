@@ -5,6 +5,7 @@ library(artemis)
 # does not run tests
 if(!is.null(cmdstan_version(error_on_NA = FALSE))){
   compile_models(rewrite = FALSE)
+  
   if(compiled_models_ok())
         test_check("artemis")
 }
