@@ -35,7 +35,7 @@ sim_eDNA_lm = function(formula, variable_list,
                       fixed_param = TRUE, iter_sampling = n_sim, iter_warmup = 0L,
                       show_messages = verbose)
     ## hacky
-    sims = as_cmdstan_fit(m$output_files())
+    sims = as_cmdstan_fit(m$output_files(), check_diagnostics = FALSE)
     sims = as(sims, "eDNA_simulation_lm")
     sims = load_slots(sims)
     return(sims)
@@ -208,7 +208,7 @@ sim_eDNA_lmer = function(formula, variable_list,
                    fixed_param = TRUE, iter_sampling = n_sim, iter_warmup = 0L,
                    show_messages = verbose)
     ## hacky
-    sims = as_cmdstan_fit(m$output_files())
+    sims = as_cmdstan_fit(m$output_files(), check_diagnostics = FALSE)
                                         # hacky
     sims = as(sims, "eDNA_simulation_lmer")
     sims = load_slots(sims)
