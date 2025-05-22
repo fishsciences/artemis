@@ -6,12 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Analysis and Simulation of Environmental DNA Experiments • artemis</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
+<!-- favicons --><link rel="icon" type="image/png" sizes="48x48" href="favicon-48x48.png">
+<link rel="icon" type="”image/svg+xml”" href="favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" sizes="any" href="favicon.ico">
+<link rel="manifest" href="site.webmanifest">
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
@@ -100,13 +99,13 @@
 <div class="section level4">
 <h4 id="section"></h4>
 <!-- badges: start --><!-- ![Codecov test coverage](https://codecov.io/gh/fishsciences/artemis/branch/main/graph/badge.svg)](https://app.codecov.io/gh/fishsciences/artemis?branch=main) -->
-<p>The <code>artemis</code> package was created to aid in the design and analysis of eDNA survey studies by offering a custom suite of models for eDNA sampling and qPCR data. It implements a set of Bayesian latent-variable, truncated data models which are fit using <a href="https://mc-stan.org/" class="external-link">Stan</a>.</p>
+<p>The <code>artemis</code> package was created to aid in the design and analysis of eDNA survey studies by offering a custom suite of models for eDNA sampling and qPCR data. It implements a set of Bayesian models, including latent-variable, censored data models, Poisson-distributed GLM, and Zero-Inflated models. All models are fit using <a href="https://mc-stan.org/" class="external-link">Stan</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>While it is possible to install <code>artemis</code> to run natively on Windows, <code>artemis</code> is most stable and easiest to install under Unix OSs (Mac OSX or Linux). As such, we recommend using one of these operating systems. Users of Windows OS should consider running the <a href="https://learn.microsoft.com/en-us/windows/wsl/install" class="external-link">Windows Subsystem for Linux</a> to ensure best compatability and stability.</p>
-<p><em>Please be aware, the development team of <code>artemis</code> is small with limited resources. Therefore, support for <code>artemis</code> installed on Windows will be limited.</em></p>
+<p><em>Please be aware, the development team of <code>artemis</code> is small and has limited resources. Therefore, support for <code>artemis</code> installed on Windows will be limited.</em></p>
 <div class="section level3">
 <h3 id="install-cmdstanr">Install <code>cmdstanr</code>
 <a class="anchor" aria-label="anchor" href="#install-cmdstanr"></a>
@@ -120,7 +119,7 @@
 <a class="anchor" aria-label="anchor" href="#install-cmdstan"></a>
 </h3>
 <p>The <code>cmdstanr</code> package provides an interface to the shell tool <code>cmdstan</code>, but this needs to be installed as a separate step in R via</p>
-<pre><code><span><span class="fu">install_cmdstan</span><span class="op">(</span><span class="op">)</span></span></code></pre>
+<pre><code><span><span class="fu"><a href="https://mc-stan.org/cmdstanr/reference/install_cmdstan.html" class="external-link">install_cmdstan</a></span><span class="op">(</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="verify-cmdstanr-toolchain">Verify <code>cmdstanr</code> toolchain<a class="anchor" aria-label="anchor" href="#verify-cmdstanr-toolchain"></a>
@@ -224,8 +223,8 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Matt Espe <br><small class="roles"> Author, maintainer </small>  </li>
-<li>Myfanwy Johnston <br><small class="roles"> Author </small>  </li>
+<li>Matt Espe <br><small class="roles"> Author, maintainer </small>   </li>
+<li>Myfanwy Johnston <br><small class="roles"> Author </small>   </li>
 </ul>
 </div>
 
@@ -247,7 +246,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
       </footer>
