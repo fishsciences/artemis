@@ -1,6 +1,6 @@
 ```mermaid
 graph TD;
-	A(Start) --> B{Does your data contain 0 (CT = 40) values?};
+	A(Start) --> B{"Does your data contain 0 (CT = 40) values?"};
 	B -->|Yes| C{Do your data represent single-digit copy numbers?};
 	B -->|No| D(`Use a standard model from another package (e.g. glm(), lm(), etc.)`);
 	C -->|Yes| E(`Use the Poisson-distributed GLM models (eDNA_count)`);
