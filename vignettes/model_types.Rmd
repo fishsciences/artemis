@@ -28,3 +28,17 @@ compile_models(rewrite = FALSE)
 - `eDNA_zinf_lm/lmer()`: Same as above, but the response is zero-inflated (has more zero values than expected under the normal model assumptions).
 
 - `eDNA_count_lm/lmer()`: Use when the threshold of detection is single copies of DNA. Requires the response to be converted to copy number (integer values). 
+
+
+## Which model should I use?
+
+```mermaid
+graph TD;
+  A(Start) --> B{"Does your data contain 0 (CT = 40) values?"};
+  B -->|Yes| C{"Do your data represent single-digit copy numbers?"};
+  B -->|No| D("Use a standard model from another package (e.g. glm(), lm(), etc.)");
+  C -->|Yes| E("Use the Poisson-distributed GLM models (eDNA_count())");
+  C -->|No| F{"Do the zeros in the data occur in otherwise high concentrations?"};
+  F -->|Yes| G("Use a zero-inflated model (eDNA_lm*_zinf())");
+  F -->|No| H("Use a censored-data model (eDNA_lm*())"); 
+```
