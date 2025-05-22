@@ -112,14 +112,9 @@
 <div class="section level2">
 <h2 id="which-model-should-i-use">Which model should I use?<a class="anchor" aria-label="anchor" href="#which-model-should-i-use"></a>
 </h2>
-<pre class="mermaid"><code>graph TD;
-  A(Start) --&gt; B{"Does your data contain 0 (CT = 40) values?"};
-  B --&gt;|Yes| C{"Do your data represent single-digit copy numbers?"};
-  B --&gt;|No| D("Use a standard model from another package (e.g. glm(), lm(), etc.)");
-  C --&gt;|Yes| E("Use the Poisson-distributed GLM models (eDNA_count())");
-  C --&gt;|No| F{"Do the zeros in the data occur in otherwise high concentrations?"};
-  F --&gt;|Yes| G("Use a zero-inflated model (eDNA_lm*_zinf())");
-  F --&gt;|No| H("Use a censored-data model (eDNA_lm*())"); </code></pre>
+<div class="figure">
+<img src="flowchart.png" alt=""><p class="caption">Flowchart of Model uses</p>
+</div>
 </div>
   </div>
 
