@@ -125,5 +125,29 @@ test_that("Count model", {
 
   ans = eDNA_count_lm(y ~ 1, d)
 
+  expect_is(ans, "eDNA_model_count")
   print(ans)
+
+
+  ## with covariate
+  grp = sample(0:1, 500, TRUE)
+  d = data.frame(y = rpois(500, exp(0 + grp*2)),
+                 grp = grp)
+
+  ans = eDNA_count_lm(y ~ factor(grp), d)
+  expect_is(ans, "eDNA_model_count")
+  print(ans)
+
+  # continuous covariate
+  var = runif(500)
+
+  d = data.frame(y = rpois(500, exp(0 + grp*2 + 0.1*var)),
+                 grp = grp,
+                 var = var)
+
+  ans = eDNA_count_lm(y ~ factor(grp) + var, d)
+  expect_is(ans, "eDNA_model_count")
+  print(ans)
+  ## Compared to 
+  glm(y~grp+var, d, family = "poisson")
 })
