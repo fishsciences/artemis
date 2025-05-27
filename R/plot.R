@@ -48,7 +48,7 @@ plot.eDNA_simulation = function(x, y,
 ##' Plot eDNA model results
 ##'
 ##' Plot eDNA model results. Currently, this is just a wrapper for
-##' \code{rstan::plot}, which produces a "catapillar" plot.
+##' \code{bayesplot::mcmc_intervals}, which produces a "catapillar" plot.
 ##' 
 ##' @title Plot eDNA model results
 ##' @param x object of class eDNA_model_*

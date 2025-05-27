@@ -97,8 +97,8 @@ description of how to specify linear models in R.
 
 Full control of the MCMC algorithm can be accomplished by adding these
 control arguments to the end of the `eDNA_lm*()` call, which then
-passes them on to `rstan::sampling()`. Available arguments for MCMC
-control can be found in the help for `rstan::sampling`.
+passes them on to `cmdstanr::sample()`. Available arguments for MCMC
+control can be found in the help for `cmdstanr::sample`.
 
 For example,
 
@@ -149,8 +149,8 @@ plot(model_fit, pars = c("intercept", "betas"))
 ```
 
 Additional arguments can be provided to the plot method, which are
-passed to `rstan::plot` methods for `stanfit` objects. More details
-are available via `?rstan::plot`.
+passed to `bayesplot::mcmc_intervals` methods for `array` objects. More details
+are available via `?bayesplot::mcmc_intervals`.
 
 <br>
 
@@ -167,7 +167,7 @@ or by subsetting the `stanfit` slot of the model object with `@`, and
 specifying the `random_betas` parameters with the `pars` argument:
 
 ```{r, eval=FALSE}
-rstan::summary(model_fit2@stanfit, pars = "rand_betas", probs = c(0.50, 0.025, 0.975))$summary
+model_fit2@fit$summary(variable = "rand_betas", probs = c(0.50, 0.025, 0.975))
 plot(model_fit2, pars = "rand_betas")
 ```
 
@@ -175,7 +175,11 @@ plot(model_fit2, pars = "rand_betas")
 
 # Further notes on modeling
 
-Because the models implemented in `artemis` are Bayesian, you will get the most out of their results when you can work with and summarize posterior probabilities.  Some helpful resources for this are the [Stan User's Guide](https://mc-stan.org/docs/2_22/stan-users-guide/index.html), and the [stanfit objects vignette](http://mc-stan.org/rstan/articles/stanfit_objects.html) from the `rstan` package.
+Because the models implemented in `artemis` are Bayesian, you will get
+the most out of their results when you can work with and summarize
+posterior probabilities.  Some helpful resources for this are the
+[Stan User's
+Guide](https://mc-stan.org/docs/2_22/stan-users-guide/index.html).
 
 ## Useful modeling advice
 

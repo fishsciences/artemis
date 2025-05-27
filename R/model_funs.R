@@ -28,31 +28,32 @@ eDNA_lm = function(formula, data,
 ##' structure, please refer to the "Getting Started" vignette for the
 ##' artemis package.
 ##'
-##' There are four different modeling functions in the artemis
-##' package, \code{eDNA_lm}, \code{eDNA_lmer}, \code{eDNA_zinf_lm},
-##' \code{eDNA_zinf_lmer}.  \code{eDNA_lm} is for fitting a fixed
-##' effects model, while \code{eDNA_lmer} is for fitting a mixed or
-##' random effects model. The *_zinf versions implement a
-##' zero-inflated version of their respective lm function. All models
-##' are fit using the \code{rstan::sampling} function, which uses a
+##' There are six different modeling functions in the artemis package,
+##' \code{eDNA_lm}, \code{eDNA_lmer}, \code{eDNA_zinf_lm},
+##' \code{eDNA_zinf_lmer}, \code{eDNA_count}, and \code{eDNA_countr}.
+##' \code{eDNA_lm} is for fitting a fixed effects model, while
+##' \code{eDNA_lmer} is for fitting a mixed or random effects
+##' model. The *_zinf versions implement a zero-inflated version of
+##' their respective lm function. The _count and _countr functions
+##' implement a Poisson-distributed GLM with a log-link. All models
+##' are fit using the \code{cmdstanr::sample} function, which uses a
 ##' Hamiltonian Monte Carlo algorithm to estimate parameters for the
 ##' model. Users are encouraged to refer to the documentation for Stan
-##' and RStan at \url{https://mc-stan.org/users/documentation/} for
-##' details about how models are fit.
+##' and cmdstanr at \url{https://mc-stan.org/users/documentation/} for
+##' details about how models are fit. Please see the Vignette
+##' "Model Types in artemis" for a more detailed explanation of the
+##' differences and appropriate use cases for each model.
 ##'
 ##' @section Diagnosing warning and error messages:
 ##' 
 ##' The models have been written in Stan with key focus on robustness
 ##' and speed. However, it is possible that users might encounter
 ##' issues. Typically, these issues will be highlighted by warning
-##' messages coming from \code{rstan::sampling}. Often times, these
-##' warnings can be resolved by increasing the number of iterations
-##' that the HMC algorithm runs by specifying \code{iters} to be a
-##' larger value. This should be the first action attempted, as
-##' increasing the \code{iters} increases both the warm-up and
-##' sampling iterations. If users continue to have issues, additional
-##' control arguments can be passed to \code{rstan::sampling} via the
-##' \code{...} argument.
+##' messages coming from \code{cmdstanr::sample}. Often times, these
+##' warnings can be resolved by increasing the tuning parameter
+##' \code{adapt_delta} to a larger value. If users continue to have
+##' issues, additional control arguments can be passed to
+##' \code{cmdstanr::sample} via the \code{...} argument.
 ##' 
 ##' @title Fit eDNA Model
 ##'

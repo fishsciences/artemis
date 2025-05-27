@@ -96,7 +96,7 @@ variable_list is ignored. This allows users to provide an
 unbalanced design matrix.}
 
 \item{verbose}{logical, when TRUE output from
-\code{rstan::sampling} is written to the console.}
+\code{cmdstanr::sample} is written to the console.}
 
 \item{sigma_rand}{numeric vector, the stdev for the random
 effects. There must be one sigma per random effect specified}

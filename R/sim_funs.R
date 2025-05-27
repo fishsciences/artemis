@@ -116,7 +116,7 @@ sim_eDNA_lm = function(formula, variable_list,
 ##'     variable_list is ignored. This allows users to provide an
 ##'     unbalanced design matrix.
 ##' @param verbose logical, when TRUE output from
-##'     \code{rstan::sampling} is written to the console.
+##'     \code{cmdstanr::sample} is written to the console.
 ##' @param cache_dir the cache directory where pre-compiled models are
 ##'     stored. Defaults to the output of
 ##'     \code{tools::R_user_dir("artemis", "cache")}

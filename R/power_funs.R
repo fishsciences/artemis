@@ -105,7 +105,7 @@ est_power_lm = function(formula, variable_list,
 ##'     variable_list is ignored. This allows users to provide an
 ##'     unbalanced design matrix.
 ##' @param verbose logical, when TRUE output from
-##'     \code{rstan::sampling} is written to the console.
+##'     \code{cmdstanr::sample} is written to the console.
 ##' @return a named vector, with one estimate of the power for each
 ##'     parameter estimate.
 ##' @author Matt Espe

@@ -77,7 +77,7 @@ variable_list is ignored. This allows users to provide an
 unbalanced design matrix.}
 
 \item{verbose}{logical, when TRUE output from
-\code{rstan::sampling} is written to the console.}
+\code{cmdstanr::sample} is written to the console.}
 
 \item{cache_dir}{the cache directory where pre-compiled models are
 stored. Defaults to the output of

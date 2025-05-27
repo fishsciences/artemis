@@ -23,7 +23,7 @@ Plot eDNA model results
 }
 \details{
 Plot eDNA model results. Currently, this is just a wrapper for
-\code{rstan::plot}, which produces a "catapillar" plot.
+\code{bayesplot::mcmc_intervals}, which produces a "catapillar" plot.
 }
 \author{
 Matt Espe

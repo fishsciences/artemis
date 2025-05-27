@@ -71,7 +71,7 @@ est_power_range_lm = function(formula, variable_list,
 ##'     value of log(concentration) which would result in a value
 ##'     greater than this limit is instead recorded as the limit.
 ##' @param verbose logical, when TRUE output from
-##'     \code{rstan::sampling} is written to the console.
+##'     \code{cmdstanr::sample} is written to the console.
 ##' @return list, with each element a vector for the estimated power
 ##'     for each parameter for the corresponding number of replicates.
 ##' @author Matt Espe

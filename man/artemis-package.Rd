@@ -18,9 +18,6 @@ Simulating data and fitting models for eDNA studies
 Additional details on the model implemented by the artemis package
 can be found in the "Getting Started" vignette.
 }
-\references{
-Stan Development Team (2018). RStan: the R interface to Stan. R package version 2.18.2. http://mc-stan.org
-}
 \author{
 \strong{Maintainer}: Matt Espe \email{mespe@ucdavis.edu}
 

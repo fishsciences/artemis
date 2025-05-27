@@ -15,9 +15,10 @@
 
 The `artemis` package was created to aid in the design and analysis of
 eDNA survey studies by offering a custom suite of models for eDNA
-sampling and qPCR data. It implements a set of Bayesian
-latent-variable, truncated data models which are fit using
-[Stan](https://mc-stan.org/). 
+sampling and qPCR data. It implements a set of Bayesian models,
+including latent-variable, censored data models, Poisson-distributed
+GLM, and Zero-Inflated models. All models are fit using
+[Stan](https://mc-stan.org/).
 
 
 ## Installation
@@ -30,7 +31,7 @@ Subsystem for
 Linux](https://learn.microsoft.com/en-us/windows/wsl/install) to
 ensure best compatability and stability.
 
-*Please be aware, the development team of `artemis` is small with
+*Please be aware, the development team of `artemis` is small and has
 limited resources. Therefore, support for `artemis` installed on
 Windows will be limited.*
 
