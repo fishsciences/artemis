@@ -27,7 +27,7 @@ functions {
   array[] int component_size(array[] int grp){
 	int N = size(grp);
 	int K = max(grp);
-	array[K] int ans;
+	array[K] int ans = zeros_int_array(K); // Init as 0 to avoid overflow
 	
 	for(n in 1:N){
 	  ans[grp[n]] += 1;
