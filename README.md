@@ -140,6 +140,19 @@ Please refer to the [Getting Started with the `artemis`
 package](https://fishsciences.github.io/artemis/articles/artemis-overview.html)
 vignette, which covers most of the functionality of artemis.
 
+## Troubleshooting
+
+There are many moving pieces in the `artemis` package and several things can go wrong. If you are experiencing issues, we recommend the following steps:
+
+1. Check to make sure the installations steps above **ALL** complete without error, in particular the `cmdstanr` steps.
+   
+2. If using RStudio, close and re-open RStudio. RStudio can occasionally induce interpreter errors.
+
+3. Recompile the models with `compile_models(rewrite = TRUE)`. Since `artemis` caches model executives, these can become out of date when packages update.
+
+4. Restart your computer.
+
+5. If none of the above work, please see next section. 
 
 ## Reporting bugs
 
