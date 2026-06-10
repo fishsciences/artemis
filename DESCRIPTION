@@ -1,6 +1,6 @@
 Package: artemis
 Title: Analysis and Simulation of Environmental DNA Experiments
-Version: 3.0.1
+Version: 3.0.2
 Authors@R: c(person(given = "Matt", family = "Espe",
 		   role = c("aut", "cre"),
 		   email = "mespe@ucdavis.edu"),
@@ -17,14 +17,14 @@ Depends:
 	R (>= 4.0.0),
 	cmdstanr,
     loo
-Imports: 
+Imports:
 	lme4 (>= 1.1.21),
+	reformulas,
 	bayesplot,
     utils
 Encoding: UTF-8
 LazyData: true
 SystemRequirements: GNU make
-RoxygenNote: 7.3.2
 Suggests: 
     testthat,
     knitr,
@@ -36,3 +36,4 @@ Remotes: stan-dev/cmdstanr
 Additional_repositories: https://mc-stan.org/r-packages/
 VignetteBuilder: knitr
 Biarch: true
+Config/roxygen2/version: 8.0.0

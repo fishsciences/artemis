@@ -42,7 +42,7 @@ eDNA_zinf_lm(
   upper_Cq = 40,
   prior_intercept = normal(location = -15, scale = 10),
   priors = normal(),
-  cache_dir = tools::R_user_dir("artemis", "cache"),
+  cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache")),
   ...
 )
 
@@ -55,7 +55,7 @@ eDNA_zinf_lmer(
   prior_intercept = normal(location = -15, scale = 10),
   priors = normal(),
   prior_random_variance = exponential(),
-  cache_dir = tools::R_user_dir("artemis", "cache"),
+  cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache")),
   ...
 )
 
@@ -64,7 +64,8 @@ eDNA_count_lm(
   data,
   prior_intercept = normal(location = 3, scale = 5),
   priors = normal(),
-  cache_dir = tools::R_user_dir("artemis", "cache"),
+  prior_random_variance = exponential(),
+  cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache")),
   ...
 )
 
@@ -74,7 +75,7 @@ eDNA_count_lmer(
   prior_intercept = normal(location = 3, scale = 5),
   priors = normal(),
   prior_random_variance = exponential(),
-  cache_dir = tools::R_user_dir("artemis", "cache"),
+  cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache")),
   ...
 )
 }

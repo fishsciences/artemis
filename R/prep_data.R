@@ -121,7 +121,7 @@ prep_priors = function(prior, x, y)
 
     if(prior$autoscale){
         prior$scale = prior$scale * sd(y)
-        multi_val = apply(x, 2, function(x) length(unique) > 2)
+        multi_val = apply(x, 2, function(x) length(unique(x)) > 2)
         x_sd = apply(x, 2, sd)
         prior$scale[multi_val] = prior$scale[multi_val] * x_sd[multi_val] 
     }

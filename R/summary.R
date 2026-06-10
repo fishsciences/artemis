@@ -99,13 +99,6 @@ summarize_par = function(x, p)
 }
 
 
-summary.eDNA_predict_lm = function(object, probs = c(0.025, 0.5, 0.975), ...)
-{
-    # Placeholder
-    object
-
-}
-
 ##' Summary method for eDNA p(detect)
 ##'
 ##' Summary method for eDNA p(detect)

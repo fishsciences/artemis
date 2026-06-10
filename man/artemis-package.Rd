@@ -23,6 +23,7 @@ can be found in the "Getting Started" vignette.
 
 Authors:
 \itemize{
+  \item Matt Espe \email{mespe@ucdavis.edu}
   \item Myfanwy Johnston \email{myfanwy.johnston@fishsciences.net}
 }
 

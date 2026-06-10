@@ -13,7 +13,7 @@ sim_eDNA_lm = function(formula, variable_list,
                        prob_zero = 0.08,
                        X = expand.grid(variable_list),
                        verbose = FALSE,
-                       cache_dir = tools::R_user_dir("artemis", "cache"))
+                       cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache")))
 {
     if(!has_response(formula))
       stop("Please provide a dummy response variable for simulations")
@@ -174,7 +174,7 @@ sim_eDNA_lmer = function(formula, variable_list,
                          prob_zero = 0.08,
                          X = expand.grid(variable_list),
                          verbose = FALSE,
-                         cache_dir = tools::R_user_dir("artemis", "cache"))
+                         cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache")))
 {
     if(!has_response(formula))
         stop("Please provide a dummy response variable for simulations")

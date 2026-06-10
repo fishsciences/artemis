@@ -17,7 +17,7 @@ sim_eDNA_lm(
   prob_zero = 0.08,
   X = expand.grid(variable_list),
   verbose = FALSE,
-  cache_dir = tools::R_user_dir("artemis", "cache")
+  cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache"))
 )
 
 sim_eDNA_lmer(
@@ -33,7 +33,7 @@ sim_eDNA_lmer(
   prob_zero = 0.08,
   X = expand.grid(variable_list),
   verbose = FALSE,
-  cache_dir = tools::R_user_dir("artemis", "cache")
+  cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache"))
 )
 }
 \arguments{

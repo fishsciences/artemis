@@ -91,12 +91,13 @@ est_power_range_lmer = function(formula, variable_list,
     ans = lapply(rep_range, function(i){
         variable_list$rep = seq(i)
         
-        est_power_lm(formula, 
-                     variable_list, 
-                     betas, sigma_Cq, 
-                     std_curve_alpha, std_curve_beta, type,
-                     accuracy_level, conf_level, n_sim,
-                     probs, upper_Cq, verbose)
+        est_power_lmer(formula,
+                       variable_list,
+                       betas, sigma_Cq,
+                       sigma_rand,
+                       std_curve_alpha, std_curve_beta, type,
+                       accuracy_level, conf_level, n_sim,
+                       probs, upper_Cq, verbose)
     })
     names(ans) = paste("n_rep:", rep_range)
     ans

@@ -182,12 +182,12 @@ load_slots_model = function(obj, model_type)
 
 ##' @rdname eDNA_lmer
 ##' @export
-eDNA_zinf_lm = function(formula, data, 
+eDNA_zinf_lm = function(formula, data,
                         std_curve_alpha, std_curve_beta,
                         upper_Cq = 40,
                         prior_intercept = normal(location = -15, scale = 10),
-                        priors = normal(), 
-                        cache_dir = tools::R_user_dir("artemis", "cache"),
+                        priors = normal(),
+                        cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache")),
                         ...)
 {
     # from lm
@@ -202,13 +202,13 @@ eDNA_zinf_lm = function(formula, data,
 }
 ##' @rdname eDNA_lmer
 ##' @export
-eDNA_zinf_lmer = function(formula, data, 
+eDNA_zinf_lmer = function(formula, data,
                           std_curve_alpha, std_curve_beta,
                           upper_Cq = 40,
                           prior_intercept = normal(location = -15, scale = 10),
                           priors = normal(),
                           prior_random_variance = exponential(),
-                          cache_dir = tools::R_user_dir("artemis", "cache"),
+                          cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache")),
                           ...)
 {
   
@@ -226,17 +226,17 @@ eDNA_zinf_lmer = function(formula, data,
 
 ##' @rdname eDNA_lmer
 ##' @export
-eDNA_count_lm = function(formula, data, 
+eDNA_count_lm = function(formula, data,
                          prior_intercept = normal(location = 3, scale = 5),
                          priors = normal(),
-                         cache_dir = tools::R_user_dir("artemis", "cache"),
+                         prior_random_variance = exponential(),
+                         cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache")),
                          ...)
 {
-  
   # Several parameters are not used for the count model, but
   # we pass along dummy variables to re-use code
   eDNA_lm_shared(model_type = "count",
-                 formula, data, 
+                 formula, data,
                  1L, 1L,
                  1L,
                  prior_intercept,
@@ -248,11 +248,11 @@ eDNA_count_lm = function(formula, data,
 
 ##' @rdname eDNA_lmer
 ##' @export
-eDNA_count_lmer = function(formula, data, 
+eDNA_count_lmer = function(formula, data,
                            prior_intercept = normal(location = 3, scale = 5),
                            priors = normal(),
                            prior_random_variance = exponential(),
-                           cache_dir = tools::R_user_dir("artemis", "cache"),
+                           cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache")),
                            ...)
 {
   
@@ -272,14 +272,14 @@ eDNA_count_lmer = function(formula, data,
 
 # houses most lm() code, which is similar between the lm, lmer, and
 # zero-inflated
-eDNA_lm_shared = function(model_type, 
-                          formula, data, 
+eDNA_lm_shared = function(model_type,
+                          formula, data,
                           std_curve_alpha, std_curve_beta,
                           upper_Cq = 40,
                           prior_intercept = normal(location = -15, scale = 10),
-                          priors = normal(), 
+                          priors = normal(),
                           prior_random_variance = exponential(),
-                          cache_dir = tools::R_user_dir("artemis", "cache"),
+                          cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache")),
                           ...)
 {
     md_pars = get_mod_funs(model_type, cache_dir)
