@@ -30,3 +30,17 @@ test_that("Prep data", {
 
     expect_true(all(sapply(ans[c("groups", "rand_x", "rand_sigma")], length) != 0))
 })
+
+test_that("Count response conversion", {
+    d = data.frame(y = c(0, 3, 10), x = 1:3)
+    ml = gen_model_list_lm(y ~ x, d)
+    # integer-valued doubles convert silently
+    ans = expect_silent(prep_data.count(ml, prior_int = normal(), prior_b = normal()))
+    expect_true(is.integer(ans$y))
+
+    ml$y = c(0.4, 3, 10.6)
+    expect_warning(prep_data.count(ml, prior_int = normal(), prior_b = normal()),
+                   "not integer")
+    ans = suppressWarnings(prep_data.count(ml, prior_int = normal(), prior_b = normal()))
+    expect_equal(ans$y, c(0L, 3L, 11L))
+})

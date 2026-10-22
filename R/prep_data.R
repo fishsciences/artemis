@@ -243,10 +243,9 @@ prep_data.count = function(mod_list,
     priors = prep_priors(prior_b, x, y)
     n_vars = if(is.null(ncol(x))) 0 else ncol(x)
 
-    if(!is.integer(y)){
+    if(any(y != round(y)))
       warning("Model response is not integer and is being converted. This will round count numbers.")
-      y = as.integer(round(y))
-    }
+    y = as.integer(round(y))
     
     model_data = list(y = y,
                       N = length(y),
