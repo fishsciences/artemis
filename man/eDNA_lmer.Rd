@@ -119,8 +119,9 @@ directory returned by \code{R_user_dir()}.}
 \item{...}{additional arguments passed to
 \code{\link[cmdstanr]{sample}}}
 
-\item{prior_random_variance}{the prior on variance of the random
-effects. Defaults to exponential distribution with rate 1.}
+\item{prior_random_variance}{the prior on the standard deviation
+of the random effects. Only \code{exponential()} is
+supported. Defaults to exponential distribution with rate 1.}
 }
 \value{
 S4 object, with the following slots:

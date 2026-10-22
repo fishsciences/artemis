@@ -75,7 +75,8 @@ data {
   real prior_int_mu;
   real<lower=0> prior_int_sd;
   vector[K] prior_mu;
-  vector<lower=0>[K] prior_sd;  
+  vector<lower=0>[K] prior_sd;
+  real<lower=0> rand_sd; // rate of exponential prior on rand_sigma
 
   // for intercept-less models
   int<lower=0,upper=1> has_inter;
@@ -114,7 +115,7 @@ transformed parameters {
 model {
   // priors
   intercept ~ normal(prior_int_mu, prior_int_sd);
-  rand_sigma ~ gamma(2, 0.1);
+  rand_sigma ~ exponential(rand_sd);
   rand_betas_raw ~ std_normal();
   
   if(K) {

@@ -74,8 +74,9 @@ eDNA_lm = function(formula, data,
 ##'     "location" and "scale", which are the location and scale for a
 ##'     normal prior over the intercept. Ignored when the intercept is
 ##'     omitted in the model formula.
-##' @param prior_random_variance the prior on variance of the random
-##'     effects. Defaults to exponential distribution with rate 1.
+##' @param prior_random_variance the prior on the standard deviation
+##'     of the random effects. Only \code{exponential()} is
+##'     supported. Defaults to exponential distribution with rate 1.
 ##' @param priors named list such as created by
 ##'     \code{rstanarm::normal}. The list must contain elements named
 ##'     "location" and "scale", which are the location and scale for a
