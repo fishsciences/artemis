@@ -36,4 +36,4 @@ Remotes: stan-dev/cmdstanr
 Additional_repositories: https://mc-stan.org/r-packages/
 VignetteBuilder: knitr
 Biarch: true
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0

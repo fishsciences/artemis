@@ -56,6 +56,11 @@ test_that("lmer model.list", {
     expect_true(length(d$groups) == ncol(d$rand_x))
     expect_true(ncol(d$x) == 4)
 
+    # observation-level random effect (one level per row)
+    d = mtcars
+    d$obs = seq_len(nrow(d))
+    d = gen_model_list_lmer(mpg ~ cyl + (1|obs), d)
+    expect_true(ncol(d$rand_x) == nrow(mtcars))
 })
 
 test_that("Error on NA", {

@@ -20,7 +20,7 @@
 #' @import cmdstanr
 #' @importFrom stats model.matrix model.response model.frame pnorm quantile rnorm terms sd delete.response formula dpois
 #' @importFrom graphics lines segments plot
-#' @importFrom lme4 lFormula ranef
+#' @importFrom lme4 lFormula lmerControl ranef
 #' @importFrom reformulas nobars
 #' @importFrom loo waic
 #' @importFrom utils head

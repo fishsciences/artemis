@@ -22,7 +22,11 @@ gen_model_list_lm = function(formula, data)
 
 gen_model_list_lmer = function(formula, data)
 {
-    mf = lFormula(formula, data)
+    # lme4's nobs checks guard its own optimizer, not the Stan model;
+    # relaxing them allows observation-level random effects
+    mf = lFormula(formula, data,
+                  control = lmerControl(check.nobs.vs.nlev = "ignore",
+                                        check.nobs.vs.nRE = "ignore"))
 
     x = mf$X
     if(nrow(x) != nrow(data))
