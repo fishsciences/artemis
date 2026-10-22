@@ -14,3 +14,23 @@ inst/stan_files/eDNA_sim_omni
 doc
 Meta
 .Rproj.user
+# secrets / private data
+.Renviron
+.env
+.env.*
+*.pem
+*credentials*
+# local Claude Code settings
+.claude/
+# sandbox /dev/null artifacts
+.bash_profile
+.bashrc
+.gitconfig
+.gitmodules
+.idea
+.mcp.json
+.profile
+.ripgreprc
+.vscode
+.zprofile
+.zshrc
