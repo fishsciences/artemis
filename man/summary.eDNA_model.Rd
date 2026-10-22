@@ -16,7 +16,9 @@ samples}
 }
 \value{
 data.frame, with summary of the fixed effects from the
-    model
+    model. For models with random effects, the standard deviation
+    of each group of random effects is included as
+    \code{sd(<group>)}.
 }
 \description{
 Summary of eDNA model

@@ -170,9 +170,10 @@ load_slots_model = function(obj, model_type)
   obj@std_curve_beta = get("std_curve_beta", parent.frame())
   obj@upper_Cq = get("upper_Cq", parent.frame())
   
-  if(model_type == "eDNA_model_lmer"){
-    #obj@random_x = as.data.frame(get("md", parent.frame())$X)
-    #obj@random_sd = as.data.frame(get("md", parent.frame())$X)
+  if(model_type %in% c("lmer", "zero_inf_lmer", "countr")){
+    ml = get("ml", parent.frame())
+    obj@random_names = colnames(ml$rand_x)
+    obj@random_groups = ml$group_names
   }
   if(model_type %in% c("zero_inf_lm", "zero_inf_lmer")){
     obj@xz = as.data.frame(get("md", parent.frame())$Xz)

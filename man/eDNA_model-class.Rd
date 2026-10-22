@@ -34,10 +34,11 @@ An S4 object holding the results of a model fit by \code{eDNA_lm*}
 
 \item{\code{upper_Cq}}{the upper limit for CQ}
 
+\item{\code{random_names}}{names of the random effects, one per level}
+
+\item{\code{random_groups}}{names of the random effect groups, one per
+estimated standard deviation}
+
 \item{\code{fit}}{the result from cmdstanr::sample}
-
-\item{\code{random_x}}{data.frame of the grouping variables used}
-
-\item{\code{random_sd}}{the estimated stdev. of each of the random effects}
 }}
 

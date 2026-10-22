@@ -127,6 +127,9 @@ p_detect = function(y, thresh)
 ##' @slot std_curve_alpha the alpha for the std. curve conversion formual used
 ##' @slot std_curve_beta the beta for the std. curve conversion formula used
 ##' @slot upper_Cq the upper limit for CQ
+##' @slot random_names names of the random effects, one per level
+##' @slot random_groups names of the random effect groups, one per
+##'     estimated standard deviation
 ##' @slot fit the result from cmdstanr::sample
 ##'
 ##' @export
@@ -134,10 +137,12 @@ setClass("eDNA_model",
          slots = c(ln_conc = "matrix", Cq_star = "matrix",
                    intercept = "array",
                    betas = "array",
-                   sigma_ln_eDNA = "array", 
+                   sigma_ln_eDNA = "array",
                    formula = "formula",
                    x = "data.frame",
                    xz = "data.frame", # for zero-infl
+                   random_names = "character", # for mixed models
+                   random_groups = "character",
                    std_curve_alpha = "numeric", std_curve_beta = "numeric",
                    upper_Cq = "numeric",
                    fit = "ANY"))
@@ -182,13 +187,13 @@ setAs("eDNA_model_countr", "eDNA_model", function(from){
   from
 })
 
-##' @slot random_x data.frame of the grouping variables used
-##' @slot random_sd the estimated stdev. of each of the random effects
-##'
 ##' @rdname eDNA_model-class
 ##' @export
-setClass("eDNA_model_lmer", contains = "eDNA_model_lm",
-         slots = c(random_x = "data.frame", random_sd = "array"))
+setClass("eDNA_model_lmer", contains = "eDNA_model_lm")
+
+## models with random effects, for ranef() dispatch
+setClassUnion("eDNA_model_mixed",
+              c("eDNA_model_lmer", "eDNA_model_zipr", "eDNA_model_countr"))
 
 setAs("eDNA_model_lmer", "eDNA_model", function(from) {
   

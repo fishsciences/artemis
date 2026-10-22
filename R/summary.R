@@ -62,7 +62,9 @@ summary.eDNA_simulation = function(object, var = "Cq_star",
 ##'     samples
 ##' @param ... currently ignored
 ##' @return data.frame, with summary of the fixed effects from the
-##'     model
+##'     model. For models with random effects, the standard deviation
+##'     of each group of random effects is included as
+##'     \code{sd(<group>)}.
 ##'
 ##' @author Matt Espe
 ##' @method summary eDNA_model
@@ -72,7 +74,7 @@ summary.eDNA_model = function(object, probs = c(0.025, 0.5, 0.975), ...)
   res = as.data.frame(object@fit$summary(...))
 
   #remove thetas and log_lik to avoid confusion
-  res = res[!grepl("thetas\\[|log_lik\\[|lp__|_raw\\[|rand_", res$variable),]
+  res = res[!grepl("thetas\\[|log_lik\\[|lp__|_raw\\[|rand_betas", res$variable),]
 
   ## handle zip components
   i = grepl("^nz_", res$variable)
@@ -85,6 +87,12 @@ summary.eDNA_model = function(object, probs = c(0.025, 0.5, 0.975), ...)
   ## Fix names
   res$variable[res$variable == "intercept[1]"] = "(Intercept)"
   res$variable[grep("^betas\\[", res$variable)] = colnames(object@x)
+
+  ## random effect SDs last, named by group
+  j = grepl("^rand_sigma\\[", res$variable)
+  grp = as.integer(gsub("\\D", "", res$variable[j]))
+  res$variable[j] = paste0("sd(", object@random_groups[grp], ")")
+  res = res[order(j),]
 
   res
     

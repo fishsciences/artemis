@@ -45,6 +45,7 @@ gen_model_list_lmer = function(formula, data)
     return(list(y = y, x = x,
                 rand_x = rand_x,
                 groups = groups,
+                group_names = rt$group_names,
                 n_rand = n_rand,
                 n_grp = n_grp))
 }
@@ -103,14 +104,16 @@ mk_rand_mat = function(rt)
         x = rt$cnms, var = rt$flist, nm = names(rt$flist),
         SIMPLIFY = FALSE)
 
-    groups = as.integer(factor(unlist(vars), levels = unique(unlist(vars))))
-    var_names = unlist(mapply(function(x, y) paste(x, rownames(y), sep = ""),
+    group_names = unique(unlist(vars))
+    groups = as.integer(factor(unlist(vars), levels = group_names))
+    var_names = unlist(mapply(function(x, y) paste0(x, "[", rownames(y), "]"),
                               x = vars, y = mats,
                               SIMPLIFY = FALSE))
     rand_mat = do.call(cbind, lapply(mats, t))
     colnames(rand_mat) = var_names
 
     return(list(random_effects = rand_mat,
-                groups = groups))
+                groups = groups,
+                group_names = group_names))
 }
 
