@@ -24,4 +24,13 @@ There are other implications of assuming the copy numbers are Poisson distribute
 
 However, there are some downsides. First, the CT values need to be converted to copy number with reasonable accuracy. In cases where the standard curve is being set via an unknown starting point (i.e. tissue samples), it can be difficult to get an accurate conversion. Second, because the response of the Poisson model is an integer, some rounding from continuous CT values is required which can introduce some inaccuracy.
 
+Third, the count model has no overdispersion term (i.e. a term for
+variance beyond what the Poisson distribution allows). A Poisson
+distribution has a variance equal to its mean. When copy numbers are
+large and vary widely between samples, this assumption does not hold
+and the sampler often fails to converge. The count model is best
+suited to copy numbers of roughly 1 to 20. For data with larger copy
+numbers, use the censored-data models fit by the `eDNA_lm()` and
+`eDNA_lmer()` functions instead.
+
 

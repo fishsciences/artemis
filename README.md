@@ -183,5 +183,35 @@ likely never will be available via CRAN due to its requirements on
 external software (`cmdstan`). This meant that `artemis` would
 likewise not be available via CRAN.
 
+## LLM Policy
 
+This project is developed with assistance from AI coding agents,
+including Claude Code. Agent-assisted contributions are accepted subject
+to the following. A change not meeting these requirements will not be
+merged.
+
+1. Style and idioms MUST match the project's existing code. This
+   includes avoiding new dependency debt and favoring ease of
+   maintenance over cleverness.
+2. New functionality MUST be tested using the existing test suite's
+   conventions.
+3. New functionality or any change in behavior MUST be documented
+   following the project's existing documentation style.
+4. Changes MUST be intentional and motivated by a real defect or a
+   required piece of functionality — not spontaneous refactors,
+   speculative features, or unrequested abstractions. Where the project
+   exposes a stable interface (e.g. an R package's exported functions),
+   existing behavior MUST NOT break unless it can be demonstrated to be
+   erroneous.
+5. Every commit containing agent-assisted work MUST carry an
+   `Assisted-by:` trailer naming the agent, model version, and any
+   additional tooling used, e.g. `Assisted-by: Claude:Sonnet-5
+   Claude-Code`. Basic development tools (git, gcc, make, editors)
+   should not be listed.
+6. All agent-assisted contributions MUST be reviewed and signed off by a
+   human before inclusion. The human reviewer is ultimately responsible
+   for any resulting errors or bugs.
+
+Agents should read the project's `CLAUDE.md`, where present, since it is
+curated to inform the points above with project-specific detail.
 

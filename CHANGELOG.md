@@ -1,5 +1,28 @@
 # artemis: ChangeLog
 
+# v3.1
+
+## 3.1.0
+
+The mixed models (`eDNA_lmer()`, `eDNA_zinf_lmer()`, and
+`eDNA_count_lmer()`) now use the `prior_random_variance` argument.
+Previously the Stan models ignored it and used a fixed gamma(2, 0.1)
+prior on the random effect standard deviations. The default is now
+exponential(1), as documented. This changes results from these models
+fit with default settings. Recompile the cached models with
+`compile_models(rewrite = TRUE)` after updating.
+
+The `ranef()` method now works for all three mixed models. It applies
+`FUN` and labels each row as `term:group[level]`. The `summary()`
+method reports the standard deviation of each group of random effects
+as `sd(<group>)`.
+
+Formulas with an observation-level random effect (one level per row)
+are now accepted.
+
+The count models no longer warn when the response is stored as a
+double but holds whole numbers.
+
 # v3.0
 
 ## 3.0.0
