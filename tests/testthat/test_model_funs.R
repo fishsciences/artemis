@@ -153,3 +153,18 @@ test_that("Count model", {
   ## Compared to 
   glm(y~grp+var, d, family = "poisson")
 })
+
+test_that("cache_dir is forwarded by every model function", {
+    # a cache_dir under a regular file cannot be created, so a used
+    # cache_dir must error
+    f = tempfile()
+    file.create(f)
+    bad_dir = file.path(f, "cache")
+    fits = list(
+        function() eDNA_lm(Cq ~ Distance_m, eDNA_data, 21.2, -1.5, cache_dir = bad_dir),
+        function() eDNA_zinf_lm(Cq ~ Distance_m | 1, eDNA_data, 21.2, -1.5, cache_dir = bad_dir),
+        function() eDNA_lmer(Cq ~ Distance_m + (1|FilterID), eDNA_data, 21.2, -1.5, cache_dir = bad_dir),
+        function() eDNA_count_lm(Cq ~ Distance_m, eDNA_data, cache_dir = bad_dir))
+    for(fit in fits)
+        expect_error(suppressWarnings(fit()))
+})

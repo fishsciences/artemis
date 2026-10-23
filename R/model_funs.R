@@ -10,12 +10,13 @@ eDNA_lm = function(formula, data,
                    ...)
 {
     eDNA_lm_shared(model_type = "lm",
-                   formula, data, 
-                   std_curve_alpha, std_curve_beta,
-                   upper_Cq,
-                   prior_intercept,
-                   priors,
-                   cache_dir,
+                   formula = formula, data = data,
+                   std_curve_alpha = std_curve_alpha,
+                   std_curve_beta = std_curve_beta,
+                   upper_Cq = upper_Cq,
+                   prior_intercept = prior_intercept,
+                   priors = priors,
+                   cache_dir = cache_dir,
                    ...)
 }
 
@@ -140,13 +141,14 @@ eDNA_lmer = function(formula, data,
                      ...)
 {
     eDNA_lm_shared(model_type = "lmer",
-                   formula, data, 
-                   std_curve_alpha, std_curve_beta,
-                   upper_Cq,
-                   prior_intercept,
-                   priors,
-                   prior_random_variance,
-                   cache_dir,
+                   formula = formula, data = data,
+                   std_curve_alpha = std_curve_alpha,
+                   std_curve_beta = std_curve_beta,
+                   upper_Cq = upper_Cq,
+                   prior_intercept = prior_intercept,
+                   priors = priors,
+                   prior_random_variance = prior_random_variance,
+                   cache_dir = cache_dir,
                    ...)
 }
 
@@ -194,13 +196,14 @@ eDNA_zinf_lm = function(formula, data,
 {
     # from lm
   eDNA_lm_shared(model_type = "zero_inf_lm",
-                 formula, data, 
-                 std_curve_alpha, std_curve_beta,
-                 upper_Cq,
-                 prior_intercept,
-                 priors,
-                 cache_dir,
-                   ...)
+                 formula = formula, data = data,
+                 std_curve_alpha = std_curve_alpha,
+                 std_curve_beta = std_curve_beta,
+                 upper_Cq = upper_Cq,
+                 prior_intercept = prior_intercept,
+                 priors = priors,
+                 cache_dir = cache_dir,
+                 ...)
 }
 ##' @rdname eDNA_lmer
 ##' @export
@@ -216,13 +219,14 @@ eDNA_zinf_lmer = function(formula, data,
   
   # from lm
   eDNA_lm_shared(model_type = "zero_inf_lmer",
-                 formula, data, 
-                 std_curve_alpha, std_curve_beta,
-                 upper_Cq,
-                 prior_intercept,
-                 priors,
-                 prior_random_variance,
-                 cache_dir,
+                 formula = formula, data = data,
+                 std_curve_alpha = std_curve_alpha,
+                 std_curve_beta = std_curve_beta,
+                 upper_Cq = upper_Cq,
+                 prior_intercept = prior_intercept,
+                 priors = priors,
+                 prior_random_variance = prior_random_variance,
+                 cache_dir = cache_dir,
                  ...)
 }
 
@@ -238,13 +242,13 @@ eDNA_count_lm = function(formula, data,
   # Several parameters are not used for the count model, but
   # we pass along dummy variables to re-use code
   eDNA_lm_shared(model_type = "count",
-                 formula, data,
-                 1L, 1L,
-                 1L,
-                 prior_intercept,
-                 priors,
-                 prior_random_variance,
-                 cache_dir,
+                 formula = formula, data = data,
+                 std_curve_alpha = 1L, std_curve_beta = 1L,
+                 upper_Cq = 1L,
+                 prior_intercept = prior_intercept,
+                 priors = priors,
+                 prior_random_variance = prior_random_variance,
+                 cache_dir = cache_dir,
                  ...)
 }
 
@@ -261,13 +265,13 @@ eDNA_count_lmer = function(formula, data,
   # Several parameters are not used for the count model, but
   # we pass along dummy variables to re-use code
   eDNA_lm_shared(model_type = "countr",
-                 formula, data, 
-                 1L, 1L,
-                 1L,
-                 prior_intercept,
-                 priors,
-                 prior_random_variance,
-                 cache_dir,
+                 formula = formula, data = data,
+                 std_curve_alpha = 1L, std_curve_beta = 1L,
+                 upper_Cq = 1L,
+                 prior_intercept = prior_intercept,
+                 priors = priors,
+                 prior_random_variance = prior_random_variance,
+                 cache_dir = cache_dir,
                  ...)
 }
 
