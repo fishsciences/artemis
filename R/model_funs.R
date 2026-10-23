@@ -162,25 +162,24 @@ run_model = function(model,
     return(fit)
 }
 
-load_slots_model = function(obj, model_type)
-  # This grabs data from 'md', the input data to the model and adds it
-  # to the final fit returned object, thus preserving the inputs.
+load_slots_model = function(obj, model_type, formula, ml, md,
+                            std_curve_alpha, std_curve_beta, upper_Cq)
+  # preserve the model inputs on the returned fit
 {
-  obj@formula = get("formula", parent.frame())
-  obj@x = as.data.frame(get("md", parent.frame())$X)
-  obj@std_curve_alpha = get("std_curve_alpha", parent.frame())
-  obj@std_curve_beta = get("std_curve_beta", parent.frame())
-  obj@upper_Cq = get("upper_Cq", parent.frame())
-  
+  obj@formula = formula
+  obj@x = as.data.frame(md$X)
+  obj@std_curve_alpha = std_curve_alpha
+  obj@std_curve_beta = std_curve_beta
+  obj@upper_Cq = upper_Cq
+
   if(model_type %in% c("lmer", "zero_inf_lmer", "countr")){
-    ml = get("ml", parent.frame())
     obj@random_names = colnames(ml$rand_x)
     obj@random_groups = ml$group_names
   }
   if(model_type %in% c("zero_inf_lm", "zero_inf_lmer")){
-    obj@xz = as.data.frame(get("md", parent.frame())$Xz)
+    obj@xz = as.data.frame(md$Xz)
   }
-  
+
   obj
 }
 
@@ -289,25 +288,17 @@ eDNA_lm_shared = function(model_type,
                           ...)
 {
     md_pars = get_mod_funs(model_type, cache_dir)
-    
-    # from lm
-    mf <- match.call(expand.dots = FALSE)
-    m <- match(c("formula", "data"), names(mf), 0L)
-    mf <- mf[c(1L, m)]
+    ml = md_pars$gen_fun(formula, data)
 
-    mf[[1]] = md_pars$gen_fun
-
-    ml = eval(mf, parent.frame(1L))
-       
     # This works because Stan ignores extra input data
     md = md_pars$prep_fun(ml, std_curve_alpha, std_curve_beta,
-                          Cq_upper = upper_Cq, 
+                          Cq_upper = upper_Cq,
                           prior_int = prior_intercept,
                           prior_b = priors, rand_sd = prior_random_variance)
-    # md$y = ml$y
     fit = run_model(model = md_pars$mod,
                     data = md, ...)
-    fit = load_slots_model(fit, model_type)
+    fit = load_slots_model(fit, model_type, formula, ml, md,
+                           std_curve_alpha, std_curve_beta, upper_Cq)
     fit = as(fit, md_pars$model_class)
     
     return(fit)
@@ -338,13 +329,12 @@ get_mod_funs = function(model_type, cache_dir)
     list(mn = mn,
          mod = mod,
          gen_fun = switch(model_type,
-                          lm = quote(gen_model_list_lm),
-                          lmer = quote(gen_model_list_lmer),
-                          zero_inf_lm = quote(gen_model_list_lm_zip),
-                          zero_inf_lmer = quote(gen_model_list_lmer_zip),
-                          count = quote(gen_model_list_lm),
-                          countr = quote(gen_model_list_lmer),
-                          ),
+                          lm = gen_model_list_lm,
+                          lmer = gen_model_list_lmer,
+                          zero_inf_lm = gen_model_list_lm_zip,
+                          zero_inf_lmer = gen_model_list_lmer_zip,
+                          count = gen_model_list_lm,
+                          countr = gen_model_list_lmer),
          
          prep_fun = switch(model_type,
                            lm = prep_data.lm,

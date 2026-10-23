@@ -18,80 +18,46 @@ prep_data.lmer = function(mod_list,
     model_data$X_obs_r = mod_list$rand_x[i, , drop = FALSE]
     model_data$X_cens_r = mod_list$rand_x[!i, , drop = FALSE]
 
+    add_rand_components(mod_list, model_data, rand_sd)
+}
+
+add_rand_components = function(mod_list, model_data, rand_sd)
+  ## shared between all mixed models
+{
+    if(rand_sd$dist != "exponential")
+        stop("Only exponential priors on random effect variance supported at this time")
     model_data$K_r = mod_list$n_rand
     model_data$group = mod_list$groups
     model_data$N_grp = mod_list$n_grp
-    if(rand_sd$dist != "exponential")
-        stop("Only exponential priors on random effect variance supported at this time")
-    model_data$rand_sd = rand_sd$scale^-1    
-    return(model_data)
+    model_data$rand_sd = rand_sd$scale^-1
+    model_data
 }
 
-# This needs to be updated maybe?
 prep_data.sim = function(mod_list,
-                     alpha, beta,
-                     Cq_sd, betas, p_zero,
-                     Cq_upper = 40, rand_sd = double(0),
-                     prior_int, prior_b, error_type = "fixed")
+                         alpha, beta,
+                         Cq_sd, betas, p_zero,
+                         Cq_upper = 40, rand_sd = double(0))
 {
-        
-    has_inter = has_intercept(mod_list$x)
-    x = mod_list$x
-    idx = seq(length(mod_list$y))
-    n_below = 1
-    
-    n_vars = if(is.null(ncol(x))) 0 else ncol(x)
-    priors = prep_priors(prior_b, x, mod_list$y)
-    
-    model_data = list(y = mod_list$y,
-                      N = length(mod_list$y),
-                      n_vars = n_vars,
-                      X = as.matrix(x[idx,]),
-                      upper_Cq = Cq_upper,
-                      p_zero = p_zero,
-                      rand_sigma = as.array(rand_sd),
-                      prior_mu = priors$location,
-                      prior_sd = priors$scale,
-                      has_inter = has_inter,
-                      n_below = n_below)
+    N = length(mod_list$y)
+    if(is.null(mod_list$groups))
+        mod_list[c("n_rand", "groups", "rand_x", "n_grp")] =
+            list(0L, integer(0), matrix(double(0), N, 0), 0L)
 
-    if(length(alpha) < model_data$N)
-        alpha = rep(alpha, model_data$N)
-    if(length(beta) < model_data$N)
-        beta = rep(beta, model_data$N)
-
-    model_data$std_curve_alpha = alpha
-    model_data$std_curve_beta = beta
-    
-    model_data$prior_int_mu = prior_int$location
-    model_data$prior_int_sd = prior_int$scale
-    model_data$has_prior = 1L # for testing ifelse(length(b_prior_mu), 1, 0)
-
-    model_data$sd_vary = switch(error_type,
-                                "fixed" = 0L,
-                                "varying" = 1L,
-                                stop("CQ Error type must be either 'fixed' or 'varying'"))
-    model_data$center_Cq = 30 ## for testing
-    
-    if(is.null(mod_list$groups)){
-        model_data$has_random = 0L
-        model_data$n_rand = 0L
-        model_data$groups = as.array(integer(0))
-        model_data$rand_x = array(double(0), dim = c(nrow(mod_list$x), 0))
-        model_data$n_grp = 0L
-        model_data$rand_sigma = as.array(rand_sd)
-    } else { 
-        model_data$has_random = 1L
-        model_data$n_rand = mod_list$n_rand
-        model_data$groups = mod_list$groups
-        model_data$rand_x = mod_list$rand_x[idx,]
-        model_data$n_grp = mod_list$n_grp
-        model_data$rand_sigma = as.array(rand_sd)
-    }
-        model_data$betas = as.array(betas)
-        model_data$sigma_ln_eDNA = Cq_sd
-    
-    return(model_data)
+    list(N = N,
+         n_vars = ncol(mod_list$x),
+         X = as.matrix(mod_list$x),
+         upper_Cq = Cq_upper,
+         p_zero = p_zero,
+         std_curve_alpha = rep_len(alpha, N),
+         std_curve_beta = rep_len(beta, N),
+         has_random = as.integer(mod_list$n_rand > 0),
+         n_rand = mod_list$n_rand,
+         groups = as.array(mod_list$groups),
+         rand_x = mod_list$rand_x,
+         n_grp = mod_list$n_grp,
+         rand_sigma = as.array(rand_sd),
+         betas = as.array(betas),
+         sigma_ln_eDNA = Cq_sd)
 }
 
 remove_intercept = function(x)
@@ -158,8 +124,8 @@ prep_data.lm = function(mod_list,
                       N_obs = sum(i),
                       N_cens = sum(!i),
                       K = n_vars,
-                      X_obs = as.matrix(x[i, , drop = FALSE],),
-                      X_cens = as.matrix(x[!i, , drop = FALSE],),
+                      X_obs = as.matrix(x[i, , drop = FALSE]),
+                      X_cens = as.matrix(x[!i, , drop = FALSE]),
                       L = lower_bound[!i],
                       p_zero = prob_zero,
                       prior_mu = priors$location,
@@ -275,12 +241,5 @@ prep_data.countr = function(mod_list,
   model_data = prep_data.count(mod_list, alpha, beta, 
                                prob_zero, Cq_upper, prior_int, prior_b)
   model_data$X_r = mod_list$rand_x
-
-  model_data$K_r = mod_list$n_rand
-  model_data$group = mod_list$groups
-  model_data$N_grp = mod_list$n_grp
-  if(rand_sd$dist != "exponential")
-    stop("Only exponential priors on random effect variance supported at this time")
-  model_data$rand_sd = rand_sd$scale^-1    
-  return(model_data)
+  add_rand_components(mod_list, model_data, rand_sd)
 }

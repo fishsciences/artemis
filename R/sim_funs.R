@@ -26,8 +26,7 @@ sim_eDNA_lm = function(formula, variable_list,
              "Required: ", ncol(ml$x), "\n")
 
     md = prep_data.sim(ml, std_curve_alpha, std_curve_beta, sigma_ln_eDNA, betas,
-                       prob_zero, Cq_upper = upper_Cq,
-                       prior_int = normal(), prior_b = normal())
+                       prob_zero, Cq_upper = upper_Cq)
     mod_file = file.path(cache_dir, "eDNA_sim_omni.stan")
 
     compile_models("eDNA_sim_omni.stan", cache_dir = cache_dir, verbose = FALSE)
@@ -38,7 +37,8 @@ sim_eDNA_lm = function(formula, variable_list,
     ## hacky
     sims = as_cmdstan_fit(m$output_files(), check_diagnostics = FALSE)
     sims = as(sims, "eDNA_simulation_lm")
-    sims = load_slots(sims)
+    sims = load_slots(sims, formula, betas, variable_list, md,
+                      std_curve_alpha, std_curve_beta, upper_Cq)
     return(sims)
 }
 
@@ -198,8 +198,7 @@ sim_eDNA_lmer = function(formula, variable_list,
 
     md = prep_data.sim(ml, std_curve_alpha, std_curve_beta, sigma_ln_eDNA,
                    betas = betas, prob_zero, Cq_upper = upper_Cq,
-                   rand_sd = sigma_rand,
-                   prior_int = normal(), prior_b = normal())
+                   rand_sd = sigma_rand)
 
     mod_file = file.path(cache_dir, "eDNA_sim_omni.stan")
     compile_models("eDNA_sim_omni.stan", cache_dir = cache_dir, verbose = FALSE)
@@ -212,7 +211,8 @@ sim_eDNA_lmer = function(formula, variable_list,
     sims = as_cmdstan_fit(m$output_files(), check_diagnostics = FALSE)
                                         # hacky
     sims = as(sims, "eDNA_simulation_lmer")
-    sims = load_slots(sims)
+    sims = load_slots(sims, formula, betas, variable_list, md,
+                      std_curve_alpha, std_curve_beta, upper_Cq)
     
     return(sims)
 }
@@ -223,20 +223,17 @@ has_response = function(formula)
     attr(terms(formula), "response") > 0
 }
 
-load_slots = function(obj)
-    ## Potentially really dangerous - think about this
-
-    ## Want to avoid copying this code 2x for each sim, but
-    ## grabbing from the parent frame might bite us
+load_slots = function(obj, formula, betas, variable_list, md,
+                      std_curve_alpha, std_curve_beta, upper_Cq)
 {
-    obj@formula = get("formula", parent.frame())
-    obj@betas = get("betas", parent.frame())
-    obj@variable_levels = get("variable_list", parent.frame())
-    obj@x = as.data.frame(get("md", parent.frame())$X)
-    obj@std_curve_alpha = get("std_curve_alpha", parent.frame())
-    obj@std_curve_beta = get("std_curve_beta", parent.frame())
-    obj@upper_Cq = get("upper_Cq", parent.frame())
-    
+    obj@formula = formula
+    obj@betas = betas
+    obj@variable_levels = variable_list
+    obj@x = as.data.frame(md$X)
+    obj@std_curve_alpha = std_curve_alpha
+    obj@std_curve_beta = std_curve_beta
+    obj@upper_Cq = upper_Cq
+
     obj
 }
 
