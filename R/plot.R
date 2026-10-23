@@ -25,14 +25,7 @@ plot.eDNA_simulation = function(x, y,
                                 alpha = 0.1, jitter_width = 0.35, 
                                 ...)
 {
-    y = slot(x, response)
-    if(dim(y)[1] == 1){
-        ymn = as.vector(y)
-        yci = rep(0, length(ymn))
-    } else {
-        ymn = apply(y, 2, mean)
-        yci = apply(y, 2, quantile, probs)
-    }
+    ymn = rowMeans(slot(x, response))
     vars = colnames(x@x)
     p = lapply(vars, function(v){
         ggplot(, aes(y = ymn, x = x@x[[v]] )) +

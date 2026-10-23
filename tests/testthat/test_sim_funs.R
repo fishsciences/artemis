@@ -185,3 +185,24 @@ test_that("Simulation accuracy", {
     tt = tapply(ans@Cq_star, ans@x$distance, sd)
     expect_true(all(abs(tt[1] - 1) < 1)) # the sd of Cq should be close to 1
 })
+
+test_that("Simulations keep every draw and respect upper_Cq", {
+    v = list(distance = c(0, 15, 50), rep = 1:3, Cq = 1)
+    ans = sim_eDNA_lm(Cq ~ distance, v, betas = c(-10, -0.05),
+                      sigma_ln_eDNA = 1, std_curve_alpha = 21.2,
+                      std_curve_beta = -1.5, n_sim = 5, upper_Cq = 30)
+    expect_equal(dim(ans@Cq_star), c(9L, 5L))
+    expect_equal(dim(ans@ln_conc_hat), c(9L, 5L))
+    expect_true(max(ans@Cq_star) <= 30)
+    expect_true(any(ans@Cq_star == 30))
+    # different draws per simulation
+    expect_true(any(ans@ln_conc_hat[, 1] != ans@ln_conc_hat[, 2]))
+    expect_is(summary(ans), "data.frame")
+
+    ans = sim_eDNA_lmer(Cq ~ distance + (1|rep), v, betas = c(-10, -0.05),
+                        sigma_ln_eDNA = 1, sigma_rand = 0.5,
+                        std_curve_alpha = 21.2, std_curve_beta = -1.5,
+                        n_sim = 3, upper_Cq = 30)
+    expect_equal(dim(ans@Cq_star), c(9L, 3L))
+    expect_true(max(ans@Cq_star) <= 30)
+})

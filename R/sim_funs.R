@@ -26,10 +26,11 @@ sim_eDNA_lm = function(formula, variable_list,
              "Required: ", ncol(ml$x), "\n")
 
     md = prep_data.sim(ml, std_curve_alpha, std_curve_beta, sigma_ln_eDNA, betas,
-                       prob_zero, prior_int = normal(), prior_b = normal())
+                       prob_zero, Cq_upper = upper_Cq,
+                       prior_int = normal(), prior_b = normal())
     mod_file = file.path(cache_dir, "eDNA_sim_omni.stan")
 
-    compile_models("eDNA_sim_omni.stan", ,cache_dir, rewrite = FALSE, verbose = FALSE)
+    compile_models("eDNA_sim_omni.stan", cache_dir = cache_dir, verbose = FALSE)
     mod = cmdstan_model(mod_file)
     m = mod$sample(data = md, chains = 1L,
                       fixed_param = TRUE, iter_sampling = n_sim, iter_warmup = 0L,
@@ -192,16 +193,16 @@ sim_eDNA_lmer = function(formula, variable_list,
     if(length(sigma_rand) != ml$n_grp)
         stop("You must provide one sd for each random effect\n",
              "Provided: ", length(sigma_rand), "\n",
-             "Required: ", ncol(ml$groups), "\n",
-             "Random effects: ", colnames(ml$groups))
+             "Required: ", ml$n_grp, "\n",
+             "Random effects: ", paste(ml$group_names, collapse = ", "))
 
-    
     md = prep_data.sim(ml, std_curve_alpha, std_curve_beta, sigma_ln_eDNA,
-                   betas = betas, prob_zero, rand_sd = sigma_rand,
+                   betas = betas, prob_zero, Cq_upper = upper_Cq,
+                   rand_sd = sigma_rand,
                    prior_int = normal(), prior_b = normal())
 
     mod_file = file.path(cache_dir, "eDNA_sim_omni.stan")
-    compiled_models_ok("eDNA_sim_omni.stan", cache_dir, issue_error = TRUE)
+    compile_models("eDNA_sim_omni.stan", cache_dir = cache_dir, verbose = FALSE)
     
     mod = cmdstan_model(mod_file)
     m = mod$sample(data = md, chains = 1L,

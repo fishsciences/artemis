@@ -43,15 +43,21 @@ setAs("CmdStanMCMC_CSV", "eDNA_simulation_lmer", function(from) callNextMethod()
 setAs("CmdStanMCMC_CSV", "eDNA_simulation_lm", function(from) callNextMethod())
 
 setAs("CmdStanMCMC_CSV", "eDNA_simulation", function(from){
-  tmp = from$draws()
-  vars = dimnames(tmp)$variable
-  
-  new("eDNA_simulation", 
-      ln_conc_hat = as.matrix(tmp[1,1,grep("ln_conc_hat", vars)]),
-      ln_conc_star =  as.matrix(tmp[1,1,grep("ln_conc_star", vars)]),
-      Cq_star =  as.matrix(tmp[1,1,grep("Cq_star", vars)]))
+  tmp = unclass(from$draws(format = "draws_matrix"))
+
+  new("eDNA_simulation",
+      ln_conc_hat = sim_draws(tmp, "ln_conc_hat"),
+      ln_conc_star = sim_draws(tmp, "ln_conc_star"),
+      Cq_star = sim_draws(tmp, "Cq_star"))
 
 })
+
+sim_draws = function(draws, var)
+  # one row per observation, one column per simulation
+{
+  i = startsWith(colnames(draws), paste0(var, "["))
+  t(draws[, i, drop = FALSE])
+}
 
 if(FALSE){
 
