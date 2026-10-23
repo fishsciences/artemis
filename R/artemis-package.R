@@ -24,7 +24,7 @@
 #' @importFrom reformulas nobars
 #' @importFrom loo waic
 #' @importFrom utils head
-#' @importFrom tools R_user_dir
+#' @importFrom tools R_user_dir md5sum
 #' @importFrom bayesplot mcmc_intervals
 #' 
 "_PACKAGE"

@@ -2,6 +2,10 @@
 ##' be done before using the \code{eDNA_lm*} functions. This function
 ##' is called for its side-effects.
 ##'
+##' A cached \code{.stan} file that differs from the copy in the
+##' installed package is replaced and recompiled. This keeps the cache
+##' current after the package is updated.
+##'
 ##' @title Compile artemis models
 ##' @param model_names the names of the models to compile
 ##' @param models full file path to the location of models
@@ -10,8 +14,8 @@
 ##'     "artemis_cache_dir", otherwise defaults to the directory
 ##'     returned by \code{R_user_dir()}. If the directory does not
 ##'     exist, it will be created.
-##' @param rewrite logical, whether to re-compile the models,
-##'     overwriting previous versions.
+##' @param rewrite logical, whether to re-compile all models,
+##'     overwriting previous versions even when they are current.
 ##' @param verbose logical, if TRUE messages will report steps being
 ##'     taken
 ##' @param ... additional arguments passed to
@@ -41,14 +45,18 @@ compile_models = function(model_names = c("eDNA_lm.stan",
     is_windows = .Platform$OS.type == "windows"
     out_files = gsub("\\.stan$", ifelse(is_windows, ".exe", ""), model_files)
 
-    if(!all(file.exists(model_files)) || rewrite){
+    # refresh cached code that differs from the installed package
+    cached = unname(md5sum(model_files))
+    stale = rewrite | is.na(cached) | cached != unname(md5sum(models))
+    if(any(stale)){
         if(verbose) message("Copying .stan files to cache")
-        file.copy(models, model_files, overwrite = rewrite, ...)
+        file.copy(models[stale], model_files[stale], overwrite = TRUE)
     }
 
-    if(!all(file.exists(out_files)) || rewrite){
+    to_compile = stale | !file.exists(out_files)
+    if(any(to_compile)){
         if(verbose) message("Compiling executables")
-        m = lapply(model_files, cmdstan_model, force_recompile = rewrite, ... )
+        m = lapply(model_files[to_compile], cmdstan_model, force_recompile = TRUE, ...)
     }
 
     if(verbose) message("Models compiled and ready to use!")

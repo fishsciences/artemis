@@ -26,8 +26,8 @@ compiled models. Can be set with the option
 returned by \code{R_user_dir()}. If the directory does not
 exist, it will be created.}
 
-\item{rewrite}{logical, whether to re-compile the models,
-overwriting previous versions.}
+\item{rewrite}{logical, whether to re-compile all models,
+overwriting previous versions even when they are current.}
 
 \item{verbose}{logical, if TRUE messages will report steps being
 taken}
@@ -39,6 +39,11 @@ taken}
 This compiles the models needed for the artemis package. This must
 be done before using the \code{eDNA_lm*} functions. This function
 is called for its side-effects.
+}
+\details{
+A cached \code{.stan} file that differs from the copy in the
+installed package is replaced and recompiled. This keeps the cache
+current after the package is updated.
 }
 \author{
 Matt Espe
