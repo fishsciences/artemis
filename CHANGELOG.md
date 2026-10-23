@@ -1,5 +1,16 @@
 # artemis: ChangeLog
 
+# v3.2
+
+## 3.2.0
+
+With `autoscale = TRUE`, the prior scale on each coefficient is now
+divided by the standard deviation of its predictor, as in rstanarm.
+Previously it was multiplied, which gave predictors with a wide range
+(e.g. distance in meters) priors that were far too wide. This changes
+results from models fit with the default priors. Predictors with two
+or fewer unique values are still not scaled.
+
 # v3.1
 
 ## 3.1.0

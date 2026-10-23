@@ -59,3 +59,10 @@ test_that("remove_intercept only drops the intercept column", {
     x = cbind("(Intercept)" = 1, Intercept_dist = 1:3, b = 3:1)
     expect_equal(colnames(remove_intercept(x)), c("Intercept_dist", "b"))
 })
+
+test_that("Autoscaled priors shrink for wide predictors", {
+    x = data.frame(a = c(0, 100, 200, 300), b = c(0, 1, 0, 1))
+    y = c(1, 2, 3, 5)
+    p = prep_priors(normal(0, 1), x, y)
+    expect_equal(as.vector(p$scale), c(sd(y) / sd(x$a), sd(y)))
+})
