@@ -15,8 +15,8 @@ prep_data.lmer = function(mod_list,
                              prob_zero, Cq_upper, prior_int, prior_b)
     i = mod_list$y < Cq_upper
 
-    model_data$X_obs_r = mod_list$rand_x[i,]
-    model_data$X_cens_r = mod_list$rand_x[!i,]
+    model_data$X_obs_r = mod_list$rand_x[i, , drop = FALSE]
+    model_data$X_cens_r = mod_list$rand_x[!i, , drop = FALSE]
 
     model_data$K_r = mod_list$n_rand
     model_data$group = mod_list$groups
@@ -96,8 +96,7 @@ prep_data.sim = function(mod_list,
 
 remove_intercept = function(x)
 {
-    cnms = colnames(x)
-    i = grep("(Intercept)", cnms, invert = TRUE)
+    i = colnames(x) != "(Intercept)"
 
     x = as.data.frame(subset(x, select = i)) ## Fixes dropping names on 1 column df
     

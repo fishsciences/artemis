@@ -72,3 +72,14 @@ test_that("Error on NA", {
     expect_error(gen_model_list_lmer(mpg ~ cyl + (1|cyl), d))
     expect_error(gen_model_list_lmer(mpg ~ cyl, d))
 })
+
+test_that("Zero-inflated mixed formula requires a bar", {
+    expect_error(gen_model_list_lmer_zip(Cq ~ Distance_m + (1|FilterID), eDNA_data),
+                 "zero-inflated")
+    d = eDNA_data
+    d$Volume_mL[1] = NA
+    expect_error(gen_model_list_lmer_zip(Cq ~ Distance_m + (1|FilterID) | Volume_mL, d),
+                 "NA values")
+    ans = gen_model_list_lmer_zip(Cq ~ Distance_m + (1|FilterID) | Volume_mL, eDNA_data)
+    expect_true(all(c("x", "xz", "rand_x") %in% names(ans)))
+})

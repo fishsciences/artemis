@@ -79,6 +79,9 @@ gen_model_list_lm_zip = function(formula, data)
 
 gen_model_list_lmer_zip = function(formula, data)
 {
+  if (!identical(formula[[3]][[1]], as.name("|")))
+    stop("Please specify a zero-inflated model using `|` to separate model components.")
+
   ffr = . ~ .
   ffz = ~ .
   ffr[[2]] = formula[[2]]
@@ -87,7 +90,9 @@ gen_model_list_lmer_zip = function(formula, data)
   ffz[[2]] = formula[[3]][[3]]
 
   mfz = model.frame(ffz, data)
-  
+  if(nrow(mfz) != nrow(data))
+    stop("NA values present in response or predictor cols. Please remove NA values prior to modeling.")
+
   ## use other gen functions to parse random effects
   ans = gen_model_list_lmer(ffr, data)
   ans$xz = model.matrix(attr(mfz, "terms"), data)

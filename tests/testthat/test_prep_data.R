@@ -44,3 +44,18 @@ test_that("Count response conversion", {
     ans = suppressWarnings(prep_data.count(ml, prior_int = normal(), prior_b = normal()))
     expect_equal(ans$y, c(0L, 3L, 11L))
 })
+
+test_that("Random effect matrices stay matrices with one censored row", {
+    d = eDNA_data[1:30, ]
+    d$Cq = pmin(d$Cq, 39)
+    d$Cq[1] = 40
+    ml = gen_model_list_lmer(Cq ~ Distance_m + (1|FilterID), d)
+    md = prep_data.lmer(ml, 21.2, -1.5, 0, 40, normal(), normal(), exponential())
+    expect_true(is.matrix(md$X_cens_r))
+    expect_equal(dim(md$X_cens_r), c(1L, md$K_r))
+})
+
+test_that("remove_intercept only drops the intercept column", {
+    x = cbind("(Intercept)" = 1, Intercept_dist = 1:3, b = 3:1)
+    expect_equal(colnames(remove_intercept(x)), c("Intercept_dist", "b"))
+})
