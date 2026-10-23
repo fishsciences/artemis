@@ -3,15 +3,15 @@
 ##' Plot method for eDNA simulations which creates a separate plot of
 ##' the simulated CQ values by each of the variables, i.e. a plot of
 ##' the marginal distributions. Each plot is returned in a list of
-##' gglot objects, each of which can be further augmented. By default,
-##' the points are semi-transparant and jittered to reduce
-##' overplotting.
-##' 
+##' ggplot objects, each of which can be further augmented. By default,
+##' the points are semi-transparent and jittered to reduce
+##' overplotting. When the object holds several simulations, each
+##' point is the mean across simulations for one observation.
+##'
 ##' @title Plot method for eDNA simulations
 ##' @param x object of class eDNA_simulation
 ##' @param y ignored
 ##' @param response the response variable to plot
-##' @param probs the probability for plotting CIs
 ##' @param alpha the alpha value, i.e. transparancy, of the points
 ##' @param jitter_width the width of the jitter applied to the points
 ##' @param ... ignored
@@ -21,7 +21,6 @@
 ##' @export
 plot.eDNA_simulation = function(x, y,
                                 response = "Cq_star",
-                                probs = c(0.025, 0.975),
                                 alpha = 0.1, jitter_width = 0.35, 
                                 ...)
 {
@@ -41,7 +40,7 @@ plot.eDNA_simulation = function(x, y,
 ##' Plot eDNA model results
 ##'
 ##' Plot eDNA model results. Currently, this is just a wrapper for
-##' \code{bayesplot::mcmc_intervals}, which produces a "catapillar" plot.
+##' \code{bayesplot::mcmc_intervals}, which produces a "caterpillar" plot.
 ##' 
 ##' @title Plot eDNA model results
 ##' @param x object of class eDNA_model_*
@@ -61,7 +60,7 @@ plot.eDNA_model = function(x, y, pars = c("intercept", "betas"),  ...) {
 ##' Plot the p(detect eDNA)
 ##'
 ##' This allows the visualization of the probability of detection
-##' producted by \code{est_p_detect}. If the object includes an
+##' produced by \code{est_p_detect}. If the object includes an
 ##' interval estimate, errorbars are produced with those intervals.
 ##' 
 ##' @title Plot p(detect)

@@ -63,11 +63,11 @@ est_power_range_lm = function(formula, variable_list,
 ##' @param conf_level numeric, between 0 and 1, representing the
 ##'     percent of the confidence interval to calculate. If
 ##'     \code{probs} is not provided, then the interval is assumed to
-##'     be symetric.
+##'     be symmetric.
 ##' @param n_sim integer, the number of simulations to conduct in
 ##'     order to estimate the power.
 ##' @param probs probabilities for the calculation of the confidence
-##'     intervals. By default, a symetric set of lower and upper
+##'     intervals. By default, a symmetric set of lower and upper
 ##'     probabilities is constructed by \code{conf_to_probs})
 ##' @param upper_Cq numeric, the upper limit on CQ detection. Any
 ##'     value of log(concentration) which would result in a value

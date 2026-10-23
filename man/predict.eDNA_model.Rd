@@ -2,7 +2,6 @@
 % Please edit documentation in R/predict.R
 \name{predict.eDNA_model}
 \alias{predict.eDNA_model}
-\alias{predict.eDNA_model_lmer}
 \title{Predict eDNA model}
 \usage{
 \method{predict}{eDNA_model}(
@@ -13,8 +12,6 @@
   interval_fun = function(x) quantile(x, probs = c(0.05, 0.95)),
   ...
 )
-
-\method{predict}{eDNA_model_lmer}(object, newdata = NULL, type = c(), ...)
 }
 \arguments{
 \item{object}{an object of class eDNA_lm\{er\}}
@@ -33,8 +30,6 @@ measurement error?}
 vector of posterior samples}
 
 \item{...}{additional arguments passed to the interval function}
-
-\item{type}{the type of the prediction, MORE HERE}
 }
 \value{
 a list with elements \code{ln_conc}, \code{Cq_hat}, and

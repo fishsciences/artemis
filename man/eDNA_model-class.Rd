@@ -16,9 +16,8 @@ An S4 object holding the results of a model fit by \code{eDNA_lm*}
 \section{Slots}{
 
 \describe{
-\item{\code{ln_conc}}{matrix, the estimated latent variable, log(eDNA concentration)}
-
-\item{\code{Cq_star}}{matrix, the predicted CQ value for each obs}
+\item{\code{intercept}}{matrix, the posterior draws of the intercept, if
+the model has one}
 
 \item{\code{betas}}{matrix, the posterior estimate for each beta in the model}
 
@@ -28,7 +27,10 @@ An S4 object holding the results of a model fit by \code{eDNA_lm*}
 
 \item{\code{x}}{the model.matrix used to fit the model}
 
-\item{\code{std_curve_alpha}}{the alpha for the std. curve conversion formual used}
+\item{\code{xz}}{the model.matrix for the zero-inflation component, for
+zero-inflated models}
+
+\item{\code{std_curve_alpha}}{the alpha for the std. curve conversion formula used}
 
 \item{\code{std_curve_beta}}{the beta for the std. curve conversion formula used}
 

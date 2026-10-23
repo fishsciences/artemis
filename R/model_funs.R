@@ -95,10 +95,8 @@ eDNA_lm = function(formula, data,
 ##'     \code{\link[cmdstanr]{sample}}
 ##' @return S4 object, with the following slots:
 ##' \describe{
-##'   \item{ln_conc}{matrix, the posterior samples for the latent
-##'     variable, eDNA concentration}
-##' \item{Cq_star}{matrix, the
-##'     posterior prediction for the observed response}
+##' \item{intercept}{array, the posterior estimates for the
+##'     intercept, if the model has one}
 ##' \item{betas}{array, the posterior estimates for the betas for
 ##'     the linear model}
 ##' \item{sigma_ln_eDNA}{array, the posterior

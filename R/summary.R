@@ -102,13 +102,6 @@ summary.eDNA_model = function(object, probs = c(0.025, 0.5, 0.975), ...)
     
 }
 
-summarize_par = function(x, p)
-{
-    means = apply(x, 2, mean, simplify = TRUE)
-    qs = apply(x, 2, quantile, prob = p, simplify = TRUE)
-    rbind(mean = means, qs)
-}
-
 
 ##' Summary method for eDNA p(detect)
 ##'

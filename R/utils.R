@@ -16,7 +16,7 @@ within_accuracy = function(ci, true_betas, acc = 0.20)
 ##' Confidence level to probability
 ##'
 ##' 
-##' This is a convience function to convert from a confidence level to
+##' This is a convenience function to convert from a confidence level to
 ##' the lower and upper probability of the confidence interval.
 ##' @title Confidence to probability
 ##' @param conf numeric between 0 and 1
@@ -33,20 +33,9 @@ conf_to_probs = function(conf)
 }
 
 
-in_interval = function(ci, beta)
-{
-    beta > ci[1] & beta < ci[2]
-}
-
-
 has_intercept = function(X)
 {
     as.integer(any(grepl("\\(Intercept\\)", colnames(X))))
-}
-
-conc_thresh = function(a, b, thresh = 40)
-{
-    (thresh - a) / b
 }
 
 ##' Convenience function to convert from Cq to [eDNA]
@@ -94,22 +83,3 @@ lnconc_to_cq = function(x,
         ans[ans > upper_Cq] = upper_Cq
     ans
 }
-
-
-zero_sum_constrain = function(y)
-## R version of the sum to zero function inside the Stan models with random effects
-{
-
-  N = length(y)
-    z = rep(0, N + 1)
-    sum_w = 0
-    for (ii in 1:N) {
-      i = N - ii + 1  
-      n = i 
-      w = y[i] * (sqrt(n * (n + 1)))^-1 
-      sum_w = sum_w + w 
-      z[i] = z[i] + sum_w      
-      z[i + 1] = z[i + 1] - w * n     
-    }
-    return(z)
- }

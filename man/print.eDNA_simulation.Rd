@@ -21,7 +21,7 @@
 \item{digits}{number of digits to show}
 
 \item{show_variables}{logical, should the variable levels used in
-the simulation be displayed. This is a bit redundent, since
+the simulation be displayed. This is a bit redundant, since
 the variable levels are also displayed in the summary, but
 this can be helpful to check the results.}
 

@@ -16,7 +16,7 @@ vector of length 2
 Confidence level to probability
 }
 \details{
-This is a convience function to convert from a confidence level to
+This is a convenience function to convert from a confidence level to
 the lower and upper probability of the confidence interval.
 }
 \examples{

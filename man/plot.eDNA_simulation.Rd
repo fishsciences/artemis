@@ -4,15 +4,7 @@
 \alias{plot.eDNA_simulation}
 \title{Plot method for eDNA simulations}
 \usage{
-\method{plot}{eDNA_simulation}(
-  x,
-  y,
-  response = "Cq_star",
-  probs = c(0.025, 0.975),
-  alpha = 0.1,
-  jitter_width = 0.35,
-  ...
-)
+\method{plot}{eDNA_simulation}(x, y, response = "Cq_star", alpha = 0.1, jitter_width = 0.35, ...)
 }
 \arguments{
 \item{x}{object of class eDNA_simulation}
@@ -20,8 +12,6 @@
 \item{y}{ignored}
 
 \item{response}{the response variable to plot}
-
-\item{probs}{the probability for plotting CIs}
 
 \item{alpha}{the alpha value, i.e. transparancy, of the points}
 
@@ -39,9 +29,10 @@ Plot method for eDNA simulations
 Plot method for eDNA simulations which creates a separate plot of
 the simulated CQ values by each of the variables, i.e. a plot of
 the marginal distributions. Each plot is returned in a list of
-gglot objects, each of which can be further augmented. By default,
-the points are semi-transparant and jittered to reduce
-overplotting.
+ggplot objects, each of which can be further augmented. By default,
+the points are semi-transparent and jittered to reduce
+overplotting. When the object holds several simulations, each
+point is the mean across simulations for one observation.
 }
 \author{
 Matt Espe

@@ -30,7 +30,7 @@ loo.eDNA_model = function(x,
 ##' @author Matt Espe
 ##' @export
 waic.eDNA_model = function(x, pars = "log_lik", ...) {
-  LLarray <- get_log_lik(x@fit, pars)
+  LLarray = get_log_lik(x@fit, pars)
   waic(LLarray, ...)
 }
 

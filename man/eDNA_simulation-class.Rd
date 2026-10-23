@@ -12,9 +12,15 @@ An S4 object holding the results of \code{sim_eDNA_lm*}.
 \section{Slots}{
 
 \describe{
-\item{\code{ln_conc}}{matrix, simulated log(eDNA concentration)}
+\item{\code{ln_conc_hat}}{matrix, simulated log(eDNA concentration)
+including measurement error. One row per observation, one
+column per simulation.}
 
-\item{\code{Cq_star}}{matrx, simulated CQ star}
+\item{\code{ln_conc_star}}{matrix, expected log(eDNA concentration) from
+the predictors and random effects}
+
+\item{\code{Cq_star}}{matrix, simulated Cq values after censoring at
+\code{upper_Cq} and zero inflation}
 
 \item{\code{formula}}{the formula used}
 
@@ -24,14 +30,10 @@ An S4 object holding the results of \code{sim_eDNA_lm*}.
 
 \item{\code{x}}{the model matrix used}
 
-\item{\code{std_curve_alpha}}{the alpha for the std. curve conversion formual used}
+\item{\code{std_curve_alpha}}{the alpha for the std. curve conversion formula used}
 
 \item{\code{std_curve_beta}}{the beta for the std. curve conversion formula used}
 
 \item{\code{upper_Cq}}{the upper limit for CQ}
-
-\item{\code{groups}}{the grouping variables used}
-
-\item{\code{random_sd}}{the stdev of the random effects}
 }}
 

@@ -81,13 +81,13 @@ true betas for the accuracy estimate.}
 \item{conf_level}{numeric, between 0 and 1, representing the
 percent of the confidence interval to calculate. If
 \code{probs} is not provided, then the interval is assumed to
-be symetric.}
+be symmetric.}
 
 \item{n_sim}{integer, the number of simulations to conduct in
 order to estimate the power.}
 
 \item{probs}{probabilities for the calculation of the confidence
-intervals. By default, a symetric set of lower and upper
+intervals. By default, a symmetric set of lower and upper
 probabilities is constructed by \code{conf_to_probs})}
 
 \item{upper_Cq}{numeric, the upper limit on CQ detection. Any

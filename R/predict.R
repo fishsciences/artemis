@@ -65,18 +65,6 @@ predict.eDNA_model = function(object, newdata = NULL, include_sigma = FALSE,
               class = c("eDNA_predict_lm", class(ans)))
 }
 
-##' @param type the type of the prediction, MORE HERE
-##' @rdname predict.eDNA_model
-##' @export
-predict.eDNA_model_lmer = function(object, newdata = NULL, 
-                                   type = c(), ...)
-{
-    ans = NextMethod()
-    ## Do something with the random effects here
-    
-    return(ans)
-}
-
 lin_pred = function(X, betas, intercept)
 {
     n_draw = max(NROW(betas), NROW(intercept))
@@ -92,9 +80,4 @@ form_newdata = function(object, newdata, fm = object@formula)
         stop("Predictors in newdata do not match the model: expected ",
              paste(colnames(object@x), collapse = ", "))
     X
-}
-
-is_rand_eff = function(fm)
-{
-    sapply(fm, function(x) any(grep("\\|", as.character(x))))
 }

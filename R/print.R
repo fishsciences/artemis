@@ -10,7 +10,7 @@
 ##'     \code{summary}
 ##' @param digits number of digits to show
 ##' @param show_variables logical, should the variable levels used in
-##'     the simulation be displayed. This is a bit redundent, since
+##'     the simulation be displayed. This is a bit redundant, since
 ##'     the variable levels are also displayed in the summary, but
 ##'     this can be helpful to check the results.
 ##' @param ... additional arguments passed to \code{print}
@@ -122,7 +122,3 @@ print.eDNA_p_detect = function(x, digits = getOption("digits"), ...)
 ##' @aliases eDNA_model, ANY-method
 ##' @export
 setMethod("show", "eDNA_model", function(object) print(object))
-
-##' @rdname print.eDNA_model
-##' @export
-setMethod("show", "eDNA_model_zip", function(object) print(object))

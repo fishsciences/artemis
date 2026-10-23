@@ -41,7 +41,7 @@ Plot the p(detect eDNA)
 }
 \details{
 This allows the visualization of the probability of detection
-producted by \code{est_p_detect}. If the object includes an
+produced by \code{est_p_detect}. If the object includes an
 interval estimate, errorbars are produced with those intervals.
 }
 \author{
