@@ -37,9 +37,12 @@ vector of posterior samples}
 \item{type}{the type of the prediction, MORE HERE}
 }
 \value{
-either a vector of predictions, or a matrix with the
-    prediction plus interval, depending on the value of
-    \code{interval}
+a list with elements \code{ln_conc}, \code{Cq_hat}, and
+    \code{Cq_star}. Each is a matrix with one row per observation.
+    With \code{interval = FALSE}, each column is one posterior
+    draw. With \code{interval = TRUE}, the columns are the output
+    of \code{interval_fun}. \code{Cq_star} is \code{NULL} unless
+    \code{include_sigma = TRUE}.
 }
 \description{
 Predict values for eDNA model

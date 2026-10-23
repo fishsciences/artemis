@@ -8,8 +8,8 @@ test_that("Model predictions",{
 
     ans2 = predict(dd, interval = TRUE)
     expect_is(ans2, "eDNA_predict_lm")
-    expect_true(length(ans2$ln_conc) == 2)
-    expect_true(length(ans2$Cq_hat) == 2)
+    expect_equal(dim(ans2$ln_conc), c(nrow(eDNA_data), 2L))
+    expect_equal(dim(ans2$Cq_hat), c(nrow(eDNA_data), 2L))
     expect_true(is.null(ans$Cq_star))
 
     ans3 = predict(dd, interval = TRUE, include_sigma = TRUE)
@@ -25,5 +25,18 @@ test_that("Model predictions",{
 
 
     ans5 = predict(dd, include_sigma = TRUE)
+
+    # each column is one posterior draw
+    j = 7
+    manual = as.matrix(dd@x) %*% dd@betas[j,] + dd@intercept[j]
+    expect_equal(as.vector(ans$ln_conc[, j]), as.vector(manual))
+    expect_equal(as.vector(ans4$ln_conc[2, j]),
+                 unname(dd@intercept[j] + 50 * dd@betas[j, 1]))
+
+    # measurement error varies across draws, not only across rows
+    noise = ans5$Cq_star[1, ] - ans5$Cq_hat[1, ]
+    expect_true(length(unique(noise)) > 1)
+
+    expect_error(predict(dd, newdata = data.frame(Volume_mL = 1)))
     
 })
