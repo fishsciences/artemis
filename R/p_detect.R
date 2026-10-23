@@ -83,11 +83,11 @@ est_p_detect_lm = function(variable_levels,
 {
     if(!is.null(dim(variable_levels)))
         stop("Sorry, only one set of variable levels at a time currently supported")
+    if(missing(betas) && is.null(model_fit))
+        stop("Must provide either a set of beta values or a model_fit object")
     if((is.null(model_fit) && length(variable_levels) != length(betas)) ||
        (!is.null(model_fit) && length(variable_levels) != ncol(model_fit@betas)) )
         stop("Variable levels and betas cannot be of different lengths")
-    if(missing(betas) && is.null(model_fit))
-        stop("Must provide either a set of beta values or a model_fit object")
 
     if(!missing(betas)) {
         if(!is.null(model_fit)) dup_arg_warn("beta")
@@ -128,7 +128,6 @@ est_p_detect_lm = function(variable_levels,
     }
     
     lower_bound = (upper_Cq - std_curve_alpha) / std_curve_beta
-    Cq_hat = ln_conc_hat * std_curve_beta + std_curve_alpha
     ans = prob_detect_ln(ln_conc_hat, ln_eDNA_sd, n_rep, prob_zero, lower_bound)
 
     structure(ans,
@@ -147,11 +146,11 @@ est_p_detect_count = function(variable_levels,
 {
     if(!is.null(dim(variable_levels)))
         stop("Sorry, only one set of variable levels at a time currently supported")
+    if(missing(betas) && is.null(model_fit))
+        stop("Must provide either a set of beta values or a model_fit object")
     if((is.null(model_fit) && length(variable_levels) != length(betas)) ||
        (!is.null(model_fit) && length(variable_levels) != ncol(model_fit@betas)) )
         stop("Variable levels and betas cannot be of different lengths")
-    if(missing(betas) && is.null(model_fit))
-        stop("Must provide either a set of beta values or a model_fit object")
 
     if(!missing(betas)) {
       if(!is.null(model_fit)) dup_arg_warn("beta")

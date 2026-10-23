@@ -72,4 +72,6 @@ test_that("Summary methods: predict", {
                         std_curve_alpha = 21.2, std_curve_beta = -1.5)
     ans = predict(model_fit)
     expect_is(summary(ans), "list")
+    expect_true(withVisible(summary(ans))$visible)
+    expect_equal(dim(summary(ans)$ln_conc), c(nrow(eDNA_data), 3L))
 })

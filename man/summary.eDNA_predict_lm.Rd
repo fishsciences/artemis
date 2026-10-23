@@ -7,19 +7,22 @@
 \method{summary}{eDNA_predict_lm}(object, probs = c(0.025, 0.5, 0.975), FUN = quantile, ...)
 }
 \arguments{
-\item{object}{an object of class eDNA_p_detect}
+\item{object}{an object of class eDNA_predict_lm, from \code{predict}}
 
-\item{probs}{probabilities for summary, passed to \code{quantile}}
+\item{probs}{probabilities for summary, passed to \code{FUN}}
 
 \item{FUN}{a function to apply to the predictions}
 
 \item{...}{additional arguments passed to FUN}
 }
 \value{
-data.frame
+list with elements \code{ln_conc}, \code{Cq_hat}, and
+    \code{Cq_star}. Each is a matrix with one row per observation
+    and one column per value returned by \code{FUN}. If the
+    predictions already hold intervals, they are returned as is.
 }
 \description{
-Summarizes predictions into a simple data.frame.
+Summarizes the posterior draws of each prediction.
 }
 \author{
 Matt Espe

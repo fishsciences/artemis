@@ -71,3 +71,12 @@ test_that("Count models", {
 
 
 
+
+test_that("Missing betas and model_fit gives a clear error", {
+    expect_error(est_p_detect_lm(variable_levels = c(Intercept = 1),
+                                 ln_eDNA_sd = 1, std_curve_alpha = 21.2,
+                                 std_curve_beta = -1.5),
+                 "Must provide either")
+    expect_error(est_p_detect_count(variable_levels = c(Intercept = 1)),
+                 "Must provide either")
+})

@@ -134,29 +134,28 @@ summary.eDNA_p_detect = function(object, probs = c(0.025, 0.5, 0.975), ...)
     as.data.frame(cbind(n_rep = attr(object, "reps"), mean = mn, t(ci)))
 }
 
-##' Summarizes predictions into a simple data.frame.
+##' Summarizes the posterior draws of each prediction.
 ##'
 ##' @title Summarize predictions
-##' @param object an object of class eDNA_p_detect
-##' @param probs probabilities for summary, passed to \code{quantile}
+##' @param object an object of class eDNA_predict_lm, from \code{predict}
+##' @param probs probabilities for summary, passed to \code{FUN}
 ##' @param FUN a function to apply to the predictions
 ##' @param ... additional arguments passed to FUN
-##' @return data.frame
+##' @return list with elements \code{ln_conc}, \code{Cq_hat}, and
+##'     \code{Cq_star}. Each is a matrix with one row per observation
+##'     and one column per value returned by \code{FUN}. If the
+##'     predictions already hold intervals, they are returned as is.
 ##' @author Matt Espe
 ##' @export
 summary.eDNA_predict_lm = function(object, probs = c(0.025, 0.5, 0.975),
                                    FUN = quantile, ...)
 {
-    ll = if(!attr(object, "interval")){
-             lapply(object, function(x) {
-                 if(is.null(x)) return(NULL)
-                 t(apply(x, 1, FUN, probs, ...))
-             })
-         } else {
-             object
-         }
-    
-    
+    if(attr(object, "interval"))
+        return(unclass(object))
+    lapply(object, function(x) {
+        if(is.null(x)) return(NULL)
+        t(apply(x, 1, FUN, probs, ...))
+    })
 }
 
 
