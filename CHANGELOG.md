@@ -11,6 +11,47 @@ Previously it was multiplied, which gave predictors with a wide range
 results from models fit with the default priors. Predictors with two
 or fewer unique values are still not scaled.
 
+The `sim_eDNA_lm()` and `sim_eDNA_lmer()` functions now return every
+simulation. Before, only the first was kept, whatever the value of
+`n_sim`. The simulated matrices have one row per observation and one
+column per simulation. The simulations also respect `upper_Cq`, which
+was fixed at 40. With several simulations, the `summary()` method pools
+all of them and the `plot()` method shows the mean for each
+observation.
+
+The `predict()` method now matches each intercept draw to its own
+column of predictions. Before, the draws were misaligned. With
+`include_sigma = TRUE`, measurement error is drawn separately for each
+posterior draw. The `newdata` argument is converted with the model
+formula, so factors, interactions, and transformed predictors work.
+With `interval = TRUE`, each element is a matrix of per-observation
+intervals.
+
+The `eDNA_lm()` and `eDNA_zinf_lm()` functions now use the `cache_dir`
+argument. Before, they always used the default cache.
+
+The `compile_models()` function replaces and recompiles any cached
+model whose Stan code differs from the installed package. Recompiling
+by hand after an update is no longer needed.
+
+The `summary()` method for model fits now reports quantiles at
+`probs`. Summary measures passed in `...` still replace the defaults.
+The `loo()` method passes `...` on to the fit.
+
+Mixed models with a single censored or a single observed row no longer
+fail when the data are passed to Stan. A predictor whose name contains
+"Intercept" is no longer dropped from the model. The
+`eDNA_zinf_lmer()` function requires the `|` that separates the
+zero-inflation formula.
+
+The `est_p_detect_lm()` and `est_p_detect_count()` functions raise a
+clear error when neither `betas` nor `model_fit` is given.
+
+Slots that were never filled are removed. These are `ln_conc` and
+`Cq_star` on model fits, `z_intercept`, `z_betas`, and `x_zip` on
+zero-inflated fits, and `groups` and `random_sd` on mixed-model
+simulations.
+
 # v3.1
 
 ## 3.1.0
