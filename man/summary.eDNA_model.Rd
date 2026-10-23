@@ -10,15 +10,18 @@
 \item{object}{an object of class eDNA_model_*}
 
 \item{probs}{probabilities for the quantiles of the posterior
-samples}
+samples. Ignored when summary measures are given in \code{...}.}
 
-\item{...}{currently ignored}
+\item{...}{optional summary measures passed to the
+\code{$summary()} method of the cmdstanr fit, replacing the
+defaults}
 }
 \value{
 data.frame, with summary of the fixed effects from the
-    model. For models with random effects, the standard deviation
-    of each group of random effects is included as
-    \code{sd(<group>)}.
+    model. By default, the columns are the mean, sd, quantiles at
+    \code{probs}, and convergence diagnostics. For models with
+    random effects, the standard deviation of each group of random
+    effects is included as \code{sd(<group>)}.
 }
 \description{
 Summary of eDNA model

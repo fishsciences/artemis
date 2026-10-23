@@ -13,7 +13,7 @@ loo.eDNA_model = function(x,
 ## Based on LOO documentation https://mc-stan.org/loo/reference/loo.html
 {
   ## loo(as.matrix(get_log_lik(x@fit)))
-  x@fit$loo()
+  x@fit$loo(...)
 }
 
 

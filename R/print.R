@@ -78,7 +78,7 @@ print.eDNA_model = function(x, digits = getOption("digits", 3), ...)
       cat("\nZero-Inflated Model Parameter estimates:\n")
       print(subset(tmp, grepl("\\*$", variable)), digits = digits, row.names = FALSE, ...)
       } else {
-        print(summary(x, ...), digits = digits, row.names = FALSE, ...)
+        print(tmp, digits = digits, row.names = FALSE, ...)
       }
     invisible(x)
 }

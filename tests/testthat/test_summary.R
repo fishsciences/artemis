@@ -40,8 +40,12 @@ test_that("Summary methods: model", {
     expect_is(res, "data.frame")
 
     ## expect_true(nrow(res) == ncol(ans@betas) + 2)
-    expect_true(ncol(res) == 10)
-    
+    expect_true(ncol(res) == 9)
+    expect_true(all(c("2.5%", "50%", "97.5%") %in% names(res)))
+
+    res3 = summary(ans, probs = c(0.1, 0.9))
+    expect_true(all(c("10%", "90%") %in% names(res3)))
+
     res2 = summary(ans, quantiles = ~quantile(.x, probs = 0.5))
 
     expect_true(ncol(res2) == 2)

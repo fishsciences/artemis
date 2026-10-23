@@ -57,19 +57,24 @@ summary.eDNA_simulation = function(object, var = "Cq_star",
 ##' @title Summary of an eDNA model
 ##' @param object an object of class eDNA_model_*
 ##' @param probs probabilities for the quantiles of the posterior
-##'     samples
-##' @param ... currently ignored
+##'     samples. Ignored when summary measures are given in \code{...}.
+##' @param ... optional summary measures passed to the
+##'     \code{$summary()} method of the cmdstanr fit, replacing the
+##'     defaults
 ##' @return data.frame, with summary of the fixed effects from the
-##'     model. For models with random effects, the standard deviation
-##'     of each group of random effects is included as
-##'     \code{sd(<group>)}.
+##'     model. By default, the columns are the mean, sd, quantiles at
+##'     \code{probs}, and convergence diagnostics. For models with
+##'     random effects, the standard deviation of each group of random
+##'     effects is included as \code{sd(<group>)}.
 ##'
 ##' @author Matt Espe
 ##' @method summary eDNA_model
 ##' @export
 summary.eDNA_model = function(object, probs = c(0.025, 0.5, 0.975), ...)
 {
-  res = as.data.frame(object@fit$summary(...))
+  measures = if(...length()) list(...) else
+    list("mean", "sd", ~quantile(.x, probs = probs), "rhat", "ess_bulk", "ess_tail")
+  res = as.data.frame(do.call(object@fit$summary, c(list(NULL), measures)))
 
   #remove thetas and log_lik to avoid confusion
   res = res[!grepl("thetas\\[|log_lik\\[|lp__|_raw\\[|rand_betas", res$variable),]
