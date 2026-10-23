@@ -9,7 +9,7 @@ est_power_lm(
   formula,
   variable_list,
   betas,
-  sigma_Cq,
+  sigma_ln_eDNA,
   std_curve_alpha,
   std_curve_beta,
   type = c("exclude_zero", "accuracy"),
@@ -18,15 +18,17 @@ est_power_lm(
   n_sim = 200L,
   probs = conf_to_probs(conf_level),
   upper_Cq = 40,
+  prob_zero = 0.08,
   X = expand.grid(variable_list),
-  verbose = FALSE
+  verbose = FALSE,
+  ...
 )
 
 est_power_lmer(
   formula,
   variable_list,
   betas,
-  sigma_Cq,
+  sigma_ln_eDNA,
   sigma_rand,
   std_curve_alpha,
   std_curve_beta,
@@ -36,8 +38,10 @@ est_power_lmer(
   n_sim = 200L,
   probs = conf_to_probs(conf_level),
   upper_Cq = 40,
+  prob_zero = 0.08,
   X = expand.grid(variable_list),
-  verbose = FALSE
+  verbose = FALSE,
+  ...
 )
 }
 \arguments{
@@ -55,7 +59,7 @@ are ignored.}
 \item{betas}{numeric vector, the beta for each variable in the
 design matrix}
 
-\item{sigma_Cq}{numeric, the measurement error on CQ.}
+\item{sigma_ln_eDNA}{numeric, the measurement error on ln[eDNA].}
 
 \item{std_curve_alpha}{the alpha value for the formula for
 converting between log(eDNA concentration) and CQ value}
@@ -88,6 +92,10 @@ probabilities is constructed by \code{conf_to_probs})}
 value of log(concentration) which would result in a value
 greater than this limit is instead recorded as the limit.}
 
+\item{prob_zero}{numeric, between 0 and 1. The probability of a
+non-detection from the zero-inflated process in the
+simulations.}
+
 \item{X}{optional, a design matrix. By default, this is created
 from the variable_list using \code{expand.grid()}, which
 creates a balanced design matrix. However, the user can
@@ -98,12 +106,16 @@ unbalanced design matrix.}
 \item{verbose}{logical, when TRUE output from
 \code{cmdstanr::sample} is written to the console.}
 
+\item{...}{additional arguments passed to \code{eDNA_lm} or
+\code{eDNA_lmer} when fitting each simulated dataset, e.g.
+\code{chains} or \code{iter_sampling}}
+
 \item{sigma_rand}{numeric vector, the stdev for the random
 effects. There must be one sigma per random effect specified}
 }
 \value{
 a named vector, with one estimate of the power for each
-    parameter estimate.
+    coefficient, including the intercept.
 }
 \description{
 Estimate the power for a given eDNA design

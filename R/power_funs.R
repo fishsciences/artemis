@@ -1,45 +1,51 @@
 
 ##' @rdname est_power_lmer
 est_power_lm = function(formula, variable_list,
-                     betas, sigma_Cq,
+                     betas, sigma_ln_eDNA,
                      std_curve_alpha, std_curve_beta,
                      type = c("exclude_zero", "accuracy"),
-                     accuracy_level = 0.2, 
+                     accuracy_level = 0.2,
                      conf_level = 0.95,
                      n_sim = 200L,
                      probs = conf_to_probs(conf_level),
                      upper_Cq = 40,
+                     prob_zero = 0.08,
                      X = expand.grid(variable_list),
-                     verbose = FALSE)
+                     verbose = FALSE,
+                     ...)
 {
-    if(!type %in% c("exclude_zero", "accuracy"))
-        stop("Invalid type: ", type)
-    
+    type = match.arg(type)
     sims = sim_eDNA_lm(formula, variable_list,
-                       betas, sigma_Cq,
-                       std_curve_alpha, std_curve_beta,
-                       n_sim, upper_Cq,
-                       X, verbose)
+                       betas = betas, sigma_ln_eDNA = sigma_ln_eDNA,
+                       std_curve_alpha = std_curve_alpha,
+                       std_curve_beta = std_curve_beta,
+                       n_sim = n_sim, upper_Cq = upper_Cq,
+                       prob_zero = prob_zero, X = X, verbose = verbose)
+    est_power_shared(sims, eDNA_lm, X, type, accuracy_level, probs,
+                     std_curve_alpha = std_curve_alpha,
+                     std_curve_beta = std_curve_beta,
+                     upper_Cq = upper_Cq, ...)
+}
 
-    ans = lapply(seq(n_sim), function(i) {
-        fit = eDNA_lm(formula,
-                      cbind(sims@x, Cq = sims@Cq_star[i,]),
-                      std_curve_alpha = std_curve_alpha,
-                      std_curve_beta = std_curve_beta,
-                      upper_Cq = upper_Cq, n_chain = 4, iters = 500)
-        as.data.frame(t(apply(fit@betas, 2, quantile, probs)),
-                      row.names = colnames(fit@x))
+est_power_shared = function(sims, fit_fun, X, type, accuracy_level, probs, ...)
+{
+    resp = all.vars(sims@formula[[2]])
+    hits = sapply(seq_len(ncol(sims@Cq_star)), function(i) {
+        X[[resp]] = sims@Cq_star[, i]
+        ci = power_ci(fit_fun(sims@formula, X, ...), probs)
+        if(type == "exclude_zero") excludes_zero(ci)
+        else within_accuracy(ci, sims@betas, accuracy_level)
     })
+    ans = rowMeans(matrix(hits, nrow = length(sims@betas)))
+    names(ans) = colnames(sims@x)
+    ans
+}
 
-    res = if(type == "exclude_zero"){
-              lapply(ans, excludes_zero)
-          } else { 
-              lapply(ans, function(x) within_accuracy(x, betas, accuracy_level))
-          }
-    
-    res = do.call(cbind, res)
-    
-    return(rowSums(res)/ncol(res))
+power_ci = function(fit, probs)
+  # posterior interval per coefficient, intercept first
+{
+    post = do.call(cbind, Filter(length, list(fit@intercept, fit@betas)))
+    t(apply(post, 2, quantile, probs))
 }
 
 ##' Estimate the power for a given eDNA design
@@ -72,7 +78,7 @@ est_power_lm = function(formula, variable_list,
 ##'     are ignored.
 ##' @param betas numeric vector, the beta for each variable in the
 ##'     design matrix
-##' @param sigma_Cq numeric, the measurement error on CQ.
+##' @param sigma_ln_eDNA numeric, the measurement error on ln[eDNA].
 ##' @param sigma_rand numeric vector, the stdev for the random
 ##'     effects. There must be one sigma per random effect specified
 ##' @param std_curve_alpha the alpha value for the formula for
@@ -98,6 +104,9 @@ est_power_lm = function(formula, variable_list,
 ##' @param upper_Cq numeric, the upper limit on CQ detection. Any
 ##'     value of log(concentration) which would result in a value
 ##'     greater than this limit is instead recorded as the limit.
+##' @param prob_zero numeric, between 0 and 1. The probability of a
+##'     non-detection from the zero-inflated process in the
+##'     simulations.
 ##' @param X optional, a design matrix. By default, this is created
 ##'     from the variable_list using \code{expand.grid()}, which
 ##'     creates a balanced design matrix. However, the user can
@@ -106,49 +115,38 @@ est_power_lm = function(formula, variable_list,
 ##'     unbalanced design matrix.
 ##' @param verbose logical, when TRUE output from
 ##'     \code{cmdstanr::sample} is written to the console.
+##' @param ... additional arguments passed to \code{eDNA_lm} or
+##'     \code{eDNA_lmer} when fitting each simulated dataset, e.g.
+##'     \code{chains} or \code{iter_sampling}
 ##' @return a named vector, with one estimate of the power for each
-##'     parameter estimate.
+##'     coefficient, including the intercept.
 ##' @author Matt Espe
 est_power_lmer = function(formula, variable_list,
-                          betas, sigma_Cq,
+                          betas, sigma_ln_eDNA,
                           sigma_rand,
                           std_curve_alpha, std_curve_beta,
                           type = c("exclude_zero", "accuracy"),
-                          accuracy_level = 0.2, 
+                          accuracy_level = 0.2,
                           conf_level = 0.95,
                           n_sim = 200L,
                           probs = conf_to_probs(conf_level),
                           upper_Cq = 40,
+                          prob_zero = 0.08,
                           X = expand.grid(variable_list),
-                          verbose = FALSE)
+                          verbose = FALSE,
+                          ...)
 {
-    if(!type %in% c("exclude_zero", "accuracy"))
-        stop("Invalid type: ", type)
-    
+    type = match.arg(type)
     sims = sim_eDNA_lmer(formula, variable_list,
-                         betas, sigma_Cq, sigma_rand,
-                         std_curve_alpha, std_curve_beta,
-                         n_sim, upper_Cq,
-                         X, verbose)
-
-    ans = lapply(seq(n_sim), function(i) {
-        fit = eDNA_lmer(formula,
-                        cbind(sims@x, Cq = sims@Cq_star[i,]),
-                        std_curve_alpha = std_curve_alpha,
-                        std_curve_beta = std_curve_beta,
-                        upper_Cq = upper_Cq, n_chain = 4, iters = 500)
-        as.data.frame(t(apply(fit@betas, 2, quantile, probs)),
-                      row.names = colnames(fit@x))
-    })
-    
-    res = if(type == "exclude_zero"){
-              lapply(ans, excludes_zero)
-          } else { 
-              lapply(ans, function(x) within_accuracy(x, betas, accuracy_level))
-          }
-    
-    res = do.call(cbind, res)
-    
-    return(rowSums(res)/ncol(res))
+                         betas = betas, sigma_ln_eDNA = sigma_ln_eDNA,
+                         sigma_rand = sigma_rand,
+                         std_curve_alpha = std_curve_alpha,
+                         std_curve_beta = std_curve_beta,
+                         n_sim = n_sim, upper_Cq = upper_Cq,
+                         prob_zero = prob_zero, X = X, verbose = verbose)
+    est_power_shared(sims, eDNA_lmer, X, type, accuracy_level, probs,
+                     std_curve_alpha = std_curve_alpha,
+                     std_curve_beta = std_curve_beta,
+                     upper_Cq = upper_Cq, ...)
 }
 

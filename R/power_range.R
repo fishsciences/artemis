@@ -1,25 +1,26 @@
 ##' @rdname est_power_range_lmer
 est_power_range_lm = function(formula, variable_list,
-                     betas, sigma_Cq,
+                     betas, sigma_ln_eDNA,
                      std_curve_alpha, std_curve_beta,
                      type = c("exclude_zero", "accuracy"),
                      rep_range = seq(2, 20, 2),
-                     accuracy_level = 0.2, 
+                     accuracy_level = 0.2,
                      conf_level = 0.95,
                      n_sim = 200L,
                      probs = conf_to_probs(conf_level),
                      upper_Cq = 40,
-                     verbose = FALSE)
+                     verbose = FALSE,
+                     ...)
 {
     ans = lapply(rep_range, function(i){
         variable_list$rep = seq(i)
-        
-        est_power_lm(formula, 
-                     variable_list, 
-                     betas, sigma_Cq, 
-                     std_curve_alpha, std_curve_beta, type,
-                     accuracy_level, conf_level, n_sim,
-                     probs, upper_Cq, expand.grid(variable_list), verbose)
+        est_power_lm(formula, variable_list,
+                     betas = betas, sigma_ln_eDNA = sigma_ln_eDNA,
+                     std_curve_alpha = std_curve_alpha,
+                     std_curve_beta = std_curve_beta, type = type,
+                     accuracy_level = accuracy_level, n_sim = n_sim,
+                     probs = probs, upper_Cq = upper_Cq,
+                     X = expand.grid(variable_list), verbose = verbose, ...)
     })
     names(ans) = paste("n_rep:", rep_range)
     ans
@@ -42,7 +43,7 @@ est_power_range_lm = function(formula, variable_list,
 ##'     are ignored.
 ##' @param betas numeric vector, the beta for each variable in the
 ##'     design matrix
-##' @param sigma_Cq numeric, the measurement error on CQ.
+##' @param sigma_ln_eDNA numeric, the measurement error on ln[eDNA].
 ##' @param sigma_rand numeric vector, the stdev for the random
 ##'     effects. There must be one sigma per random effect specified
 ##' @param std_curve_alpha the alpha value for the formula for
@@ -54,8 +55,9 @@ est_power_range_lm = function(formula, variable_list,
 ##'     confidence interval for the estimate ("significant"). Accuracy
 ##'     measures whether the estimated betas are within some
 ##'     percentage of the "true" betas used to simulate the data.
-##' @param rep_range vector, a set of the number of iterations to
-##'     calculate the power for
+##' @param rep_range vector, the numbers of replicates to calculate
+##'     the power for. Each value sets the variable \code{rep} in
+##'     \code{variable_list} to \code{1:n}.
 ##' @param accuracy_level numeric, between 0 and 1. The percent of the
 ##'     true betas for the accuracy estimate.
 ##' @param conf_level numeric, between 0 and 1, representing the
@@ -72,32 +74,35 @@ est_power_range_lm = function(formula, variable_list,
 ##'     greater than this limit is instead recorded as the limit.
 ##' @param verbose logical, when TRUE output from
 ##'     \code{cmdstanr::sample} is written to the console.
+##' @param ... additional arguments passed to \code{eDNA_lm} or
+##'     \code{eDNA_lmer} when fitting each simulated dataset
 ##' @return list, with each element a vector for the estimated power
 ##'     for each parameter for the corresponding number of replicates.
 ##' @author Matt Espe
 est_power_range_lmer = function(formula, variable_list,
-                                betas, sigma_Cq,
+                                betas, sigma_ln_eDNA,
                                 sigma_rand,
                                 std_curve_alpha, std_curve_beta,
                                 type = c("exclude_zero", "accuracy"),
                                 rep_range = seq(2, 20, 2),
-                                accuracy_level = 0.2, 
+                                accuracy_level = 0.2,
                                 conf_level = 0.95,
                                 n_sim = 200L,
                                 probs = conf_to_probs(conf_level),
                                 upper_Cq = 40,
-                                verbose = FALSE)
+                                verbose = FALSE,
+                                ...)
 {
     ans = lapply(rep_range, function(i){
         variable_list$rep = seq(i)
-        
-        est_power_lmer(formula,
-                       variable_list,
-                       betas, sigma_Cq,
-                       sigma_rand,
-                       std_curve_alpha, std_curve_beta, type,
-                       accuracy_level, conf_level, n_sim,
-                       probs, upper_Cq, verbose)
+        est_power_lmer(formula, variable_list,
+                       betas = betas, sigma_ln_eDNA = sigma_ln_eDNA,
+                       sigma_rand = sigma_rand,
+                       std_curve_alpha = std_curve_alpha,
+                       std_curve_beta = std_curve_beta, type = type,
+                       accuracy_level = accuracy_level, n_sim = n_sim,
+                       probs = probs, upper_Cq = upper_Cq,
+                       X = expand.grid(variable_list), verbose = verbose, ...)
     })
     names(ans) = paste("n_rep:", rep_range)
     ans

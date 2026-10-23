@@ -9,7 +9,7 @@ est_power_range_lm(
   formula,
   variable_list,
   betas,
-  sigma_Cq,
+  sigma_ln_eDNA,
   std_curve_alpha,
   std_curve_beta,
   type = c("exclude_zero", "accuracy"),
@@ -19,14 +19,15 @@ est_power_range_lm(
   n_sim = 200L,
   probs = conf_to_probs(conf_level),
   upper_Cq = 40,
-  verbose = FALSE
+  verbose = FALSE,
+  ...
 )
 
 est_power_range_lmer(
   formula,
   variable_list,
   betas,
-  sigma_Cq,
+  sigma_ln_eDNA,
   sigma_rand,
   std_curve_alpha,
   std_curve_beta,
@@ -37,7 +38,8 @@ est_power_range_lmer(
   n_sim = 200L,
   probs = conf_to_probs(conf_level),
   upper_Cq = 40,
-  verbose = FALSE
+  verbose = FALSE,
+  ...
 )
 }
 \arguments{
@@ -55,7 +57,7 @@ are ignored.}
 \item{betas}{numeric vector, the beta for each variable in the
 design matrix}
 
-\item{sigma_Cq}{numeric, the measurement error on CQ.}
+\item{sigma_ln_eDNA}{numeric, the measurement error on ln[eDNA].}
 
 \item{std_curve_alpha}{the alpha value for the formula for
 converting between log(eDNA concentration) and CQ value}
@@ -69,8 +71,9 @@ confidence interval for the estimate ("significant"). Accuracy
 measures whether the estimated betas are within some
 percentage of the "true" betas used to simulate the data.}
 
-\item{rep_range}{vector, a set of the number of iterations to
-calculate the power for}
+\item{rep_range}{vector, the numbers of replicates to calculate
+the power for. Each value sets the variable \code{rep} in
+\code{variable_list} to \code{1:n}.}
 
 \item{accuracy_level}{numeric, between 0 and 1. The percent of the
 true betas for the accuracy estimate.}
@@ -93,6 +96,9 @@ greater than this limit is instead recorded as the limit.}
 
 \item{verbose}{logical, when TRUE output from
 \code{cmdstanr::sample} is written to the console.}
+
+\item{...}{additional arguments passed to \code{eDNA_lm} or
+\code{eDNA_lmer} when fitting each simulated dataset}
 
 \item{sigma_rand}{numeric vector, the stdev for the random
 effects. There must be one sigma per random effect specified}

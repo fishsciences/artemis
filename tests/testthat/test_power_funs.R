@@ -94,33 +94,30 @@ test_that("P-detect: numeric", {
 })
 
 
-if(FALSE){ #These can take a really long time to run
-    
-test_that("Power function", {
-    ans = est_power_lm(Cq ~ 1 + distance,
-                       variable_list = list(Cq = 1, distance = c(0,100,300), rep = 1:3),
-                       betas = c(intercept = -10.6, distance = -0.05),
-                       sigma_Cq = 1, sigma_rep = 0.5,
-                       std_curve_alpha = 21.2, std_curve_beta = -1.5, n_sim = 5,
-                       type = "exclude_zero")
+test_that("Power functions", {
+    skip_on_cran()
+    v = list(Cq = 1, distance = c(0, 100, 300), rep = 1:3)
+    fast = list(chains = 1, iter_warmup = 200, iter_sampling = 200,
+                show_messages = FALSE, refresh = 0)
 
-    ans = est_power_lm(Cq ~ 1 + distance,
-                    variable_list = list(Cq = 1, distance = c(0,100,300), rep = 1:20),
-                    betas = c(intercept = -10.6, distance = -0.05),
-                    sigma_Cq = 1, sigma_rep = 0.5,
-                    std_curve_alpha = 21.2, std_curve_beta = -1.5, n_sim = 5,
-                    type = "exclude_zero")
+    ans = do.call(artemis:::est_power_lm,
+                  c(list(Cq ~ distance, v, betas = c(-10.6, -0.01),
+                         sigma_ln_eDNA = 1, std_curve_alpha = 21.2,
+                         std_curve_beta = -1.5, n_sim = 2), fast))
+    expect_equal(names(ans), c("(Intercept)", "distance"))
+    expect_true(all(ans >= 0 & ans <= 1))
 
-    lapply(seq(2, 20, 2), function(i){
-    ans = est_power_lm(Cq ~ 1 + distance,
-                    variable_list = list(Cq = 1, distance = c(0,50,75,100,300), rep = 1:i),
-                    betas = c(intercept = -10.6, distance = -0.04),
-                    sigma_Cq = 1, sigma_rep = 0.5,
-                    std_curve_alpha = 21.2, std_curve_beta = -1.5, n_sim = 200,
-                    type = "accuracy")
-    })
- 
+    ans = do.call(artemis:::est_power_lmer,
+                  c(list(Cq ~ distance + (1|rep), v, betas = c(-10.6, -0.01),
+                         sigma_ln_eDNA = 1, sigma_rand = 0.5,
+                         std_curve_alpha = 21.2, std_curve_beta = -1.5,
+                         type = "accuracy", n_sim = 2), fast))
+    expect_equal(length(ans), 2L)
 
+    ans = do.call(artemis:::est_power_range_lm,
+                  c(list(Cq ~ distance, v, betas = c(-10.6, -0.01),
+                         sigma_ln_eDNA = 1, std_curve_alpha = 21.2,
+                         std_curve_beta = -1.5, rep_range = c(2, 4),
+                         n_sim = 1), fast))
+    expect_equal(names(ans), c("n_rep: 2", "n_rep: 4"))
 })
-
-}

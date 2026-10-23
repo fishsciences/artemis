@@ -1,13 +1,17 @@
 
+# ci: c(lower, upper), or one row per parameter with lower, upper columns
 excludes_zero = function(ci)
 {
-    ci[2] < 0 | ci[1] > 0
+    ci = matrix(unlist(ci), ncol = 2)
+    ci[, 2] < 0 | ci[, 1] > 0
 }
 
 within_accuracy = function(ci, true_betas, acc = 0.20)
 {
-    ci[1] > true_betas * (1 - acc) &
-        ci[2] < true_betas * (1 + acc)
+    ci = matrix(unlist(ci), ncol = 2)
+    lwr = pmin(true_betas * (1 - acc), true_betas * (1 + acc))
+    upr = pmax(true_betas * (1 - acc), true_betas * (1 + acc))
+    ci[, 1] > lwr & ci[, 2] < upr
 }
 ##' Confidence level to probability
 ##'

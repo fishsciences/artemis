@@ -14,6 +14,10 @@ test_that("Interval funs", {
 
     expect_true(within_accuracy(c(0.9, 1.1), 1))
     expect_true(!within_accuracy(c(0.5, 1.5), 1))
+    expect_true(within_accuracy(c(-1.1, -0.9), -1))
+    expect_true(!within_accuracy(c(-1.5, -0.5), -1))
+    expect_equal(within_accuracy(rbind(c(0.9, 1.1), c(-1.1, -0.9)), c(1, -1)),
+                 c(TRUE, TRUE))
 
     expect_true(in_interval(c(0.5, 1.5), 1))
     expect_true(!in_interval(c(0.5, 1.5), 1.75))
