@@ -45,9 +45,13 @@ compile_models = function(model_names = c("eDNA_lm.stan",
     is_windows = .Platform$OS.type == "windows"
     out_files = gsub("\\.stan$", ifelse(is_windows, ".exe", ""), model_files)
 
+    source_md5 = unname(md5sum(models))
+    if(anyNA(source_md5))
+        stop("Stan model files not found: ", paste(models[is.na(source_md5)], collapse = ", "))
+
     # refresh cached code that differs from the installed package
     cached = unname(md5sum(model_files))
-    stale = rewrite | is.na(cached) | cached != unname(md5sum(models))
+    stale = rewrite | is.na(cached) | cached != source_md5
     if(any(stale)){
         if(verbose) message("Copying .stan files to cache")
         file.copy(models[stale], model_files[stale], overwrite = TRUE)

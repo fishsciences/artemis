@@ -330,8 +330,7 @@ get_mod_funs = function(model_type, cache_dir)
     # Not sure about this - will recompile the models
     # but gets around issue with checks and installs
     compile_models(model_names = mn,
-                   cache_dir,
-                   rewrite = FALSE,
+                   cache_dir = cache_dir,
                    verbose = FALSE)
     
     mod = cmdstan_model(mod_file)
