@@ -45,6 +45,14 @@ eDNA_lm = function(formula, data,
 ##' "Model Types in artemis" for a more detailed explanation of the
 ##' differences and appropriate use cases for each model.
 ##'
+##' @section Random effects:
+##'
+##' Random effects use the lme4 formula syntax. Each term gets its own
+##' standard deviation, and the effects within a term sum to zero. A
+##' block such as \code{(1 + x | site)} is fit without a correlation
+##' between the intercepts and slopes. It is the same model as
+##' \code{(1 + x || site)}.
+##'
 ##' @section Diagnosing warning and error messages:
 ##' 
 ##' The models have been written in Stan with key focus on robustness

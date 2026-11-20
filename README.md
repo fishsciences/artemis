@@ -61,6 +61,9 @@ The `cmdstanr` package provides an interface to the shell tool
 install_cmdstan()
 ```
 
+The artemis models need CmdStan 2.37.0 or newer. The
+`cmdstan_version()` function reports the installed version.
+
 ### Verify `cmdstanr` toolchain
 
 If `cmdstanr` and `cmdstan` were both installed correctly, the

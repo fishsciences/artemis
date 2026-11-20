@@ -2,6 +2,26 @@
 
 # v3.2
 
+## Development version
+
+Random slopes in the mixed models now fit the intended model. For a
+term such as `(1 + x | site)`, the intercepts and the slopes each sum
+to zero and each get their own standard deviation. Before, the
+constraint and the standard deviations were applied to a mix of
+intercept and slope effects. Models with only random intercepts are
+unchanged. This affects `eDNA_lmer()`, `eDNA_zinf_lmer()`, and
+`eDNA_count_lmer()`.
+
+A random slope on a predictor with negative values no longer stops
+with a Stan size error.
+
+For models with random slopes, the `ranef()` method now lists all
+levels of one term before the next term (all intercepts, then all
+slopes).
+
+The models now need CmdStan 2.37.0 or newer. The `compile_models()`
+function stops with a message if an older version is installed.
+
 ## 3.2.0
 
 With `autoscale = TRUE`, the prior scale on each coefficient is now
