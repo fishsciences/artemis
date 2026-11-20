@@ -74,9 +74,10 @@ print.eDNA_model = function(x, digits = getOption("digits", 3), ...)
     cat("\nParameter estimates:\n")
     
     if(inherits(x, "eDNA_model_zip")){
-      print(subset(tmp, !grepl("\\*$", variable)), digits = digits, row.names = FALSE, ...)
+      zi = grepl("\\*$", tmp$variable)  # zero-inflation terms end in "*"
+      print(tmp[!zi, ], digits = digits, row.names = FALSE, ...)
       cat("\nZero-Inflated Model Parameter estimates:\n")
-      print(subset(tmp, grepl("\\*$", variable)), digits = digits, row.names = FALSE, ...)
+      print(tmp[zi, ], digits = digits, row.names = FALSE, ...)
       } else {
         print(tmp, digits = digits, row.names = FALSE, ...)
       }
