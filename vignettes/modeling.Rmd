@@ -199,7 +199,8 @@ This is a collection of advice for modeling eDNA data with the
 ## Other information
 
 The underlying [Stan](https://mc-stan.org) models are compiled on install. Thereafter, the models will not need
-to be re-compiled. The model's Stan code can be found in the `artemis` source code [here](https://github.com/fishsciences/artemis/tree/main/inst/stan). 
+to be re-compiled. The model's Stan code can be found in the `artemis` source code [here](https://github.com/fishsciences/artemis/tree/main/inst/stan).
+Code shared by several models is kept in the `include/` folder there.
 
 
 <br>

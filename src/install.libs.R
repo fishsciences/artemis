@@ -15,6 +15,8 @@ dir.create(bin_stan, recursive = TRUE, showWarnings = FALSE)
 stan_files = list.files(file.path("..", "inst", "stan"), pattern = "\\.stan$",
                         full.names = TRUE)
 file.copy(stan_files, bin_stan, overwrite = TRUE)
+file.copy(file.path("..", "inst", "stan", "include"), bin_stan, recursive = TRUE,
+          overwrite = TRUE)
 
 v = if(requireNamespace("cmdstanr", quietly = TRUE))
         cmdstanr::cmdstan_version(error_on_NA = FALSE)
@@ -28,7 +30,8 @@ if(grepl("devtools_install_", R_PACKAGE_DIR, fixed = TRUE)) {
 } else {
     for(f in file.path(bin_stan, basename(stan_files))) {
         message("Compiling ", basename(f))
-        tryCatch(cmdstanr::cmdstan_model(f, force_recompile = TRUE),
+        tryCatch(cmdstanr::cmdstan_model(f, force_recompile = TRUE,
+                                         include_paths = file.path(bin_stan, "include")),
                  error = function(e)
                      message("Compiling ", basename(f), " failed; ",
                              "it will be compiled on first use:\n",

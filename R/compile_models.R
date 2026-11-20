@@ -7,13 +7,16 @@
 ##'
 ##' A cached \code{.stan} file that differs from the copy in the
 ##' installed package is replaced and recompiled. This keeps the cache
-##' current after the package is updated. Use \code{rewrite = TRUE} to
+##' current after the package is updated. The models share code kept in
+##' separate include files. When any of those files changes, every
+##' requested model is recompiled. Use \code{rewrite = TRUE} to
 ##' force a rebuild of the cached models. To rebuild the models compiled
 ##' at install (e.g. after CmdStan is updated), reinstall artemis.
 ##'
 ##' @title Compile artemis models
 ##' @param model_names the names of the models to compile
 ##' @param models full file path to the location of models
+##' @param include_dir directory of Stan files shared by the models
 ##' @param cache_dir a directory to store the Stan model code and
 ##'     compiled models. Can be set with the option
 ##'     "artemis_cache_dir", otherwise defaults to the directory
@@ -37,6 +40,8 @@ compile_models = function(model_names = c("eDNA_lm.stan",
                                           "eDNA_sim_omni.stan"),
                           models = system.file("stan", model_names,
                                                package = "artemis"),
+                          include_dir = system.file("stan", "include",
+                                                    package = "artemis"),
                           cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache")),
                           rewrite = FALSE,
                           verbose = TRUE, ...)
@@ -51,16 +56,17 @@ compile_models = function(model_names = c("eDNA_lm.stan",
     }
     
     model_files = file.path(cache_dir, model_names)
-    is_windows = .Platform$OS.type == "windows"
-    out_files = gsub("\\.stan$", ifelse(is_windows, ".exe", ""), model_files)
+    out_files = exe_name(model_files)
 
     source_md5 = unname(md5sum(models))
     if(anyNA(source_md5))
         stop("Stan model files not found: ", paste(models[is.na(source_md5)], collapse = ", "))
 
-    # refresh cached code that differs from the installed package
+    # refresh cached code that differs from the installed package;
+    # a changed include file makes every model stale
     cached = unname(md5sum(model_files))
-    stale = rewrite | is.na(cached) | cached != source_md5
+    includes_changed = sync_includes(include_dir, file.path(cache_dir, "include"))
+    stale = rewrite | includes_changed | is.na(cached) | cached != source_md5
     if(any(stale)){
         if(verbose) message("Copying .stan files to cache")
         file.copy(models[stale], model_files[stale], overwrite = TRUE)
@@ -69,7 +75,8 @@ compile_models = function(model_names = c("eDNA_lm.stan",
     to_compile = stale | !file.exists(out_files)
     if(any(to_compile)){
         if(verbose) message("Compiling executables")
-        m = lapply(model_files[to_compile], cmdstan_model, force_recompile = TRUE, ...)
+        m = lapply(model_files[to_compile], cmdstan_model, force_recompile = TRUE,
+                   include_paths = file.path(cache_dir, "include"), ...)
     }
 
     if(verbose) message("Models compiled and ready to use!")
@@ -133,7 +140,23 @@ get_model = function(model_name, cache_dir, exe = installed_exe(model_name))
     if(file.exists(exe))
         return(cmdstan_model(exe_file = exe))
     compile_models(model_name, cache_dir = cache_dir, verbose = FALSE)
-    cmdstan_model(file.path(cache_dir, model_name))
+    cmdstan_model(exe_file = file.path(cache_dir, exe_name(model_name)))
+}
+
+# copy Stan include files into the cache; TRUE if any were new or changed
+sync_includes = function(include_dir, cache_include_dir)
+{
+    rel = list.files(include_dir, recursive = TRUE)
+    if(!length(rel))
+        stop("Stan include files not found in: ", include_dir)
+    src = file.path(include_dir, rel)
+    dest = file.path(cache_include_dir, rel)
+    changed = unname(md5sum(src)) != unname(md5sum(dest))
+    changed = is.na(changed) | changed # NA: not yet cached
+    for(d in unique(dirname(dest[changed])))
+        dir.create(d, recursive = TRUE, showWarnings = FALSE)
+    file.copy(src[changed], dest[changed], overwrite = TRUE)
+    any(changed)
 }
 
                           

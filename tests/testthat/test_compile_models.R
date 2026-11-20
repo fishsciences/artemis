@@ -15,6 +15,13 @@ test_that("Compile models", {
     expect_equal(unname(tools::md5sum(file.path(td, mn))),
                  unname(tools::md5sum(system.file("stan", mn, package = "artemis"))))
 
+    # an outdated cached include file is replaced
+    inc = file.path("normal", "mu.stan")
+    cat("// outdated\n", file = file.path(td, "include", inc), append = TRUE)
+    compile_models(mn, cache_dir = td, verbose = FALSE)
+    expect_equal(unname(tools::md5sum(file.path(td, "include", inc))),
+                 unname(tools::md5sum(system.file("stan", "include", inc, package = "artemis"))))
+
     # without an install-time executable, the model compiles into the cache
     td2 = file.path(tempdir(), "artemis_fallback")
     mod = artemis:::get_model(mn, td2, exe = file.path(td2, "missing"))

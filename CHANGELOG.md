@@ -20,6 +20,13 @@ The censored models no longer fail when the data have exactly one
 observed or one censored row. This affected the power simulations at
 random.
 
+The Stan models now share common code through include files in
+`inst/stan/include/`. The models are mathematically unchanged. A fit
+with a fixed seed can still give different draws than earlier versions
+because of floating-point rounding. When a cached include file is out
+of date, the `compile_models()` function recompiles every requested
+model.
+
 # v3.2
 
 ## 3.2.1

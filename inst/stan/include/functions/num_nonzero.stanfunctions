@@ -1,0 +1,9 @@
+  // number of nonzero entries in a matrix
+  int num_nonzero(matrix m) {
+    int ans = 0;
+    for (i in 1:rows(m))
+      for (j in 1:cols(m))
+        if (m[i, j] != 0)
+          ans += 1;
+    return ans;
+  }

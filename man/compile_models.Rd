@@ -9,6 +9,7 @@ compile_models(
     "eDNA_lmer_zinf.stan", "eDNA_pois_lm.stan", "eDNA_pois_lmer.stan",
     "eDNA_sim_omni.stan"),
   models = system.file("stan", model_names, package = "artemis"),
+  include_dir = system.file("stan", "include", package = "artemis"),
   cache_dir = getOption("artemis_cache_dir", R_user_dir("artemis", "cache")),
   rewrite = FALSE,
   verbose = TRUE,
@@ -19,6 +20,8 @@ compile_models(
 \item{model_names}{the names of the models to compile}
 
 \item{models}{full file path to the location of models}
+
+\item{include_dir}{directory of Stan files shared by the models}
 
 \item{cache_dir}{a directory to store the Stan model code and
 compiled models. Can be set with the option
@@ -46,7 +49,9 @@ is called for its side-effects.
 \details{
 A cached \code{.stan} file that differs from the copy in the
 installed package is replaced and recompiled. This keeps the cache
-current after the package is updated. Use \code{rewrite = TRUE} to
+current after the package is updated. The models share code kept in
+separate include files. When any of those files changes, every
+requested model is recompiled. Use \code{rewrite = TRUE} to
 force a rebuild of the cached models. To rebuild the models compiled
 at install (e.g. after CmdStan is updated), reinstall artemis.
 }
