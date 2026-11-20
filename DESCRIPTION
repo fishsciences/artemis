@@ -30,8 +30,7 @@ Suggests:
     knitr,
     rmarkdown,
 	markdown,
-	rstanarm,
-    covr
+	rstanarm
 Remotes: stan-dev/cmdstanr
 Additional_repositories: https://mc-stan.org/r-packages/
 VignetteBuilder: knitr
