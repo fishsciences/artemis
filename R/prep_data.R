@@ -121,13 +121,14 @@ prep_data.lm = function(mod_list,
     # to length N
     if(length(lower_bound) == 1) lower_bound = rep(lower_bound, length(ln_eDNA))
     
-    model_data = list(y_obs = ln_eDNA[i],
+    # as.array: length-1 vectors must reach Stan as arrays, not scalars
+    model_data = list(y_obs = as.array(ln_eDNA[i]),
                       N_obs = sum(i),
                       N_cens = sum(!i),
                       K = n_vars,
                       X_obs = as.matrix(x[i, , drop = FALSE]),
                       X_cens = as.matrix(x[!i, , drop = FALSE]),
-                      L = lower_bound[!i],
+                      L = as.array(lower_bound[!i]),
                       p_zero = prob_zero,
                       prior_mu = priors$location,
                       prior_sd = priors$scale,

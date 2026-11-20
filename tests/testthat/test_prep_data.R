@@ -90,3 +90,14 @@ test_that("Autoscaled priors shrink for wide predictors", {
     p = prep_priors(normal(0, 1), x, y)
     expect_equal(as.vector(p$scale), c(sd(y) / sd(x$a), sd(y)))
 })
+
+test_that("Single observed or censored row reaches Stan as an array", {
+    d = data.frame(Cq = c(40, 30, 40), x = 1:3)
+    md = prep_data.lm(gen_model_list_lm(Cq ~ x, d), 21, -1.5, Cq_upper = 40,
+                      prior_int = normal(), prior_b = normal())
+    expect_false(is.null(dim(md$y_obs)))
+    d$Cq = c(30, 40, 30)
+    md = prep_data.lm(gen_model_list_lm(Cq ~ x, d), 21, -1.5, Cq_upper = 40,
+                      prior_int = normal(), prior_b = normal())
+    expect_false(is.null(dim(md$L)))
+})

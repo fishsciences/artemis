@@ -16,6 +16,10 @@ models compiled at install.
 The install script is adapted from the instantiate package by William
 Michael Landau.
 
+The censored models no longer fail when the data have exactly one
+observed or one censored row. This affected the power simulations at
+random.
+
 # v3.2
 
 ## 3.2.1
