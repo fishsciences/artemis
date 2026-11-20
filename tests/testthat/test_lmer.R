@@ -2,10 +2,7 @@ if(FALSE){
 library(artemis)
 ## library(elaphos)
 
-# make sure model is up-to-date
-compile_models()
-
-m = eDNA_lmer(Cq ~ Distance_m + (1|FilterID), eDNA_data, 21, -1.5)
+m =eDNA_lmer(Cq ~ Distance_m + (1|FilterID), eDNA_data, 21, -1.5)
 m
 loo(m)
 ranef(m)
@@ -42,7 +39,6 @@ m3 = eDNA_lm(Cq ~ Distance_m + Volume_mL, eDNA_data, 21, -1.5,
              priors = normal(1, c(0.02, 0.01)))
 m3
 
-compile_models("eDNA_lm_zinf.stan")
 m4 = artemis:::eDNA_zinf_lm(Cq ~ Distance_m + Volume_mL, eDNA_data, 21, -1.5)
 m4
 loo(m4)

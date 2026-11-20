@@ -15,18 +15,19 @@ compiled_models_ok(
 compiled models. On Windows platforms, the extension "exe" is
 added}
 
-\item{cache_dir}{directory where the compiled models should be
-found.}
+\item{cache_dir}{directory where the cached compiled models should
+be found.}
 
 \item{issue_error}{logical, if TRUE an error will be raised if the
-models are not all found in the specified cache_dir}
+models are not all found}
 }
 \value{
 logical, TRUE if the compiled models were found and FALSE
     otherwise
 }
 \description{
-Checks if the pre-compiled models for the artemis package exist.
+Checks if the pre-compiled models for the artemis package exist,
+either from the package installation or in the cache directory.
 }
 \examples{
 {

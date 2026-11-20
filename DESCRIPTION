@@ -1,6 +1,6 @@
 Package: artemis
 Title: Analysis and Simulation of Environmental DNA Experiments
-Version: 3.2.1
+Version: 3.3.0
 Authors@R: c(person(given = "Matt", family = "Espe",
 		   role = c("aut", "cre"),
 		   email = "mespe@ucdavis.edu"),
@@ -36,4 +36,4 @@ Remotes: stan-dev/cmdstanr
 Additional_repositories: https://mc-stan.org/r-packages/
 VignetteBuilder: knitr
 Biarch: true
-Config/roxygen2/version: 8.1.0
+Config/roxygen2/version: 8.1.1

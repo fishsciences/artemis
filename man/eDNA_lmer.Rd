@@ -111,10 +111,10 @@ scaled by the sd of the predictors similar to rstanarm handles
 them.}
 
 \item{cache_dir}{a directory which stores the Stan model code and
-compiled models. This directory can be set up and the models
-compiled via \code{compile_models()}.  Can be set with the
-option "artemis_cache_dir", otherwise defaults to the
-directory returned by \code{R_user_dir()}.}
+compiled models when they were not compiled at install. See
+\code{compile_models()}. Can be set with the option
+"artemis_cache_dir", otherwise defaults to the directory
+returned by \code{R_user_dir()}.}
 
 \item{...}{additional arguments passed to
 \code{\link[cmdstanr]{sample}}}

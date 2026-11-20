@@ -1,5 +1,4 @@
 context("LOO")
-compile_models()
 
 ans = eDNA_lm(Cq ~ Distance_m, eDNA_data,
               std_curve_alpha = 21.2, std_curve_beta = -1.5)

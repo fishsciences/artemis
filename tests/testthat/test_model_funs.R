@@ -155,8 +155,9 @@ test_that("Count model", {
 })
 
 test_that("cache_dir is forwarded by every model function", {
-    # a cache_dir under a regular file cannot be created, so a used
-    # cache_dir must error
+    # cache_dir is only used without install-time executables; a
+    # cache_dir under a regular file cannot be created, so a used one errors
+    local_mocked_bindings(installed_exe = function(model_name) "")
     f = tempfile()
     file.create(f)
     bad_dir = file.path(f, "cache")

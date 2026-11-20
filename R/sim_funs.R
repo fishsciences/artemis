@@ -27,10 +27,7 @@ sim_eDNA_lm = function(formula, variable_list,
 
     md = prep_data.sim(ml, std_curve_alpha, std_curve_beta, sigma_ln_eDNA, betas,
                        prob_zero, Cq_upper = upper_Cq)
-    mod_file = file.path(cache_dir, "eDNA_sim_omni.stan")
-
-    compile_models("eDNA_sim_omni.stan", cache_dir = cache_dir, verbose = FALSE)
-    mod = cmdstan_model(mod_file)
+    mod = get_model("eDNA_sim_omni.stan", cache_dir)
     m = mod$sample(data = md, chains = 1L,
                       fixed_param = TRUE, iter_sampling = n_sim, iter_warmup = 0L,
                       show_messages = verbose)
@@ -118,8 +115,8 @@ sim_eDNA_lm = function(formula, variable_list,
 ##'     unbalanced design matrix.
 ##' @param verbose logical, when TRUE output from
 ##'     \code{cmdstanr::sample} is written to the console.
-##' @param cache_dir the cache directory where pre-compiled models are
-##'     stored. Defaults to the output of
+##' @param cache_dir the cache directory for compiled models, used when
+##'     they were not compiled at install. Defaults to the output of
 ##'     \code{tools::R_user_dir("artemis", "cache")}
 ##' @return S4 object of class "eDNA_simulation_\{lm/lmer\}" with the
 ##'     following slots:
@@ -200,10 +197,7 @@ sim_eDNA_lmer = function(formula, variable_list,
                    betas = betas, prob_zero, Cq_upper = upper_Cq,
                    rand_sd = sigma_rand)
 
-    mod_file = file.path(cache_dir, "eDNA_sim_omni.stan")
-    compile_models("eDNA_sim_omni.stan", cache_dir = cache_dir, verbose = FALSE)
-    
-    mod = cmdstan_model(mod_file)
+    mod = get_model("eDNA_sim_omni.stan", cache_dir)
     m = mod$sample(data = md, chains = 1L,
                    fixed_param = TRUE, iter_sampling = n_sim, iter_warmup = 0L,
                    show_messages = verbose)

@@ -14,4 +14,10 @@ test_that("Compile models", {
     compile_models(mn, cache_dir = td, verbose = FALSE)
     expect_equal(unname(tools::md5sum(file.path(td, mn))),
                  unname(tools::md5sum(system.file("stan", mn, package = "artemis"))))
+
+    # without an install-time executable, the model compiles into the cache
+    td2 = file.path(tempdir(), "artemis_fallback")
+    mod = artemis:::get_model(mn, td2, exe = file.path(td2, "missing"))
+    expect_true(file.exists(file.path(td2, artemis:::exe_name(mn))))
+    expect_true(inherits(mod, "CmdStanModel"))
 })

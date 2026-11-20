@@ -95,10 +95,10 @@ eDNA_lm = function(formula, data,
 ##'     scaled by the sd of the predictors similar to rstanarm handles
 ##'     them.
 ##' @param cache_dir a directory which stores the Stan model code and
-##'     compiled models. This directory can be set up and the models
-##'     compiled via \code{compile_models()}.  Can be set with the
-##'     option "artemis_cache_dir", otherwise defaults to the
-##'     directory returned by \code{R_user_dir()}.
+##'     compiled models when they were not compiled at install. See
+##'     \code{compile_models()}. Can be set with the option
+##'     "artemis_cache_dir", otherwise defaults to the directory
+##'     returned by \code{R_user_dir()}.
 ##' @param ... additional arguments passed to
 ##'     \code{\link[cmdstanr]{sample}}
 ##' @return S4 object, with the following slots:
@@ -322,15 +322,7 @@ get_mod_funs = function(model_type, cache_dir)
                 countr = "eDNA_pois_lmer.stan",
                 stop("Unknown model type"))
     
-    mod_file = file.path(cache_dir, mn)
-
-    # Not sure about this - will recompile the models
-    # but gets around issue with checks and installs
-    compile_models(model_names = mn,
-                   cache_dir = cache_dir,
-                   verbose = FALSE)
-    
-    mod = cmdstan_model(mod_file)
+    mod = get_model(mn, cache_dir)
     
     list(mn = mn,
          mod = mod,

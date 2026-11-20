@@ -79,8 +79,8 @@ unbalanced design matrix.}
 \item{verbose}{logical, when TRUE output from
 \code{cmdstanr::sample} is written to the console.}
 
-\item{cache_dir}{the cache directory where pre-compiled models are
-stored. Defaults to the output of
+\item{cache_dir}{the cache directory for compiled models, used when
+they were not compiled at install. Defaults to the output of
 \code{tools::R_user_dir("artemis", "cache")}}
 
 \item{sigma_rand}{numeric vector, the stdev for the random

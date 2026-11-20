@@ -2,7 +2,6 @@ if(FALSE){
 library(artemis)
 library(tools)
 
-compile_models("eDNA_lm_zinf.stan")
 
 ##no zip - should error
 assertError(eDNA_zinf_lm(Cq ~ Distance_m + Volume_mL, eDNA_data, 21, -1.5,
@@ -32,7 +31,6 @@ m = eDNA_zinf_lm(Cq ~ 1 | z,df , 21, -1.5, parallel_chains = 4L)
 summary(plogis(m@fit$draws(variables = "nz_beta[1]", format = "draws_df")[[1]]))
 
 
-compile_models("eDNA_lmer_zinf.stan")
 
 m5 = eDNA_zinf_lmer(Cq ~ Distance_m + Volume_mL + (1|FilterID) | 1, eDNA_data, 21, -1.5,
                                    parallel_chains = 4L, adapt_delta = 0.99)

@@ -110,14 +110,10 @@ devtools::install_github("fishsciences/artemis")
 
 ```
 
-### Compile the `artemis` models
-
-The models included in `artemis` are not compiled on install - they
-must be compiled via a second step following installation:
-
-``` 
-artemis::compile_models()
-```
+The `artemis` models are compiled during installation, which takes a
+few minutes. CmdStan must be installed first for this to work. If
+CmdStan was missing at install time, each model is compiled the first
+time it is used and saved for later sessions.
 
 ### Testing your `artemis` installation
 
@@ -151,7 +147,7 @@ There are many moving pieces in the `artemis` package and several things can go 
    
 2. If using RStudio, close and re-open RStudio. RStudio can occasionally induce interpreter errors.
 
-3. Recompile the models with `compile_models(rewrite = TRUE)`. Since `artemis` caches model executives, these can become out of date when packages update.
+3. Reinstall `artemis` to recompile the models. The compiled models depend on the CmdStan installation they were built with, so they can stop working after CmdStan is updated or removed. If you did not have CmdStan when you installed `artemis`, run `compile_models(rewrite = TRUE)` instead.
 
 4. Restart your computer.
 

@@ -1,8 +1,6 @@
 if(FALSE){
 library(artemis)
 
-# make sure model is up-to-date
-compile_models("eDNA_lm.stan")
 
 m = eDNA_lm(Cq ~ Distance_m, eDNA_data, 21, -1.5, parallel_chains = 4L)
 m
@@ -32,7 +30,6 @@ m3 = eDNA_lm(Cq ~ Distance_m + Volume_mL, eDNA_data, 21, -1.5,
              priors = normal(1, c(0.02, 0.01)), parallel_chains = 4L)
 m3
 
-## compile_models("eDNA_lm_zinf.stan")
 
 m4 = artemis:::eDNA_zinf_lm(Cq ~ Distance_m + Volume_mL, eDNA_data, 21, -1.5, parallel_chains = 4L)
 m4

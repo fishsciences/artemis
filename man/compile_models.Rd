@@ -36,14 +36,19 @@ taken}
 \code{cmdstanr::cmdstan_model()}}
 }
 \description{
-This compiles the models needed for the artemis package. This must
-be done before using the \code{eDNA_lm*} functions. This function
+This compiles the artemis models into a cache directory. Most users
+do not need to call it. The models are compiled when the package is
+installed, as long as CmdStan is already installed at that time.
+When those compiled models are missing, the modeling and simulation
+functions call this function themselves on first use. This function
 is called for its side-effects.
 }
 \details{
 A cached \code{.stan} file that differs from the copy in the
 installed package is replaced and recompiled. This keeps the cache
-current after the package is updated.
+current after the package is updated. Use \code{rewrite = TRUE} to
+force a rebuild of the cached models. To rebuild the models compiled
+at install (e.g. after CmdStan is updated), reinstall artemis.
 }
 \author{
 Matt Espe

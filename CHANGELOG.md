@@ -1,5 +1,21 @@
 # artemis: ChangeLog
 
+# v3.3
+
+## 3.3.0
+
+The models are now compiled when the package is installed, so the
+separate `compile_models()` step is no longer needed. CmdStan must be
+installed before `artemis` for this to happen. If it is not, or a
+model fails to compile, the install still succeeds and each model is
+compiled into the cache directory the first time it is used. The
+`compile_models()` function remains available to build or rebuild the
+cached models. The `compiled_models_ok()` function now also finds the
+models compiled at install.
+
+The install script is adapted from the instantiate package by William
+Michael Landau.
+
 # v3.2
 
 ## 3.2.1
