@@ -36,6 +36,10 @@ compile_models = function(model_names = c("eDNA_lm.stan",
                           rewrite = FALSE,
                           verbose = TRUE, ...)
 {
+    if(package_version(cmdstan_version()) < "2.37.0")
+        stop("artemis requires CmdStan 2.37.0 or newer; found ", cmdstan_version(),
+             ". Update with cmdstanr::install_cmdstan()")
+
     if(!dir.exists(cache_dir)) {
         if(verbose) message("Creating cache directory: ", cache_dir)
         dir.create(cache_dir, recursive = TRUE)

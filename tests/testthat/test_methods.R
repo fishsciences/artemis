@@ -19,6 +19,30 @@ test_that("Random effects", {
     expect_true(tail(res$variable, 1) == "sd((Intercept):Distance_m)")
 })
 
+test_that("Random slopes: effects sum to zero within each term", {
+    skip_on_cran()
+    d = eDNA_data
+    # centered, so the slope column has negative values
+    d$dist_c = d$Distance_m - mean(d$Distance_m)
+    m = eDNA_lmer(Cq ~ dist_c + (1 + dist_c | FilterID), d,
+                  std_curve_alpha = 21.2, std_curve_beta = -1.5,
+                  seed = 1, chains = 1, refresh = 0)
+
+    rr = ranef(m)
+    term = sub("\\[.*", "", rownames(rr))
+    expect_equal(unique(term), m@random_groups)
+    expect_false(is.unsorted(match(term, m@random_groups)))
+
+    draws = unclass(m@fit$draws("rand_betas", format = "draws_matrix"))
+    g = match(term, m@random_groups)
+    # draws are stored to 6 significant digits, so allow relative rounding
+    sums = rowsum(t(draws), g)
+    expect_true(max(abs(sums) / rowsum(t(abs(draws)), g)) < 1e-5)
+
+    res = summary(m)
+    expect_true(all(paste0("sd(", m@random_groups, ")") %in% res$variable))
+})
+
 test_that("Random effects: zero-inflated and count models", {
     d = eDNA_data
     d$count = ceiling(12.9 - 0.367 * d$Cq)

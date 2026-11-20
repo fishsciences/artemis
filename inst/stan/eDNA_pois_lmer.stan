@@ -3,29 +3,12 @@
 */
 
 functions {
-
-  /**
-   * Get the component size. Assumes the componenets are contiguous
-   * required for segmented sum to zero.
-   */
-  array[] int component_size(array[] int grp){
-	int N = size(grp);
-	int K = max(grp);
-	array[K] int ans = zeros_int_array(K);
-	
-	for(n in 1:N){
-	  ans[grp[n]] += 1;
-	}
-
-	return ans;
-  }
-
   // Adapted from https://github.com/mitzimorris/geomed_2024/blob/main/stan/bym2_multicomp.stan
   /**
    * Component-wise constrain sum-to-zero vectors
    *
    * @param phi unconstrained vector of zero-sum slices
-   * @param sizes component sizes
+   * @param sizes component sizes; components must be contiguous
    * @return vector phi_ozs, the vector whose slices sum to zero
    */
   vector zero_sum_components(vector phi, array[] int sizes) {
@@ -35,33 +18,11 @@ functions {
     for (i in 1:size(sizes)) {
       int n = sizes[i];
       phi_ozs[idx_ozs : (idx_ozs + n - 1)] = 
-        zero_sum_constrain(segment(phi, idx_phi, n - 1));
+        sum_to_zero_constrain(segment(phi, idx_phi, n - 1));
       idx_phi += n - 1;
       idx_ozs += n;
     }
     return phi_ozs;
-  }
-
-  // From https://github.com/mitzimorris/geomed_2024/blob/main/stan/bym2_multicomp.stan
-  /**
-   * Constrain sum-to-zero vector
-   *
-   * @param y unconstrained zero-sum parameters
-   * @return vector z, the vector whose slices sum to zero
-   */
-  vector zero_sum_constrain(vector y) {
-    int N = num_elements(y);
-    vector[N + 1] z = zeros_vector(N + 1);
-    real sum_w = 0;
-    for (ii in 1:N) {
-      int i = N - ii + 1; 
-      real n = i;
-      real w = y[i] * inv_sqrt(n * (n + 1));
-      sum_w += w;
-      z[i] += sum_w;     
-      z[i + 1] -= w * n;    
-    }
-    return z;
   }
 }
 
@@ -84,16 +45,12 @@ data {
   // Random effects
   int<lower=1> K_r; // must have at least one 
   int<lower=1> N_grp;
-  array[K_r] int<lower=1,upper=N_grp> group;
+  array[K_r] int<lower=1,upper=N_grp> group; // contiguous by group
+  array[N_grp] int<lower=1> grp_size;
   matrix[N, K_r] X_r;
     
   array[N] int<lower=0> y;
   
-}
-
-transformed data {
-  // Random affect group sizes
-  array[N_grp] int comp_sizes = component_size(group);
 }
 
 parameters {
@@ -104,12 +61,8 @@ parameters {
 }
 
 transformed parameters {
-  vector[K_r] rand_betas;
-  
-  rand_betas = zero_sum_components(rand_betas_raw, comp_sizes);
-  
-  for(k in 1:K_r)
-	rand_betas[k] = rand_betas[k] * rand_sigma[group[k]];
+  vector[K_r] rand_betas =
+	zero_sum_components(rand_betas_raw, grp_size) .* rand_sigma[group];
 }
 
 model {

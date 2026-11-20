@@ -117,8 +117,12 @@ mk_rand_mat = function(rt)
     rand_mat = do.call(cbind, lapply(mats, t))
     colnames(rand_mat) = var_names
 
-    return(list(random_effects = rand_mat,
-                groups = groups,
+    # lme4 interleaves terms within a block, e.g. (1 + x | g);
+    # the Stan sum-to-zero constraint needs each group contiguous
+    o = order(groups)
+
+    return(list(random_effects = rand_mat[, o, drop = FALSE],
+                groups = groups[o],
                 group_names = group_names))
 }
 

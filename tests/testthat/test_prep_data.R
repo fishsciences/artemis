@@ -29,6 +29,32 @@ test_that("Prep data", {
     expect_true(all(sapply(ans[c("groups", "rand_x", "rand_sigma")], length) != 0))
 })
 
+test_that("Mixed model data keeps random effect columns in group order", {
+    set.seed(2)
+    d = data.frame(Cq = c(rep(40, 6), runif(18, 25, 35)), x = rnorm(24),
+                   site = gl(3, 1, 24), filt = gl(4, 6))
+    ml = gen_model_list_lmer(Cq ~ x + (1 + x | site) + (1 | filt), d)
+    md = prep_data.lmer(ml, 21, -1.5, Cq_upper = 40,
+                        prior_int = normal(), prior_b = normal(),
+                        rand_sd = exponential())
+
+    expect_equal(as.vector(md$grp_size), tabulate(ml$groups))
+    expect_equal(sum(md$grp_size), md$K_r)
+    expect_equal(length(md$grp_size), md$N_grp)
+    expect_false(is.unsorted(md$group))
+
+    # censored/observed split moves rows only, never columns
+    i = d$Cq < 40
+    expect_equal(rbind(md$X_obs_r, md$X_cens_r), ml$rand_x[c(which(i), which(!i)), ])
+
+    d$count = rpois(24, 3)
+    mc = gen_model_list_lmer(count ~ x + (1 + x | site), d)
+    mdc = prep_data.countr(mc, prior_int = normal(), prior_b = normal(),
+                           rand_sd = exponential())
+    expect_equal(as.vector(mdc$grp_size), tabulate(mc$groups))
+    expect_equal(mdc$X_r, mc$rand_x)
+})
+
 test_that("Count response conversion", {
     d = data.frame(y = c(0, 3, 10), x = 1:3)
     ml = gen_model_list_lm(y ~ x, d)

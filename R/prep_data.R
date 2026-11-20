@@ -29,6 +29,7 @@ add_rand_components = function(mod_list, model_data, rand_sd)
     model_data$K_r = mod_list$n_rand
     model_data$group = mod_list$groups
     model_data$N_grp = mod_list$n_grp
+    model_data$grp_size = as.array(tabulate(mod_list$groups))
     model_data$rand_sd = rand_sd$scale^-1
     model_data
 }
