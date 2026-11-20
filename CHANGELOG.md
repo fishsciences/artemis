@@ -2,7 +2,7 @@
 
 # v3.2
 
-## Development version
+## 3.2.1
 
 Random slopes in the mixed models now fit the intended model. For a
 term such as `(1 + x | site)`, the intercepts and the slopes each sum
