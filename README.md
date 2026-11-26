@@ -44,7 +44,7 @@ Unix systems, this can generally be installed via a single command in
 R:
 
 ```
-install.packages("cmdstanr", repos = c("https://mc-stan.org/r-packages/", getOption("repos")))
+install.packages("cmdstanr", repos = c("https://stan-dev.r-universe.dev/", getOption("repos")))
 ```
 
 **Notes for Windows users**: `cmdstanr` requires
